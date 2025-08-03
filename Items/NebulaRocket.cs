@@ -16,12 +16,12 @@ namespace WuDao.Items
         {
             Item.width = 24;
             Item.height = 16;
-            Item.damage = 80;
+            Item.damage = 70;
             Item.knockBack = 4f;
             Item.consumable = true;
             Item.DamageType = DamageClass.Ranged;
             Item.maxStack = Item.CommonMaxStack;
-            Item.value = Item.buyPrice(silver: 10);
+            Item.value = Item.buyPrice(silver: 1);
             Item.rare = ItemRarityID.Purple;
             Item.ammo = AmmoID.Rocket;
         }
@@ -29,8 +29,10 @@ namespace WuDao.Items
         public override void AddRecipes()
         {
             Recipe recipe = CreateRecipe(50);
+            recipe.AddIngredient(ItemID.RocketI, 50);
             recipe.AddIngredient(ItemID.FragmentNebula, 1);
             recipe.AddTile(TileID.LunarCraftingStation);
+            recipe.AddCondition(Condition.NpcIsPresent(NPCID.Cyborg));
             recipe.Register();
         }
     }

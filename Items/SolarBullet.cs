@@ -30,6 +30,7 @@ namespace WuDao.Items
         {
             Recipe recipe = CreateRecipe(100);
             recipe.AddIngredient(ItemID.FragmentSolar, 1);
+            recipe.AddTile(TileID.LunarCraftingStation);
             recipe.Register();
         }
     }

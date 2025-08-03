@@ -17,7 +17,7 @@ namespace WuDao.Projectiles
         }
         public override void SetDefaults()
         {
-            Projectile.width = 30;
+            Projectile.width = 16;
             Projectile.height = 16;
             Projectile.friendly = true;
             Projectile.penetrate = -1;
@@ -82,22 +82,56 @@ namespace WuDao.Projectiles
 
             // Resize the hitbox of the projectile for the blast "radius".
             // Rocket I: 128, Rocket III: 200, Mini Nuke Rocket: 250
-            // Measurements are in pixels, so 128 / 16 = 8 tiles.
-            Projectile.Resize(250, 250);
+            // Measurements are in pixels, so 200 / 16 = 12.5 tiles.
+            Projectile.Resize(200, 200);
             // Set the knockback of the blast.
             // Rocket I: 8f, Rocket III: 10f, Mini Nuke Rocket: 12f
-            Projectile.knockBack = 12f;
+            Projectile.knockBack = 10f;
         }
 
         public override void OnKill(int timeLeft)
         {
             SoundEngine.PlaySound(SoundID.Item14.WithVolumeScale(0.5f).WithPitchOffset(0.8f), Projectile.position);
 
-            Projectile.Resize(30,16);
+            Projectile.Resize(60, 60);
 
-            for (var i = 0; i < 6; i++)
+            for (var i = 0; i < 20; i++)
             {
-                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.CrystalPulse2, 0f, 0f, 0, default, 1f);
+                Dust smokeDust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Smoke, 0f, 0f, 100, default, 1.5f);
+                smokeDust.velocity *= 1.4f;
+            }
+            // Spawn a bunch of fire dusts.
+            for (int j = 0; j < 10; j++)
+            {
+                Dust fireDust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.CrystalPulse2, 0f, 0f, 100, default, 3.5f);
+                fireDust.noGravity = true;
+                fireDust.velocity *= 7f;
+                fireDust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.CrystalPulse2, 0f, 0f, 100, default, 1.5f);
+                fireDust.velocity *= 3f;
+            }
+            // Spawn a bunch of smoke gores.
+            for (int k = 0; k < 2; k++)
+            {
+                float speedMulti = 0.4f;
+                if (k == 1)
+                {
+                    speedMulti = 0.8f;
+                }
+
+                Gore smokeGore = Gore.NewGoreDirect(Projectile.GetSource_Death(), Projectile.position, default, Main.rand.Next(GoreID.Smoke1, GoreID.Smoke3 + 1));
+                smokeGore.velocity *= speedMulti;
+                smokeGore.velocity += Vector2.One;
+                smokeGore = Gore.NewGoreDirect(Projectile.GetSource_Death(), Projectile.position, default, Main.rand.Next(GoreID.Smoke1, GoreID.Smoke3 + 1));
+                smokeGore.velocity *= speedMulti;
+                smokeGore.velocity.X -= 1f;
+                smokeGore.velocity.Y += 1f;
+                smokeGore = Gore.NewGoreDirect(Projectile.GetSource_Death(), Projectile.position, default, Main.rand.Next(GoreID.Smoke1, GoreID.Smoke3 + 1));
+                smokeGore.velocity *= speedMulti;
+                smokeGore.velocity.X += 1f;
+                smokeGore.velocity.Y -= 1f;
+                smokeGore = Gore.NewGoreDirect(Projectile.GetSource_Death(), Projectile.position, default, Main.rand.Next(GoreID.Smoke1, GoreID.Smoke3 + 1));
+                smokeGore.velocity *= speedMulti;
+                smokeGore.velocity -= Vector2.One;
             }
         }
     }
