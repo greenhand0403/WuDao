@@ -1,0 +1,16 @@
+Items: {
+	NebulaRocket: {
+		DisplayName: Nebula Rocket
+		Tooltip: ""
+	}
+
+	SolarBullet: {
+		DisplayName: Solar Bullet
+		Tooltip: ""
+	}
+}
+
+Projectiles: {
+	NebulaRocketProjectile.DisplayName: Nebula Rocket Projectile
+	SolarBulletProjectile.DisplayName: Solar Bullet Projectile
+}
