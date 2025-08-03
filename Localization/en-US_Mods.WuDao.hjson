@@ -8,9 +8,26 @@ Items: {
 		DisplayName: Solar Bullet
 		Tooltip: ""
 	}
+
+	SteelHeavySword: {
+		DisplayName: Steel Heavy Sword
+		Tooltip: ""
+	}
+
+	WoodenShuriken: {
+		DisplayName: Wooden Shuriken
+		Tooltip: ""
+	}
+
+	GoldenShuriken: {
+		DisplayName: Golden Shuriken
+		Tooltip: ""
+	}
 }
 
 Projectiles: {
 	NebulaRocketProjectile.DisplayName: Nebula Rocket Projectile
 	SolarBulletProjectile.DisplayName: Solar Bullet Projectile
+	WoodenShurikenProjectile.DisplayName: Wooden Shuriken Projectile
+	GoldenShurikenProjectile.DisplayName: Golden Shuriken Projectile
 }

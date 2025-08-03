@@ -2,7 +2,7 @@
 using Terraria.ModLoader;
 using Terraria;
 
-namespace WuDao.Items
+namespace WuDao.Items.Ammo
 {
     public class SolarBullet:ModItem
     {

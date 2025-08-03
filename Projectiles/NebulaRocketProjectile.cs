@@ -97,25 +97,24 @@ namespace WuDao.Projectiles
 
             for (var i = 0; i < 20; i++)
             {
-                Dust smokeDust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Smoke, 0f, 0f, 100, default, 1.5f);
-                smokeDust.velocity *= 1.4f;
+                Dust smokeDust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Smoke, 0f, 0f, 100, default, 1.4f);
+                smokeDust.velocity *= 1.2f;
             }
-            // Spawn a bunch of fire dusts.
-            for (int j = 0; j < 10; j++)
+            for (int j = 0; j < 14; j++)
             {
-                Dust fireDust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.CrystalPulse2, 0f, 0f, 100, default, 3.5f);
-                fireDust.noGravity = true;
-                fireDust.velocity *= 7f;
-                fireDust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.CrystalPulse2, 0f, 0f, 100, default, 1.5f);
-                fireDust.velocity *= 3f;
+                Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.CrystalPulse2, 0f, 0f, 150, default, 2.2f);
+                dust.velocity *= 3.4f;
+                dust.noGravity = true;
+                dust.fadeIn = 1f + Main.rand.NextFloat(0.5f);
             }
+
             // Spawn a bunch of smoke gores.
             for (int k = 0; k < 2; k++)
             {
-                float speedMulti = 0.4f;
+                float speedMulti = 0.3f;
                 if (k == 1)
                 {
-                    speedMulti = 0.8f;
+                    speedMulti = 0.6f;
                 }
 
                 Gore smokeGore = Gore.NewGoreDirect(Projectile.GetSource_Death(), Projectile.position, default, Main.rand.Next(GoreID.Smoke1, GoreID.Smoke3 + 1));

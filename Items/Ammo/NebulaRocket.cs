@@ -3,7 +3,7 @@ using Terraria.ModLoader;
 using Terraria;
 using WuDao.Projectiles;
 
-namespace WuDao.Items
+namespace WuDao.Items.Ammo
 {
     public class NebulaRocket : ModItem
     {
