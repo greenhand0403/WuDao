@@ -23,6 +23,11 @@ Items: {
 		DisplayName: Golden Shuriken
 		Tooltip: ""
 	}
+
+	FlyStone: {
+		DisplayName: Fly Stone
+		Tooltip: ""
+	}
 }
 
 Projectiles: {
@@ -30,4 +35,10 @@ Projectiles: {
 	SolarBulletProjectile.DisplayName: Solar Bullet Projectile
 	WoodenShurikenProjectile.DisplayName: Wooden Shuriken Projectile
 	GoldenShurikenProjectile.DisplayName: Golden Shuriken Projectile
+	FlyStoneProjectile.DisplayName: Fly Stone Projectile
+}
+
+DamageClasses: {
+	ExternalPowerDamageClass.DisplayName: External Power Damage Class
+	InternalPowerDamageClass.DisplayName: Internal Power Damage Class
 }
