@@ -41,4 +41,5 @@ Projectiles: {
 DamageClasses: {
 	ExternalPowerDamageClass.DisplayName: External Power Damage Class
 	InternalPowerDamageClass.DisplayName: Internal Power Damage Class
+	ChiEnergyDamageClass.DisplayName: Chi Energy Damage Class
 }
