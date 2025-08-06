@@ -102,7 +102,7 @@ namespace WuDao.Content.Projectiles.Ranged
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
-            if(Main.rand.NextBool(3)) // 33% chance to inflict On Fire!
+            if (Main.rand.NextBool(3)) // 33% chance to inflict On Fire!
             {
                 target.AddBuff(BuffID.Daybreak, 180); // Inflict On Fire! for 3 seconds
             }
