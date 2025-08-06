@@ -15,13 +15,14 @@ namespace WuDao.Content.Projectiles.Ranged
             Projectile.height = 8;
             Projectile.aiStyle = 1;
             Projectile.friendly = true;
-            Projectile.hostile = false;
-            Projectile.DamageType = DamageClass.Ranged;
-            Projectile.timeLeft = 600;
+            Projectile.penetrate = 1;
             Projectile.light = 0.5f;
+            Projectile.alpha = 255;
+            Projectile.MaxUpdates = 5;
+            Projectile.timeLeft = 600;
+            Projectile.DamageType = DamageClass.Ranged;
+            
             Projectile.ignoreWater = true;
-            Projectile.tileCollide = true;
-            Projectile.extraUpdates = 1;
             // ignore gravity
             AIType = ProjectileID.Bullet;
         }

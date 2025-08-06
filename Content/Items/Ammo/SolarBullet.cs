@@ -12,24 +12,25 @@ namespace WuDao.Content.Items.Ammo
         }
         public override void SetDefaults()
         {
+            Item.shootSpeed = 2f;
+            Item.shoot = Mod.Find<ModProjectile>("SolarBulletProjectile").Type;
             Item.damage = 17;
-            Item.DamageType = DamageClass.Ranged;
             Item.width = 8;
             Item.height = 8;
             Item.maxStack = Item.CommonMaxStack;
             Item.consumable = true;
-            Item.knockBack = 3f;
-            Item.value = Item.buyPrice(copper: 10);
-            Item.rare = ItemRarityID.Purple;
-            Item.shoot = Mod.Find<ModProjectile>("SolarBulletProjectile").Type;
-            Item.shootSpeed = 3.5f;
             Item.ammo = AmmoID.Bullet;
+            Item.knockBack = 3f;
+            Item.value = Item.buyPrice(copper: 2);
+            Item.rare = ItemRarityID.Purple;
+            Item.DamageType = DamageClass.Ranged;
         }
 
         public override void AddRecipes()
         {
-            Recipe recipe = CreateRecipe(100);
+            Recipe recipe = CreateRecipe(300);
             recipe.AddIngredient(ItemID.FragmentSolar, 1);
+            recipe.AddIngredient(ItemID.MusketBall, 300);
             recipe.AddTile(TileID.LunarCraftingStation);
             recipe.Register();
         }
