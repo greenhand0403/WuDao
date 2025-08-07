@@ -58,7 +58,7 @@ namespace WuDao.Content.Projectiles.Ranged
                     }
                 }
 
-                if (Math.Abs(Projectile.velocity.X) <= 15f && Math.Abs(Projectile.velocity.Y) <= 15f)
+                if (Math.Abs(Projectile.velocity.X) < 15f && Math.Abs(Projectile.velocity.Y) < 15f)
                 {
                     Projectile.velocity *= 1.1f;
                 }
@@ -72,6 +72,7 @@ namespace WuDao.Content.Projectiles.Ranged
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
             Projectile.velocity *= 0f; // Stop moving so the explosion is where the rocket was.
+            Projectile.alpha = 255;
             Projectile.timeLeft = 3; // Set the timeLeft to 3 so it can get ready to explode.
             return false; // Returning false is important here. Otherwise the projectile will die without being resized (no blast radius).
         }
@@ -93,28 +94,37 @@ namespace WuDao.Content.Projectiles.Ranged
         {
             SoundEngine.PlaySound(SoundID.Item14.WithVolumeScale(0.5f).WithPitchOffset(0.8f), Projectile.position);
 
-            Projectile.Resize(60, 60);
+            Projectile.Resize(80, 80);
 
-            for (var i = 0; i < 20; i++)
+            for (var i = 0; i < 40; i++)
             {
                 Dust smokeDust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Smoke, 0f, 0f, 100, default, 1.4f);
                 smokeDust.velocity *= 1.2f;
+                if (Main.rand.NextBool(2))
+                {
+                    smokeDust.scale = 0.5f;
+                    smokeDust.fadeIn = 1f + Main.rand.NextFloat(0.5f);
+                }
             }
-            for (int j = 0; j < 14; j++)
+            for (int j = 0; j < 70; j++)
             {
-                Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.CrystalPulse2, 0f, 0f, 150, default, 2.2f);
-                dust.velocity *= 3.4f;
+                Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Gastropod, 0f, 0f, 100, default, 3f);
                 dust.noGravity = true;
-                dust.fadeIn = 1f + Main.rand.NextFloat(0.5f);
+                dust.velocity *= 5f;
+                dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Gastropod, 0f, 0f, 100, default(Color), 2f);
+                dust.velocity *= 2f;
             }
 
             // Spawn a bunch of smoke gores.
-            for (int k = 0; k < 2; k++)
+            for (int k = 0; k < 3; k++)
             {
-                float speedMulti = 0.3f;
+                float speedMulti = 0.33f;
                 if (k == 1)
                 {
-                    speedMulti = 0.6f;
+                    speedMulti = 0.66f;
+                }else if (k == 2)
+                {
+                    speedMulti = 1f;
                 }
 
                 Gore smokeGore = Gore.NewGoreDirect(Projectile.GetSource_Death(), Projectile.position, default, Main.rand.Next(GoreID.Smoke1, GoreID.Smoke3 + 1));
@@ -132,6 +142,8 @@ namespace WuDao.Content.Projectiles.Ranged
                 smokeGore.velocity *= speedMulti;
                 smokeGore.velocity -= Vector2.One;
             }
+
+            Projectile.Resize(16, 16);
         }
     }
 }

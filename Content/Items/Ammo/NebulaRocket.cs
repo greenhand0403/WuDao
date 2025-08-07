@@ -13,25 +13,25 @@ namespace WuDao.Content.Items.Ammo
         }
         public override void SetDefaults()
         {
+            Item.damage = 70;
             Item.width = 24;
             Item.height = 16;
-            Item.damage = 70;
-            Item.knockBack = 4f;
-            Item.consumable = true;
-            Item.DamageType = DamageClass.Ranged;
             Item.maxStack = Item.CommonMaxStack;
-            Item.value = Item.buyPrice(silver: 1);
-            Item.rare = ItemRarityID.Purple;
+            Item.consumable = true;
             Item.ammo = AmmoID.Rocket;
+            Item.knockBack = 5f;
+            Item.value = Item.buyPrice(silver: 1);
+            Item.DamageType = DamageClass.Ranged;
+            Item.rare = ItemRarityID.Purple;
         }
 
         public override void AddRecipes()
         {
-            Recipe recipe = CreateRecipe(50);
-            recipe.AddIngredient(ItemID.RocketI, 50);
+            Recipe recipe = CreateRecipe(100);
+            recipe.AddIngredient(ItemID.RocketIII, 100);
             recipe.AddIngredient(ItemID.FragmentNebula, 1);
-            recipe.AddTile(TileID.LunarCraftingStation);
-            recipe.AddCondition(Condition.NpcIsPresent(NPCID.Cyborg));
+            recipe.AddIngredient(ItemID.ShroomiteBar, 1);
+            recipe.AddTile(TileID.Autohammer);
             recipe.Register();
         }
     }

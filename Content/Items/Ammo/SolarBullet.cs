@@ -14,7 +14,7 @@ namespace WuDao.Content.Items.Ammo
         {
             Item.shootSpeed = 2f;
             Item.shoot = Mod.Find<ModProjectile>("SolarBulletProjectile").Type;
-            Item.damage = 17;
+            Item.damage = 15;
             Item.width = 8;
             Item.height = 8;
             Item.maxStack = Item.CommonMaxStack;
