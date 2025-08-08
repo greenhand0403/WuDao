@@ -9,18 +9,14 @@ namespace WuDao.Content.Items.Weapons.Throwing
         public override void SetDefaults()
         {
             Item.CloneDefaults(ItemID.Shuriken); // 克隆原版行为
-            Item.DamageType = DamageClass.Throwing;
-
-            Item.damage = 5;
-            Item.useTime = 14;
-            Item.useAnimation = 14;
-            
-            Item.crit = 4;
-            Item.value = Item.buyPrice(copper: 1);
-            Item.rare = ItemRarityID.Green;
-
-            Item.shoot = ModContent.ProjectileType<Projectiles.Throwing.WoodenShurikenProjectile>();
             Item.shootSpeed = 8f;
+            Item.shoot = ModContent.ProjectileType<Projectiles.Throwing.WoodenShurikenProjectile>();
+            Item.damage = 6;
+            Item.useAnimation = 14;
+            Item.useTime = 14;
+            Item.rare = ItemRarityID.Green;
+            Item.value = Item.buyPrice(copper: 5);
+            Item.DamageType = DamageClass.Throwing;
         }
 
         public override void AddRecipes()

@@ -1,4 +1,4 @@
-// FlyStone.cs - 飞蚊石武器
+// FlyStone.cs - 飞石武器
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -10,25 +10,23 @@ namespace WuDao.Content.Items.Weapons.Throwing
     {
         public override void SetDefaults()
         {
+            Item.useStyle = ItemUseStyleID.Shoot; // 正确用法
+            Item.shootSpeed = 10f;
+            Item.shoot = ModContent.ProjectileType<Projectiles.Throwing.FlyStoneProjectile>();
             Item.damage = 8;
-            Item.DamageType = DamageClass.Throwing;
             Item.width = 12;
             Item.height = 12;
-            Item.useTime = 12;
+            Item.maxStack = Item.CommonMaxStack;
+            Item.consumable = true;
+            Item.UseSound = SoundID.Item1;
             Item.useAnimation = 12;
-
-            Item.crit = 0;
+            Item.useTime = 12;
             Item.value = Item.sellPrice(silver: 1);
             Item.rare = ItemRarityID.Green;
-            Item.useStyle = ItemUseStyleID.Shoot; // 正确用法
-            Item.maxStack = 9999;
-
-            Item.consumable = true;
             Item.noUseGraphic = true;
             Item.noMelee = true;
-            Item.shoot = ModContent.ProjectileType<Projectiles.Throwing.FlyStoneProjectile>();
-            Item.shootSpeed = 10f;
-            Item.UseSound = SoundID.Item1;
+            Item.knockBack = 1;
+            Item.DamageType = DamageClass.Throwing;
         }
 
         public override void AddRecipes()

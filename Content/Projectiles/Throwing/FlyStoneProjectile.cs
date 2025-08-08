@@ -1,4 +1,4 @@
-// FlyStoneProjectile.cs - 飞蚊石射弹
+// FlyStoneProjectile.cs - 飞石射弹
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -18,24 +18,18 @@ namespace WuDao.Content.Projectiles.Throwing
             Projectile.friendly = true;
             Projectile.penetrate = 3;
             Projectile.DamageType = DamageClass.Throwing;
-            Projectile.tileCollide = true;
+
             Projectile.timeLeft = 360;
             Projectile.ignoreWater = true;
             Projectile.extraUpdates = 1;
 
             // 添加抽尾设置
-            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 6;
+            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 5;
             ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
         }
 
         public override void AI()
         {
-            if (Projectile.ai[0] == 0)
-            {
-                Projectile.velocity *= 1.05f; // 初始速度增强
-                Projectile.ai[0] = 1;
-            }
-
             if (Projectile.timeLeft > 100)
             {
                 if (Projectile.velocity.X > 1.5f)
@@ -64,11 +58,6 @@ namespace WuDao.Content.Projectiles.Throwing
             CreateImpactDust();
         }
 
-        public override void OnHitPlayer(Player target, Player.HurtInfo info)
-        {
-            CreateImpactDust();
-        }
-
         public override void OnKill(int timeLeft)
         {
             CreateImpactDust();
@@ -76,10 +65,9 @@ namespace WuDao.Content.Projectiles.Throwing
 
         private void CreateImpactDust()
         {
-            for (int i = 0; i < 6; i++)
+            for (int i = 0; i < 10; i++)
             {
-                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Stone,
-                    Main.rand.NextFloat(-1.5f, 1.5f), Main.rand.NextFloat(-1.5f, 1.5f));
+                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Stone, Projectile.velocity.X * 0.1f, Projectile.velocity.Y * 0.1f, 0, default, 0.75f);
             }
         }
 
@@ -88,18 +76,20 @@ namespace WuDao.Content.Projectiles.Throwing
             Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
             Vector2 origin = new Vector2(texture.Width / 2, texture.Height / 2);
 
-            for (int i = 0; i < Projectile.oldPos.Length; i++)
+            for (int i = Projectile.oldPos.Length - 1; i > 0; i--)
             {
-                Vector2 drawPos = Projectile.oldPos[i] + Projectile.Size / 2f - Main.screenPosition;
+                Vector2 drawPos = Projectile.oldPos[i] + origin - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY);
+
                 Color color = lightColor * ((Projectile.oldPos.Length - i) / (float)Projectile.oldPos.Length);
                 Main.spriteBatch.Draw(texture, drawPos, null, color, Projectile.rotation, origin, Projectile.scale, SpriteEffects.None, 0);
             }
+            // 再画一遍当前射弹
 
-            // 绘制当前射弹
             Vector2 currentPos = Projectile.Center - Main.screenPosition;
+
             Main.spriteBatch.Draw(texture, currentPos, null, lightColor, Projectile.rotation, origin, Projectile.scale, SpriteEffects.None, 0);
 
-            return false; // 阻止默认绘制
+            return false;
         }
     }
 }

@@ -15,24 +15,17 @@ namespace WuDao.Content.Projectiles.Throwing
             AIType = ProjectileID.Shuriken;
         }
 
-        public override Color? GetAlpha(Color lightColor)
-        {
-            // 让颜色变为偏黄色（也可根据光照动态调节）
-            return new Color(255, 220, 100, 128);
-        }
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
+            SoundEngine.PlaySound(SoundID.Dig, Projectile.position);
             CreateWoodDusts(Projectile.position, Projectile.velocity);
-            SoundEngine.PlaySound(SoundID.Dig, Projectile.position); // 撞击声
-
         }
 
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
+            SoundEngine.PlaySound(SoundID.Dig, Projectile.position);
             CreateWoodDusts(Projectile.position, oldVelocity);
-            SoundEngine.PlaySound(SoundID.Dig, Projectile.position); // 撞击声
-
-            return true; // 撞墙后正常销毁
+            return true;
         }
 
         private void CreateWoodDusts(Vector2 pos, Vector2 vel)
@@ -41,9 +34,9 @@ namespace WuDao.Content.Projectiles.Throwing
             {
                 Dust.NewDustDirect(pos, Projectile.width, Projectile.height,
                     DustID.WoodFurniture, // 木屑 Dust
-                    vel.X * 0.3f + Main.rand.NextFloat(-1, 1),
-                    vel.Y * 0.3f + Main.rand.NextFloat(-1, 1),
-                    100, default, 1.2f
+                    vel.X * 0.1f + Main.rand.NextFloat(-1, 1),
+                    vel.Y * 0.1f + Main.rand.NextFloat(-1, 1),
+                    0, default, 0.75f
                 ).noGravity = true;
             }
         }

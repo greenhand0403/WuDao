@@ -16,7 +16,7 @@ namespace WuDao.Content.Items.Weapons.Throwing
             Item.useAnimation = 16;
 
 
-            Item.crit = 6;
+            Item.crit = 2;
             Item.value = Item.buyPrice(silver: 15);
             Item.rare = ItemRarityID.Green;
 
