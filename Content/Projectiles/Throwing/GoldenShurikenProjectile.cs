@@ -5,7 +5,6 @@ using Microsoft.Xna.Framework;
 using Terraria.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent;
-using System;
 
 namespace WuDao.Content.Projectiles.Throwing
 {
@@ -23,14 +22,8 @@ namespace WuDao.Content.Projectiles.Throwing
             Projectile.CloneDefaults(ProjectileID.Shuriken); // 克隆原版行为
             AIType = ProjectileID.Shuriken;
             Projectile.extraUpdates = 1; // 提升更新频率，让拖尾更平滑
-        }
-        public override void AI()
-        {
-            // 每帧撒一个尾焰粒子（很少）
-            if (Main.rand.NextBool(3))
-            {
-                CreateGoldenDusts(Projectile.position, Projectile.velocity);
-            }
+            Projectile.alpha = 255; // 淡入效果
+            Projectile.timeLeft = 300;
         }
 
         public override bool PreDraw(ref Color lightColor)
@@ -38,15 +31,19 @@ namespace WuDao.Content.Projectiles.Throwing
             Texture2D texture = TextureAssets.Projectile[Type].Value;
             Vector2 origin = texture.Size() * 0.5f;
 
-            for (int i = Projectile.oldPos.Length-1; i > 0; i--)
+            for (int i = Projectile.oldPos.Length - 1; i > 0; i--)
             {
                 Vector2 drawPos = Projectile.oldPos[i] + origin - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY);
 
                 float opacity = (Projectile.oldPos.Length - i) / (float)Projectile.oldPos.Length;
-                Color trailColor = new Color(255, 220, 80, 127) * opacity; // 偏金黄色尾焰
+                Color trailColor = new Color(255, 220, 80, 255) * opacity;
 
                 Main.EntitySpriteDraw(texture, drawPos, null, trailColor, Projectile.rotation, origin, Projectile.scale, SpriteEffects.None, 0);
             }
+            // 就需要自己手动把本体画出来
+            // Vector2 curPos = Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY);
+            // Main.EntitySpriteDraw(texture, curPos, null, Projectile.GetAlpha(lightColor), Projectile.rotation, origin, Projectile.scale, SpriteEffects.None, 0);
+            // return false;
             return true;
         }
 
@@ -68,20 +65,18 @@ namespace WuDao.Content.Projectiles.Throwing
             SoundEngine.PlaySound(SoundID.Dig, Projectile.position);
             for (int i = 0; i < 10; i++)
             {
-                CreateGoldenDusts(Projectile.position, oldVelocity);
+                CreateGoldenDusts(Projectile.position, Projectile.velocity);
             }
             return true;
         }
 
         private void CreateGoldenDusts(Vector2 pos, Vector2 vel)
         {
-            Dust dust = Dust.NewDustDirect(pos, Projectile.width, Projectile.height,
+            Dust.NewDustDirect(pos, Projectile.width, Projectile.height,
                 DustID.GoldFlame,
-                vel.X * 0.1f + Main.rand.NextFloat(-1f, 1f),
-                vel.Y * 0.1f + Main.rand.NextFloat(-1f, 1f),
-                100, default, 0.75f);
-            dust.noGravity = true;
-            dust.fadeIn = 0.5f;
+                vel.X * 0.1f,
+                vel.Y * 0.1f,
+                100, default, 0.85f);
         }
     }
 }

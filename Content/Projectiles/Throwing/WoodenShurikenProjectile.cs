@@ -24,20 +24,20 @@ namespace WuDao.Content.Projectiles.Throwing
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
             SoundEngine.PlaySound(SoundID.Dig, Projectile.position);
-            CreateWoodDusts(Projectile.position, oldVelocity);
+            CreateWoodDusts(Projectile.position, Projectile.velocity);
             return true;
         }
 
         private void CreateWoodDusts(Vector2 pos, Vector2 vel)
         {
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 10; i++)
             {
                 Dust.NewDustDirect(pos, Projectile.width, Projectile.height,
                     DustID.WoodFurniture, // 木屑 Dust
-                    vel.X * 0.1f + Main.rand.NextFloat(-1, 1),
-                    vel.Y * 0.1f + Main.rand.NextFloat(-1, 1),
-                    0, default, 0.75f
-                ).noGravity = true;
+                    vel.X * 0.1f,
+                    vel.Y * 0.1f,
+                    100, default, 0.85f
+                );
             }
         }
     }

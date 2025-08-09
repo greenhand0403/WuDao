@@ -67,7 +67,7 @@ namespace WuDao.Content.Projectiles.Throwing
         {
             for (int i = 0; i < 10; i++)
             {
-                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Stone, Projectile.velocity.X * 0.1f, Projectile.velocity.Y * 0.1f, 0, default, 0.75f);
+                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Stone, Projectile.velocity.X * 0.1f, Projectile.velocity.Y * 0.1f, 100, default, 0.85f);
             }
         }
 
@@ -83,7 +83,7 @@ namespace WuDao.Content.Projectiles.Throwing
                 Color color = lightColor * ((Projectile.oldPos.Length - i) / (float)Projectile.oldPos.Length);
                 Main.spriteBatch.Draw(texture, drawPos, null, color, Projectile.rotation, origin, Projectile.scale, SpriteEffects.None, 0);
             }
-            // 再画一遍当前射弹
+            // 需要自己手动把本体画出来
 
             Vector2 currentPos = Projectile.Center - Main.screenPosition;
 

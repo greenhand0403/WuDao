@@ -1,4 +1,6 @@
 using Terraria;
+using Terraria.Audio;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace WuDao.Content.Cooldowns
@@ -11,7 +13,13 @@ namespace WuDao.Content.Cooldowns
         public override void ResetEffects()
         {
             if (RightClickCooldown > 0)
+            {
                 RightClickCooldown--;
+                if (RightClickCooldown==0)
+                {
+                    SoundEngine.PlaySound(SoundID.MaxMana, Player.position);
+                }
+            }
         }
     }
 }

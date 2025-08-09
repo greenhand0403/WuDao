@@ -99,16 +99,16 @@ namespace WuDao.Content.Projectiles.Ranged
             for (var i = 0; i < 40; i++)
             {
                 Dust smokeDust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Smoke, 0f, 0f, 100, default, 1.4f);
-                smokeDust.velocity *= 1.2f;
+                smokeDust.velocity *= 3f;
                 if (Main.rand.NextBool(2))
                 {
                     smokeDust.scale = 0.5f;
-                    smokeDust.fadeIn = 1f + Main.rand.NextFloat(0.5f);
+                    smokeDust.fadeIn = 1f + Main.rand.NextFloat(1.0f);
                 }
             }
             for (int j = 0; j < 70; j++)
             {
-                Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Gastropod, 0f, 0f, 100, default, 3f);
+                Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.UndergroundHallowedEnemies, 0f, 0f, 100, default, 3f);
                 dust.noGravity = true;
                 dust.velocity *= 5f;
                 dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Gastropod, 0f, 0f, 100, default(Color), 2f);

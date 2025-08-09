@@ -1,14 +1,15 @@
 ﻿using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria;
+using Microsoft.Xna.Framework;
 
 namespace WuDao.Content.Items.Ammo
 {
-    public class SolarBullet:ModItem
+    public class SolarBullet : ModItem
     {
         public override void SetStaticDefaults()
         {
-            Item.ResearchUnlockCount=99;
+            Item.ResearchUnlockCount = 99;
         }
         public override void SetDefaults()
         {

@@ -28,6 +28,11 @@ Items: {
 		DisplayName: Fly Stone
 		Tooltip: ""
 	}
+
+	WeaponBundleItem: {
+		DisplayName: Weapon Bundle Item
+		Tooltip: ""
+	}
 }
 
 Projectiles: {

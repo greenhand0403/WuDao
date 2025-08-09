@@ -26,6 +26,13 @@ namespace WuDao.Content.Projectiles.Ranged
             // ignore gravity
             AIType = ProjectileID.Bullet;
         }
+
+        public override void OnSpawn(Terraria.DataStructures.IEntitySource source)
+        {
+            var owner = Main.player[Projectile.owner];
+            Projectile.position.Y -= 10f * owner.gravDir;
+        }
+
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
             Projectile.penetrate--;
