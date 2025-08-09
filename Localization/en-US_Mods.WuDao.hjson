@@ -33,6 +33,21 @@ Items: {
 		DisplayName: Weapon Bundle Item
 		Tooltip: ""
 	}
+
+	FlameShuriken: {
+		DisplayName: Flame Shuriken
+		Tooltip: ""
+	}
+
+	IceShuriken: {
+		DisplayName: Ice Shuriken
+		Tooltip: ""
+	}
+
+	PoisonedShuriken: {
+		DisplayName: Poisoned Shuriken
+		Tooltip: ""
+	}
 }
 
 Projectiles: {
@@ -41,6 +56,9 @@ Projectiles: {
 	WoodenShurikenProjectile.DisplayName: Wooden Shuriken Projectile
 	GoldenShurikenProjectile.DisplayName: Golden Shuriken Projectile
 	FlyStoneProjectile.DisplayName: Fly Stone Projectile
+	FlameShurikenProjectile.DisplayName: Flame Shuriken Projectile
+	IceShurikenProjectile.DisplayName: Ice Shuriken Projectile
+	PoisonedShurikenProjectile.DisplayName: Poisoned Shuriken Projectile
 }
 
 DamageClasses: {

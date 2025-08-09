@@ -5,7 +5,7 @@ using WuDao.Content.Items.Weapons.Throwing.Base;
 
 namespace WuDao.Content.Items.Weapons.Throwing
 {
-    public class GoldenShuriken : BaseShurikenItem
+    public class PoisonedShuriken : BaseShurikenItem
     {
         // 数值配置
         protected override int BaseDamage => 14;
@@ -21,12 +21,12 @@ namespace WuDao.Content.Items.Weapons.Throwing
         protected override DamageClass DmgClass => DamageClass.Throwing;
 
         // 绑定它的投射物
-        protected override int ProjectileType => ModContent.ProjectileType<Projectiles.Throwing.GoldenShurikenProjectile>();
+        protected override int ProjectileType => ModContent.ProjectileType<Projectiles.Throwing.PoisonedShurikenProjectile>();
 
         // 配方（30 个/组）
         protected override void BuildRecipe(Recipe recipe)
         {
-            recipe.AddIngredient(ItemID.GoldBar, 1);
+            recipe.AddIngredient(ItemID.JungleSpores, 5);
             recipe.AddIngredient(ItemID.IronBar, 2);
             recipe.AddTile(TileID.Anvils);
         }

@@ -109,7 +109,10 @@ namespace WuDao.Content.Projectiles.Ranged
             for (int j = 0; j < 70; j++)
             {
                 Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.UndergroundHallowedEnemies, 0f, 0f, 100, default, 3f);
-                dust.noGravity = true;
+                if (Main.rand.NextBool(3))
+                {
+                    dust.noGravity = true;
+                }
                 dust.velocity *= 5f;
                 dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Gastropod, 0f, 0f, 100, default(Color), 2f);
                 dust.velocity *= 2f;
