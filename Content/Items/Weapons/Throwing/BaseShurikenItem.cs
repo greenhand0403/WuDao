@@ -39,7 +39,8 @@ namespace WuDao.Content.Items.Weapons.Throwing.Base
             Item.damage = BaseDamage;
             Item.useTime = BaseUseTime;
             Item.useAnimation = BaseUseAnimation;
-
+            Item.autoReuse = true;
+            
             Item.crit = BaseCrit;
             Item.rare = Rarity;
             Item.value = ValueInCopper;

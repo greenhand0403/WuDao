@@ -21,6 +21,8 @@ namespace WuDao.Content.Items.Weapons.Throwing
             Item.UseSound = SoundID.Item1;
             Item.useAnimation = 12;
             Item.useTime = 12;
+            Item.autoReuse = true;
+            
             Item.value = Item.sellPrice(silver: 1);
             Item.rare = ItemRarityID.Green;
             Item.noUseGraphic = true;

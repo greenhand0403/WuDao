@@ -48,6 +48,11 @@ Items: {
 		DisplayName: Poisoned Shuriken
 		Tooltip: ""
 	}
+
+	CactusNeedle: {
+		DisplayName: Cactus Needle
+		Tooltip: ""
+	}
 }
 
 Projectiles: {
@@ -59,6 +64,7 @@ Projectiles: {
 	FlameShurikenProjectile.DisplayName: Flame Shuriken Projectile
 	IceShurikenProjectile.DisplayName: Ice Shuriken Projectile
 	PoisonedShurikenProjectile.DisplayName: Poisoned Shuriken Projectile
+	CactusNeedleProjectile.DisplayName: Cactus Needle Projectile
 }
 
 DamageClasses: {

@@ -14,6 +14,7 @@ namespace WuDao.Content.Items.Weapons.Throwing
             Item.damage = 6;
             Item.useAnimation = 14;
             Item.useTime = 14;
+            Item.autoReuse = true;
             Item.rare = ItemRarityID.Green;
             Item.value = Item.buyPrice(copper: 5);
             Item.DamageType = DamageClass.Throwing;
