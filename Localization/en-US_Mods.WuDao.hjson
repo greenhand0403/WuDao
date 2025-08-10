@@ -53,6 +53,16 @@ Items: {
 		DisplayName: Cactus Needle
 		Tooltip: ""
 	}
+
+	OceanBlueSword: {
+		DisplayName: Ocean Blue Sword
+		Tooltip: ""
+	}
+
+	HellfireSword: {
+		DisplayName: Hellfire Sword
+		Tooltip: ""
+	}
 }
 
 Projectiles: {
@@ -65,6 +75,8 @@ Projectiles: {
 	IceShurikenProjectile.DisplayName: Ice Shuriken Projectile
 	PoisonedShurikenProjectile.DisplayName: Poisoned Shuriken Projectile
 	CactusNeedleProjectile.DisplayName: Cactus Needle Projectile
+	OceanBlueSwordProjectile.DisplayName: Ocean Blue Sword Projectile
+	HellfireSwordProjectile.DisplayName: Hellfire Sword Projectile
 }
 
 DamageClasses: {
