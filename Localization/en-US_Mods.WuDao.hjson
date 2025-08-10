@@ -63,6 +63,11 @@ Items: {
 		DisplayName: Hellfire Sword
 		Tooltip: ""
 	}
+
+	NormalScissors: {
+		DisplayName: Normal Scissors
+		Tooltip: ""
+	}
 }
 
 Projectiles: {

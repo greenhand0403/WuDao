@@ -61,7 +61,7 @@ namespace WuDao.Common
             var red = SpriteSheet.FromTexture("WuDao/Assets/RedEffect")
                 // 第1列一堆图标（示例，按你的坐标继续补）
                 .AddSprite(new Rectangle(0, 0, 32, 32), new Point(0, 0), 1)
-                .AddSprite(new Rectangle(0, 32, 32, 32), new Point(0, 0), 1)
+                .AddSprite(new Rectangle(0, 96, 32, 32), new Point(0, 0), 1)
                 // 第2列：有高矩形，横向3帧（示例坐标）
                 .AddSprite(new Rectangle(64, 256, 32, 64), new Point(32, 0), 3);
             // 继续 AddSprite(...) 把你需要用到的都登记完
