@@ -68,6 +68,11 @@ Items: {
 		DisplayName: Normal Scissors
 		Tooltip: ""
 	}
+
+	TimeStopItem: {
+		DisplayName: Time Stop Item
+		Tooltip: ""
+	}
 }
 
 Projectiles: {
@@ -82,6 +87,8 @@ Projectiles: {
 	CactusNeedleProjectile.DisplayName: Cactus Needle Projectile
 	OceanBlueSwordProjectile.DisplayName: Ocean Blue Sword Projectile
 	HellfireSwordProjectile.DisplayName: Hellfire Sword Projectile
+	ChargedSlashProj.DisplayName: Charged Slash Proj
+	DashSlashProj.DisplayName: Dash Slash Proj
 }
 
 DamageClasses: {

@@ -313,6 +313,7 @@ namespace WuDao.Content.Items.Weapons.Melee
     // —— 右键冲刺：贴身命中体 —— //
     public class DashSlashProj : ModProjectile
     {
+        public override string Texture => "WuDao/Content/Items/Weapons/Melee/NormalScissors";
         public override void SetDefaults()
         {
             Projectile.width = 40;
@@ -352,6 +353,7 @@ namespace WuDao.Content.Items.Weapons.Melee
     // —— 自动释放的“蓄力斩”：短时强力贴身伤害体 —— //
     public class ChargedSlashProj : ModProjectile
     {
+        public override string Texture => "WuDao/Content/Items/Weapons/Melee/NormalScissors";
         public override void SetDefaults()
         {
             Projectile.width = 58;
