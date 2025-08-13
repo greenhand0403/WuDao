@@ -73,6 +73,16 @@ Items: {
 		DisplayName: Time Stop Item
 		Tooltip: ""
 	}
+
+	CloudArrow: {
+		DisplayName: Cloud Arrow
+		Tooltip: ""
+	}
+
+	BrightVerdict: {
+		DisplayName: Bright Verdict
+		Tooltip: ""
+	}
 }
 
 Projectiles: {
@@ -89,6 +99,10 @@ Projectiles: {
 	HellfireSwordProjectile.DisplayName: Hellfire Sword Projectile
 	ChargedSlashProj.DisplayName: Charged Slash Proj
 	DashSlashProj.DisplayName: Dash Slash Proj
+	BrightVerdictProjectile.DisplayName: Bright Verdict Projectile
+	CloudArrowProjectile.DisplayName: Cloud Arrow Projectile
+	HolyDiamondSpinHitbox.DisplayName: Holy Diamond Spin Hitbox
+	HolyKiteBurstHitbox.DisplayName: Holy Kite Burst Hitbox
 }
 
 DamageClasses: {
