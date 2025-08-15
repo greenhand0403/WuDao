@@ -7,7 +7,7 @@ namespace WuDao.Content.Items.Weapons.Melee
 {
     public class HellfireSword : ModItem
     {
-        // TODO: 合成表
+        // TODO: 地狱刀合成表
         public override void SetDefaults()
         {
             Item.width = 48;

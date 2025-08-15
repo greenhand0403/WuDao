@@ -6,14 +6,11 @@ using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace WuDao.Content.Projectiles
+namespace WuDao.Content.Projectiles.Melee
 {
     // 近战版“彩虹高尔夫球”，克隆原版高尔夫球的物理与 AI
     public class RainbowGolfBall : ModProjectile
     {
-        // 使用原版高尔夫球贴图（白球）
-        public override string Texture => TextureAssets.Projectile[ProjectileID.DirtGolfBall].Name;
-
         public override void SetDefaults()
         {
             // 克隆原版高尔夫球的物理/AI/碰撞等
@@ -53,7 +50,7 @@ namespace WuDao.Content.Projectiles
         {
             // 用轻度上色（叠乘）来“显示”不同颜色，同时保留原版贴图细节
             // 你可以把 alpha 调暗一点避免颜色太冲
-            Texture2D tex = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
+            Texture2D tex = TextureAssets.Projectile[ProjectileID.DirtGolfBall].Value; // ✅
             Vector2 drawPos = Projectile.Center - Main.screenPosition;
             float rotation = Projectile.rotation;
             Vector2 origin = Utils.Size(tex.Bounds) * 0.5f;

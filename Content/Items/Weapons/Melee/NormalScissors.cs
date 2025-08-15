@@ -4,7 +4,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Audio;
-// TODO: 未测试
+// TODO: 蓄力斩太垃圾了
 namespace WuDao.Content.Items.Weapons.Melee
 {
     // —— 玩家状态：冲刺CD + 蓄力能量 —— //
@@ -14,6 +14,7 @@ namespace WuDao.Content.Items.Weapons.Melee
         public int energy;                  // 左键能量（0~EnergyMax）
         public const int EnergyMax = 100;   // 满能量阈值
         public const int EnergyGainPerHit = 25; // 每次左键命中获得的能量
+        public bool forceChargedOnNextSwing = false; // 冲刺后置位，下一次左键挥砍必定释放蓄力斩波
 
         public override void ResetEffects()
         {
@@ -51,10 +52,8 @@ namespace WuDao.Content.Items.Weapons.Melee
         private const float HoldBackOffset = 6f;
 
         // 蓄力斩数值（巨鹿后解锁）
-        private const float ChargedSlashDamageMul = 2.0f; // 蓄力斩伤害倍率（相对 Item.damage）
-        private const float ChargedSlashKB = 7.0f;        // 蓄力斩固定击退
-        private const int ChargedSlashIFrames = 12;     // 释放瞬间给予玩家短暂无敌（帧）
-
+        private const float WaveDamageMul = 1.45f; // 斩波伤害系数（相对近战本体）
+        private const float WaveSpeed = 17f;   // 斩波飞行速度
         // 右键冲刺（WoF后）
         private const int DashCooldownFrames = 60;     // 1秒CD
         private const float DashSpeed = 11.5f;
@@ -138,20 +137,20 @@ namespace WuDao.Content.Items.Weapons.Melee
             }
 
             // —— Queen Slime：附加发射原版射弹 —— //
-            if (NPC.downedQueenSlime && Main.myPlayer == player.whoAmI)
-            {
-                Vector2 dir = Vector2.Normalize(Main.MouseWorld - player.Center);
-                if (dir == Vector2.Zero) dir = new Vector2(player.direction, 0f);
-                Projectile.NewProjectile(
-                    player.GetSource_ItemUse(Item),
-                    player.Center,
-                    dir * BeamSpeed,
-                    BeamProjectileType,
-                    (int)(Item.damage * 0.75f),
-                    Item.knockBack * 0.7f,
-                    player.whoAmI
-                );
-            }
+            // if (NPC.downedQueenSlime && Main.myPlayer == player.whoAmI)
+            // {
+            //     Vector2 dir = Vector2.Normalize(Main.MouseWorld - player.Center);
+            //     if (dir == Vector2.Zero) dir = new Vector2(player.direction, 0f);
+            //     Projectile.NewProjectile(
+            //         player.GetSource_ItemUse(Item),
+            //         player.Center,
+            //         dir * BeamSpeed,
+            //         BeamProjectileType,
+            //         (int)(Item.damage * 0.75f),
+            //         Item.knockBack * 0.7f,
+            //         player.whoAmI
+            //     );
+            // }
         }
 
         // 右键功能启用
@@ -182,13 +181,30 @@ namespace WuDao.Content.Items.Weapons.Melee
                 Item.useTime = 22;
                 Item.noUseGraphic = false;
                 Item.noMelee = false;
-
-                Item.shoot = ProjectileID.None;
-                Item.shootSpeed = 0f;
-                Item.channel = false;          // 不使用按住
+                Item.channel = false;
+                // ★ 关键改动：Queen Slime 解锁后，给物品常驻发射 EnchantedBeam（像附魔剑）
+                if (NPC.downedQueenSlime)
+                {
+                    Item.shoot = ProjectileID.EnchantedBeam;
+                    Item.shootSpeed = BeamSpeed;          // 你之前定义的 BeamSpeed（例如 12f）
+                                                          // （可选）如果想让斩波略弱于本体，可在 Shoot/ModifyShootStats 里调整 damage/knockback，见下方可选项
+                }
+                else
+                {
+                    Item.shoot = ProjectileID.None;
+                    Item.shootSpeed = 0f;
+                }
             }
-
             return true;
+        }
+        public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity,
+                                              ref int type, ref int damage, ref float knockback)
+        {
+            if (type == ProjectileID.EnchantedBeam && NPC.downedQueenSlime)
+            {
+                damage = (int)(damage * 0.75f);  // 比本体伤害低一些，按需调整
+                knockback *= 0.7f;
+            }
         }
 
         public override bool? UseItem(Player player)
@@ -224,46 +240,56 @@ namespace WuDao.Content.Items.Weapons.Melee
                 }
 
                 mp.dashCooldown = DashCooldownFrames;
-            }
 
+                mp.energy = NormalScissorsPlayer.EnergyMax;   // 能量直接拉满
+                mp.forceChargedOnNextSwing = true;            // 标记：下一次左键必放斩波
+                if (Main.netMode != NetmodeID.Server)
+                    CombatText.NewText(player.Hitbox, new Color(120, 255, 120), "能量充盈");
+            }
+            else
+            {
+                if (mp.forceChargedOnNextSwing)
+                {
+                    // 直接释放你之前实现的斩波（TerraBeam 版本）
+                    FireChargedSlash(player);
+                    mp.ClearEnergy();                 // 清能量，避免叠触发
+                    mp.forceChargedOnNextSwing = false;
+
+                    // （可选）如果你实现了斩波锁（waveLockout），这里顺手置个极短CD避免与同帧其他发射叠加
+                    // mp.waveLockout = 6;
+                }
+            }
             return base.UseItem(player);
         }
 
         // ——— 自动释放“蓄力斩” ——— //
         private void FireChargedSlash(Player player)
         {
-            // 短暂无敌，给点手感与容错
+            // （可保留）短暂无敌，给点手感容错；不需要就删
             player.immune = true;
-            player.immuneTime = ChargedSlashIFrames;
+            player.immuneTime = 10;
 
             Vector2 dir = Vector2.Normalize(Main.MouseWorld - player.Center);
             if (dir.LengthSquared() < 0.001f) dir = new Vector2(player.direction, 0f);
 
-            // 生成一个贴身的“强力斩击体”，存在极短时间，伤害高/击退大/穿透少
+            // ⭐ 改成发泰拉刃的射弹（TerraBeam）
             Projectile.NewProjectile(
                 player.GetSource_ItemUse(Item),
-                player.Center + dir * 12f, // 稍微在前面一点
-                dir * 0.1f,
-                ModContent.ProjectileType<ChargedSlashProj>(),
-                (int)(Item.damage * ChargedSlashDamageMul),
-                ChargedSlashKB,
-                player.whoAmI,
-                12 // ai0: 存活帧数
+                player.Center,
+                dir * WaveSpeed,
+                ProjectileID.TerraBeam,                       // ← 关键：泰拉刃斩波
+                (int)(Item.damage * WaveDamageMul),
+                Item.knockBack + 1.5f,
+                player.whoAmI
             );
 
-            // 粒子/音效
-            SoundEngine.PlaySound(SoundID.Item71.WithPitchOffset(-0.15f), player.Center);
-            for (int i = 0; i < 18; i++)
+            // （可选）音效/粒子，随你保留或精简
+            SoundEngine.PlaySound(SoundID.Item71.WithPitchOffset(-0.1f), player.Center);
+            for (int i = 0; i < 14; i++)
             {
                 int d = Dust.NewDust(player.Center - new Vector2(12, 12), 24, 24, DustID.MagicMirror,
-                    dir.X * Main.rand.NextFloat(2.5f, 4.5f), dir.Y * Main.rand.NextFloat(2.5f, 4.5f), 120, default, 1.3f);
+                    dir.X * Main.rand.NextFloat(2f, 4f), dir.Y * Main.rand.NextFloat(2f, 4f), 120, default, 1.2f);
                 Main.dust[d].noGravity = true;
-            }
-
-            // 战斗文本提示（本地）
-            if (Main.netMode != NetmodeID.Server)
-            {
-                CombatText.NewText(player.Hitbox, new Color(255, 220, 100), "蓄力斩！");
             }
         }
 
@@ -345,52 +371,6 @@ namespace WuDao.Content.Items.Weapons.Melee
             {
                 int d = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Smoke, 0f, 0f, 150, default, 1f);
                 Main.dust[d].velocity *= 0.2f;
-                Main.dust[d].noGravity = true;
-            }
-        }
-    }
-
-    // —— 自动释放的“蓄力斩”：短时强力贴身伤害体 —— //
-    public class ChargedSlashProj : ModProjectile
-    {
-        public override string Texture => "WuDao/Content/Items/Weapons/Melee/NormalScissors";
-        public override void SetDefaults()
-        {
-            Projectile.width = 58;
-            Projectile.height = 58;
-            Projectile.friendly = true;
-            Projectile.penetrate = 3;          // 打几体
-            Projectile.tileCollide = false;
-            Projectile.ignoreWater = true;
-            Projectile.timeLeft = 12;          // 会被 ai0 覆盖
-            Projectile.DamageType = DamageClass.Melee;
-            Projectile.usesLocalNPCImmunity = true;
-            Projectile.localNPCHitCooldown = 10;
-            Projectile.ownerHitCheck = true;   // 更贴近玩家近战
-        }
-
-        public override void OnSpawn(Terraria.DataStructures.IEntitySource source)
-        {
-            if (Projectile.ai[0] > 0) Projectile.timeLeft = (int)Projectile.ai[0];
-        }
-
-        public override void AI()
-        {
-            Player owner = Main.player[Projectile.owner];
-            if (!owner.active || owner.dead) { Projectile.Kill(); return; }
-
-            // 一点点向前推进，表现成向前扫的瞬间斩
-            Vector2 dir = Vector2.Normalize(Main.MouseWorld - owner.Center);
-            if (dir.LengthSquared() < 0.001f) dir = new Vector2(owner.direction, 0f);
-
-            Projectile.Center = owner.Center + dir * 18f;
-            Projectile.rotation = dir.ToRotation();
-
-            // 释放期间撒些闪光粒子
-            if (Main.rand.NextBool(2))
-            {
-                int d = Dust.NewDust(Projectile.Center - new Vector2(20, 20), 40, 40, DustID.MagicMirror,
-                    dir.X * 1.2f, dir.Y * 1.2f, 120, default, 1.2f);
                 Main.dust[d].noGravity = true;
             }
         }

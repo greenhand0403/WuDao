@@ -83,6 +83,46 @@ Items: {
 		DisplayName: Bright Verdict
 		Tooltip: ""
 	}
+
+	MagicHorn: {
+		DisplayName: Magic Horn
+		Tooltip: ""
+	}
+
+	Mimicker: {
+		DisplayName: Mimicker
+		Tooltip: ""
+	}
+
+	WindBlade: {
+		DisplayName: Wind Blade
+		Tooltip: ""
+	}
+
+	ForestSword: {
+		DisplayName: Forest Sword
+		Tooltip: ""
+	}
+
+	ImmortalSword: {
+		DisplayName: Immortal Sword
+		Tooltip: ""
+	}
+
+	RainBowGolfClubs: {
+		DisplayName: Rain Bow Golf Clubs
+		Tooltip: ""
+	}
+
+	SteelBroadSword: {
+		DisplayName: Steel Broad Sword
+		Tooltip: ""
+	}
+
+	SteelShortSword: {
+		DisplayName: Steel Short Sword
+		Tooltip: ""
+	}
 }
 
 Projectiles: {
@@ -103,6 +143,10 @@ Projectiles: {
 	CloudArrowProjectile.DisplayName: Cloud Arrow Projectile
 	HolyDiamondSpinHitbox.DisplayName: Holy Diamond Spin Hitbox
 	HolyKiteBurstHitbox.DisplayName: Holy Kite Burst Hitbox
+	WindBladeProjectile.DisplayName: Wind Blade Projectile
+	RainbowGolfBall.DisplayName: Rainbow Golf Ball
+	SteelBroadSwordProjectile.DisplayName: Steel Broad Sword Projectile
+	SteelShortSwordProjectile.DisplayName: Steel Short Sword Projectile
 }
 
 DamageClasses: {

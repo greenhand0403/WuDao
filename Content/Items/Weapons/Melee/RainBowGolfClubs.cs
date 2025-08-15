@@ -6,9 +6,9 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using WuDao.Common.Players;
-using WuDao.Content.Projectiles;
+using WuDao.Content.Projectiles.Melee;
 
-namespace WuDao.Content.Items
+namespace WuDao.Content.Items.Weapons.Melee
 {
     public class RainBowGolfClubs : ModItem
     {
