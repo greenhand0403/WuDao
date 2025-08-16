@@ -6,7 +6,7 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using WuDao.Common.Players;
-
+// TODO: 改贴图
 namespace WuDao.Content.Items.Weapons.Magic
 {
     // =====================
@@ -44,11 +44,9 @@ namespace WuDao.Content.Items.Weapons.Magic
         public override void ModifyWeaponDamage(Player player, ref StatModifier damage)
         {
             var mp = player.GetModPlayer<MimickerPlayer>();
-            int baseCount;
-            int total = mp.TotalTypesUnlocked(out baseCount);
-            int extraTypes = Math.Max(0, total - baseCount);
-            // 每多一种+2% 伤害（可调）
-            damage += 0.02f * extraTypes;
+            int unlocked = mp.unlockedProjectiles.Count;
+            // 每解锁1种 +2%（可自行调整）
+            damage += 0.02f * unlocked;
         }
 
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
@@ -73,10 +71,13 @@ namespace WuDao.Content.Items.Weapons.Magic
             if (Main.LocalPlayer is Player p)
             {
                 var mp = p.GetModPlayer<MimickerPlayer>();
-                int baseCount;
-                int total = mp.TotalTypesUnlocked(out baseCount);
-                int extra = Math.Max(0, total - baseCount);
-                tooltips.Add(new TooltipLine(Mod, "MimickerInfo", $"已收集射弹种类：{total}（基础 {baseCount}，额外 {extra}）"));
+                int baseInit = MimickerSystem.BasePool.Length;
+                int unlocked = mp.unlockedProjectiles.Count;
+                int remainBase = Math.Max(0, baseInit - unlocked);
+                int totalPool = remainBase + unlocked;
+
+                tooltips.Add(new TooltipLine(Mod, "MimickerInfo",
+                    $"随机池：{totalPool}（基础剩余 {remainBase}/{baseInit}，已解锁 {unlocked}）"));
             }
         }
 

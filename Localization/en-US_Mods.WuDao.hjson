@@ -152,6 +152,7 @@ Projectiles: {
 	RainbowGolfBall.DisplayName: Rainbow Golf Ball
 	SteelBroadSwordProjectile.DisplayName: Steel Broad Sword Projectile
 	SteelShortSwordProjectile.DisplayName: Steel Short Sword Projectile
+	BasiliskChargeProj.DisplayName: Basilisk Charge Proj
 }
 
 DamageClasses: {
