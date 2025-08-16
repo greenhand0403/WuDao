@@ -9,12 +9,14 @@ namespace WuDao.Content.Projectiles.Melee
     // 地狱之锋的射弹
     public class HellfireSwordProjectile : ModProjectile
     {
+        // 仅占位用，此处贴图路径不起作用，后续自己绘制贴图
         public override string Texture => "WuDao/Content/Items/Weapons/Melee/HellfireSword";
         private SpriteSheet _sheet;
         private SpriteAnimator _anim = new SpriteAnimator();
 
         // 选择要用的精灵索引（根据你 AddSprite 的顺序）
-        public int SpriteIndex = 2;
+        // 根据 Common/SpriteSheetsSys.cs 中添加精灵图的顺序
+        public int SpriteIndex = 0;
 
         public override void SetDefaults()
         {

@@ -5,7 +5,10 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
-using WuDao.Common.Players;
+using WuDao.Content.Players;
+using WuDao.Content.Global.Systems;
+using WuDao.Content.Global.Projectiles;
+
 // TODO: 改贴图
 namespace WuDao.Content.Items.Weapons.Magic
 {

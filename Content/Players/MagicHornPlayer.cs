@@ -3,9 +3,11 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
+using WuDao.Content.Items.Weapons.Magic;
 
-namespace WuDao.Content.Items.Weapons.Magic
+namespace WuDao.Content.Players
 {
+    // 魔法号角 随机射弹辅助类
     public class MagicHornPlayer : ModPlayer
     {
         private int hornTimer;

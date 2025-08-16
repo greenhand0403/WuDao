@@ -3,10 +3,10 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.GameContent;
 
 namespace WuDao.Content.Items.Weapons.Magic
 {
+    // 魔法号角 随机射弹 石化蜥冲锋
     public class BasiliskChargeProj : ModProjectile
     {
         public override string Texture => $"Terraria/Images/NPC_{NPCID.DesertBeast}";

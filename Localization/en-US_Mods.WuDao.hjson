@@ -128,6 +128,21 @@ Items: {
 		DisplayName: Harpy Wing Sword
 		Tooltip: ""
 	}
+
+	GritShotgun: {
+		DisplayName: Grit Shotgun
+		Tooltip: ""
+	}
+
+	SmokeGrenade: {
+		DisplayName: Smoke Grenade
+		Tooltip: ""
+	}
+
+	TheOutlaw: {
+		DisplayName: The Outlaw
+		Tooltip: ""
+	}
 }
 
 Projectiles: {
@@ -153,6 +168,14 @@ Projectiles: {
 	SteelBroadSwordProjectile.DisplayName: Steel Broad Sword Projectile
 	SteelShortSwordProjectile.DisplayName: Steel Short Sword Projectile
 	BasiliskChargeProj.DisplayName: Basilisk Charge Proj
+	InstantExplosion.DisplayName: Instant Explosion
+	SmokeCloud.DisplayName: Smoke Cloud
+	SmokeGrenadeProj.DisplayName: Smoke Grenade Proj
+	TheOutlawFirewall.DisplayName: The Outlaw Firewall
+	TheOutlawPellet.DisplayName: The Outlaw Pellet
+	TheOutlawSplitBomblet.DisplayName: The Outlaw Split Bomblet
+	TheOutlawSplitShot.DisplayName: The Outlaw Split Shot
+	TheOutlawUltimateBomb.DisplayName: The Outlaw Ultimate Bomb
 }
 
 DamageClasses: {
@@ -160,4 +183,11 @@ DamageClasses: {
 	InternalPowerDamageClass.DisplayName: Internal Power Damage Class
 	ChiEnergyDamageClass.DisplayName: Chi Energy Damage Class
 	SupremeDamageClass.DisplayName: Supreme Damage Class
+}
+
+Buffs: {
+	OutlawBackstepCooldown: {
+		DisplayName: Outlaw Backstep Cooldown
+		Description: Mods.WuDao.Buffs.OutlawBackstepCooldown.Description
+	}
 }

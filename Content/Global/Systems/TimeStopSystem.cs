@@ -3,7 +3,7 @@ using Terraria.ModLoader;
 using Terraria.ID;
 using Microsoft.Xna.Framework;
 
-namespace WuDao.Common
+namespace WuDao.Content.Global.Systems
 {
     // 静止怀表 冻结时间的辅助类
     public static class TimeStopSystem

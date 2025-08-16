@@ -3,7 +3,7 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace WuDao.Common
+namespace WuDao.Content.Global.Projectiles
 {
     // 修改原版高尔夫球的行为
     public class GolfBallMeleeGlobal : GlobalProjectile
