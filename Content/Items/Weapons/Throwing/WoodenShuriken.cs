@@ -4,6 +4,7 @@ using Terraria.ModLoader;
 
 namespace WuDao.Content.Items.Weapons.Throwing
 {
+    // TODO: 未继承飞镖基类的木飞镖，需要统一
     public class WoodenShuriken : ModItem
     {
         public override void SetDefaults()

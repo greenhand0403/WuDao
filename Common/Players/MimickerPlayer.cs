@@ -1,16 +1,13 @@
-using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Terraria;
-using Terraria.Audio;
-using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 
 namespace WuDao.Common.Players
 {
-    // 解锁定义：指定NPC -> 解锁的友方射弹 -> 所需击杀数
+    // 模仿者 特殊魔法武器的辅助类 解锁定义：指定NPC -> 解锁的友方射弹 -> 所需击杀数
     public struct UnlockDef
     {
         public int NpcType;

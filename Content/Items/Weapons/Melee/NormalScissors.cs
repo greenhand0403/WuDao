@@ -4,7 +4,8 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Audio;
-// TODO: 蓄力斩太垃圾了
+// TODO: 重绘贴图 成长型武器，剪刀，改成了发射斩波
+// ModPlayer ModItem ModProjectile 写在一个文件了
 namespace WuDao.Content.Items.Weapons.Melee
 {
     // —— 玩家状态：冲刺CD + 蓄力能量 —— //

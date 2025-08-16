@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 
 namespace WuDao.Common
 {
+    // 静止怀表 冻结时间的辅助类
     public static class TimeStopSystem
     {
         public static bool IsFrozen = false;

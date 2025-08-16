@@ -1,8 +1,7 @@
-// FlyStone.cs - 飞石武器
+// TODO: FlyStone 飞蝗石 可以提取出基类，方便我以后做可投掷的宝石
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Microsoft.Xna.Framework;
 
 namespace WuDao.Content.Items.Weapons.Throwing
 {

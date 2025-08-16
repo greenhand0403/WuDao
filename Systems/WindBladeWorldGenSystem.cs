@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 
 namespace WuDao.Systems
 {
+    // 添加空岛宝箱生成风刃规则
     public class WindBladeWorldGenSystem : ModSystem
     {
         public override void PostWorldGen()

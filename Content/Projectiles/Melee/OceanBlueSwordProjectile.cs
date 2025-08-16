@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
 using WuDao.Common;
+using Terraria.ID;
 
 namespace WuDao.Content.Projectiles.Melee
 {
@@ -28,7 +29,7 @@ namespace WuDao.Content.Projectiles.Melee
             Projectile.friendly = true;
             Projectile.tileCollide = true;
             Projectile.penetrate = -1;
-            Projectile.timeLeft = 600;
+            Projectile.timeLeft = 300;
 
             _sheet = SpriteSheets.Get(SpriteAtlasId.Effect1);
             // _anim = new SpriteAnimator();
@@ -75,18 +76,24 @@ namespace WuDao.Content.Projectiles.Melee
 
         public override bool PreDraw(ref Color lightColor)
         {
-            _sheet.Draw(ColumnIndex, _anim.Frame, Projectile.Center, lightColor, Projectile.rotation, Projectile.scale*2);
+            _sheet.Draw(ColumnIndex, _anim.Frame, Projectile.Center, lightColor, Projectile.rotation, Projectile.scale * 2);
             return false;
         }
 
-        // public override void ModifyDamageHitbox(ref Rectangle hitbox)
-        // {
-        //     // 以当前中心为基准，重设为 50×50
-        //     Point center = hitbox.Center;
-        //     hitbox.Width = 6;
-        //     hitbox.Height = 6;
-        //     hitbox.X = center.X - hitbox.Width / 2;
-        //     hitbox.Y = center.Y - hitbox.Height / 2;
-        // }
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+        {
+            if (Main.rand.NextFloat() < 0.25f)
+                target.AddBuff(BuffID.Frostburn, 120);
+        }
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
+        {
+            // 取到发射者玩家来判断是否处于海洋
+            if (Projectile.owner >= 0 && Projectile.owner < Main.maxPlayers)
+            {
+                Player owner = Main.player[Projectile.owner];
+                if (owner?.active == true && owner.ZoneBeach)
+                    modifiers.FinalDamage *= 1.20f;
+            }
+        }
     }
 }

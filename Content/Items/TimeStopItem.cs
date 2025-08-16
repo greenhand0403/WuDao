@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 
 namespace WuDao.Content.Items
 {
-    // TODO: 并不完美的冻结时间
+    // TODO: 重绘静止怀表的贴图
     public class TimeStopItem : ModItem
     {
         public override void SetDefaults()
@@ -22,7 +22,7 @@ namespace WuDao.Content.Items
         {
             if (!TimeStopSystem.IsFrozen)
             {
-                TimeStopSystem.StartFreeze(300);
+                TimeStopSystem.StartFreeze(180);
                 CombatText.NewText(player.getRect(), Color.Cyan, "Time... STOP!");
             }
             return true;

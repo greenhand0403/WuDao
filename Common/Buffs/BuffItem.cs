@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using WuDao.Content.Items.Weapons.Melee;
 
 // ----------------------------------------------------------
 // 可复用的 Buff + 属性（速度/回血等）统一框架
@@ -113,7 +114,7 @@ namespace WuDao.Common.Buffs
         public float MeleeSizeMult = 1f;
         public readonly HashSet<int> ImmuneBuffs = new();
         public float CritGenericAdd, CritMeleeAdd, CritRangedAdd, CritMagicAdd, CritSummonAdd;
-
+        public bool FlagSlowFall, FlagNoFallDmg;
         public override void ResetEffects()
         {
             MoveSpeedAdd = 0f; MoveSpeedMult = 1f;
@@ -122,17 +123,59 @@ namespace WuDao.Common.Buffs
             DefenseAdd = 0; MaxLifeAdd = 0; MaxLifeMult = 1f; MeleeSizeMult = 1f;
             ImmuneBuffs.Clear();
             CritGenericAdd = CritMeleeAdd = CritRangedAdd = CritMagicAdd = CritSummonAdd = 0f;
+            FlagSlowFall = FlagNoFallDmg = false;
         }
-
-        public override void PostUpdateEquips()
+        public override bool PreModifyLuck(ref float luck)
         {
             // 先应用移动相关
             Player.moveSpeed += MoveSpeedAdd;
             Player.moveSpeed *= MoveSpeedMult;
             Player.maxRunSpeed += RunSpeedAdd;
             Player.runAcceleration += RunAccelAdd;
-            Player.jumpSpeedBoost += JumpSpeedAdd;
+            return base.PreModifyLuck(ref luck);
+        }
+        // BuffStatPlayer 内新增
+        internal void ApplyMovementNow()
+        {
+            Player.moveSpeed += MoveSpeedAdd;
+            Player.moveSpeed *= MoveSpeedMult;
+            Player.maxRunSpeed += RunSpeedAdd;
+            Player.runAcceleration += RunAccelAdd;
+        }
 
+        // BuffStatPlayer 内新增字段（缓存用，避免每帧分配）
+        private static readonly List<StatRule> _tmpRules = new();
+
+        public override void PostUpdateRunSpeeds()
+        {
+            // 1) 先把当前累加槽清零（只用于本阶段立即应用）
+            MoveSpeedAdd = 0f; MoveSpeedMult = 1f;
+            RunSpeedAdd = 0f; RunAccelAdd = 0f;
+
+            // 2) 动态从“手持物品”拉取规则（不特判类型）
+            Item held = Player.HeldItem;
+            if (held?.ModItem is IStatItemProvider statProvider)
+            {
+                _tmpRules.Clear();
+                statProvider.AddStatRules(Player, held, _tmpRules);
+
+                // 3) 仅筛选满足条件的规则，并把“移动三件套”写入累加槽
+                foreach (var rule in _tmpRules)
+                {
+                    if (rule?.Condition == null || !rule.Condition(Player, held))
+                        continue;
+
+                    foreach (var eff in rule.Effects)
+                        eff.Apply(Player, this); // 这一步会把移动相关增量写进 MoveSpeed*/Run* 字段
+                }
+            }
+
+            // 4) 当场应用“移动三件套”（影响本帧速度计算）
+            ApplyMovementNow();
+        }
+        public override void PostItemCheck()
+        {
+            Player.jumpSpeedBoost += JumpSpeedAdd;
             // 生命再生：先乘再加，便于和其他来源组合
             Player.lifeRegen = (int)Math.Round(Player.lifeRegen * LifeRegenMult);
             Player.lifeRegen += LifeRegenAdd;
@@ -159,10 +202,16 @@ namespace WuDao.Common.Buffs
                 if (Player.HasBuff(buffId))
                     Player.ClearBuff(buffId);
             }
-            
+            if (FlagSlowFall)
+            {
+                Player.slowFall = true;
+            }
+            if (FlagNoFallDmg)
+            {
+                Player.noFallDmg = true;
+            }
         }
     }
-
     // 一个“属性效果”的表示：
     public delegate void StatApplier(Player player, BuffStatPlayer acc);
 
@@ -191,6 +240,8 @@ namespace WuDao.Common.Buffs
         public static StatEffect RangedCrit(float add) => new((p, acc) => acc.CritRangedAdd += add);
         public static StatEffect MagicCrit(float add) => new((p, acc) => acc.CritMagicAdd += add);
         public static StatEffect SummonCrit(float add) => new((p, acc) => acc.CritSummonAdd += add);
+        public static StatEffect SlowFall() => new((p, acc) => acc.FlagSlowFall = true);
+        public static StatEffect NoFallDmg() => new((p, acc) => acc.FlagNoFallDmg = true);
 
     }
 
@@ -250,7 +301,7 @@ namespace WuDao.Common.Buffs
         public override void HoldItem(Item item, Player player) => TryApplyFromItem(player, item);
         public override void UpdateAccessory(Item item, Player player, bool hideVisual) => TryApplyFromItem(player, item);
         public override void UpdateEquip(Item item, Player player) => TryApplyFromItem(player, item);
-        
+
         public override void ModifyItemScale(Item item, Player player, ref float scale)
         {
             if (item.CountsAsClass(DamageClass.Melee))

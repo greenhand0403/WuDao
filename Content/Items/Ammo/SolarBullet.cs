@@ -1,10 +1,10 @@
 ﻿using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria;
-using Microsoft.Xna.Framework;
 
 namespace WuDao.Content.Items.Ammo
 {
+    // 日曜弹 射弹单独做了
     public class SolarBullet : ModItem
     {
         public override void SetStaticDefaults()

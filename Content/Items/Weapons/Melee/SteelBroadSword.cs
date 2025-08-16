@@ -5,6 +5,7 @@ using WuDao.Content.Projectiles.Melee;
 
 namespace WuDao.Content.Items.Weapons.Melee
 {
+    // TODO: 近战刀光武器，完全不能用，重做 崇阳铁剑
     public class SteelBroadSword : ModItem
     {
         public override void SetDefaults()
@@ -30,7 +31,7 @@ namespace WuDao.Content.Items.Weapons.Melee
             Item.shootSpeed = 0f;     // held projectile 通常不需要速度
 
             Item.value = Item.buyPrice(silver: 4);
-            Item.rare = ItemRarityID.Blue;
+            Item.rare = ItemRarityID.Green;
         }
 
         public override void AddRecipes()

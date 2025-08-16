@@ -1,7 +1,6 @@
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using WuDao.Content.Items.Weapons.Throwing.Base;
 
 namespace WuDao.Content.Items.Weapons.Throwing
 {

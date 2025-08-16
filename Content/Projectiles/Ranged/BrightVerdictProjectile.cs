@@ -7,17 +7,10 @@ using System;
 
 namespace WuDao.Content.Projectiles.Ranged
 {
+    // 十字星射弹 改了碰撞箱
     public class BrightVerdictProjectile : ModProjectile
     {
-        // —— 可调参数（十字星爆裂） ——
-        private const float CrossLenLong = 140f;      // 菱形长轴长度（沿弹丸速度方向）
-        private const float CrossLenShort = 64f;      // 菱形短轴长度（沿法线方向）
-        private const int CrossEdgePoints = 22;       // 每个菱形边的取样点数（越大越密）
-        private const int CrossBurstDustPerPoint = 2; // 每个点生成多少粒子
-        private const float CrossOutSpeed = 5.25f;    // 粒子向外爆散的基速度
-        private const float InheritVel = 0.25f;       // 继承弹体速度的比例
-        private const bool PlayChime = true;          // 命中是否播放清脆音效
-                                                      // —— 可调：起步加速 —— 
+        private bool _burstFired;
         const int BoostFrames = 6;      // 前 6 帧加速
         const float BoostFactor = 1.2f; // 每帧×1.06 ≈ 1.42 倍（与发射端夹速共同作用）
         const float MaxFlightSpeed = 22f;// 绝对速度上限（双保险）
@@ -79,13 +72,13 @@ namespace WuDao.Content.Projectiles.Ranged
         // —— 命中敌怪：触发圣光十字星爆裂 ——
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
-            SpawnHolyCrossBurst(Projectile.Center, Projectile.velocity);
+            TryBurstOnce(Projectile.Center, Projectile.velocity);
         }
 
         // —— 命中方块：也触发（并让弹体正常死亡/反弹按默认）——
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
-            SpawnHolyCrossBurst(Projectile.Center, oldVelocity);
+            TryBurstOnce(Projectile.Center, oldVelocity);
             return base.OnTileCollide(oldVelocity); // 使用原本的碰撞处理
         }
 
@@ -93,15 +86,26 @@ namespace WuDao.Content.Projectiles.Ranged
         public override void OnKill(int timeLeft)
         {
             // 仅在没有刚刚命中的情况下补一次（简单做法：总是补一次，视觉更爽）
-            SpawnHolyCrossBurst(Projectile.Center, Projectile.velocity);
+            TryBurstOnce(Projectile.Center, Projectile.velocity);
         }
-
+        private void TryBurstOnce(Vector2 center, Vector2 baseVelocity)
+        {
+            if (_burstFired)
+            {
+                return;
+            }
+            _burstFired = true;
+            if (Projectile.owner == Main.myPlayer)
+            {
+                SpawnHolyCrossBurst(center, baseVelocity);
+            }
+        }
         private void SpawnHolyCrossBurst(Vector2 center, Vector2 baseVelocity)
         {
             SoundEngine.PlaySound(SoundID.Item29 with { Pitch = 0.25f }, center);
 
-            float baseAngle = baseVelocity.ToRotation();
-            if (float.IsNaN(baseAngle)) baseAngle = -MathHelper.PiOver2;
+            // float baseAngle = baseVelocity.ToRotation();
+            // if (float.IsNaN(baseAngle)) baseAngle = -MathHelper.PiOver2;
 
             float b = 42f;                 // 横向半宽（越小越瘦越尖）
             int duration = 1;              // 瞬发
@@ -119,7 +123,7 @@ namespace WuDao.Content.Projectiles.Ranged
                 {
                     var proj = Main.projectile[p];
                     proj.Center = center;
-                    proj.ai[0] = baseAngle + off;  // 朝向
+                    proj.ai[0] = off;  // 不随着碰撞面的方向 baseAngle + 
                     proj.localAI[0] = b;           // 横向半宽；纵向 a 自动由公式算
                     proj.timeLeft = duration;
 

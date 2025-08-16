@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Terraria;
-using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -23,7 +22,7 @@ namespace WuDao.Content.Items.Weapons.Magic
             Item.width = 40;
             Item.height = 26;
             Item.rare = ItemRarityID.LightRed; // 困难模式早中期
-            Item.value = Item.buyPrice(gold: 6);
+            Item.value = Item.buyPrice(gold: 5);
 
             Item.DamageType = DamageClass.Magic;
             Item.damage = 22; // 初始略低，靠收集叠加
@@ -36,7 +35,7 @@ namespace WuDao.Content.Items.Weapons.Magic
             Item.UseSound = SoundID.Item85;
             Item.noMelee = true;
 
-            Item.shoot = ProjectileID.AmethystBolt; // 占位
+            Item.shoot = ProjectileID.WoodenArrowFriendly; // 占位
             Item.shootSpeed = 10.5f;
             Item.autoReuse = true;
         }

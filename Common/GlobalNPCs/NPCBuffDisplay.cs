@@ -6,7 +6,7 @@ using Terraria.GameContent;
 
 namespace WuDao.Common.GlobalNPCs
 {
-    // 绘制 buff 图标
+    // 在敌怪头顶绘制 buff 图标
     public class NPCBuffDisplay : GlobalNPC
     {
         public override bool InstancePerEntity => true;

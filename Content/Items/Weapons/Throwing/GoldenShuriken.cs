@@ -1,10 +1,10 @@
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using WuDao.Content.Items.Weapons.Throwing.Base;
 
 namespace WuDao.Content.Items.Weapons.Throwing
 {
+    // 继承飞镖基类的金飞镖
     public class GoldenShuriken : BaseShurikenItem
     {
         // 数值配置

@@ -47,7 +47,7 @@ namespace WuDao.Content.Projectiles.Ranged
                         // Spawn fire dusts at the back of the rocket.
                         Dust fireDust = Dust.NewDustDirect(new Vector2(Projectile.position.X + 6f + posOffsetX, Projectile.position.Y + 6f + posOffsetY) - Projectile.velocity * 0.5f,
                             Projectile.width - 8, Projectile.height - 8, DustID.CrystalPulse2, 0f, 0f, 100);
-                        fireDust.scale *= 2f + Main.rand.Next(10) * 0.1f;
+                        fireDust.scale *= 1.2f + Main.rand.Next(10) * 0.1f;
                         fireDust.velocity *= 0.2f;
                         fireDust.noGravity = true;
 
@@ -99,7 +99,7 @@ namespace WuDao.Content.Projectiles.Ranged
             for (var i = 0; i < 40; i++)
             {
                 Dust smokeDust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Smoke, 0f, 0f, 100, default, 1.4f);
-                smokeDust.velocity *= 3f;
+                smokeDust.velocity *= 2f;
                 if (Main.rand.NextBool(2))
                 {
                     smokeDust.scale = 0.5f;
@@ -113,9 +113,9 @@ namespace WuDao.Content.Projectiles.Ranged
                 {
                     dust.noGravity = true;
                 }
-                dust.velocity *= 5f;
-                dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Gastropod, 0f, 0f, 100, default(Color), 2f);
-                dust.velocity *= 2f;
+                dust.velocity *= 3f;
+                dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.CrystalPulse2, 0f, 0f, 100, default(Color), 2f);
+                dust.velocity *= 1.2f;
             }
 
             // Spawn a bunch of smoke gores.

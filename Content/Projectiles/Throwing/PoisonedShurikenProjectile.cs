@@ -54,7 +54,7 @@ namespace WuDao.Content.Projectiles.Throwing
         private void CreatePoisonedDusts(Vector2 pos, Vector2 vel)
         {
             Dust.NewDustDirect(pos, Projectile.width, Projectile.height,
-                DustID.GoldFlame,
+                DustID.JungleTorch,
                 vel.X * 0.1f,
                 vel.Y * 0.1f,
                 100, default, 0.85f);

@@ -4,6 +4,7 @@ using Terraria;
 
 namespace WuDao.Content.Items.Weapons.Throwing
 {
+    // TODO: 仙人掌飞针 改贴图 需要抽象出飞针基类
     public class CactusNeedle : ModItem
     {
         public override void SetDefaults()
@@ -28,7 +29,7 @@ namespace WuDao.Content.Items.Weapons.Throwing
             Item.rare = ItemRarityID.Green;
             Item.value = 1;
 
-            Item.shoot = ModContent.ProjectileType<Content.Projectiles.Throwing.CactusNeedleProjectile>();
+            Item.shoot = ModContent.ProjectileType<Projectiles.Throwing.CactusNeedleProjectile>();
             Item.shootSpeed = 8f;
         }
         public override void AddRecipes()

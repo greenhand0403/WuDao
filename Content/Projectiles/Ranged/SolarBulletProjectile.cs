@@ -3,10 +3,10 @@ using Terraria.ID;
 using Terraria;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
-using System;
 
 namespace WuDao.Content.Projectiles.Ranged
 {
+    // 日曜弹 射弹
     public class SolarBulletProjectile : ModProjectile
     {
         public override void SetDefaults()
@@ -21,7 +21,7 @@ namespace WuDao.Content.Projectiles.Ranged
             Projectile.MaxUpdates = 3;
             Projectile.timeLeft = 600;
             Projectile.DamageType = DamageClass.Ranged;
-            
+
             Projectile.ignoreWater = true;
             // ignore gravity
             AIType = ProjectileID.Bullet;

@@ -85,7 +85,7 @@ namespace WuDao.Content.Projectiles.Ranged
             }
 
             // 可选：音效
-            Terraria.Audio.SoundEngine.PlaySound(SoundID.Item14, Projectile.Center);
+            Terraria.Audio.SoundEngine.PlaySound(SoundID.Item5, Projectile.Center);
         }
     }
 }

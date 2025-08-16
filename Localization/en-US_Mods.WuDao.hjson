@@ -123,6 +123,11 @@ Items: {
 		DisplayName: Steel Short Sword
 		Tooltip: ""
 	}
+
+	HarpyWingSword: {
+		DisplayName: Harpy Wing Sword
+		Tooltip: ""
+	}
 }
 
 Projectiles: {

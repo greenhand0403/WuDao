@@ -7,6 +7,7 @@ using WuDao.Content.Projectiles.Melee;
 
 namespace WuDao.Content.Items.Weapons.Melee
 {
+    // TODO: 改贴图 玄铁短剑
     public class SteelShortSword : BuffItem
     {
         public override void SetDefaults()
@@ -24,7 +25,7 @@ namespace WuDao.Content.Items.Weapons.Melee
             Item.noUseGraphic = true; // The sword is actually a "projectile", so the item should not be visible when used
             Item.noMelee = true; // The projectile will do the damage and not the item
 
-            Item.rare = ItemRarityID.White;
+            Item.rare = ItemRarityID.Green;
             Item.value = Item.sellPrice(0, 0, 3, 0);
 
             Item.shoot = ModContent.ProjectileType<SteelShortSwordProjectile>(); // The projectile is what makes a shortsword work
@@ -34,8 +35,9 @@ namespace WuDao.Content.Items.Weapons.Melee
         {
             // 白天的小幅移动强化
             rules.Add(new StatRule(BuffConditions.DayTime,
-                StatEffect.RunSpeed(0.5f),        // maxRunSpeed +0.5
-                StatEffect.RunAcceleration(0.08f) // runAcceleration +0.08
+                StatEffect.MoveSpeed(2,mult:1.2f),
+                StatEffect.RunSpeed(2f),        // maxRunSpeed
+                StatEffect.RunAcceleration(1.2f) // runAcceleration
             ));
         }
         public override void AddRecipes()

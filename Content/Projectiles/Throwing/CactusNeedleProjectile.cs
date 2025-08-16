@@ -22,7 +22,7 @@ namespace WuDao.Content.Projectiles.Throwing
             Projectile.hostile = false;
             Projectile.DamageType = DamageClass.Throwing;
             Projectile.penetrate = 1;
-            Projectile.timeLeft = 180;           // 存活3秒
+            Projectile.timeLeft = 100;           // 存活100tick
             Projectile.ignoreWater = true;       // 不被水减速
             Projectile.tileCollide = true;       // 碰砖块就消失（也可改成 false 直穿）
             Projectile.extraUpdates = 0;         // 如需更丝滑可设为1

@@ -2,9 +2,11 @@ using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
 using WuDao.Common;
+using Terraria.ID;
 
 namespace WuDao.Content.Projectiles.Melee
 {
+    // 地狱之锋的射弹
     public class HellfireSwordProjectile : ModProjectile
     {
         public override string Texture => "WuDao/Content/Items/Weapons/Melee/HellfireSword";
@@ -21,8 +23,9 @@ namespace WuDao.Content.Projectiles.Melee
             Projectile.friendly = true;
             Projectile.timeLeft = 300;
             Projectile.tileCollide = false;
-            
+            Projectile.light = 0.3f;
             _sheet = SpriteSheets.Get(SpriteAtlasId.RedEffect);
+            // 精灵图表的使用方法
             // _anim = new SpriteAnimator();
 
             // _sheet = SpriteSheet
@@ -52,25 +55,31 @@ namespace WuDao.Content.Projectiles.Melee
             _anim.Update(ticksPerFrame: 3, frameCount: frameCount, loop: true);
 
             Projectile.rotation = Projectile.velocity.ToRotation();
-
-            // 让投射物更贴近贴图大小（不强制）
-            // var r = _sheet.GetFrameRect(SpriteIndex, _anim.Frame);
-            // Projectile.width = r.Width;
-            // Projectile.height = r.Height;
         }
 
         public override bool PreDraw(ref Color lightColor)
         {
-            _sheet.Draw(SpriteIndex, _anim.Frame, Projectile.Center, lightColor, Projectile.rotation, Projectile.scale*2);
+            _sheet.Draw(SpriteIndex, _anim.Frame, Projectile.Center, lightColor, Projectile.rotation, Projectile.scale * 2);
             return false;
         }
-        // public override void ModifyDamageHitbox(ref Rectangle hitbox)
-        // {
-        //     Point center = hitbox.Center;
-        //     hitbox.Width = 2;
-        //     hitbox.Height = 6;
-        //     hitbox.X = center.X - hitbox.Width / 2;
-        //     hitbox.Y = center.Y - hitbox.Height / 2;
-        // }
+        // HellfireSwordProjectile.cs （剑气命中）
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+        {
+            if (Main.rand.NextFloat() < 0.25f)
+                target.AddBuff(BuffID.OnFire, 120);
+        }
+        // HellfireSwordProjectile.cs
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
+        {
+            // 拿到发射者玩家并判定是否在地狱层
+            if (Projectile.owner >= 0 && Projectile.owner < Main.maxPlayers)
+            {
+                Player owner = Main.player[Projectile.owner];
+                if (owner?.active == true && owner.ZoneUnderworldHeight)
+                {
+                    modifiers.FinalDamage *= 1.20f;
+                }
+            }
+        }
     }
 }

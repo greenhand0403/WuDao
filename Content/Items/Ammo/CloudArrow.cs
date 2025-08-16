@@ -6,7 +6,7 @@ using WuDao.Content.Projectiles.Ranged;
 
 namespace WuDao.Content.Items.Ammo
 {
-    // This example is similar to the Wooden Arrow item
+    // TODO: 重绘贴图 穿云箭 弹药
     public class CloudArrow : ModItem
     {
         public override void SetStaticDefaults()
@@ -29,6 +29,7 @@ namespace WuDao.Content.Items.Ammo
             Item.shoot = ModContent.ProjectileType<CloudArrowProjectile>();
             Item.shootSpeed = 1.5f;
             Item.ammo = AmmoID.Arrow;
+            Item.rare = ItemRarityID.Blue;
         }
         public override void AddRecipes()
         {

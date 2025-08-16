@@ -6,25 +6,30 @@ namespace WuDao.Content.DamageClasses
 {
     public class SupremeDamageClass : DamageClass
     {
-        public override StatInheritanceData GetModifierInheritance(DamageClass damageClass)
+        public override StatInheritanceData GetModifierInheritance(DamageClass dc)
         {
-            StatInheritanceData statInheritanceData = StatInheritanceData.None;
-            // TODO： 未测试能否继承魔法伤害和召唤伤害
-            if (damageClass == DamageClass.Magic)
+            var data = StatInheritanceData.None;
+
+            // 超能 = 魔法(50%) + 召唤(50%)
+            if (dc == DamageClass.Magic || dc == DamageClass.Summon)
             {
-                statInheritanceData.damageInheritance = 0.5f;
+                data.damageInheritance = 0.5f;
+                // 召唤本体不走暴击，通常只从魔法继承暴击更合理：
+                if (dc == DamageClass.Magic)
+                    data.critChanceInheritance = 0.5f;
+
+                data.knockbackInheritance = 0.5f;
+                data.armorPenInheritance = 0.5f;
             }
-            if (damageClass == DamageClass.Summon)
-            {
-                statInheritanceData.damageInheritance = 0.5f;
-            }
-            return statInheritanceData;
+
+            // 如果你还想让“鞭子攻速（SummonMeleeSpeed）”参与，可以额外对该类给 attackSpeedInheritance
+            // if (dc == DamageClass.SummonMeleeSpeed) data.attackSpeedInheritance = 0.5f;
+
+            return data;
         }
 
-        public override bool GetEffectInheritance(DamageClass damageClass)
-        {
-            return damageClass == DamageClass.Magic || damageClass == DamageClass.Summon;
-        }
+        public override bool GetEffectInheritance(DamageClass dc)
+            => dc == DamageClass.Magic || dc == DamageClass.Summon;
 
         public override bool UseStandardCritCalcs => true;
     }

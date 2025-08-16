@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 
 namespace WuDao.Content.Items.Weapons.Ranged
 {
+    // TODO: 重绘贴图
     public class BrightVerdict : ModItem
     {
         public override void SetDefaults()
@@ -15,6 +16,7 @@ namespace WuDao.Content.Items.Weapons.Ranged
             Item.shoot = ModContent.ProjectileType<BrightVerdictProjectile>(); // 特殊“神圣弹丸”
             Item.rare = ItemRarityID.LightRed;      // 可按喜好
             Item.UseSound = SoundID.Item36;         // 霰弹风格，神圣一点也可换成SoundID.Item40等
+            Item.autoReuse = true;
         }
 
         // 关键：自定义发射逻辑，复刻“霰弹 + 特殊弹”
@@ -50,7 +52,7 @@ namespace WuDao.Content.Items.Weapons.Ranged
                 (int)(damage * 1.15f),                                // 比霰弹更猛些
                 knockback, player.whoAmI
             );
-            
+
             // 白色“枪口火舌”（可选）
             for (int i = 0; i < 6; i++)
             {
@@ -68,7 +70,8 @@ namespace WuDao.Content.Items.Weapons.Ranged
         {
             CreateRecipe()
                 .AddIngredient(ItemID.Shotgun)
-                .AddIngredient(ItemID.LightShard, 2) // 保留你的设定
+                .AddIngredient(ItemID.LightShard, 2)
+                .AddIngredient(ItemID.SoulofLight,10)
                 .AddTile(TileID.MythrilAnvil)
                 .Register();
         }

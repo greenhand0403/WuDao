@@ -6,6 +6,7 @@ using System.Collections.Generic;
 
 namespace WuDao.Content.Items.Weapons.Melee
 {
+    // TODO: 重绘贴图 长生剑
     public class ImmortalSword : BuffItem
     {
         public override void SetDefaults()
@@ -24,7 +25,7 @@ namespace WuDao.Content.Items.Weapons.Melee
             Item.UseSound = SoundID.Item1;
 
             Item.value = Item.buyPrice(silver: 4);
-            Item.rare = ItemRarityID.Blue;
+            Item.rare = ItemRarityID.Green;
         }
         protected override void BuildStatRules(Player player, Item item, IList<StatRule> rules)
         {

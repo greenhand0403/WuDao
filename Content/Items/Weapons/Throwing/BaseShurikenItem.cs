@@ -3,7 +3,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 
-namespace WuDao.Content.Items.Weapons.Throwing.Base
+namespace WuDao.Content.Items.Weapons.Throwing
 {
     /// <summary>
     /// 可继承的飞镖物品基类：

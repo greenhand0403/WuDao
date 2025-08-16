@@ -1,8 +1,5 @@
-using System;
-using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Terraria;
-using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -55,7 +52,7 @@ namespace WuDao.Content.Items.Weapons.Magic
             Item.UseSound = SoundID.Item85; // 号角/喇叭类音效可自定
             Item.noMelee = true;
 
-            Item.shoot = ProjectileID.AmethystBolt; // 仅作为默认占位
+            Item.shoot = ProjectileID.WoodenArrowFriendly; // 仅作为默认占位
             Item.shootSpeed = 10f;
             Item.autoReuse = true;
         }
