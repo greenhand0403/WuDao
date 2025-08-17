@@ -4,7 +4,9 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Audio;
-// TODO: 重绘贴图 成长型武器，剪刀，改成了发射斩波
+using WuDao.Content.Cooldowns;
+
+// TODO: 重绘贴图 成长型武器，剪刀，改成了发射斩波 辅助类未拆分到目录
 // ModPlayer ModItem ModProjectile 写在一个文件了
 namespace WuDao.Content.Items.Weapons.Melee
 {
@@ -68,7 +70,7 @@ namespace WuDao.Content.Items.Weapons.Melee
         {
             Item.width = 34;
             Item.height = 34;
-            Item.rare = ItemRarityID.Blue;
+            Item.rare = ItemRarityID.Red;
             Item.value = Item.buyPrice(silver: 50);
 
             Item.useStyle = ItemUseStyleID.Swing;
@@ -165,7 +167,7 @@ namespace WuDao.Content.Items.Weapons.Melee
             {
                 // 右键冲刺（打完WoF → Hardmode）
                 if (!Main.hardMode) return false;
-                if (mp.dashCooldown > 0) return false;
+                if (player.HasBuff(ModContent.BuffType<NormalScissorsDashCooldownBuff>())) return false;
 
                 Item.useStyle = ItemUseStyleID.Thrust;
                 Item.useAnimation = 12;
@@ -241,6 +243,7 @@ namespace WuDao.Content.Items.Weapons.Melee
                 }
 
                 mp.dashCooldown = DashCooldownFrames;
+                player.AddBuff(ModContent.BuffType<NormalScissorsDashCooldownBuff>(), DashCooldownFrames);
 
                 mp.energy = NormalScissorsPlayer.EnergyMax;   // 能量直接拉满
                 mp.forceChargedOnNextSwing = true;            // 标记：下一次左键必放斩波

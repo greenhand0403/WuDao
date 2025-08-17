@@ -229,4 +229,86 @@ namespace WuDao.Common
                 effects: fx);
         }
     }
+    public struct SpriteGrid // 行优先多行帧
+    {
+        public Rectangle Start;   // 左上首帧矩形（x,y,w,h）
+        public Point FrameSize;   // 单帧尺寸（w,h）
+        public Point Spacing;     // 帧间距（X: 横向像素间隔，Y: 纵向像素间隔）
+        public int FramesAcross;  // 每行的帧数（列数）
+        public int FramesDown;    // 行数
+        public int TotalFrames;   // 总帧数（最后一行不满时用它裁掉）
+
+        public SpriteGrid(Rectangle start, Point frameSize, Point spacing, int across, int down, int total)
+        {
+            Start = start;
+            FrameSize = frameSize;
+            Spacing = spacing;
+            FramesAcross = Math.Max(1, across);
+            FramesDown = Math.Max(1, down);
+            TotalFrames = Math.Max(1, total);
+        }
+
+        public Rectangle GetFrameRect(int frameIndex)
+        {
+            if (TotalFrames <= 0) return new Rectangle(0, 0, 1, 1);
+            int idx = ((frameIndex % TotalFrames) + TotalFrames) % TotalFrames; // wrap
+            int cx = idx % FramesAcross;  // 列索引 (0..Across-1)
+            int cy = idx / FramesAcross;  // 行索引
+                                          // 防越界：如果最后一行不满，超出的 idx 会被 TotalFrames 限制住
+            int x = Start.X + cx * (FrameSize.X + Spacing.X);
+            int y = Start.Y + cy * (FrameSize.Y + Spacing.Y);
+            return new Rectangle(x, y, FrameSize.X, FrameSize.Y);
+        }
+
+        /// <summary>
+        /// 直接绘制“第 frameIndex 帧”。和 SpriteSheet.Draw 一样的常用参数。
+        /// </summary>
+        public void Draw(Texture2D texture, int frameIndex, Vector2 worldCenter, Color color,
+                         float rotation, float scale, SpriteEffects fx = SpriteEffects.None,
+                         float layerDepth = 0f, float gfxOffY = 0f)
+        {
+            Rectangle rect = GetFrameRect(frameIndex);
+            Vector2 origin = new Vector2(rect.Width / 2f, rect.Height / 2f);
+
+            Main.EntitySpriteDraw(texture,
+                position: worldCenter - Main.screenPosition + new Vector2(0f, gfxOffY),
+                sourceRectangle: rect,
+                color: color,
+                rotation: rotation,
+                origin: origin,
+                scale: scale,
+                effects: fx);
+        }
+
+        /// <summary>
+        /// 画“起始帧 + 局部动画帧”。适合同表里多个精灵各占一段连续帧：
+        /// startFrame = 该精灵的首帧索引；localFrame = (0..frameCount-1)。
+        /// </summary>
+        public void DrawRange(Texture2D texture, int startFrame, int frameCount, int localFrame,
+                              Vector2 worldCenter, Color color, float rotation, float scale,
+                              SpriteEffects fx = SpriteEffects.None, float layerDepth = 0f, float gfxOffY = 0f)
+        {
+            if (frameCount <= 0) frameCount = 1;
+            int frameIndex = startFrame + ((localFrame % frameCount) + frameCount) % frameCount;
+            Draw(texture, frameIndex, worldCenter, color, rotation, scale, fx, layerDepth, gfxOffY);
+        }
+
+        /// <summary>
+        /// 如果需要自定义旋转原点（例如不是正中心），用这个。
+        /// </summary>
+        public void DrawWithOrigin(Texture2D texture, int frameIndex, Vector2 worldCenter, Color color,
+                                   float rotation, float scale, Vector2 origin,
+                                   SpriteEffects fx = SpriteEffects.None, float layerDepth = 0f, float gfxOffY = 0f)
+        {
+            Rectangle rect = GetFrameRect(frameIndex);
+            Main.EntitySpriteDraw(texture,
+                position: worldCenter - Main.screenPosition + new Vector2(0f, gfxOffY),
+                sourceRectangle: rect,
+                color: color,
+                rotation: rotation,
+                origin: origin,
+                scale: scale,
+                effects: fx);
+        }
+    }
 }

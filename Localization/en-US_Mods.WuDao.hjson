@@ -153,6 +153,16 @@ Items: {
 		DisplayName: Invincible Blade
 		Tooltip: ""
 	}
+
+	DevolutionCharm: {
+		DisplayName: Devolution Charm
+		Tooltip: ""
+	}
+
+	WrathLotus: {
+		DisplayName: Wrath Lotus
+		Tooltip: ""
+	}
 }
 
 Projectiles: {
@@ -188,6 +198,7 @@ Projectiles: {
 	TheOutlawUltimateBomb.DisplayName: The Outlaw Ultimate Bomb
 	GhostChakramProj.DisplayName: Ghost Chakram Proj
 	InvincibleArcShot.DisplayName: Invincible Arc Shot
+	WrathLotusProj.DisplayName: Wrath Lotus Proj
 }
 
 DamageClasses: {
@@ -201,5 +212,10 @@ Buffs: {
 	OutlawBackstepCooldown: {
 		DisplayName: Outlaw Backstep Cooldown
 		Description: Mods.WuDao.Buffs.OutlawBackstepCooldown.Description
+	}
+
+	NormalScissorsDashCooldownBuff: {
+		DisplayName: Normal Scissors Dash Cooldown Buff
+		Description: Mods.WuDao.Buffs.NormalScissorsDashCooldownBuff.Description
 	}
 }

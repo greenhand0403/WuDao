@@ -45,7 +45,7 @@ namespace WuDao.Content.Items.Weapons.Ranged
             Item.noMelee = true;
             Item.knockBack = 3f;
             Item.value = Item.buyPrice(0, 5);
-            Item.rare = ItemRarityID.Green;
+            Item.rare = ItemRarityID.Red;
             Item.UseSound = SoundID.Item36;
             Item.autoReuse = true;
             Item.shoot = ModContent.ProjectileType<TheOutlawPellet>();

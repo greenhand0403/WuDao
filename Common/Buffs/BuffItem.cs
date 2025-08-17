@@ -4,6 +4,8 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using WuDao.Content.Items.Weapons.Melee;
+using WuDao.Content.Items.Accessories;
+using WuDao.Content.Global.NPCs;
 
 // ----------------------------------------------------------
 // 可复用的 Buff + 属性（速度/回血等）统一框架
@@ -115,6 +117,19 @@ namespace WuDao.Common.Buffs
         public readonly HashSet<int> ImmuneBuffs = new();
         public float CritGenericAdd, CritMeleeAdd, CritRangedAdd, CritMagicAdd, CritSummonAdd;
         public bool FlagSlowFall, FlagNoFallDmg;
+        // 累加槽（放在已有字段旁）
+        public int MaxManaAdd;
+        public float MaxManaMult = 1f;
+        public int ManaRegenAdd;
+        public float ManaRegenMult = 1f;
+
+        // BuffStatPlayer 字段
+        public float AttackSpeedAddGeneric = 0;
+        public float DamageMultAddGeneric = 0;
+        public float AttackSpeedMultGeneric = 1f;   // 攻速乘法
+        public float DamageMultGeneric = 1f;        // 伤害乘法
+        public float DefenseMult = 1f;           // 防御倍率（在加法 DefenseAdd 之前乘）
+
         public override void ResetEffects()
         {
             MoveSpeedAdd = 0f; MoveSpeedMult = 1f;
@@ -124,6 +139,13 @@ namespace WuDao.Common.Buffs
             ImmuneBuffs.Clear();
             CritGenericAdd = CritMeleeAdd = CritRangedAdd = CritMagicAdd = CritSummonAdd = 0f;
             FlagSlowFall = FlagNoFallDmg = false;
+            MaxManaAdd = 0; MaxManaMult = 1f;
+            ManaRegenAdd = 0; ManaRegenMult = 1f;
+            AttackSpeedAddGeneric = 0f;
+            DamageMultAddGeneric = 0f;
+            AttackSpeedMultGeneric = 1f;
+            DamageMultGeneric = 1f;
+            DefenseMult = 1f;
         }
         public override bool PreModifyLuck(ref float luck)
         {
@@ -175,13 +197,25 @@ namespace WuDao.Common.Buffs
         }
         public override void PostItemCheck()
         {
-            Player.jumpSpeedBoost += JumpSpeedAdd;
+            Player.statManaMax2 = (int)Math.Round(Player.statManaMax2 * MaxManaMult) + MaxManaAdd;
+            if (Player.statMana > Player.statManaMax2) Player.statMana = Player.statManaMax2;
+
+            Player.manaRegen = (int)Math.Round(Player.manaRegen * ManaRegenMult) + ManaRegenAdd;
+
             // 生命再生：先乘再加，便于和其他来源组合
             Player.lifeRegen = (int)Math.Round(Player.lifeRegen * LifeRegenMult);
             Player.lifeRegen += LifeRegenAdd;
+            // 先乘
+            Player.GetAttackSpeed(DamageClass.Generic) *= AttackSpeedMultGeneric;
+            Player.GetAttackSpeed(DamageClass.Generic) += AttackSpeedAddGeneric;
 
+            Player.GetDamage(DamageClass.Generic) *= DamageMultGeneric;
+            Player.GetDamage(DamageClass.Generic) += DamageMultAddGeneric;
+
+            Player.jumpSpeedBoost += JumpSpeedAdd;
+
+            Player.statDefense *= DefenseMult;
             Player.statDefense += DefenseAdd;
-
             // 最大生命：先百分比，再平移
             int newMaxLife = (int)Math.Round(Player.statLifeMax2 * MaxLifeMult) + MaxLifeAdd;
             if (newMaxLife < 1) newMaxLife = 1;
@@ -242,6 +276,25 @@ namespace WuDao.Common.Buffs
         public static StatEffect SummonCrit(float add) => new((p, acc) => acc.CritSummonAdd += add);
         public static StatEffect SlowFall() => new((p, acc) => acc.FlagSlowFall = true);
         public static StatEffect NoFallDmg() => new((p, acc) => acc.FlagNoFallDmg = true);
+        // 法力
+        public static StatEffect MaxMana(int add) => new((p, acc) => acc.MaxManaAdd += add);
+        public static StatEffect MaxManaMultiplier(float mult) => new((p, acc) => acc.MaxManaMult *= mult);
+        public static StatEffect MaxManaPercent(float percent) => new((p, acc) => acc.MaxManaMult *= 1f + percent);
+        public static StatEffect ManaRegen(int add) => new((p, acc) => acc.ManaRegenAdd += add);
+        public static StatEffect ManaRegenMultiplier(float mult) => new((p, acc) => acc.ManaRegenMult *= mult);
+        public static StatEffect ManaRegenPercent(float percent) => new((p, acc) => acc.ManaRegenMult *= 1f + percent);
+
+        // 攻速 & 伤害（对所有类型）
+        public static StatEffect AttackSpeedPercent(float percent) => new((p, acc) => acc.AttackSpeedAddGeneric += percent);
+        public static StatEffect DamagePercent(float percent) => new((p, acc) => acc.DamageMultAddGeneric += percent);
+
+        // 防御倍率
+        public static StatEffect DefenseMultiplier(float mult) => new((p, acc) => acc.DefenseMult *= mult);
+        public static StatEffect DefensePercent(float percent) => new((p, acc) => acc.DefenseMult *= 1f + percent);
+
+        public static StatEffect AttackSpeedMultiplier(float mult) => new((p, acc) => acc.AttackSpeedMultGeneric *= mult);
+
+        public static StatEffect DamageMultiplier(float mult) => new((p, acc) => acc.DamageMultGeneric *= mult);
 
     }
 
@@ -299,8 +352,12 @@ namespace WuDao.Common.Buffs
         private static readonly List<StatRule> _statRules = new();
 
         public override void HoldItem(Item item, Player player) => TryApplyFromItem(player, item);
-        public override void UpdateAccessory(Item item, Player player, bool hideVisual) => TryApplyFromItem(player, item);
-        public override void UpdateEquip(Item item, Player player) => TryApplyFromItem(player, item);
+        public override void UpdateEquip(Item item, Player player)
+        {
+            // 避免饰品在 UpdateEquip 中再次应用（饰品应只走 UpdateAccessory）
+            if (item.accessory) return;
+            TryApplyFromItem(player, item);
+        }
 
         public override void ModifyItemScale(Item item, Player player, ref float scale)
         {
@@ -328,6 +385,22 @@ namespace WuDao.Common.Buffs
                 _statRules.Clear();
                 statProvider.AddStatRules(player, item, _statRules);
                 ApplyStatRules(player, item, _statRules);
+            }
+        }
+        public override void UpdateAccessory(Item item, Player player, bool hideVisual)
+        {
+            if (hideVisual) return; // 社交饰品不生效，防止再次叠加
+
+            TryApplyFromItem(player, item); // 你已有的收集规则调用
+
+            // 如果这个 item 是“全面退化”饰品，就给 ModPlayer 打标
+            if (item.type == ModContent.ItemType<DevolutionCharm>())
+            {
+                player.GetModPlayer<DevolutionPlayer>().HasDevolutionAura = true;
+            }
+            else if (item.type == ModContent.ItemType<WrathLotus>())
+            {
+                player.GetModPlayer<WrathLotusPlayer>().hasLotus = true;
             }
         }
 

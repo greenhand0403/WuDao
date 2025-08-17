@@ -58,12 +58,13 @@ namespace WuDao.Content.Projectiles.Ranged
             // ——— 分裂时机（避免先分裂错过 Tile 碰撞） ———
             if (!_split)
             {
-                if (Projectile.timeLeft <= 35) // 进入“可能分裂”的窗口
+                if (Projectile.timeLeft <= 40) // 进入“可能分裂”的窗口
                 {
                     if (IsImminentTileCollision())
                     {
                         _deferSplitTicks = Math.Max(_deferSplitTicks, 3); // 等 3 帧让 OnTileCollide 先发生
-                    }else if (Projectile.timeLeft <= 32)
+                    }
+                    else if (Projectile.timeLeft <= 32)
                     {
                         if (_deferSplitTicks > 0) _deferSplitTicks--; // 继续等待
                         else DoSplit(); // 真不靠近地形了，才空中分裂
@@ -99,66 +100,88 @@ namespace WuDao.Content.Projectiles.Ranged
             }
             return false;
         }
-        private bool IsSolidTileWorld(Vector2 worldPos)
+
+        public override bool OnTileCollide(Vector2 oldVelocity)
+        {
+            if (!_split) DoSplit();   // 只做分裂；是否生成火墙由 DoSplit() 内部决定
+            return true;              // Kill；OnKill 不再生成火墙
+        }
+        // 分裂瞬间：探测附近是否有可贴靠的实心（地/左/右），命中则生成火墙
+        private void TrySpawnFirewallAtSplit()
+        {
+            if (_spawnedFirewall || !NPC.downedPlantBoss || Projectile.owner != Main.myPlayer) return;
+
+            // 取样偏移：沿法向探 10/16px，覆盖高速或边缘缝
+            const float probeNear = 10f, probeFar = 16f;
+
+            // 地面（只要下方是实心砖/斜坡/半砖，平台忽略）
+            if (IsStrictSolidBlockAtWorld(Projectile.Center + new Vector2(0f, +probeNear)) ||
+                IsStrictSolidBlockAtWorld(Projectile.Center + new Vector2(0f, +probeFar)))
+            {
+                SpawnFirewall(0); // 贴地水平
+                return;
+            }
+
+            // 左墙
+            if (IsStrictSolidBlockAtWorld(Projectile.Center + new Vector2(-probeNear, 0f)) ||
+                IsStrictSolidBlockAtWorld(Projectile.Center + new Vector2(-probeFar, 0f)))
+            {
+                SpawnFirewall(+1); // 贴左墙（贴图朝右）
+                return;
+            }
+
+            // 右墙
+            if (IsStrictSolidBlockAtWorld(Projectile.Center + new Vector2(+probeNear, 0f)) ||
+                IsStrictSolidBlockAtWorld(Projectile.Center + new Vector2(+probeFar, 0f)))
+            {
+                SpawnFirewall(-1); // 贴右墙（贴图朝左）
+                return;
+            }
+
+            // 天花板或周围都不是实心 → 不生成（满足“只在实心物块才生成”的规则）
+        }
+
+        // 严格实心检测：未激活、参与碰撞的砖/斜坡/半砖；平台排除
+        private bool IsStrictSolidBlockAtWorld(Vector2 worldPos)
         {
             int tx = (int)(worldPos.X / 16f);
             int ty = (int)(worldPos.Y / 16f);
+            if (!WorldGen.InWorld(tx, ty, 10)) return false;
+
             Tile t = Framing.GetTileSafely(tx, ty);
-            if (!t.HasTile) return false;
-
-            // 砖块或平台都算可贴靠生成火墙的地形
-            bool solidBlock = Main.tileSolid[t.TileType] && !Main.tileSolidTop[t.TileType];
-            bool solidTop = Main.tileSolidTop[t.TileType]; // 平台
-            return solidBlock || solidTop;
-        }
-        public override bool OnTileCollide(Vector2 oldVelocity)
-        {
-            if (!_split) DoSplit(); // 只做分裂；火墙只在这里生成
-
-            if (NPC.downedPlantBoss) // 世纪之花后才有火墙
-            {
-                Vector2 c = Projectile.Center;
-
-                // 四向探测：只把“地板”和“左右墙”作为合法生成面；天花板不生成
-                bool hitFloor = IsSolidTileWorld(c + new Vector2(0f, +16f)); // ↓
-                bool hitCeil = IsSolidTileWorld(c + new Vector2(0f, -16f)); // ↑
-                bool hitRightW = IsSolidTileWorld(c + new Vector2(+16f, 0f)); // →
-                bool hitLeftW = IsSolidTileWorld(c + new Vector2(-16f, 0f)); // ←
-
-                if (hitFloor && !hitCeil) SpawnFirewall(0);
-                else if (hitLeftW && !hitRightW) SpawnFirewall(+1);
-                else if (hitRightW && !hitLeftW) SpawnFirewall(-1);
-            }
-
-            return true; // Kill；OnKill 不再生成火墙（避免双生）
+            if (!t.HasUnactuatedTile) return false;                   // 激活砖不碰撞
+            if (TileID.Sets.Platforms[t.TileType]) return false;      // 平台排除
+            if (WorldGen.SolidOrSlopedTile(tx, ty)) return true;      // 普通/斜坡/半砖
+            if (Main.tileSolid[t.TileType] && !Main.tileSolidTop[t.TileType]) return true; // 兜底
+            return false;
         }
 
-        // 0 = 水平贴地（贴图朝上）
-        // +1 = 竖直贴左墙（贴图朝右）
-        // -1 = 竖直贴右墙（贴图朝左）
-        private void SpawnFirewall(int orient)
+        // 原先只有 orient，现在加一个可选 overrideCenter
+        private void SpawnFirewall(int orient, Vector2? overrideCenter = null)
         {
             if (_spawnedFirewall) return;
             if (!NPC.downedPlantBoss) return;
             if (Projectile.owner != Main.myPlayer) return;
 
+            Vector2 pos = overrideCenter ?? Projectile.Center; // ← 支持指定中心
             Projectile.NewProjectile(
                 Projectile.GetSource_FromThis(),
-                Projectile.Center,
+                pos,                        // ★ 用这个位置
                 Vector2.Zero,
                 ModContent.ProjectileType<TheOutlawFirewall>(),
                 (int)(Projectile.damage * 0.75f),
                 0f,
                 Projectile.owner,
-                ai0: 120f,      // 存活
-                ai1: orient     // ★存“方位”，不是角度
+                ai0: 120f,
+                ai1: orient                 // -1右墙/0地面/+1左墙（你之前的方位枚举）
             );
             _spawnedFirewall = true;
         }
+
         public override void OnKill(int timeLeft)
         {
             if (!_split) DoSplit();
-            
+
             // 小爆点特效
             for (int i = 0; i < 8; i++)
                 Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Smoke, Main.rand.NextFloat(-2, 2), Main.rand.NextFloat(-2, 2), 150, default, 1f);
@@ -167,8 +190,36 @@ namespace WuDao.Content.Projectiles.Ranged
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             if (!_split) DoSplit();
+
+            // ★ 命中后补墙：未生成 → 优先贴地，其次至少放在“身体中心”
+            if (!_spawnedFirewall && NPC.downedPlantBoss && Projectile.owner == Main.myPlayer)
+            {
+                // 1) 先找“脚下实心”
+                //   从脚底往下“投两刀”：10px/16px；三点取样（中、左1/4、右1/4）增强容错
+                Vector2 footMid = new Vector2(target.Center.X, target.Bottom.Y);
+                float quarter = target.width * 0.25f;
+                Vector2 footL = footMid + new Vector2(-quarter, 0f);
+                Vector2 footR = footMid + new Vector2(+quarter, 0f);
+
+                bool solidBelow(Vector2 p) =>
+                    IsStrictSolidBlockAtWorld(p + new Vector2(0f, 10f)) ||
+                    IsStrictSolidBlockAtWorld(p + new Vector2(0f, 16f));
+
+                if (solidBelow(footMid) || solidBelow(footL) || solidBelow(footR))
+                {
+                    // 贴“实心地面”：把火墙中心放到“方块顶面”附近
+                    // 简化：用脚底Y当作基准（你的火墙AI第一帧会沿法向上抬10px，正好离地）实测需要降低9像素
+                    Vector2 pos = new Vector2(target.Center.X, target.Bottom.Y - 9);
+                    SpawnFirewall(0, pos); // 0 = 水平火墙
+                    return;
+                }
+
+                // 2) 脚下不是实心 → 至少“生成在它的中心”
+                //    避免生成到头顶：直接用 Center
+                SpawnFirewall(0, target.Center);
+            }
         }
-        
+
         private void DoSplit()
         {
             if (_split) return; // 双保险
@@ -197,9 +248,9 @@ namespace WuDao.Content.Projectiles.Ranged
                     ModContent.ProjectileType<TheOutlawSplitBomblet>(),
                     (int)(Projectile.damage * 1f), Projectile.knockBack, Projectile.owner);
             }
-            
-            // 要求：本体在分裂后消失
-            // 若该函数来自 AI/命中/撞墙，直接 Kill 即可；若来自 OnKill，再次调用也安全，因为 _split=true 会阻止重复生成
+
+            // ★ 分裂瞬间：仅当贴靠到实心物块时才生成火墙
+            TrySpawnFirewallAtSplit();
             Projectile.Kill();
         }
 
@@ -333,11 +384,11 @@ namespace WuDao.Content.Projectiles.Ranged
                 -1 => -MathHelper.PiOver2,  // 右墙，贴图朝左
                 _ => 0f
             };
-
+            // 射弹中心位置改变
             if (Projectile.localAI[0] == 0f)
             {
                 Vector2 snap = Vector2.Zero;
-                const float floorLift = 2f; // 地面抬高 10px（你想要的）
+                const float floorLift = 0f; // 地面抬高
                 const float wallPush = 5f; // 贴墙外推 10px（左右一致）
 
                 if (Orientation == 0) snap = new Vector2(0f, -floorLift); // 贴地向上抬
@@ -377,9 +428,9 @@ namespace WuDao.Content.Projectiles.Ranged
             Vector2 drawCenter = Projectile.Center;
 
             // 贴图偏移
-            
+
             Vector2 snap = Vector2.Zero;
-            const float floorLift = 18f; // 地面抬高 20px（你想要的）
+            const float floorLift = 16f; // 地面抬高
             const float wallPush = 18f; // 贴墙外推 26px（左右一致）
 
             if (Orientation == 0) snap = new Vector2(0f, -floorLift); // 贴地向上抬
@@ -391,7 +442,7 @@ namespace WuDao.Content.Projectiles.Ranged
                 drawCenter += snap;
                 Projectile.netUpdate = true;
             }
-            
+
             _sheet.Draw(SpriteIndex, _anim.Frame, drawCenter, lightColor, rot, Projectile.scale * 2);
             return false;
         }
