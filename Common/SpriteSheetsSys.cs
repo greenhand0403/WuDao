@@ -102,8 +102,8 @@ namespace WuDao.Common
             _map[SpriteAtlasId.BlueEffect] = blue;
             // ========= YellowEffect：多列不规则，手工 AddSprite =========
             var yellow = SpriteSheet.FromTexture("WuDao/Assets/YellowEffect")
-                // 第1列一堆图标（示例，按你的坐标继续补）
-                .AddSprite(new Rectangle(0, 0, 32, 32), new Point(0, 0), 1);
+                // 第1列一堆图标（示例，按你的坐标继续补）幽灵回旋镖
+                .AddSprite(new Rectangle(0, 96, 32, 32), new Point(0, 0), 1);
             // 继续 AddSprite(...) 把你需要用到的都登记完
 
             _map[SpriteAtlasId.YellowEffect] = yellow;

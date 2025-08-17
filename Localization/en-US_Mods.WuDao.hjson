@@ -143,6 +143,16 @@ Items: {
 		DisplayName: The Outlaw
 		Tooltip: ""
 	}
+
+	GhostChakram: {
+		DisplayName: Ghost Chakram
+		Tooltip: ""
+	}
+
+	InvincibleBlade: {
+		DisplayName: Invincible Blade
+		Tooltip: ""
+	}
 }
 
 Projectiles: {
@@ -176,6 +186,8 @@ Projectiles: {
 	TheOutlawSplitBomblet.DisplayName: The Outlaw Split Bomblet
 	TheOutlawSplitShot.DisplayName: The Outlaw Split Shot
 	TheOutlawUltimateBomb.DisplayName: The Outlaw Ultimate Bomb
+	GhostChakramProj.DisplayName: Ghost Chakram Proj
+	InvincibleArcShot.DisplayName: Invincible Arc Shot
 }
 
 DamageClasses: {

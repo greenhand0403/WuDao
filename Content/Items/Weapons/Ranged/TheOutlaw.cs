@@ -19,7 +19,7 @@ using WuDao.Content.Projectiles.Ranged;
 */
 namespace WuDao.Content.Items.Weapons.Ranged
 {
-    // 成长型散弹枪（法外狂徒风格）
+    // TODO: 重绘贴图 成长型散弹枪（法外狂徒风格）
     public class TheOutlaw : ModItem
     {
         // public override void SetStaticDefaults()
@@ -49,7 +49,7 @@ namespace WuDao.Content.Items.Weapons.Ranged
             Item.UseSound = SoundID.Item36;
             Item.autoReuse = true;
             Item.shoot = ModContent.ProjectileType<TheOutlawPellet>();
-            Item.shootSpeed = 16f;
+            Item.shootSpeed = 6f;
             Item.useAmmo = AmmoID.None;    // 内置子弹，不消耗弹药
             Item.crit = 90;//测试
         }

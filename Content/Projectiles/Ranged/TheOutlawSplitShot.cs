@@ -1,6 +1,7 @@
 using System;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using WuDao.Common;
@@ -11,6 +12,8 @@ namespace WuDao.Content.Projectiles.Ranged
     {
         private bool _split;
         private bool _spawnedFirewall;
+        // 字段
+        private int _deferSplitTicks = 0;
         // public override void SetStaticDefaults()
         // {
         //     DisplayName.SetDefault("分裂射弹");
@@ -18,16 +21,17 @@ namespace WuDao.Content.Projectiles.Ranged
         public override string Texture => $"Terraria/Images/Projectile_{ProjectileID.MiniNukeGrenadeI}";
         public override void SetDefaults()
         {
-            Projectile.width = 10;
-            Projectile.height = 10;
+            Projectile.width = 6;
+            Projectile.height = 6;
             Projectile.friendly = true;
             Projectile.hostile = false;
             Projectile.DamageType = DamageClass.Ranged;
             Projectile.penetrate = 1;
-            Projectile.timeLeft = 60; // 飞行很短距离
+            Projectile.timeLeft = 240; // 飞行很短距离
             Projectile.tileCollide = true;
             Projectile.usesLocalNPCImmunity = true;
             Projectile.localNPCHitCooldown = 10;
+            Projectile.MaxUpdates = 2;
         }
 
         public override void AI()
@@ -51,48 +55,92 @@ namespace WuDao.Content.Projectiles.Ranged
                 d.fadeIn = Main.rand.NextFloat(1.0f, 1.4f);
             }
 
-            if (Projectile.timeLeft == 30 && !_split)
+            // ——— 分裂时机（避免先分裂错过 Tile 碰撞） ———
+            if (!_split)
             {
-                DoSplit(); // 飞行到一半自动分裂
+                if (Projectile.timeLeft <= 35) // 进入“可能分裂”的窗口
+                {
+                    if (IsImminentTileCollision())
+                    {
+                        _deferSplitTicks = Math.Max(_deferSplitTicks, 3); // 等 3 帧让 OnTileCollide 先发生
+                    }else if (Projectile.timeLeft <= 32)
+                    {
+                        if (_deferSplitTicks > 0) _deferSplitTicks--; // 继续等待
+                        else DoSplit(); // 真不靠近地形了，才空中分裂
+                    }
+                }
             }
         }
+        public override void OnSpawn(IEntitySource source)
+        {
+            Player p = Main.player[Projectile.owner];
+            if (p != null && p.active)
+            {
+                Vector2 dir = Projectile.velocity;
+                if (dir.LengthSquared() < 0.001f) dir = Vector2.UnitX; else dir.Normalize();
 
+                Projectile.Center = p.Center + dir * 8f; // 从玩家中心稍微向射线方向偏 6px
+                Projectile.netUpdate = true;
+            }
+        }
+        // 预测“下一小段路径上是否会撞地形”（扫掠 3 步，每步 8px）
+        private bool IsImminentTileCollision()
+        {
+            Vector2 dir = Projectile.velocity;
+            if (dir.LengthSquared() < 0.001f) return false;
+            dir.Normalize();
+            Vector2 step = dir * 8f;
+
+            for (int i = 1; i <= 3; i++)
+            {
+                Vector2 checkPos = Projectile.position + step * i;
+                if (Collision.SolidCollision(checkPos, Projectile.width, Projectile.height))
+                    return true;
+            }
+            return false;
+        }
+        private bool IsSolidTileWorld(Vector2 worldPos)
+        {
+            int tx = (int)(worldPos.X / 16f);
+            int ty = (int)(worldPos.Y / 16f);
+            Tile t = Framing.GetTileSafely(tx, ty);
+            if (!t.HasTile) return false;
+
+            // 砖块或平台都算可贴靠生成火墙的地形
+            bool solidBlock = Main.tileSolid[t.TileType] && !Main.tileSolidTop[t.TileType];
+            bool solidTop = Main.tileSolidTop[t.TileType]; // 平台
+            return solidBlock || solidTop;
+        }
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
-            // 先做你现有的“分裂成左右小弹”的逻辑（如果还没做过）
-            if (!_split) DoSplit(); // 这会生成两颗小分裂弹并Kill自己（如你之前的写法）
+            if (!_split) DoSplit(); // 只做分裂；火墙只在这里生成
 
-            // 仅“砖块/平台”碰撞时考虑火墙生成
             if (NPC.downedPlantBoss) // 世纪之花后才有火墙
             {
-                // 判断撞的是水平面还是竖直面：
-                // 一般来说，撞地/顶 oldVelocity.Y 的幅度 > oldVelocity.X；撞墙则反之
-                bool hitHorizontal = Math.Abs(oldVelocity.Y) >= Math.Abs(oldVelocity.X); // 地板/天花板
-                float rotation;
+                Vector2 c = Projectile.Center;
 
-                if (hitHorizontal)
-                {
-                    // 水平火墙：沿着 X 轴展开，贴图朝上（你的火墙贴图默认朝上）
-                    rotation = 0f; // 0度
-                }
-                else
-                {
-                    // 垂直火墙：沿着 Y 轴展开，像爬藤怪法杖（贴图向右，旋转90°）
-                    rotation = MathHelper.PiOver2; // 90度
-                }
+                // 四向探测：只把“地板”和“左右墙”作为合法生成面；天花板不生成
+                bool hitFloor = IsSolidTileWorld(c + new Vector2(0f, +16f)); // ↓
+                bool hitCeil = IsSolidTileWorld(c + new Vector2(0f, -16f)); // ↑
+                bool hitRightW = IsSolidTileWorld(c + new Vector2(+16f, 0f)); // →
+                bool hitLeftW = IsSolidTileWorld(c + new Vector2(-16f, 0f)); // ←
 
-                // 生成火墙（只这一处会生成；空中/撞NPC不生成）
-                SpawnFirewall(rotation);
+                if (hitFloor && !hitCeil) SpawnFirewall(0);
+                else if (hitLeftW && !hitRightW) SpawnFirewall(+1);
+                else if (hitRightW && !hitLeftW) SpawnFirewall(-1);
             }
 
-            // 让本体自然消亡（或直接 return true）
-            return true;
+            return true; // Kill；OnKill 不再生成火墙（避免双生）
         }
-        private void SpawnFirewall(float rotation)
+
+        // 0 = 水平贴地（贴图朝上）
+        // +1 = 竖直贴左墙（贴图朝右）
+        // -1 = 竖直贴右墙（贴图朝左）
+        private void SpawnFirewall(int orient)
         {
             if (_spawnedFirewall) return;
-            if (!NPC.downedPlantBoss) return;              // 世纪之花后才有火墙
-            if (Projectile.owner != Main.myPlayer) return; // 避免联机重复生成
+            if (!NPC.downedPlantBoss) return;
+            if (Projectile.owner != Main.myPlayer) return;
 
             Projectile.NewProjectile(
                 Projectile.GetSource_FromThis(),
@@ -102,14 +150,15 @@ namespace WuDao.Content.Projectiles.Ranged
                 (int)(Projectile.damage * 0.75f),
                 0f,
                 Projectile.owner,
-                ai0: 120f,        // 2秒
-                ai1: rotation     // 0=水平、Pi/2=竖直
+                ai0: 120f,      // 存活
+                ai1: orient     // ★存“方位”，不是角度
             );
             _spawnedFirewall = true;
         }
         public override void OnKill(int timeLeft)
         {
             if (!_split) DoSplit();
+            
             // 小爆点特效
             for (int i = 0; i < 8; i++)
                 Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Smoke, Main.rand.NextFloat(-2, 2), Main.rand.NextFloat(-2, 2), 150, default, 1f);
@@ -119,7 +168,7 @@ namespace WuDao.Content.Projectiles.Ranged
         {
             if (!_split) DoSplit();
         }
-
+        
         private void DoSplit()
         {
             if (_split) return; // 双保险
@@ -148,13 +197,10 @@ namespace WuDao.Content.Projectiles.Ranged
                     ModContent.ProjectileType<TheOutlawSplitBomblet>(),
                     (int)(Projectile.damage * 1f), Projectile.knockBack, Projectile.owner);
             }
-
+            
             // 要求：本体在分裂后消失
             // 若该函数来自 AI/命中/撞墙，直接 Kill 即可；若来自 OnKill，再次调用也安全，因为 _split=true 会阻止重复生成
-            if (Projectile.timeLeft > 2)
-            {
-                Projectile.Kill();
-            }
+            Projectile.Kill();
         }
 
     }
@@ -173,7 +219,7 @@ namespace WuDao.Content.Projectiles.Ranged
             Projectile.friendly = true;
             Projectile.DamageType = DamageClass.Ranged;
             Projectile.penetrate = -1;
-            Projectile.timeLeft = 10; // 立刻爆
+            Projectile.timeLeft = 20; // 立刻爆
             Projectile.tileCollide = false;
             Projectile.usesLocalNPCImmunity = true;
             Projectile.localNPCHitCooldown = 10;
@@ -243,20 +289,24 @@ namespace WuDao.Content.Projectiles.Ranged
         // }
         // 自己管理的本地免疫（命中间隔）
         private const int LocalHitCD = 20; // 每20tick(约0.33s)对同一NPC结算一次
+                                           // 用于命中/绘制的一致几何（你可以按贴图像素改）
+        public const float TotalLen = 120f; // 墙“长度”
+        public const float Thickness = 28f;  // 墙“厚度”
         public override string Texture => $"Terraria/Images/Projectile_{ProjectileID.SnowBallFriendly}";
         // 取精灵图表里面的火墙
         private SpriteSheet _sheet;
         private SpriteAnimator _anim = new SpriteAnimator();
-
+        // 读取方位（ai1存的 int：-1 / 0 / +1）
+        private int Orientation => (int)Projectile.ai[1]; // -1右墙,0水平,+1左墙
+        private bool IsVertical => Orientation != 0;
         // 选择要用的精灵索引（根据你 AddSprite 的顺序）
         // 根据 Common/SpriteSheetsSys.cs 中添加精灵图的顺序
         public int SpriteIndex = 1;
         public override void SetDefaults()
         {
-            Projectile.width = 128; // 视觉上是一堵墙，可按需调
-            Projectile.height = 16;
-            // 不用原生命中判断，自己改了判定
-            // Projectile.friendly = true;
+            Projectile.width = (int)TotalLen; // 视觉上是一堵墙，可按需调
+            Projectile.height = (int)Thickness;
+            Projectile.friendly = true;
             Projectile.hostile = false;
             Projectile.DamageType = DamageClass.Ranged;
             Projectile.penetrate = -1;
@@ -264,8 +314,8 @@ namespace WuDao.Content.Projectiles.Ranged
             Projectile.ignoreWater = true;
             Projectile.timeLeft = 120; // 2秒
             Projectile.usesLocalNPCImmunity = true;
-            Projectile.localNPCHitCooldown = LocalHitCD;
             Projectile.netImportant = true;
+            Projectile.localNPCHitCooldown = LocalHitCD;
             _sheet = SpriteSheets.Get(SpriteAtlasId.RedEffect);
         }
 
@@ -275,71 +325,98 @@ namespace WuDao.Content.Projectiles.Ranged
             int frameCount = _sheet.Sprites[SpriteIndex].FrameCount;
             _anim.Update(ticksPerFrame: 4, frameCount: frameCount, loop: true);
 
-            Projectile.rotation = Projectile.ai[1]; // 0=水平(贴图朝上), Pi/2=竖直
+            // 仅用于“贴图方向”的rotation
+            Projectile.rotation = Orientation switch
+            {
+                0 => 0f,
+                1 => MathHelper.PiOver2,   // 左墙，贴图朝右
+                -1 => -MathHelper.PiOver2,  // 右墙，贴图朝左
+                _ => 0f
+            };
 
-            // 贴图几何：按你视觉来调
-            float totalLen = 160f;  // 火墙总长度
-            float thickness = 24f;  // 火墙厚度
+            if (Projectile.localAI[0] == 0f)
+            {
+                Vector2 snap = Vector2.Zero;
+                const float floorLift = 2f; // 地面抬高 10px（你想要的）
+                const float wallPush = 5f; // 贴墙外推 10px（左右一致）
 
-            bool vertical = Math.Abs(MathHelper.WrapAngle(Projectile.rotation - MathHelper.PiOver2)) < MathHelper.PiOver4;
+                if (Orientation == 0) snap = new Vector2(0f, -floorLift); // 贴地向上抬
+                else if (Orientation == 1) snap = new Vector2(+wallPush, 0f);  // 贴左墙→向右推
+                else if (Orientation == -1) snap = new Vector2(-wallPush, 0f);  // 贴右墙→向左推
+
+                if (snap != Vector2.Zero)
+                {
+                    Projectile.Center += snap;
+                    Projectile.netUpdate = true;
+                }
+                Projectile.localAI[0] = 1f; // 打上“已偏移”标记
+            }
 
             Vector2 center = Projectile.Center;
-            Vector2 topLeft, size;
-            if (!vertical)
+            Lighting.AddLight(center, 0.9f, 0.45f, 0.1f);
+
+            // 记录中心 → 改尺寸 → 还原中心（否则会跳位）
+            int w = IsVertical ? (int)Thickness : (int)TotalLen;
+            int h = IsVertical ? (int)TotalLen : (int)Thickness;
+            if (Projectile.width != w || Projectile.height != h)
             {
-                // 水平墙：长度沿 X，厚度沿 Y
-                topLeft = new Vector2(center.X - totalLen * 0.5f, center.Y - thickness * 0.5f);
-                size = new Vector2(totalLen, thickness);
+                Projectile.width = w;
+                Projectile.height = h;
+                Projectile.Center = center;      // 还原中心
+                Projectile.netUpdate = true;
+            }
+        }
+        // 绘制自己的火墙 水平方向也有偏移 例如打到左侧墙壁上，贴图应该往右边移动20像素
+        public override bool PreDraw(ref Color lightColor)
+        {
+            // 朝向判断（能识别 +90° / -90°）
+            float rot = MathHelper.WrapAngle(Projectile.rotation);
+            bool vertical = Math.Abs(Math.Abs(rot) - MathHelper.PiOver2) < MathHelper.PiOver4;
+
+            // ★ 仅在“水平”时抬高贴图 10px（命中盒子不动）
+            Vector2 drawCenter = Projectile.Center;
+
+            // 贴图偏移
+            
+            Vector2 snap = Vector2.Zero;
+            const float floorLift = 18f; // 地面抬高 20px（你想要的）
+            const float wallPush = 18f; // 贴墙外推 26px（左右一致）
+
+            if (Orientation == 0) snap = new Vector2(0f, -floorLift); // 贴地向上抬
+            else if (Orientation == 1) snap = new Vector2(+wallPush, 0f);  // 贴左墙→向右推
+            else if (Orientation == -1) snap = new Vector2(-wallPush, 0f);  // 贴右墙→向左推
+
+            if (snap != Vector2.Zero)
+            {
+                drawCenter += snap;
+                Projectile.netUpdate = true;
+            }
+            
+            _sheet.Draw(SpriteIndex, _anim.Frame, drawCenter, lightColor, rot, Projectile.scale * 2);
+            return false;
+        }
+        // ★★ 关键：用 Colliding 覆盖默认碰撞，按朝向给出“水平/竖直”的 AABB
+        public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
+        {
+            Vector2 c = Projectile.Center;
+            Vector2 topLeft, size;
+
+            if (!IsVertical)
+            {
+                topLeft = new Vector2(c.X - TotalLen * 0.5f, c.Y - Thickness * 0.5f);
+                size = new Vector2(TotalLen, Thickness);
             }
             else
             {
-                // 竖直墙：长度沿 Y，厚度沿 X（宽高互换）
-                topLeft = new Vector2(center.X - thickness * 0.5f, center.Y - totalLen * 0.5f);
-                size = new Vector2(thickness, totalLen);
+                topLeft = new Vector2(c.X - Thickness * 0.5f, c.Y - TotalLen * 0.5f);
+                size = new Vector2(Thickness, TotalLen);
             }
 
-            // 免疫递减
-            for (int i = 0; i < Main.maxNPCs; i++)
-                if (Projectile.localNPCImmunity[i] > 0) Projectile.localNPCImmunity[i]--;
-
-            // 命中
-            for (int n = 0; n < Main.maxNPCs; n++)
-            {
-                NPC npc = Main.npc[n];
-                if (!npc.active || npc.friendly || npc.life <= 0) continue;
-
-                if (Collision.CheckAABBvAABBCollision(npc.position, npc.Size, topLeft, size))
-                {
-                    if (Projectile.localNPCImmunity[n] <= 0)
-                    {
-                        var hit = new NPC.HitInfo
-                        {
-                            Damage = Projectile.damage,
-                            Knockback = 0f,
-                            HitDirection = (!vertical ? (npc.Center.X >= center.X ? 1 : -1)
-                                                      : (npc.Center.Y >= center.Y ? 1 : -1)),
-                            Crit = false
-                        };
-                        npc.StrikeNPC(hit, fromNet: false);
-                        Projectile.localNPCImmunity[n] = Projectile.localNPCHitCooldown > 0 ? Projectile.localNPCHitCooldown : 20;
-                        Dust.NewDust(npc.position, npc.width, npc.height, DustID.Torch);
-                    }
-                }
-            }
-
-            // 你原来的粉尘/发光/自定义绘制保留
-            for (int i = 0; i < 3; i++)
-            {
-                Vector2 p = center + new Vector2(Main.rand.NextFloat(-Projectile.width / 2, Projectile.width / 2), Main.rand.NextFloat(-4, 4));
-                Dust.NewDustPerfect(p, DustID.Torch, Vector2.Zero, 100, default, Main.rand.NextFloat(1.0f, 1.4f));
-            }
-            Lighting.AddLight(center, 0.9f, 0.45f, 0.1f);
-        }
-        // 绘制自己的火墙
-        public override bool PreDraw(ref Color lightColor)
-        {
-            _sheet.Draw(SpriteIndex, _anim.Frame, Projectile.Center, lightColor, Projectile.rotation, Projectile.scale * 2);
-            return false;
+            bool hit = Collision.CheckAABBvAABBCollision(
+                targetHitbox.TopLeft(), targetHitbox.Size(),
+                topLeft, size
+            );
+            return hit;
         }
     }
 }
