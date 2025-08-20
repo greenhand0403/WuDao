@@ -4,7 +4,7 @@ using Terraria;
 
 namespace WuDao.Content.Items.Ammo
 {
-    // 星云火箭 调整了粒子速度
+    // 星云火箭
     public class NebulaRocket : ModItem
     {
         public override void SetStaticDefaults()

@@ -1,6 +1,7 @@
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using WuDao.Content.Projectiles.Throwing;
 
 namespace WuDao.Content.Items.Weapons.Throwing
 {
@@ -11,7 +12,7 @@ namespace WuDao.Content.Items.Weapons.Throwing
         {
             Item.CloneDefaults(ItemID.Shuriken); // 克隆原版行为
             Item.shootSpeed = 8f;
-            Item.shoot = ModContent.ProjectileType<Projectiles.Throwing.WoodenShurikenProjectile>();
+            Item.shoot = ModContent.ProjectileType<WoodenShurikenProjectile>();
             Item.damage = 6;
             Item.useAnimation = 14;
             Item.useTime = 14;

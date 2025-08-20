@@ -45,7 +45,7 @@ namespace WuDao.Content.Items.Weapons.Melee
         public override bool? UseItem(Player player)
         {
             // 设定自定义冷却（不吃攻速）
-            player.GetModPlayer<InvincibleBladeCooldown>().Cooldown = InvincibleBlade.CooldownFrames;
+            player.GetModPlayer<InvincibleBladeCooldown>().Cooldown = CooldownFrames;
             return true;
         }
 
@@ -58,7 +58,7 @@ namespace WuDao.Content.Items.Weapons.Melee
 
             // 发射的射弹随着使用时间增多
             int cold = player.GetModPlayer<InvincibleBladeCooldown>().Cooldown;
-            for (int i = 0; i < 1 + (InvincibleBlade.CooldownFrames - cold) / 2; i++)
+            for (int i = 0; i < 1 + (CooldownFrames - cold) / 2; i++)
             {
                 // 发射一个“弧线寻敌”的射弹，速度/路径由射弹自行处理
                 Projectile.NewProjectile(

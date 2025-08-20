@@ -20,9 +20,9 @@ namespace WuDao.Content.Global.NPCs
     {
         static bool AnyAuraHolderAffecting(NPC npc)
         {
-            // 屏幕半径（近似）：用对角线一半，或你自定常量例如 900f
-            float radius = (float)Math.Sqrt(Main.screenWidth * Main.screenWidth + Main.screenHeight * Main.screenHeight) * 0.5f;
-
+            // 距离玩家的半径r的敌怪将受到削弱 屏幕半径（近似）：用对角线一半，或你自定常量例如 900f
+            // float radius = (float)Math.Sqrt(Main.screenWidth * Main.screenWidth + Main.screenHeight * Main.screenHeight) * 0.5f;
+            float radius = 8f;// 仅供测试
             for (int i = 0; i < Main.maxPlayers; i++)
             {
                 Player plr = Main.player[i];
@@ -50,11 +50,8 @@ namespace WuDao.Content.Global.NPCs
             if (npc.friendly) return;
             if (!AnyAuraHolderAffecting(npc)) return;
 
-            // “等效生命上限 ×0.8”：提高承受伤害 25% 近似模拟（EHP≈0.8）
+            // 提高敌怪承受的伤害 25% 
             modifiers.FinalDamage *= 1.25f;
-
-            // “防御 ×0.8”：如果你想更贴近，也可以再降一点防御（可选）
-            // modifiers.Defense *= 0.8f; // 若 tML 版本支持对 Defense 的乘法；否则忽略这行
         }
 
         public override void UpdateLifeRegen(NPC npc, ref int damage)

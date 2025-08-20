@@ -8,15 +8,10 @@ using WuDao.Content.Projectiles.Magic;
 namespace WuDao.Content.Items.Accessories
 {
     // TODO ：贴图置换 佛怒火莲
-    public class WrathLotus : BuffItem
+    // public class WrathLotus : BuffItem
+    public class WrathLotus : ModItem
     {
         public override string Texture => $"Terraria/Images/Item_{ItemID.HellCake}";
-        // public override void SetStaticDefaults()
-        // {
-        //     DisplayName.SetDefault("莲花护符");
-        //     Tooltip.SetDefault("受击时生成莲花灵气\n额外提供短暂无敌时间");
-        // }
-
         public override void SetDefaults()
         {
             Item.width = 32;
@@ -25,13 +20,17 @@ namespace WuDao.Content.Items.Accessories
             Item.rare = ItemRarityID.LightRed; // 星星斗篷 一王前
             Item.value = Item.sellPrice(gold: 5);
         }
-
-        // public override void UpdateAccessory(Player player, bool hideVisual)
-        // {
-        //     // 这里可以以后拓展，例如：
-        //     // player.lavaImmune = true;
-        //     player.GetModPlayer<WrathLotusPlayer>().hasLotus = true;
-        // }
+        // 装备饰品时设置标志位为真 受击时释放莲花射弹
+        public override void UpdateAccessory(Player player, bool hideVisual)
+        {
+            // 这里可以以后拓展，例如：
+            // player.lavaImmune = true;
+            player.GetModPlayer<WrathLotusPlayer>().hasLotus = true;
+            // 速度系数，奔跑加速度0.08和最大速度3会乘上这个系数
+            player.moveSpeed += 0.15f;
+            // 由最后一个加速度加成覆盖 由maxRunSpeed 赋值给 accRunSpeed
+            // player.accRunSpeed = 6.75f; // Sets the players sprint speed in boots.
+        }
     }
 
     public class WrathLotusPlayer : ModPlayer
@@ -42,7 +41,7 @@ namespace WuDao.Content.Items.Accessories
         {
             hasLotus = false;
         }
-        
+
         public override void OnHurt(Player.HurtInfo info)
         {
             if (hasLotus)

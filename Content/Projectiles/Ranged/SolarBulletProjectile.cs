@@ -23,7 +23,7 @@ namespace WuDao.Content.Projectiles.Ranged
             Projectile.DamageType = DamageClass.Ranged;
 
             Projectile.ignoreWater = true;
-            // ignore gravity
+            
             AIType = ProjectileID.Bullet;
         }
 
@@ -46,10 +46,7 @@ namespace WuDao.Content.Projectiles.Ranged
         public override void OnKill(int timeLeft)
         {
             SoundEngine.PlaySound(SoundID.Item14.WithVolumeScale(0.5f).WithPitchOffset(0.8f), Projectile.position);
-            // for (var i = 0; i < 2; i++)
-            // {
-            //     Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.SolarFlare, 0.5f, 0.5f, 0, default, 1f);
-            // }
+            
             Collision.HitTiles(Projectile.position + Projectile.velocity, Projectile.velocity, Projectile.width, Projectile.height);
 
             if (Main.myPlayer == Projectile.owner)
@@ -68,13 +65,5 @@ namespace WuDao.Content.Projectiles.Ranged
                 p2.CritChance = 0;
             }
         }
-
-        // public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
-        // {
-        //     if (Main.rand.NextBool(3)) // 33% chance to inflict On Fire!
-        //     {
-        //         target.AddBuff(BuffID.Daybreak, 180); // Inflict On Fire! for 3 seconds
-        //     }
-        // }
     }
 }

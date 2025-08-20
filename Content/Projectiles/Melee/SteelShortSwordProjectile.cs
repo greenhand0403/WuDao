@@ -38,7 +38,6 @@ namespace WuDao.Content.Projectiles.Melee
 			Projectile.timeLeft = 360; // This value does not matter since we manually kill it earlier, it just has to be higher than the duration we use in AI
 			Projectile.hide = true; // Important when used alongside player.heldProj. "Hidden" projectiles have special draw conditions
 		}
-
 		public override void AI() {
 			Player player = Main.player[Projectile.owner];
 
@@ -72,7 +71,7 @@ namespace WuDao.Content.Projectiles.Melee
 			// The code in this method is important to align the sprite with the hitbox how we want it to
 			SetVisualOffsets();
 		}
-
+        
 		private void SetVisualOffsets() {
 			// 32 is the sprite size (here both width and height equal)
 			const int HalfSpriteWidth = 32 / 2;

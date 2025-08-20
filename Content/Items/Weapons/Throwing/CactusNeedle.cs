@@ -1,6 +1,7 @@
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria;
+using WuDao.Content.Projectiles.Throwing;
 
 namespace WuDao.Content.Items.Weapons.Throwing
 {
@@ -25,11 +26,11 @@ namespace WuDao.Content.Items.Weapons.Throwing
 
             Item.DamageType = DamageClass.Throwing; // 如需兼容，可改为 DamageClass.Ranged
             Item.damage = 4;
-            // Item.knockBack = 1.5f;
+            
             Item.rare = ItemRarityID.Green;
             Item.value = 1;
 
-            Item.shoot = ModContent.ProjectileType<Projectiles.Throwing.CactusNeedleProjectile>();
+            Item.shoot = ModContent.ProjectileType<CactusNeedleProjectile>();
             Item.shootSpeed = 8f;
         }
         public override void AddRecipes()

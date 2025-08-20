@@ -5,7 +5,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using WuDao.Content.Cooldowns;
 
-// 玄铁重剑 用到了额外的 ModPlayer 右键下劈 冷却
+// TODO: 重置贴图 玄铁重剑 用到了额外的 ModPlayer 右键下劈 冷却
 namespace WuDao.Content.Items.Weapons.Melee
 {
     public class SteelHeavySword : ModItem
@@ -38,7 +38,7 @@ namespace WuDao.Content.Items.Weapons.Melee
         {
             int cd = player.GetModPlayer<SteelHeavySwordPlayer>().RightClickCooldown;
 
-            // 只在 90~120 的窗口内做分段缩放
+            // 根据冷却时间动态调整缩放 只在 90~120 的窗口内做分段缩放
             const int start = 90;
             const int end = 120;
             const int window = end - start; // 30
@@ -74,11 +74,6 @@ namespace WuDao.Content.Items.Weapons.Melee
         public override void UseItemHitbox(Player player, ref Rectangle hitbox, ref bool noHitbox)
         {
             // 右键时至少挥舞了1/2的动画，才判定碰撞
-            // if (!noHitbox && (player.altFunctionUse == 2) && ((Item.useAnimation - player.itemAnimation) > (Item.useAnimation / 2)))
-            // {
-            //     noHitbox = true;
-            //     return;
-            // }
             // 90~120是右击挥舞动画，110~120期间不碰撞，确保至少挥出1/3的动画
             if (!noHitbox && (player.altFunctionUse == 2) && (player.GetModPlayer<SteelHeavySwordPlayer>().RightClickCooldown > 110))
             {

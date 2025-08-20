@@ -10,7 +10,7 @@ namespace WuDao.Content.Items.Accessories
     public class DevolutionCharm : BuffItem
     {
         public override string Texture => $"Terraria/Images/Item_{ItemID.OldShoe}";
-        private const float MULT = 0.5f;
+        public const float MULT = 0.5f;
         public override void SetDefaults()
         {
             Item.width = 28; Item.height = 28;
@@ -30,31 +30,13 @@ namespace WuDao.Content.Items.Accessories
                 StatEffect.ManaRegenMultiplier(MULT),
 
                 // 攻速/伤害/移速/防御
-                StatEffect.AttackSpeedMultiplier(MULT),
-                // StatEffect.DamageMultiplier(MULT),
-
-                StatEffect.MoveSpeed(mult: MULT),      // 移动速度 ×0.8
-                StatEffect.DefenseMultiplier(MULT)     // 防御 ×0.8
+                StatEffect.DamageAdd(2.0f),
+                StatEffect.AttackSpeedAdd(0.5f),
+                // StatEffect.MoveSpeed(0.2f),//+20%的意思
+                // StatEffect.RunSpeed(2f),
+                StatEffect.DefenseMultiplier(MULT)
             ));
         }
-
-        // 这里不用写敌怪效果，见第三部分（GlobalNPC/GlobalProjectile）
-    }
-    public class DevolutionDamageScaleGlobal : GlobalItem
-    {
-        public const float POSITIVE_SCALE = 0.8f; // 80%
-
-        public override void ModifyWeaponDamage(Item item, Player player, ref StatModifier damage)
-        {
-            // 仅在佩戴了“全面退化”饰品时生效
-            if (!player.GetModPlayer<DevolutionPlayer>().HasDevolutionAura)
-                return;
-
-            // 关键：把当前累计好的伤害 StatModifier 朝 1.0F 缩放到 80%
-            damage = damage.Scale(POSITIVE_SCALE);
-            // 让负面也变小（-10% 仍保持 -10%），只想削弱正增的写法
-            // float add = damage.Additive - 1f;
-            // if (add > 0) damage.Additive = 1f + add * 0.8f;
-        }
+        
     }
 }

@@ -2,6 +2,7 @@
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using WuDao.Content.Projectiles.Throwing;
 
 namespace WuDao.Content.Items.Weapons.Throwing
 {
@@ -11,8 +12,8 @@ namespace WuDao.Content.Items.Weapons.Throwing
         {
             Item.useStyle = ItemUseStyleID.Shoot; // 正确用法
             Item.shootSpeed = 10f;
-            Item.shoot = ModContent.ProjectileType<Projectiles.Throwing.FlyStoneProjectile>();
-            Item.damage = 8;
+            Item.shoot = ModContent.ProjectileType<FlyStoneProjectile>();
+            Item.damage = 6;
             Item.width = 12;
             Item.height = 12;
             Item.maxStack = Item.CommonMaxStack;

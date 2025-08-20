@@ -1,6 +1,7 @@
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using WuDao.Content.Projectiles.Throwing;
 
 namespace WuDao.Content.Items.Weapons.Throwing
 {
@@ -21,7 +22,7 @@ namespace WuDao.Content.Items.Weapons.Throwing
         protected override DamageClass DmgClass => DamageClass.Throwing;
 
         // 绑定它的投射物
-        protected override int ProjectileType => ModContent.ProjectileType<Projectiles.Throwing.FlameShurikenProjectile>();
+        protected override int ProjectileType => ModContent.ProjectileType<FlameShurikenProjectile>();
 
         // 配方（30 个/组）
         protected override void BuildRecipe(Recipe recipe)

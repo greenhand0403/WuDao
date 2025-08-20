@@ -7,7 +7,7 @@ using WuDao.Content.Projectiles.Melee;
 
 namespace WuDao.Content.Items.Weapons.Melee
 {
-    // TODO: 改贴图 玄铁短剑
+    // TODO: 改贴图 玄铁短剑 射弹的碰撞箱在中间不在剑尖是 bug
     public class SteelShortSword : BuffItem
     {
         public override void SetDefaults()
@@ -33,13 +33,12 @@ namespace WuDao.Content.Items.Weapons.Melee
         }
         protected override void BuildStatRules(Player player, Item item, IList<StatRule> rules)
         {
-            // 白天的小幅移动强化
+            // 白天的增加15%移动速度
             rules.Add(new StatRule(BuffConditions.DayTime,
-                StatEffect.MoveSpeed(2,mult:1.2f),
-                StatEffect.RunSpeed(2f),        // maxRunSpeed
-                StatEffect.RunAcceleration(1.2f) // runAcceleration
+                StatEffect.MoveSpeed(0.15f)
             ));
         }
+        
         public override void AddRecipes()
         {
             CreateRecipe()

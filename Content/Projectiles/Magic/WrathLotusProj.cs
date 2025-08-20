@@ -28,18 +28,6 @@ namespace WuDao.Content.Projectiles.Magic
             // ProjectileID.Sets.TrailCacheLength[Type] = 6;
             // ProjectileID.Sets.TrailingMode[Type] = 2;
         }
-        public override void Load()
-        {
-            _grid = new SpriteGrid(
-                start: new Rectangle(0, 0, 32, 32), // 表内左上角第一帧
-                frameSize: new Point(32, 32),
-                spacing: Point.Zero,                // 帧之间没有像素空隙就填 0
-                across: 6,                          // 每行 6 帧
-                down: 2,                            // 2 行
-                total: 11                          // 实际总帧数 11
-            ); // 如上初始化，或在 OnSpawn 里按贴图实际尺寸/行列计算
-            _tex = ModContent.Request<Texture2D>("WuDao/Content/Projectiles/Magic/WrathLotusProj").Value;
-        }
         public override void SetDefaults()
         {
             Projectile.width = 32; // 命中箱基准（不需要等于贴图）
@@ -57,7 +45,19 @@ namespace WuDao.Content.Projectiles.Magic
 
             // 同一 NPC 的命中冷却
             Projectile.usesLocalNPCImmunity = true;     // 
-            Projectile.localNPCHitCooldown = 12;        // 12 tick ≈ 0.2 秒
+            Projectile.localNPCHitCooldown = 12;        // 12 tick ≈ 0.2 秒 
+
+            // 加载问题，放到load里面无法加载
+            // 如上初始化，或在 OnSpawn 里按贴图实际尺寸/行列计算
+            _grid = new SpriteGrid(
+                start: new Rectangle(0, 0, 32, 32), // 表内左上角第一帧
+                frameSize: new Point(32, 32),
+                spacing: Point.Zero,                // 帧之间没有像素空隙就填 0
+                across: 6,                          // 每行 6 帧
+                down: 2,                            // 2 行
+                total: 11                          // 实际总帧数 11
+            );
+            _tex = ModContent.Request<Texture2D>("WuDao/Content/Projectiles/Magic/WrathLotusProj").Value;
         }
 
         public override void OnSpawn(Terraria.DataStructures.IEntitySource source)

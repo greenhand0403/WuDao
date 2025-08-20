@@ -12,7 +12,6 @@ namespace WuDao.Content.Projectiles.Ranged
         public override void SetStaticDefaults()
         {
             ProjectileID.Sets.IsARocketThatDealsDoubleDamageToPrimaryEnemy[Type] = true; // Deals double damage on direct hits.
-            //ProjectileID.Sets.PlayerHurtDamageIgnoresDifficultyScaling[Type] = true; // Damage dealt to players does not scale with difficulty in vanilla.
             ProjectileID.Sets.Explosive[Type] = true;
         }
         public override void SetDefaults()
@@ -98,7 +97,7 @@ namespace WuDao.Content.Projectiles.Ranged
 
             for (var i = 0; i < 40; i++)
             {
-                Dust smokeDust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Smoke, 0f, 0f, 100, default, 1.4f);
+                Dust smokeDust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Smoke, 0f, 0f, 100, default, 1.2f);
                 smokeDust.velocity *= 2f;
                 if (Main.rand.NextBool(2))
                 {
@@ -108,26 +107,24 @@ namespace WuDao.Content.Projectiles.Ranged
             }
             for (int j = 0; j < 70; j++)
             {
-                Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.UndergroundHallowedEnemies, 0f, 0f, 100, default, 3f);
-                if (Main.rand.NextBool(3))
-                {
-                    dust.noGravity = true;
-                }
+                Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.UndergroundHallowedEnemies, 0f, 0f, 100, default, 2.5f);
+                dust.noGravity = true;
                 dust.velocity *= 3f;
-                dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.CrystalPulse2, 0f, 0f, 100, default(Color), 2f);
+                dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.CrystalPulse2, 0f, 0f, 100, default(Color), 1.5f);
                 dust.velocity *= 1.2f;
+                dust.noGravity = true;
             }
 
             // Spawn a bunch of smoke gores.
             for (int k = 0; k < 3; k++)
             {
-                float speedMulti = 0.33f;
+                float speedMulti = 0.3f;
                 if (k == 1)
                 {
-                    speedMulti = 0.66f;
+                    speedMulti = 0.6f;
                 }else if (k == 2)
                 {
-                    speedMulti = 1f;
+                    speedMulti = 0.9f;
                 }
 
                 Gore smokeGore = Gore.NewGoreDirect(Projectile.GetSource_Death(), Projectile.position, default, Main.rand.Next(GoreID.Smoke1, GoreID.Smoke3 + 1));

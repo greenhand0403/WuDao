@@ -75,7 +75,7 @@ namespace WuDao.Content.Projectiles.Throwing
         {
             Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
             Vector2 origin = new Vector2(texture.Width / 2, texture.Height / 2);
-
+            // 画拖尾
             for (int i = Projectile.oldPos.Length - 1; i > 0; i--)
             {
                 Vector2 drawPos = Projectile.oldPos[i] + origin - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY);
@@ -83,12 +83,9 @@ namespace WuDao.Content.Projectiles.Throwing
                 Color color = lightColor * ((Projectile.oldPos.Length - i) / (float)Projectile.oldPos.Length);
                 Main.spriteBatch.Draw(texture, drawPos, null, color, Projectile.rotation, origin, Projectile.scale, SpriteEffects.None, 0);
             }
-            // 需要自己手动把本体画出来
-
+            // 返回 false 就需要自己手动把本体画出来
             Vector2 currentPos = Projectile.Center - Main.screenPosition;
-
             Main.spriteBatch.Draw(texture, currentPos, null, lightColor, Projectile.rotation, origin, Projectile.scale, SpriteEffects.None, 0);
-
             return false;
         }
     }
