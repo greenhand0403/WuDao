@@ -25,24 +25,26 @@ namespace WuDao.Content.Projectiles.Melee
         public static int[] SwordItemIDs = new int[]
         {
             ItemID.CopperBroadsword,
-            ItemID.IronBroadsword,
-            ItemID.SilverBroadsword,
-            ItemID.GoldBroadsword,
             ItemID.LightsBane,
-            ItemID.BloodButcherer,
-            ItemID.BladeofGrass,
             ItemID.Muramasa,
+            ItemID.Terragrim,
+            ItemID.BloodButcherer,
+            ItemID.Starfury,
+            ItemID.EnchantedSword,
+            ItemID.BeeKeeper,
+            ItemID.BladeofGrass,
             ItemID.FieryGreatsword,
             ItemID.NightsEdge,
-            ItemID.EnchantedSword,
-            ItemID.Excalibur,
-            ItemID.TrueExcalibur,
             ItemID.TrueNightsEdge,
+            ItemID.TrueExcalibur,
+            ItemID.Excalibur,
+            ItemID.Seedler,
             ItemID.TerraBlade,
-            ItemID.Starfury,
             ItemID.TheHorsemansBlade,
             ItemID.StarWrath,
-            ItemID.Meowmere
+            ItemID.Meowmere,
+            ItemID.InfluxWaver,
+            ItemID.Zenith
         };
 
         // 2) 剑尖对齐角修正（度）。键：ItemID；值：让“贴图”绕中心旋转多少度后，剑尖指向“贴图的朝前方向”。
@@ -51,9 +53,9 @@ namespace WuDao.Content.Projectiles.Melee
         {
             // 示例（以下角度仅示意，请按你包里的实际视觉调整）：
             [ItemID.CopperBroadsword] = 45,
-            [ItemID.IronBroadsword] = 45,
-            [ItemID.SilverBroadsword] = 45,
-            [ItemID.GoldBroadsword] = 45,
+            [ItemID.LightsBane] = 45,
+            [ItemID.Muramasa] = 45,
+            [ItemID.Terragrim] = 45,
             // ...
         };
 
@@ -88,7 +90,7 @@ namespace WuDao.Content.Projectiles.Melee
             Projectile.light = 0.3f;
             Projectile.MaxUpdates = 3;
         }
-
+        // TODO: 必有1个本体剑刺向光标位置
         public override void OnSpawn(Terraria.DataStructures.IEntitySource source)
         {
             Vector2 mouse = Main.MouseWorld;

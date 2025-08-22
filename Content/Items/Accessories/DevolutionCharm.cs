@@ -10,7 +10,7 @@ namespace WuDao.Content.Items.Accessories
     public class DevolutionCharm : BuffItem
     {
         public override string Texture => $"Terraria/Images/Item_{ItemID.OldShoe}";
-        public const float MULT = 0.5f;
+        public const float MULT = 0.8f;
         public override void SetDefaults()
         {
             Item.width = 28; Item.height = 28;
@@ -30,10 +30,10 @@ namespace WuDao.Content.Items.Accessories
                 StatEffect.ManaRegenMultiplier(MULT),
 
                 // 攻速/伤害/移速/防御
-                StatEffect.DamageAdd(2.0f),
-                StatEffect.AttackSpeedAdd(0.5f),
-                // StatEffect.MoveSpeed(0.2f),//+20%的意思
-                // StatEffect.RunSpeed(2f),
+                StatEffect.DamageAdd(-(1-MULT)),
+                StatEffect.AttackSpeedAdd(-(1-MULT)),
+                StatEffect.MoveSpeed(-(1-MULT)),
+                
                 StatEffect.DefenseMultiplier(MULT)
             ));
         }

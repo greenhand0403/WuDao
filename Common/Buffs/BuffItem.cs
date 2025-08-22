@@ -6,6 +6,7 @@ using Terraria.ModLoader;
 using WuDao.Content.Items.Weapons.Melee;
 using WuDao.Content.Items.Accessories;
 using WuDao.Content.Global.NPCs;
+using Terraria.GameContent.UI.Minimap;
 
 // ----------------------------------------------------------
 // 可复用的 Buff + 属性（速度/回血等）统一框架
@@ -103,97 +104,193 @@ namespace WuDao.Common.Buffs
     public class BuffStatPlayer : ModPlayer
     {
         // 常用属性累加器
-        public float MoveSpeedAdd;      // 加法（与 vanilla Player.moveSpeed 同维度）
-        public float RunSpeedAdd;       // 叠加到 Player.maxRunSpeed
-        public float RunAccelAdd;       // 叠加到 Player.runAcceleration
-        public float JumpSpeedAdd;      // 叠加到 Player.jumpSpeedBoost
-        public int LifeRegenAdd;        // 叠加到 Player.lifeRegen（约每秒回复 = lifeRegen/2 生命）
-        public float LifeRegenMult = 1; // 生命再生“倍率”
-        public int DefenseAdd;          // 叠加防御
-        public int MaxLifeAdd;          // 叠加最大生命（作用于 statLifeMax2）
-        public float MaxLifeMult = 1;   // 百分比型最大生命加成（乘到 statLifeMax2）
-        public float MeleeSizeMult = 1f;
+        public float MoveSpeedAdd = 0f;      // 加法（与 vanilla Player.moveSpeed 同维度）
+        // public float MaxAccRunSpeed = 3f;    // accRunSpeed
+        public float AccRunSpeedCandidate;  // 本帧声明的上限候选（取最大）
+        public float AccRunSpeedAdd = 0f;
+        public float MaxRunSpeedAdd = 0f;       // 叠加到 Player.maxRunSpeed
+        public float RunAccelAdd = 0f;       // 叠加到 Player.runAcceleration
+        public float RunSlowdownAdd = 0;
+        public float JumpSpeedBoostAdd = 0f;      // 叠加到 Player.jumpSpeedBoost
+        public int JumpHeightAdd = 0;
+        public float JumpSpeed = 0;
+        public int ExtraFall = 0;
+        public int LifeRegenAdd = 0;       // 叠加到 Player.lifeRegen（约每秒回复 = lifeRegen/2 生命）
+        public float LifeRegenMult = 1f; // 生命再生“倍率”
+        public int MaxLifeAdd = 0;          // 叠加最大生命（作用于 statLifeMax2）
+        public float MaxLifeMult = 1f;   // 百分比型最大生命加成（乘到 statLifeMax2）
+        public float MeleeSizeMult = 1f;   // 近战武器尺寸加成（乘到 Player.meleeSize）
         public readonly HashSet<int> ImmuneBuffs = new();
-        public float CritGenericAdd, CritMeleeAdd, CritRangedAdd, CritMagicAdd, CritSummonAdd;
-        public bool FlagSlowFall, FlagNoFallDmg;
+        public float CritGenericAdd = 0f, CritMeleeAdd = 0f, CritRangedAdd = 0f, CritMagicAdd = 0f, CritSummonAdd = 0f;
+        public bool FlagSlowFall, FlagNoFallDmg, FlagAutoJump, FlagJumpBoost;
         // 累加槽（放在已有字段旁）
-        public int MaxManaAdd;
+        public int MaxManaAdd = 0;
         public float MaxManaMult = 1f;
-        public int ManaRegenAdd;
+        public int ManaRegenAdd = 0;
         public float ManaRegenMult = 1f;
-
-        // BuffStatPlayer 字段
-        public float AttackSpeed = 0f;   // 攻速最终乘数
-        public float DamageGeneric = 0f;
+        public float KnockbackMulti = 1f;
+        public float EnduranceAdd = 0f;
+        public int DefenseAdd = 0;          // 叠加防御
         public float DefenseMult = 1f;           // 防御倍率（在加法 DefenseAdd 之前乘）
-
+        // BuffStatPlayer 字段
+        public float AttackSpeed = 0f;   // 通用攻速加成 最终乘数
+        public float AttackSpeedMelee = 0f;
+        public float AttackSpeedRanged = 0f;
+        public float AttackSpeedMagic = 0f;
+        public float AttackSpeedSummon = 0f;
+        public float AttackSpeedThrowing = 0f;
+        public float DamageGeneric = 0f;
+        public float MeleeDamageAdd = 0f;
+        public float RangedDamageAdd = 0f;
+        public float MagicDamageAdd = 0f;
+        public float SummonDamageAdd = 0f;
+        public float ThrowingDamageAdd = 0f;
+        public bool FlagkbGlove = false;
+        public bool MeleeScaleGlove = false;
+        public bool AutoReuse = false;
+        public bool FlagFireWalk = false;
+        public bool FlagLavaImmune = false;
+        public bool FlagNoKnockback = false;
+        public bool FlagLongInvince = false;
+        public int LavaMax = 0;
         public override void ResetEffects()
         {
             MoveSpeedAdd = 0f;
-            RunSpeedAdd = 0f; RunAccelAdd = 0f; JumpSpeedAdd = 0f;
+            MaxRunSpeedAdd = 0f; AccRunSpeedAdd = 0f; RunSlowdownAdd = 0; AccRunSpeedCandidate = 3f; RunAccelAdd = 0f;
+            JumpSpeedBoostAdd = 0f; JumpSpeed = 0f; JumpHeightAdd = 0; ExtraFall = 0;
             LifeRegenAdd = 0; LifeRegenMult = 1f;
             DefenseAdd = 0; MaxLifeAdd = 0; MaxLifeMult = 1f; MeleeSizeMult = 1f;
             ImmuneBuffs.Clear();
             CritGenericAdd = CritMeleeAdd = CritRangedAdd = CritMagicAdd = CritSummonAdd = 0f;
-            FlagSlowFall = FlagNoFallDmg = false;
+            FlagSlowFall = FlagNoFallDmg = FlagAutoJump = FlagJumpBoost = false;
             MaxManaAdd = 0; MaxManaMult = 1f;
             ManaRegenAdd = 0; ManaRegenMult = 1f;
             AttackSpeed = 0f;
+            AttackSpeedMelee = 0f;
+            AttackSpeedRanged = 0f;
+            AttackSpeedMagic = 0f;
+            AttackSpeedSummon = 0f;
+            AttackSpeedThrowing = 0f;
+            AutoReuse = false;
             DamageGeneric = 0f;
+            MeleeDamageAdd = 0f;
+            RangedDamageAdd = 0f;
+            MagicDamageAdd = 0f;
+            SummonDamageAdd = 0f;
+            ThrowingDamageAdd = 0f;
             DefenseMult = 1f;
+            KnockbackMulti = 1f;
+            FlagkbGlove = false;
+            MeleeScaleGlove = false;
+            EnduranceAdd = 0f;
+            FlagFireWalk = false;
+            FlagLavaImmune = false;
+            LavaMax = 0;
+            FlagNoKnockback = false;
+            FlagLongInvince = false;
         }
 
-        // BuffStatPlayer 内新增
-        internal void ApplyMovementNow()
+        public override void UpdateEquips()
         {
-            // 为了手持武器也能生效，饰品加速效果放到 updateEquip 了
-            if (!Player.HeldItem.accessory)
-            {
-                Player.moveSpeed += MoveSpeedAdd;
-            }
-
-            Player.maxRunSpeed += RunSpeedAdd;
-            Player.runAcceleration += RunAccelAdd;
-        }
-
-        // BuffStatPlayer 内新增字段（缓存用，避免每帧分配）
-        private static readonly List<StatRule> _tmpRules = new();
-        // Use this to modify maxRunSpeed, accRunSpeed, runAcceleration, and similar variables before the player moves forwards/backwards.
-        public override void PostUpdateRunSpeeds()
-        {
-            // 2) 动态从“手持物品”拉取规则（不特判类型）// 手持饰品则饰品效果不生效
+            // 动态从“手持物品”拉取规则，并应用满足规则的加成到玩家属性中
+            // 手持饰品则饰品效果不生效，饰品规则的应用放到GlobalItem中
             Item held = Player.HeldItem;
             if (held?.ModItem is IStatItemProvider statProvider && !held.accessory)
             {
                 _tmpRules.Clear();
                 statProvider.AddStatRules(Player, held, _tmpRules);
 
-                // 3) 仅筛选满足条件的规则，并把“移动三件套”写入累加槽
+                // 仅筛选满足条件的规则
                 foreach (var rule in _tmpRules)
                 {
                     if (rule?.Condition == null || !rule.Condition(Player, held))
                         continue;
 
                     foreach (var eff in rule.Effects)
-                        eff.Apply(Player, this); // 这一步会把移动相关增量写进 MoveSpeed*/Run* 字段
+                        eff.Apply(Player, this); // 这一步会把相关属性增量写进对应字段
                 }
             }
-            // 4) 当场应用“移动三件套”（影响本帧速度计算）
-            ApplyMovementNow();
-        }
-        public override void UpdateEquips()
-        {
+            // 速度系数 此加成效果会在后续应用到最大速度和冲刺速度上 放到PostUpdateRunSpeeds就太晚了
+            // 先加后乘，增加一条乘积
             Player.moveSpeed += MoveSpeedAdd;
+            // 跳跃放这里，手持正常
+            Player.jumpSpeedBoost += JumpSpeedBoostAdd;
+            Player.extraFall += ExtraFall;
+            
+            Player.jumpSpeed += JumpSpeed;
+            Player.jumpHeight += JumpHeightAdd;
+
+            Player.lavaMax += LavaMax;
+            if (FlagNoKnockback) Player.noKnockback = true;
+            if (FlagJumpBoost) Player.jumpBoost = true;
+            if (FlagAutoJump) Player.autoJump = true;
+            if (FlagFireWalk) Player.fireWalk = true;
+            if (FlagLavaImmune) Player.lavaImmune = true;
+            if (FlagLongInvince) Player.longInvince = true;
+            // 应用本帧声明的免疫
+            foreach (var buffId in ImmuneBuffs)
+            {
+                Player.buffImmune[buffId] = true;
+                if (Player.HasBuff(buffId))
+                    Player.ClearBuff(buffId);
+            }
         }
-        public override void PostUpdateEquips()
+        // BuffStatPlayer 内新增字段（缓存用，避免每帧分配）
+        private static readonly List<StatRule> _tmpRules = new();
+        // Use this to modify maxRunSpeed, accRunSpeed, runAcceleration, and similar variables before the player moves forwards/backwards.
+        public override void PostUpdateRunSpeeds()
         {
-            Player.GetDamage(DamageClass.Generic) += DamageGeneric;
-            Player.GetAttackSpeed(DamageClass.Melee) += AttackSpeed;
-            // 可能防御要挪到这里？
-            // Player.statDefense *= DefenseMult;
-            // Player.statDefense += DefenseAdd;
+            Player.runAcceleration *= 1f + RunAccelAdd;
+            // 奔跑冲刺的最大速度 疾风雪靴就只提升了这个
+            // +0.15 代表 +15% 移动的最大速度
+            Player.maxRunSpeed *= 1f + MaxRunSpeedAdd;
+            // 冲刺速度 与最大速度类似
+            Player.accRunSpeed *= 1f + AccRunSpeedAdd;
+            // 减速度
+            Player.runSlowdown *= 1f + RunSlowdownAdd;
+
+            // 注释掉，让最大速度可以减少到低于3f默认值 取消注释可以最后处理的“上限封顶”：候选合法时，取最大值覆盖（不写就等于尊重原版/别的饰品）
+            // if (AccRunSpeedCandidate > 3f)
+            // Player.accRunSpeed = Math.Max(Player.accRunSpeed, AccRunSpeedCandidate);
         }
-        
+
+        public override bool PreItemCheck()
+        {
+            Player.autoReuseGlove = AutoReuse;
+            //+3 代表 +300%
+            Player.GetDamage(DamageClass.Generic) += DamageGeneric;
+            Player.GetDamage(DamageClass.Melee) += MeleeDamageAdd;
+            Player.GetDamage(DamageClass.Ranged) += RangedDamageAdd;
+            Player.GetDamage(DamageClass.Magic) += MagicDamageAdd;
+            Player.GetDamage(DamageClass.Summon) += SummonDamageAdd;
+            Player.GetDamage(DamageClass.Throwing) += ThrowingDamageAdd;
+            // 攻速最终乘数
+            Player.GetAttackSpeed(DamageClass.Generic) += AttackSpeed;
+            Player.GetAttackSpeed(DamageClass.Melee) += AttackSpeedMelee;
+            Player.GetAttackSpeed(DamageClass.Ranged) += AttackSpeedRanged;
+            Player.GetAttackSpeed(DamageClass.Magic) += AttackSpeedMagic;
+            Player.GetAttackSpeed(DamageClass.Summon) += AttackSpeedSummon;
+            Player.GetAttackSpeed(DamageClass.Throwing) += AttackSpeedThrowing;
+            // 挖矿速度怎么做？Player.pickSpeed
+            // +30 代表 +30%
+            Player.GetCritChance(DamageClass.Generic) += CritGenericAdd;
+            Player.GetCritChance(DamageClass.Melee) += CritMeleeAdd;
+            Player.GetCritChance(DamageClass.Ranged) += CritRangedAdd;
+            Player.GetCritChance(DamageClass.Magic) += CritMagicAdd;
+            Player.GetCritChance(DamageClass.Summon) += CritSummonAdd;
+            // *2 代表 +100% 击退
+            Player.GetKnockback(DamageClass.Melee) *= KnockbackMulti;
+            // 耐力
+            Player.endurance += EnduranceAdd;
+            if (FlagkbGlove) Player.kbGlove = true;
+            if (MeleeScaleGlove) Player.meleeScaleGlove = true;
+            
+            // +750 表示 +750 仇恨
+            // Player.aggro
+            // 召唤物击退怎么做？
+            // Player.GetKnockback(DamageClass.Summon)
+            return true;
+        }
         public override void PostItemCheck()
         {
             // 最大生命：先百分比，再平移
@@ -210,33 +307,12 @@ namespace WuDao.Common.Buffs
             if (Player.statMana > Player.statManaMax2) Player.statMana = Player.statManaMax2;
             // 法力再生：先乘再加，便于和其他来源组合
             Player.manaRegen = (int)Math.Round(Player.manaRegen * ManaRegenMult) + ManaRegenAdd;
-
-            Player.jumpSpeedBoost += JumpSpeedAdd;
-
+            // 一般都是先乘后加
             Player.statDefense *= DefenseMult;
             Player.statDefense += DefenseAdd;
-
-            Player.GetCritChance(DamageClass.Generic) += CritGenericAdd;
-            Player.GetCritChance(DamageClass.Melee) += CritMeleeAdd;
-            Player.GetCritChance(DamageClass.Ranged) += CritRangedAdd;
-            Player.GetCritChance(DamageClass.Magic) += CritMagicAdd;
-            Player.GetCritChance(DamageClass.Summon) += CritSummonAdd;
-
-            // 应用本帧声明的免疫
-            foreach (var buffId in ImmuneBuffs)
-            {
-                Player.buffImmune[buffId] = true;
-                if (Player.HasBuff(buffId))
-                    Player.ClearBuff(buffId);
-            }
-            if (FlagSlowFall)
-            {
-                Player.slowFall = true;
-            }
-            if (FlagNoFallDmg)
-            {
-                Player.noFallDmg = true;
-            }
+            // TODO: 未测试 可能也需要放到 updateEquips
+            if (FlagSlowFall) Player.slowFall = true;
+            if (FlagNoFallDmg) Player.noFallDmg = true;
         }
 
     }
@@ -250,9 +326,17 @@ namespace WuDao.Common.Buffs
 
         // 常用工厂方法（可按需继续扩展）
         public static StatEffect MoveSpeed(float add = 0f) => new((p, acc) => { acc.MoveSpeedAdd += add; });
-        public static StatEffect RunSpeed(float add) => new((p, acc) => acc.RunSpeedAdd += add);
+        // 直接赋值修改最大冲刺速度，少用为妙
+        public static StatEffect AccRunSpeedSet(float cap) => new((p, acc) => acc.AccRunSpeedCandidate = Math.Max(acc.AccRunSpeedCandidate, cap));
+        // 将最大冲刺速度增加
+        public static StatEffect AccRunSpeed(float add) => new((p, acc) => acc.AccRunSpeedAdd += add);
+        public static StatEffect MaxRunSpeed(float add) => new((p, acc) => acc.MaxRunSpeedAdd += add);
         public static StatEffect RunAcceleration(float add) => new((p, acc) => acc.RunAccelAdd += add);
-        public static StatEffect JumpSpeed(float add) => new((p, acc) => acc.JumpSpeedAdd += add);
+        public static StatEffect RunSlowdown(float add) => new((p, acc) => acc.RunSlowdownAdd += add);
+        public static StatEffect JumpSpeedBoost(float add) => new((p, acc) => acc.JumpSpeedBoostAdd += add);
+        public static StatEffect JumpHeight(int add) => new((p, acc) => acc.JumpHeightAdd += add);
+        public static StatEffect JumpSpeed(float add) => new((p, acc) => acc.JumpSpeed += add);
+        public static StatEffect ExtraFall(int add) => new((p, acc) => acc.ExtraFall += add);
         public static StatEffect LifeRegen(int add) => new((p, acc) => acc.LifeRegenAdd += add);
         public static StatEffect LifeRegenMultiplier(float mult) => new((p, acc) => acc.LifeRegenMult *= mult);
         public static StatEffect LifeRegenPercent(float percent) => new((p, acc) => acc.LifeRegenMult *= 1f + percent);
@@ -261,7 +345,7 @@ namespace WuDao.Common.Buffs
 
         public static StatEffect MaxLifeMultiplier(float mult) => new((p, acc) => acc.MaxLifeMult *= mult);
         public static StatEffect MaxLifePercent(float percent) => new((p, acc) => acc.MaxLifeMult *= 1f + percent);
-        public static StatEffect MeleeSizePercent(float percent) => new((p, acc) => acc.MeleeSizeMult *= 1f + percent);
+        public static StatEffect MeleeSizePercent(float percent) => new((p, acc) => acc.MeleeSizeMult *= (1f + percent));
         public static StatEffect ImmuneTo(params int[] buffIds) => new((p, acc) => { foreach (var id in buffIds) acc.ImmuneBuffs.Add(id); });
         public static StatEffect Crit(float add) => new((p, acc) => acc.CritGenericAdd += add);
         public static StatEffect MeleeCrit(float add) => new((p, acc) => acc.CritMeleeAdd += add);
@@ -270,6 +354,9 @@ namespace WuDao.Common.Buffs
         public static StatEffect SummonCrit(float add) => new((p, acc) => acc.CritSummonAdd += add);
         public static StatEffect SlowFall() => new((p, acc) => acc.FlagSlowFall = true);
         public static StatEffect NoFallDmg() => new((p, acc) => acc.FlagNoFallDmg = true);
+        public static StatEffect ControlJump(bool enable) => new((p, acc) => acc.FlagAutoJump = enable);
+        // 是否启用原版气球的提升跳跃能力，只能叠加1次 是直接赋值的 jumpHeight = 20;jumpSpeed = 6.51f;
+        public static StatEffect JumpBoost() => new((p, acc) => acc.FlagJumpBoost = true);
         // 法力
         public static StatEffect MaxMana(int add) => new((p, acc) => acc.MaxManaAdd += add);
         public static StatEffect MaxManaMultiplier(float mult) => new((p, acc) => acc.MaxManaMult *= mult);
@@ -279,15 +366,34 @@ namespace WuDao.Common.Buffs
         public static StatEffect ManaRegenPercent(float percent) => new((p, acc) => acc.ManaRegenMult *= 1f + percent);
 
         // 攻速 & 伤害（对所有类型）
+        public static StatEffect DamageAdd(float percent) => new((p, acc) => acc.DamageGeneric += percent);
+        public static StatEffect MeleeDamageAdd(float percent) => new((p, acc) => acc.MeleeDamageAdd += percent);
+        public static StatEffect RangedDamageAdd(float percent) => new((p, acc) => acc.RangedDamageAdd += percent);
+        public static StatEffect MagicDamageAdd(float percent) => new((p, acc) => acc.MagicDamageAdd += percent);
+        public static StatEffect SummonDamageAdd(float percent) => new((p, acc) => acc.SummonDamageAdd += percent);
+        public static StatEffect ThrowingDamageAdd(float percent) => new((p, acc) => acc.ThrowingDamageAdd += percent);
+        public static StatEffect AttackSpeedAdd(float percent) => new((p, acc) => acc.AttackSpeed += percent);
+        public static StatEffect MeleeAttackSpeedAdd(float percent) => new((p, acc) => acc.AttackSpeedMelee += percent);
+        public static StatEffect RangedAttackSpeedAdd(float percent) => new((p, acc) => acc.AttackSpeedRanged += percent);
+        public static StatEffect MagicAttackSpeedAdd(float percent) => new((p, acc) => acc.AttackSpeedMagic += percent);
+        public static StatEffect SummonAttackSpeedAdd(float percent) => new((p, acc) => acc.AttackSpeedSummon += percent);
+        public static StatEffect ThrowingAttackSpeedAdd(float percent) => new((p, acc) => acc.AttackSpeedThrowing += percent);
+        public static StatEffect KnockbackMulti(float percent) => new((p, acc) => acc.KnockbackMulti += percent);
+        public static StatEffect KbGlove() => new((p, acc) => acc.FlagkbGlove = true);
+        public static StatEffect MeleeScaleGlove() => new((p, acc) => acc.MeleeScaleGlove = true);
+        public static StatEffect EnduranceAdd(float add) => new((p, acc) => acc.EnduranceAdd += add);
+        // 自动重复攻击
+        public static StatEffect AutoReuse() => new((p, acc) => acc.AutoReuse = true);
 
         // 防御倍率
         public static StatEffect DefenseMultiplier(float mult) => new((p, acc) => acc.DefenseMult *= mult);
         public static StatEffect DefensePercent(float percent) => new((p, acc) => acc.DefenseMult *= 1f + percent);
 
-        public static StatEffect AttackSpeedAdd(float add) => new((p, acc) => acc.AttackSpeed += add);
-
-        public static StatEffect DamageAdd(float add) => new((p, acc) => acc.DamageGeneric += add);
-
+        public static StatEffect FireWalk() => new((p, acc) => acc.FlagFireWalk = true);
+        public static StatEffect LavaImmune() => new((p, acc) => acc.FlagLavaImmune = true);
+        public static StatEffect LavaMaxAdd(int add) => new((p, acc) => acc.LavaMax += add);
+        public static StatEffect NoKnockback() => new((p, acc) => acc.FlagNoKnockback = true);
+        public static StatEffect LongInvince() => new((p, acc) => acc.FlagLongInvince = true);
     }
 
     public class StatRule
@@ -325,6 +431,7 @@ namespace WuDao.Common.Buffs
     // 方便继承用的基类：既能写 Buff，也能写属性。
     public abstract class BuffItem : ModItem, IBuffItemProvider, IStatItemProvider
     {
+        // 所有 BuffItem 的规则将搜集到一起，最后由 GlobalItem 去执行
         public sealed override void HoldItem(Player player) { }
         public sealed override void UpdateAccessory(Player player, bool hideVisual) { }
         public sealed override void UpdateEquip(Player player) { }
@@ -342,28 +449,32 @@ namespace WuDao.Common.Buffs
     {
         private static readonly List<BuffRule> _buffRules = new();
         private static readonly List<StatRule> _statRules = new();
-
-        public override void HoldItem(Item item, Player player)
-        {
-            if (item.accessory) return;           // ⛔ 即便拿在手上是个饰品，也不要应用
-            TryApplyFromItem(player, item);       // ✔ 武器手持走这里
-        }
-        // public override void UpdateEquip(Item item, Player player)
-        // {
-        //     // 避免饰品在 UpdateEquip 中再次应用（饰品应只走 UpdateAccessory）
-        //     if (item.accessory) return;
-        //     TryApplyFromItem(player, item);
-        // }
-
+        // 应用饰品的近战尺寸加成
         public override void ModifyItemScale(Item item, Player player, ref float scale)
         {
             if (item.CountsAsClass(DamageClass.Melee))
             {
                 var acc = player.GetModPlayer<BuffStatPlayer>();
-                scale *= acc.MeleeSizeMult;   // 你框架里定义的尺寸倍率，默认 1f
+                scale *= acc.MeleeSizeMult;   // 你框架里定义的近战武器尺寸倍率，默认 1f
             }
         }
-
+        // ① 收集饰品规则，记录标志位 饰品已装备
+        public override void UpdateEquip(Item item, Player player)
+        {
+            if (item.accessory)
+            {
+                TryApplyFromItem(player, item); // 你已有的收集规则调用
+                if (item.type == ModContent.ItemType<DevolutionCharm>())
+                {
+                    player.GetModPlayer<DevolutionPlayer>().HasDevolutionAura = true;
+                }
+                else if (item.type == ModContent.ItemType<WrathLotus>())
+                {
+                    player.GetModPlayer<WrathLotusPlayer>().hasLotus = true;
+                }
+            }
+        }
+        // 收集装备或饰品的规则
         private static void TryApplyFromItem(Player player, Item item)
         {
             if (item?.ModItem == null) return;
@@ -382,26 +493,6 @@ namespace WuDao.Common.Buffs
                 ApplyBuffRulesSmart(player, item, _buffRules);
             }
         }
-
-        public override void UpdateAccessory(Item item, Player player, bool hideVisual)
-        {
-            if (hideVisual) return; // 社交饰品不生效，防止再次叠加
-
-            TryApplyFromItem(player, item); // 你已有的收集规则调用
-
-            // 如果这个 item 是“全面退化”饰品，就给 ModPlayer 打标
-            if (item.type == ModContent.ItemType<DevolutionCharm>())
-            {
-                // player.GetDamage(DamageClass.Generic) += DevolutionCharm.MULT;
-                player.moveSpeed += 0.15f;
-                player.GetModPlayer<DevolutionPlayer>().HasDevolutionAura = true;
-            }
-            else if (item.type == ModContent.ItemType<WrathLotus>())
-            {
-                player.GetModPlayer<WrathLotusPlayer>().hasLotus = true;
-            }
-        }
-
         private static void ApplyBuffRulesSmart(Player player, Item item, List<BuffRule> rules)
         {
             for (int r = 0; r < rules.Count; r++)

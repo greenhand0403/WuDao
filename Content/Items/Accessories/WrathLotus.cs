@@ -4,12 +4,13 @@ using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using WuDao.Common.Buffs;
 using WuDao.Content.Projectiles.Magic;
+using System.Collections.Generic;
 
 namespace WuDao.Content.Items.Accessories
 {
     // TODO ：贴图置换 佛怒火莲
-    // public class WrathLotus : BuffItem
-    public class WrathLotus : ModItem
+    public class WrathLotus : BuffItem
+    // public class WrathLotus : ModItem
     {
         public override string Texture => $"Terraria/Images/Item_{ItemID.HellCake}";
         public override void SetDefaults()
@@ -19,17 +20,46 @@ namespace WuDao.Content.Items.Accessories
             Item.accessory = true;
             Item.rare = ItemRarityID.LightRed; // 星星斗篷 一王前
             Item.value = Item.sellPrice(gold: 5);
+            Item.defense = 2;
         }
-        // 装备饰品时设置标志位为真 受击时释放莲花射弹
-        public override void UpdateAccessory(Player player, bool hideVisual)
+        protected override void BuildStatRules(Player player, Item item, IList<StatRule> rules)
         {
-            // 这里可以以后拓展，例如：
-            // player.lavaImmune = true;
-            player.GetModPlayer<WrathLotusPlayer>().hasLotus = true;
-            // 速度系数，奔跑加速度0.08和最大速度3会乘上这个系数
-            player.moveSpeed += 0.15f;
-            // 由最后一个加速度加成覆盖 由maxRunSpeed 赋值给 accRunSpeed
-            // player.accRunSpeed = 6.75f; // Sets the players sprint speed in boots.
+            // 增加15%移动速度、免疫着火了、燃烧等减益
+            rules.Add(new StatRule(BuffConditions.Always,
+            // StatEffect.MoveSpeed(0.08f),
+            // StatEffect.accRunSpeed(6.75f),
+            // StatEffect.accRunSpeedAdd(3.75f),
+
+            // StatEffect.RunAcceleration(0.75f),
+            // StatEffect.AccRunSpeed(0.15f),
+            // StatEffect.MaxRunSpeed(0.15f),
+            // StatEffect.RunSlowdown(0.75f)
+
+            // StatEffect.ControlJump(true),
+            // StatEffect.JumpSpeedBoost(1.6f),
+            // StatEffect.ExtraFall(10)
+            // StatEffect.JumpBoost()
+
+            // StatEffect.AttackSpeedAdd(0.15f),
+            // StatEffect.MeleeCrit(-0.2f),
+            // StatEffect.DamageAdd(0.1f)
+
+            // StatEffect.KnockbackMulti(1f),//+100%击退
+            // StatEffect.kbGlove(),//启用原版标志位 +100%击退
+            // StatEffect.MeleeDamageAdd(0.12f),//+12%近战伤害
+            // StatEffect.MeleeAttackSpeedAdd(0.12f),//+12%近战攻速
+            // StatEffect.MeleeSizePercent(0.1f),//+10%近战武器尺寸
+            // StatEffect.MeleeScaleGlove(),//启用原版标志位 +10%近战武器尺寸
+            // StatEffect.AutoReuse()//启用原版标志位 自动重复攻击
+
+            // StatEffect.ImmuneTo(BuffID.OnFire),
+            // StatEffect.EnduranceAdd(0.1f)//+10%耐力
+
+            // StatEffect.FireWalk(),
+            // StatEffect.LavaMaxAdd(420)
+            StatEffect.LavaImmune(),
+            StatEffect.NoKnockback()
+            ));
         }
     }
 

@@ -22,7 +22,7 @@ namespace WuDao.Content.Global.NPCs
         {
             // 距离玩家的半径r的敌怪将受到削弱 屏幕半径（近似）：用对角线一半，或你自定常量例如 900f
             // float radius = (float)Math.Sqrt(Main.screenWidth * Main.screenWidth + Main.screenHeight * Main.screenHeight) * 0.5f;
-            float radius = 8f;// 仅供测试
+            float radius = 10f;// 仅供测试
             for (int i = 0; i < Main.maxPlayers; i++)
             {
                 Player plr = Main.player[i];
