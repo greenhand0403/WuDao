@@ -33,38 +33,10 @@ namespace WuDao.Content.Items.Weapons.Melee
         }
         protected override void BuildStatRules(Player player, Item item, IList<StatRule> rules)
         {
-            // TODO: 测试其他手持武器加成效果 白天的增加15%移动速度 增加15%攻击速度 增加20%暴击率 增加10%伤害
-            rules.Add(new StatRule(BuffConditions.Always,
-            // 闪电靴
-            // StatEffect.MoveSpeed(0.08f),
-            // StatEffect.accRunSpeed(6.75f)
-            // 直接把最大速度的系数增加，默认是3f，增加3.75f后变成6.75f相当于闪电靴的速度
-            // StatEffect.AccRunSpeed(3.75f)
-            // 暗影盔甲套装
-            // StatEffect.RunAcceleration(0.75f),
-            // StatEffect.AccRunSpeed(0.15f),
-            // StatEffect.MaxRunSpeed(0.15f),
-            // StatEffect.RunSlowdown(0.75f)
-            // 蛙腿
-            // StatEffect.ControlJump(true),
-            // StatEffect.JumpSpeedBoost(1.6f),
-            // StatEffect.ExtraFall(10)
-            // 气球
-            // StatEffect.JumpBoost()
-            // 机械手套
-            // StatEffect.KnockbackMulti(1f),//+100%击退
-            // StatEffect.kbGlove(),//启用原版标志位 +100%击退
-            // StatEffect.MeleeDamageAdd(0.12f),//+12%近战伤害
-            // StatEffect.MeleeAttackSpeedAdd(0.12f),//+12%近战攻速
-            // StatEffect.MeleeSizePercent(0.1f),//+10%近战武器尺寸
-            // StatEffect.MeleeScaleGlove(),//启用原版标志位 +10%近战武器尺寸
-            // StatEffect.AutoReuse()//启用原版标志位 自动重复攻击
-            // StatEffect.ImmuneTo(BuffID.OnFire),//熔岩盔甲套装奖励 免疫火 buff
-            // StatEffect.EnduranceAdd(0.1f)//+10%耐力
-            // StatEffect.FireWalk(),//熔岩护身符
-            // StatEffect.LavaMaxAdd(420)
-            StatEffect.LavaImmune(),
-            StatEffect.NoKnockback()
+            // 持有时在白天移动和奔跑速度 +5%
+            rules.Add(new StatRule(BuffConditions.DayTime,
+                StatEffect.MoveSpeed(0.05f),
+                StatEffect.AccRunSpeed(0.05f)
             ));
         }
 

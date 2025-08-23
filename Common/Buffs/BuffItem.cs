@@ -213,6 +213,9 @@ namespace WuDao.Common.Buffs
             // 速度系数 此加成效果会在后续应用到最大速度和冲刺速度上 放到PostUpdateRunSpeeds就太晚了
             // 先加后乘，增加一条乘积
             Player.moveSpeed += MoveSpeedAdd;
+            // 取最大的鞋子设置的冲刺速度
+            // if (AccRunSpeedCandidate > 3f)
+                // Player.accRunSpeed = Math.Max(Player.accRunSpeed, AccRunSpeedCandidate);
             // 跳跃放这里，手持正常
             Player.jumpSpeedBoost += JumpSpeedBoostAdd;
             Player.extraFall += ExtraFall;
@@ -249,9 +252,8 @@ namespace WuDao.Common.Buffs
             // 减速度
             Player.runSlowdown *= 1f + RunSlowdownAdd;
 
-            // 注释掉，让最大速度可以减少到低于3f默认值 取消注释可以最后处理的“上限封顶”：候选合法时，取最大值覆盖（不写就等于尊重原版/别的饰品）
-            // if (AccRunSpeedCandidate > 3f)
-            // Player.accRunSpeed = Math.Max(Player.accRunSpeed, AccRunSpeedCandidate);
+            if (AccRunSpeedCandidate > 3f)
+                Player.accRunSpeed = Math.Max(Player.accRunSpeed, AccRunSpeedCandidate);
         }
 
         public override bool PreItemCheck()

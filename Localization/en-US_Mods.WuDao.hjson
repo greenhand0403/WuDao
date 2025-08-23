@@ -163,6 +163,11 @@ Items: {
 		DisplayName: Wrath Lotus
 		Tooltip: ""
 	}
+
+	DiscoBallRemote: {
+		DisplayName: Disco Ball Remote
+		Tooltip: ""
+	}
 }
 
 Projectiles: {
@@ -199,6 +204,7 @@ Projectiles: {
 	GhostChakramProj.DisplayName: Ghost Chakram Proj
 	InvincibleArcShot.DisplayName: Invincible Arc Shot
 	WrathLotusProj.DisplayName: Wrath Lotus Proj
+	DiscoBallPetProj.DisplayName: Disco Ball Pet Proj
 }
 
 DamageClasses: {
@@ -217,5 +223,10 @@ Buffs: {
 	NormalScissorsDashCooldownBuff: {
 		DisplayName: Normal Scissors Dash Cooldown Buff
 		Description: Mods.WuDao.Buffs.NormalScissorsDashCooldownBuff.Description
+	}
+
+	DiscoBallPetBuff: {
+		DisplayName: Disco Ball Pet Buff
+		Description: Mods.WuDao.Buffs.DiscoBallPetBuff.Description
 	}
 }
