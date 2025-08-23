@@ -11,6 +11,7 @@ namespace WuDao.Content.Items.Weapons.Magic
     {
         public override string Texture => $"Terraria/Images/NPC_{NPCID.DesertBeast}";
 
+
         public override void SetStaticDefaults()
         {
             // 原版石化蜥有多帧
@@ -24,39 +25,65 @@ namespace WuDao.Content.Items.Weapons.Magic
             Projectile.aiStyle = 0;
             Projectile.friendly = true;
             Projectile.hostile = false;
-            Projectile.penetrate = 3;
             Projectile.timeLeft = 180; // 最多存在3秒
             Projectile.tileCollide = true;
             Projectile.DamageType = DamageClass.Magic;
             Projectile.ignoreWater = true;
+            Projectile.spriteDirection = -1;
         }
 
         public override void AI()
         {
-            // 简易寻的：缓慢转向最近敌怪
-            NPC target = null;
-            float best = 900f;
-            for (int i = 0; i < Main.maxNPCs; i++)
+            // 计时：ai[0] 累加（60 tick = 1s）
+            Projectile.ai[0]++;
+
+            // ===== 0.5 秒后开始弱追踪 =====
+            if (Projectile.ai[0] == 30f)
             {
-                var n = Main.npc[i];
-                if (n.active && !n.friendly && n.CanBeChasedBy())
+                // 进入追踪的一次性提示：喷尘土便于观察
+                for (int k = 0; k < 20; k++)
+                    Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Sandnado, Scale: 2.0f);
+            }
+
+            if (Projectile.ai[0] >= 30f)
+            {
+                const float homingRange = 320f;  // 大范围，便于命中目标
+                const float homingLerp = 0.16f;  // 先强一点验证（看到明显拐弯后再降到 0.06~0.10）
+                float speed = Projectile.velocity.Length();
+                if (speed < 8f) speed = 8f;       // 防止速度被耗光
+
+                NPC target = null;
+                float best = homingRange;
+
+                // 找最近可追目标（先不做视线判断，确定功能正常后再加）
+                for (int i = 0; i < Main.maxNPCs; i++)
                 {
-                    float d = Vector2.Distance(Projectile.Center, n.Center);
-                    if (d < best)
+                    NPC n = Main.npc[i];
+                    if (n.active && !n.friendly && !n.dontTakeDamage && n.CanBeChasedBy())
                     {
-                        best = d; target = n;
+                        float d = Vector2.Distance(Projectile.Center, n.Center);
+                        if (d < best)
+                        {
+                            best = d; target = n;
+                        }
                     }
                 }
-            }
 
-            if (target != null)
-            {
-                Vector2 desired = (target.Center - Projectile.Center).SafeNormalize(Vector2.UnitX) * 14f;
-                // 平滑转向
-                Projectile.velocity = Vector2.Lerp(Projectile.velocity, desired, 0.08f);
-            }
+                if (target != null)
+                {
+                    // 期望速度方向（保持原速度幅值）
+                    Vector2 desired = (target.Center - Projectile.Center).SafeNormalize(Vector2.UnitX) * speed;
 
-            Projectile.rotation = Projectile.velocity.X * 0.03f;
+                    // 线性插值逼近期望方向
+                    Vector2 newVel = Vector2.Lerp(Projectile.velocity, desired, homingLerp);
+
+                    // 归一化恢复速度幅值，避免越补越慢
+                    if (newVel.LengthSquared() > 0.001f)
+                        newVel = newVel.SafeNormalize(Vector2.UnitX) * speed;
+
+                    Projectile.velocity = newVel;
+                }
+            }
 
             // 帧动画
             if (++Projectile.frameCounter >= 5)
@@ -70,28 +97,35 @@ namespace WuDao.Content.Items.Weapons.Magic
             // 轻微尘土
             if (Main.rand.NextBool(3))
                 Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Sandnado);
-        }
 
-        public override bool OnTileCollide(Vector2 oldVelocity)
-        {
-            // 碰砖减穿透并反弹一点
-            Projectile.penetrate--;
-            if (Projectile.penetrate <= 0) Projectile.Kill();
-            if (Projectile.velocity.X != oldVelocity.X) Projectile.velocity.X = -oldVelocity.X * 0.6f;
-            if (Projectile.velocity.Y != oldVelocity.Y) Projectile.velocity.Y = -oldVelocity.Y * 0.6f;
-            return false;
+            // 对准方向
+            Projectile.rotation = Projectile.velocity.ToRotation() - MathHelper.Pi;
         }
-
         public override bool PreDraw(ref Color lightColor)
         {
-            // 以NPC帧表绘制
             Texture2D tex = ModContent.Request<Texture2D>(Texture).Value;
             int frames = Main.projFrames[Projectile.type];
             int frameHeight = tex.Height / frames;
             Rectangle src = new Rectangle(0, frameHeight * Projectile.frame, tex.Width, frameHeight);
-            SpriteEffects fx = Projectile.spriteDirection == -1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+
+            // 角度跨到左半边时会出现“上下颠倒”的观感（因为整张图被旋转了180°）。
+            // 解决：当朝向的 X 分量为负，就竖直翻转一次，让顶朝上、头朝前。
+            SpriteEffects fx = (Projectile.velocity.X >= 0f)
+                ? SpriteEffects.FlipVertically
+                : SpriteEffects.None;
+
             Vector2 origin = new Vector2(src.Width / 2f, src.Height / 2f);
-            Main.EntitySpriteDraw(tex, Projectile.Center - Main.screenPosition, src, lightColor, Projectile.rotation, origin, 1f, fx, 0);
+            Main.EntitySpriteDraw(
+                tex,
+                Projectile.Center - Main.screenPosition,
+                src,
+                lightColor,
+                Projectile.rotation,
+                origin,
+                1f,
+                fx,
+                0
+            );
             return false;
         }
     }

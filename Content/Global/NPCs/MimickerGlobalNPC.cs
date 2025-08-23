@@ -39,34 +39,32 @@ namespace WuDao.Content.Global.NPCs
         {
             if (mimickerHitTimer <= 0 || lastHitterPlayer < 0)
                 return;
+            // 查是否在解锁表里
+            if (!MimickerSystem.UnlockByNPC.TryGetValue(npc.type, out var def))
+                return;
 
             Player p = Main.player[lastHitterPlayer];
             if (p == null || !p.active) return;
 
             var mp = p.GetModPlayer<MimickerPlayer>();
-            foreach (var def in MimickerSystem.UnlockTable)
-            {
-                if (def.NpcType == npc.type)
-                {
-                    mp.killProgress.TryGetValue(def.NpcType, out int cur);
-                    cur++;
-                    mp.killProgress[def.NpcType] = cur;
+            mp.killProgress.TryGetValue(def.NpcType, out int cur);
+            cur++;
+            mp.killProgress[def.NpcType] = cur;
 
-                    if (cur == def.Required)
-                    {
-                        mp.unlockedProjectiles.Add(def.ProjectileType);
-                        if (p.whoAmI == Main.myPlayer)
-                        {
-                            CombatText.NewText(p.getRect(), new Color(255, 220, 100), $"解锁：{def.DisplayName} 射弹！");
-                            Main.NewText($"[模仿者] 你已解锁 {def.DisplayName} 射弹。", 255, 240, 150);
-                        }
-                    }
-                    else if (p.whoAmI == Main.myPlayer && cur < def.Required)
-                    {
-                        int remain = def.Required - cur;
-                        CombatText.NewText(p.getRect(), new Color(180, 220, 255), $"{def.DisplayName} 解锁还需 {remain}");
-                    }
+            if (cur >= def.Required && !mp.unlockedProjectiles.Contains(def.ProjectileType))
+            {
+                mp.unlockedProjectiles.Add(def.ProjectileType);
+
+                if (p.whoAmI == Main.myPlayer)
+                {
+                    CombatText.NewText(p.getRect(), new Color(255, 220, 100), $"解锁：{def.DisplayName} 射弹！");
+                    Main.NewText($"[模仿者] 你已解锁 {def.DisplayName} 射弹。", 255, 240, 150);
                 }
+            }
+            else if (p.whoAmI == Main.myPlayer)
+            {
+                int remain = System.Math.Max(0, def.Required - cur);
+                CombatText.NewText(p.getRect(), new Color(180, 220, 255), $"{def.DisplayName} 解锁还需 {remain}");
             }
         }
     }
