@@ -90,7 +90,7 @@ namespace WuDao.Content.Projectiles.Melee
             Projectile.light = 0.3f;
             Projectile.MaxUpdates = 3;
         }
-        // TODO: 必有1个本体剑刺向光标位置
+
         public override void OnSpawn(Terraria.DataStructures.IEntitySource source)
         {
             Vector2 mouse = Main.MouseWorld;
@@ -114,7 +114,10 @@ namespace WuDao.Content.Projectiles.Melee
 
             Projectile.Center = spawn - 0.5f * radius * Projectile.velocity;
             // 这颗射弹整生存期固定使用同一把剑
-            Projectile.ai[1] = Main.rand.Next(SwordItemIDs.Length);
+            if (Projectile.ai[1] >= 0)
+            {
+                Projectile.ai[1] = Main.rand.Next(SwordItemIDs.Length);
+            }
             Projectile.ai[2] = (Main.rand.NextBool(2) ? 0.4f : -0.4f) * (MathHelper.PiOver4 + Main.rand.NextFloat(MathHelper.PiOver4));
         }
 
@@ -148,8 +151,15 @@ namespace WuDao.Content.Projectiles.Melee
 
             // 计算当前应显示的剑贴图
             int idx = (int)Projectile.ai[1] % SwordItemIDs.Length;
-            int itemId = SwordItemIDs[idx];
-
+            int itemId;
+            if (Projectile.ai[1] >= 0)
+            {
+                itemId = SwordItemIDs[idx];
+            }
+            else
+            {
+                itemId = (int)-Projectile.ai[1];
+            }
             // ★ 确保贴图已加载（关键！否则很多原版道具没用到就不会预加载）
             if (!TextureAssets.Item[itemId].IsLoaded)
                 Main.instance.LoadItem(itemId);

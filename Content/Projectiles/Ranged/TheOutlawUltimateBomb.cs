@@ -36,6 +36,7 @@ namespace WuDao.Content.Projectiles.Ranged
             Projectile.usesLocalNPCImmunity = true;
             Projectile.localNPCHitCooldown = 10;
             Projectile.MaxUpdates = 2;
+            Projectile.scale = 1.2f;
         }
 
         public override void AI()

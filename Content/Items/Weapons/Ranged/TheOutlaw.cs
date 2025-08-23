@@ -122,7 +122,7 @@ namespace WuDao.Content.Items.Weapons.Ranged
             if (NPC.downedMechBoss1 || NPC.downedMechBoss2 || NPC.downedMechBoss3)
             {
                 int split = Projectile.NewProjectile(
-                    source, position, velocity,
+                    source, position, velocity * 0.96f,
                     ModContent.ProjectileType<TheOutlawSplitShot>(),
                     damage, knockback, player.whoAmI
                 );

@@ -168,6 +168,11 @@ Items: {
 		DisplayName: Disco Ball Remote
 		Tooltip: ""
 	}
+
+	BlasterPliers: {
+		DisplayName: Blaster Pliers
+		Tooltip: ""
+	}
 }
 
 Projectiles: {

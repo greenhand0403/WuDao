@@ -146,8 +146,7 @@ namespace WuDao.Content.Global.Systems
         }
 
         // 避免冻结时贴身伤害（如果你不想改 npc.damage）
-        public override bool CanHitPlayer(NPC npc, Player target, ref int cooldownSlot)
-            => !TimeStopSystem.IsFrozen;
+        public override bool CanHitPlayer(NPC npc, Player target, ref int cooldownSlot) => !TimeStopSystem.IsFrozen;
     }
     public class TimeStopProjectile : GlobalProjectile
     {

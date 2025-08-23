@@ -54,8 +54,7 @@ namespace WuDao.Content.Items.Weapons.Melee
             Vector2 dir = velocity.SafeNormalize(player.direction == 1 ? Vector2.UnitX : -Vector2.UnitX);
             Vector2 finalVel = dir.RotatedBy(angleOffset) * speed;
             // 固定10点伤害
-            int p = Projectile.NewProjectile(source, position, finalVel, vanillaType, 10 + ballIndex, knockback, player.whoAmI);
-
+            Projectile.NewProjectile(source, position, finalVel, vanillaType, 10 + ballIndex, knockback, player.whoAmI);
             // 暂时不在这里改近战/寿命/命中次数 —— 交给 GlobalProjectile 统一做（见下一节）
             return false;
         }

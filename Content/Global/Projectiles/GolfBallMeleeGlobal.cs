@@ -2,6 +2,7 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
+using WuDao.Content.Items.Weapons.Melee;
 
 namespace WuDao.Content.Global.Projectiles
 {
@@ -9,10 +10,11 @@ namespace WuDao.Content.Global.Projectiles
     public class GolfBallMeleeGlobal : GlobalProjectile
     {
         public override bool InstancePerEntity => true;
-
+        // 给“彩虹杆生成的高尔夫球”打标记
+        private bool fromRainbowClub;
         // 命中计数
         private int hits;
-
+        private int lifeTicks; // 我们自己的寿命计数器
         // 识别“是否为我们要接管的高尔夫球”
         private static bool IsGolfBall(int type)
         {
@@ -36,23 +38,22 @@ namespace WuDao.Content.Global.Projectiles
         {
             if (!IsGolfBall(projectile.type))
                 return;
-
-            // 1) 伤害类型改为近战（吃近战加成）
-            projectile.DamageType = DamageClass.Melee;
-
-            // 2) 缩短寿命（默认 3600 tick≈60s，这里给个更短值，例如 240=4s）
-            projectile.timeLeft = 240;
-
-            // 3) 用本地免疫 + 命中计数来实现“最多打 5 次”
-            //    （有些高尔夫球原本是非穿透、靠弹跳命中，这里用计数来控制）
-            projectile.usesLocalNPCImmunity = true;
-            projectile.localNPCHitCooldown = 10; // 两次命中间隔，避免一帧多次
+            if (source is EntitySource_ItemUse_WithAmmo isrc && isrc.Item?.type == ModContent.ItemType<RainBowGolfClubs>())
+            {
+                fromRainbowClub = true;
+                // 1) 伤害类型改为近战（吃近战加成）
+                projectile.DamageType = DamageClass.Melee;
+                // 3) 用本地免疫 + 命中计数来实现“最多打 5 次”
+                lifeTicks = 360;
+                //    （有些高尔夫球原本是非穿透、靠弹跳命中，这里用计数来控制）
+                projectile.usesLocalNPCImmunity = true;
+                projectile.localNPCHitCooldown = 10; // 两次命中间隔，避免一帧多次
+            }
         }
 
         public override void OnHitNPC(Projectile projectile, NPC target, NPC.HitInfo hit, int damageDone)
         {
-            if (!IsGolfBall(projectile.type))
-                return;
+            if (!fromRainbowClub) return;
 
             hits++;
             if (hits >= 5)
@@ -61,13 +62,24 @@ namespace WuDao.Content.Global.Projectiles
             }
         }
 
-        public override bool PreAI(Projectile projectile)
+        public override void PostAI(Projectile projectile)
         {
-            if (!IsGolfBall(projectile.type))
-                return base.PreAI(projectile);
+            if (!fromRainbowClub) return;
 
-            // 保险：如果还没打 5 次但到了寿命也会自然消失（由 timeLeft 控制）
-            return base.PreAI(projectile);
+            // 每帧在 AI 之后递减寿命；到点强制 Kill
+            if (lifeTicks > 0)
+            {
+                lifeTicks--;
+                if (lifeTicks <= 0)
+                {
+                    projectile.Kill();
+                    return;
+                }
+            }
+
+            // （可选）把原版被拉高的 timeLeft 往下压，避免网络端显示差异
+            if (projectile.timeLeft > lifeTicks)
+                projectile.timeLeft = lifeTicks;
         }
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.DataStructures;
@@ -417,6 +418,7 @@ namespace WuDao.Content.Projectiles.Ranged
                 Projectile.netUpdate = true;
             }
         }
+
         // 绘制自己的火墙 水平方向也有偏移 例如打到左侧墙壁上，贴图应该往右边移动20像素
         public override bool PreDraw(ref Color lightColor)
         {

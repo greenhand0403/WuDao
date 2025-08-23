@@ -83,7 +83,6 @@ namespace WuDao.Content.Items.Weapons.Melee
         }
         public override void AddRecipes()
         {
-            // 假设你的“灵气”Mod物品叫 SpiritEssence
             Recipe recipe = CreateRecipe();
             recipe.AddIngredient(ItemID.Ectoplasm, 10); // 自定义掉落
             recipe.AddIngredient(ItemID.SpectreBar, 8);                     // 幽灵锭

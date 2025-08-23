@@ -1,4 +1,5 @@
 // Content/Items/Weapons/InvincibleBlade.cs
+using System;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.DataStructures;
@@ -25,7 +26,7 @@ namespace WuDao.Content.Items.Weapons.Melee
             Item.useAnimation = 10;
             Item.autoReuse = true;
             Item.UseSound = SoundID.Item60;
-            Item.noMelee = true;
+            // Item.noMelee = true;
             Item.shoot = ModContent.ProjectileType<InvincibleArcShot>();
             Item.shootSpeed = 1f;      // 由射弹自身逻辑决定
             Item.rare = ItemRarityID.Red;
@@ -55,9 +56,9 @@ namespace WuDao.Content.Items.Weapons.Melee
 
             // 在鼠标附近随机生成
             Vector2 spawnPos = Main.MouseWorld + 150 * (new Vector2(Main.rand.NextFloat(-1, 1f), Main.rand.NextFloat(-1, 1f)));
-
+            InvincibleBladeCooldown mp = player.GetModPlayer<InvincibleBladeCooldown>();
             // 发射的射弹随着使用时间增多
-            int cold = player.GetModPlayer<InvincibleBladeCooldown>().Cooldown;
+            int cold = mp.Cooldown;
             for (int i = 0; i < 1 + (CooldownFrames - cold) / 2; i++)
             {
                 // 发射一个“弧线寻敌”的射弹，速度/路径由射弹自行处理
@@ -69,7 +70,25 @@ namespace WuDao.Content.Items.Weapons.Melee
                     Item.damage, 0f, player.whoAmI, 0, 0, 0
                 );
             }
-
+            if (mp.ExtraSpawnCD <= 0)
+            {
+                mp.ExtraSpawnCD = 60; // 60帧=1秒
+                Vector2 spawnPos2 = Main.MouseWorld + 150 * new Vector2(Main.rand.NextFloat(-1f, 1f), Main.rand.NextFloat(-1f, 1f));
+                // 这里用 ai[1] 传一个“负数的 ItemID”告诉弹体：不要随机，直接用这把剑的贴图
+                float forceItemId = -ItemID.Zenith; // 你的本体现在用的是 Zenith 贴图
+                Projectile.NewProjectile(
+                    source,
+                    spawnPos2,
+                    Vector2.Zero,
+                    ModContent.ProjectileType<InvincibleArcShot>(),
+                    Math.Max(1, Item.damage),
+                    0f,
+                    player.whoAmI,
+                    0f,
+                    forceItemId, // ← ai[1] 传负的 ItemID，下面改弹体去识别
+                    0f
+                );
+            }
             return false;
         }
     }

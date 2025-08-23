@@ -127,7 +127,7 @@ namespace WuDao.Content.Projectiles.Melee
                     int dust = Dust.NewDust(Projectile.Center, 0, 0, DustID.DungeonSpirit,
                         0f, 0f, 150, new Color(160, 220, 255), 1.1f);
                     Main.dust[dust].noGravity = true;
-                    Main.dust[dust].velocity = Projectile.velocity.RotatedByRandom(0.35) * 0.2f;
+                    Main.dust[dust].velocity = Projectile.velocity.RotatedByRandom(0.35) * 0.1f;
                 }
             }
         }
@@ -136,7 +136,7 @@ namespace WuDao.Content.Projectiles.Melee
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             // 生成一圈灵气 Dust
-            SpawnAuraDust(Projectile.Center, 16, 2.2f, 10f);
+            SpawnAuraDust(Projectile.Center, 16, 2.2f, 6f);
 
             // 记录穿透次数（tML 自己会扣 penetrate，但我们要根据“已穿透”做成长）
             int hitsSoFar = ++pierced;
@@ -180,7 +180,7 @@ namespace WuDao.Content.Projectiles.Melee
                 Vector2 pos = Projectile.oldPos[i] + Projectile.Size * 0.5f;
                 float t = i / (float)trailLen; // 0..1
                 float alpha = MathHelper.Lerp(0.0f, 0.6f, 1f - t); // 越靠近本体越亮
-                float scale = (drawBaseScale * sizeScale) * MathHelper.Lerp(0.7f, 1.0f, 1f - t);
+                float scale = drawBaseScale * sizeScale * MathHelper.Lerp(0.7f, 1.0f, 1f - t);
 
                 // 强化时拖尾更偏蓝、更亮一点
                 Color c = IsEmpowered

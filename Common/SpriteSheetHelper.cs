@@ -226,7 +226,8 @@ namespace WuDao.Common
                 rotation: rotation,
                 origin: origin,
                 scale: scale,
-                effects: fx);
+                effects: fx,
+                layerDepth);
         }
     }
     public struct SpriteGrid // 行优先多行帧
