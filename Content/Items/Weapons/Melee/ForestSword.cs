@@ -30,15 +30,14 @@ namespace WuDao.Content.Items.Weapons.Melee
         protected override void BuildBuffRules(Player player, Item item, IList<BuffRule> rules)
         {
             rules.Add(new BuffRule(BuffConditions.Always,
-                new BuffEffect(BuffID.Sunflower, topUpAmount: 180, refreshThreshold: 30),
-                new BuffEffect(BuffID.Swiftness, topUpAmount: 180, refreshThreshold: 30)
+                new BuffEffect(BuffID.Swiftness, topUpAmount: 180, refreshThreshold: 30),
+                new BuffEffect(BuffID.Sunflower, topUpAmount: 180, refreshThreshold: 30)
             ));
         }
         protected override void BuildStatRules(Player player, Item item, IList<StatRule> rules)
         {
             rules.Add(new StatRule(BuffConditions.InForest,
-                StatEffect.MoveSpeed(0.1f),   // +10% 移速
-                StatEffect.RunAcceleration(0.08f) // runAcceleration +0.08
+                StatEffect.RunAcceleration(0.1f) // 奔跑加速度 +10%
             ));
         }
         public override void AddRecipes()

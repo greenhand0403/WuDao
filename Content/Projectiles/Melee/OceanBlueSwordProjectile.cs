@@ -76,7 +76,8 @@ namespace WuDao.Content.Projectiles.Melee
 
         public override bool PreDraw(ref Color lightColor)
         {
-            _sheet.Draw(ColumnIndex, _anim.Frame, Projectile.Center, lightColor, Projectile.rotation, Projectile.scale * 2);
+            // 射弹贴图自身也旋转 速度加快50%
+            _sheet.Draw(ColumnIndex, _anim.Frame, Projectile.Center, lightColor, Projectile.rotation + 1.5f * MathHelper.ToRadians(Projectile.timeLeft), Projectile.scale * 2);
             return false;
         }
 

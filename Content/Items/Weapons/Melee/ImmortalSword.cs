@@ -30,8 +30,8 @@ namespace WuDao.Content.Items.Weapons.Melee
         protected override void BuildStatRules(Player player, Item item, IList<StatRule> rules)
         {
             rules.Add(new StatRule(BuffConditions.Always,
-                StatEffect.MaxLife(50),
-                StatEffect.LifeRegen(5)
+                StatEffect.MaxLife(20),
+                StatEffect.LifeRegen(2)
             ));
         }
         public override void AddRecipes()

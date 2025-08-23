@@ -11,6 +11,10 @@ namespace WuDao.Content.Items.Weapons.Melee
     // TODO: 重绘翼剑贴图
     public class HarpyWingSword : BuffItem
     {
+        // tML 1.4.4：这两个乘子越大，出手越快（冷却越短）
+        public override float UseTimeMultiplier(Player player) => IsAirborne(player) ? 1.10f : 1f;           // 空中 +10% 使用速度
+
+        public override float UseAnimationMultiplier(Player player) => IsAirborne(player) ? 1.10f : 1f;
         public override void SetDefaults()
         {
             Item.DamageType = DamageClass.Melee;
@@ -84,13 +88,11 @@ namespace WuDao.Content.Items.Weapons.Melee
             // 脚下无砖/在按↓准备穿平台 → 空中
             return true;
         }
-
-        // tML 1.4.4：这两个乘子越大，出手越快（冷却越短）
-        public override float UseTimeMultiplier(Player player)
-            => IsAirborne(player) ? 1.20f : 1f;           // 空中 +20% 使用速度
-
-        public override float UseAnimationMultiplier(Player player)
-            => IsAirborne(player) ? 1.20f : 1f;
+        public override void ModifyItemScale(Player player, ref float scale)
+        {
+            if (IsAirborne(player))
+                scale *= 1.10f; // 空中挥砍体积 +10%
+        }
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
             float speedMult = 1f;
@@ -99,9 +101,9 @@ namespace WuDao.Content.Items.Weapons.Melee
 
             if (IsAirborne(player))
             {
-                speedMult = 1.25f; // 飞行速度 +25%
-                scaleMult = 1.15f; // 尺寸     +15%（需要自行在弹幕上读 scale）
-                dmgMult = 1.20f; // 伤害     +20%
+                speedMult = 1.1f; // 飞行速度 +10%
+                scaleMult = 1.1f; // 尺寸     +10%（需要自行在弹幕上读 scale）
+                dmgMult = 1.10f; // 伤害     +10%
             }
 
             // 生成射弹（你也可以直接 return false 并手动 NewProjectile 完全自定义）
@@ -122,13 +124,8 @@ namespace WuDao.Content.Items.Weapons.Melee
             // 调整尺寸：对“会读取 scale 绘制/判定”的弹幕有效。HarpyFeather 会跟随 scale 绘制，但命中盒不一定等比；
             // 如需更严谨，建议自定义 ModProjectile，在其中用 scale 或 AI 参数控制判定。
             p.scale *= scaleMult;
-
+            p.light = 0.1f;
             return false; // 阻止默认发射（因为我们已经手动发射了）
-        }
-        public override void ModifyItemScale(Player player, ref float scale)
-        {
-            if (IsAirborne(player))
-                scale *= 1.10f; // 空中挥砍体积 +10%
         }
         public override void AddRecipes()
         {

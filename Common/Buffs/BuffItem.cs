@@ -227,6 +227,7 @@ namespace WuDao.Common.Buffs
             if (FlagNoKnockback) Player.noKnockback = true;
             if (FlagJumpBoost) Player.jumpBoost = true;
             if (FlagAutoJump) Player.autoJump = true;
+            if (FlagSlowFall) Player.slowFall = true;
             if (FlagFireWalk) Player.fireWalk = true;
             if (FlagLavaImmune) Player.lavaImmune = true;
             if (FlagLongInvince) Player.longInvince = true;
@@ -312,8 +313,7 @@ namespace WuDao.Common.Buffs
             // 一般都是先乘后加
             Player.statDefense *= DefenseMult;
             Player.statDefense += DefenseAdd;
-            // TODO: 未测试 可能也需要放到 updateEquips
-            if (FlagSlowFall) Player.slowFall = true;
+            
             if (FlagNoFallDmg) Player.noFallDmg = true;
         }
 

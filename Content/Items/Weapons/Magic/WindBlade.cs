@@ -27,19 +27,26 @@ namespace WuDao.Content.Items.Weapons.Magic
             Item.value = Item.buyPrice(silver: 50);
         }
 
-        public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source,
-            Vector2 position, Vector2 velocity, int type, int damage, float knockback)
+        public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
             int bladeCount = 2;            // 一次生成 2 道
             float radiusMin = 36f;         // 出生半径范围
-            float radiusMax = 64f;
+            float radiusMax = 48f;
             Vector2 mouseWorld = Main.MouseWorld;
 
             for (int i = 0; i < bladeCount; i++)
             {
-                float angle = Main.rand.NextFloat(MathHelper.TwoPi);
+                // 固定 18 个角度之一
+                int angleIndex = Main.rand.Next(18);
+                float angle = MathHelper.TwoPi * angleIndex / 18f;
+
+                // 半径在范围内随机
                 float radius = MathHelper.Lerp(radiusMin, radiusMax, Main.rand.NextFloat());
                 Vector2 spawnPos = player.Center + angle.ToRotationVector2() * radius;
+
+                // 如果点在物块里就跳过
+                if (Collision.SolidCollision(spawnPos, 1, 1))
+                    continue;
 
                 int proj = Projectile.NewProjectile(
                     source,
@@ -49,22 +56,20 @@ namespace WuDao.Content.Items.Weapons.Magic
                     damage,
                     knockback,
                     player.whoAmI,
-                    ai0: 0f,       // 计时器
+                    ai0: 0f,
                     ai1: 0f
                 );
 
-                // 把“目标鼠标坐标”放到 localAI，不占用 ai[] 计时器
                 Projectile p = Main.projectile[proj];
                 p.localAI[0] = mouseWorld.X;
                 p.localAI[1] = mouseWorld.Y;
 
-                // 给每个风刃一个微小随机滞留时间，观感更自然
-                p.ai[0] = -Main.rand.Next(0, 6); // 负数开始，可视为额外等待 0~5 帧
+                p.ai[0] = -Main.rand.Next(0, 6); // 额外等待 0~5 帧
                 p.alpha = 200;
                 p.netUpdate = true;
             }
 
-            return false; // 我们手动生成
+            return false; // 手动生成
         }
 
         public override void AddRecipes()

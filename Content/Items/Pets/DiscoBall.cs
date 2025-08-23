@@ -6,7 +6,7 @@ using Terraria.ModLoader;
 
 namespace Wudao.Content.Items.Pets
 {
-    // 1) 物品：用于召唤照明宠物
+    // TODO: 绘制贴图 物品：用于召唤照明宠物
     public class DiscoBallRemote : ModItem
     {
         public override string Texture => $"Terraria/Images/Item_{ItemID.GolfBall}";
@@ -40,13 +40,8 @@ namespace Wudao.Content.Items.Pets
         public override string Texture => $"Terraria/Images/Item_{ItemID.GolfBall}";
         public override void SetStaticDefaults()
         {
-            // DisplayName.SetDefault("Disco Ball");
-            // Description.SetDefault("A disco ball follows you, lighting up the dance floor!");
             Main.buffNoTimeDisplay[Type] = true;
-            // Main.buffNoSave[Type] = true;
             Main.lightPet[Type] = true;
-            // tML 1.4 标记 Light Pet 的推荐做法
-            // BuffID.Sets.IsLightPet[Type] = true;
         }
 
         public override void Update(Player player, ref int buffIndex)
@@ -61,12 +56,12 @@ namespace Wudao.Content.Items.Pets
     {
         public override string Texture => $"Terraria/Images/Item_{ItemID.GolfBall}";
         // 配置参数（可根据需要调节/做成 ModConfig）
-        private const int BeamLengthTiles = 60;      // 期望照亮 60 格（~960 像素）
-        private const int BeamStepTiles = 4;         // 取样步长（每 4 格一个采样点）
-        private const float AmbientIntensity = 0.55f;// 环境光强度（0..1）
-        private const float BeamIntensity = 1.15f;   // 主光束强度（会随距离衰减）
-        private const int ColorHoldTicks = 45;      // 每种颜色保持 3 秒（60fps）
-        private const float RotationSpeed = 0.045f;   // 自身缓慢旋转
+        private const int BeamLengthTiles = 30;      // 期望照亮 45 格（~720 像素）
+        private const int BeamStepTiles = 2;         // 取样步长（每 4 格一个采样点）
+        private const float AmbientIntensity = 0.7f;// 环境光强度（0..1）
+        private const float BeamIntensity = 4.2f;   // 主光束强度（会随距离衰减）
+        private const int ColorHoldTicks = 35;      // 每种颜色保持
+        private const float RotationSpeed = 0.015f;   // 自身缓慢旋转
 
         // 迪斯科舞厅常用的颜色（可自行微调/扩展）
         private static readonly Color[] DiscoColors = new[]
@@ -91,7 +86,6 @@ namespace Wudao.Content.Items.Pets
 
         public override void SetDefaults()
         {
-            // Projectile.CloneDefaults(ProjectileID.CrimsonHeart); // 复用移动/跟随 AI
             Projectile.width = 28;
             Projectile.height = 28;
             Projectile.friendly = false;
@@ -99,7 +93,6 @@ namespace Wudao.Content.Items.Pets
             Projectile.tileCollide = false;
             Projectile.ignoreWater = true;
             Projectile.netImportant = true;
-            // AIType = ProjectileID.CrimsonHeart; // 参考猩红之心
             AIType = 0;
         }
 
@@ -118,22 +111,22 @@ namespace Wudao.Content.Items.Pets
 
             // ---- (A) 上方&左右轻微移动 ----
             // 头顶基准高度：略高于玩家 64px，可按需求调
-            float baseHeight = 64f;
+            float baseHeight = 48f;
             // 左右摆动：幅度与速度可调
             float swayAmp = 40f;
-            float swaySpeed = 0.05f; // 越大摆动越快
+            float swaySpeed = 0.03f; // 越大摆动越快
             float swayX = (float)System.Math.Sin(Main.GameUpdateCount * swaySpeed) * swayAmp;
 
             // 轻微上下漂浮（可选）
             float bobAmp = 6f;
-            float bobSpeed = 0.03f;
+            float bobSpeed = 0.02f;
             float bobY = (float)System.Math.Sin(Main.GameUpdateCount * bobSpeed) * bobAmp;
 
             Vector2 target = player.Center + new Vector2(swayX, -baseHeight + bobY);
 
             // 惯性跟随：平滑靠近目标点
-            float speed = 50f;     // 最大趋近速度
-            float inertia = 10f;   // 惯性（数值越大越平滑）
+            float speed = 30f;     // 最大趋近速度
+            float inertia = 15f;   // 惯性（数值越大越平滑）
             Vector2 toTarget = target - Projectile.Center;
             if (toTarget.Length() > speed)
                 toTarget = toTarget.SafeNormalize(Vector2.UnitY) * speed;
@@ -145,71 +138,39 @@ namespace Wudao.Content.Items.Pets
                 Projectile.direction = Projectile.spriteDirection =
                     (Projectile.velocity.X >= 0f) ? 1 : -1;
 
-            // 自身缓慢自转，用于主光束方向
+            // 自转决定主光束方向（保留）
             Projectile.rotation += RotationSpeed;
             Vector2 beamDir = Projectile.rotation.ToRotationVector2();
 
-            // ---- (B) 颜色平滑过渡 ----
+            // —— 颜色直接跳色 —— //
             int total = DiscoColors.Length;
             int seg = (int)(Main.GameUpdateCount / ColorHoldTicks) % total;
-            // int next = (seg + 1) % total;
-            // float t = (Main.GameUpdateCount % ColorHoldTicks) / (float)ColorHoldTicks; // 0..1
-            // Color cur = Color.Lerp(DiscoColors[seg], DiscoColors[next], t);
-            // t: 0..1，过渡只占前 15%，其余时间保持纯色
-            // float blendWindow = 0.15f;
-            // float tt = t < blendWindow ? (t / blendWindow) : 1f;
-            // Color cur = Color.Lerp(DiscoColors[seg], DiscoColors[next], tt);
-
             Color cur = DiscoColors[seg];
 
-            // ---- (C) 环境光 + 定向扫光 ----
-            // 新增：亮度脉冲（0.85~1.25 之间摆动）
-            float pulse = 0.85f + 0.40f * (0.5f + 0.5f * (float)System.Math.Sin(Main.GameUpdateCount * 0.25f));
-            // 也可以把 0.25f 提到 0.6f 做更“快节奏”的闪烁
+            // —— 环境光：每帧都加（便宜） —— //
+            Vector3 cv3 = cur.ToVector3();
+            Lighting.AddLight(Projectile.Center, cv3 * AmbientIntensity);
 
-            Vector3 ambient = cur.ToVector3() * (AmbientIntensity * pulse);
-            Lighting.AddLight(Projectile.Center, ambient);
-
-            int samples = BeamLengthTiles / BeamStepTiles;
-            float stepPixels = BeamStepTiles * 16f;
-            float coneHalfAngle = MathHelper.ToRadians(18f);
-
-            for (int i = 1; i <= samples; i++)
+            // —— 主光束照明：每 3 帧执行一次，省 CPU —— //
+            if (Main.GameUpdateCount % 3 == 0)
             {
-                Vector2 pos = Projectile.Center + beamDir * stepPixels * i;
+                int samples = BeamLengthTiles / BeamStepTiles; // 30/2=15 次左右
+                float stepPixels = BeamStepTiles * 16f;
 
-                float dist01 = i / (float)samples;
-                float distFalloff = 1f - dist01;
-                distFalloff *= distFalloff;
-
-                // 旧：0.07f 与 6f
-                float wobble = (float)System.Math.Sin((Main.GameUpdateCount + i * 12) * 0.12f) * 10f;
-                pos += beamDir.RotatedBy(MathHelper.PiOver2) * wobble;
-
-                Vector3 beam = cur.ToVector3() * (BeamIntensity * distFalloff * pulse);
-                Lighting.AddLight(pos, beam);
-
-                const int sideRays = 2;
-                for (int s = 1; s <= sideRays; s++)
+                for (int i = 1; i <= samples; i++)
                 {
-                    float frac = s / (float)(sideRays + 1);
-                    float angle = MathHelper.Lerp(0f, coneHalfAngle, frac);
+                    // 轴向点（无抖动/无侧瓣）
+                    Vector2 pos = Projectile.Center + beamDir * stepPixels * i;
 
-                    Vector2 dirL = beamDir.RotatedBy(-angle);
-                    Vector2 dirR = beamDir.RotatedBy(angle);
-                    Vector2 posL = Projectile.Center + dirL * stepPixels * i;
-                    Vector2 posR = Projectile.Center + dirR * stepPixels * i;
+                    // 距离衰减（简单平方）
+                    float dist01 = i / (float)samples;   // 0..1
+                    float fall = 1f - dist01;
+                    fall *= fall;
 
-                    float sideFalloff = distFalloff * (1f - frac * 0.6f);
-                    Vector3 side = cur.ToVector3() * (BeamIntensity * 0.6f * sideFalloff * pulse);
-
-                    Lighting.AddLight(posL, side);
-                    Lighting.AddLight(posR, side);
+                    Vector3 beam = cv3 * (BeamIntensity * fall);
+                    Lighting.AddLight(pos, beam);
                 }
             }
         }
-
-        // 选做：在地图上也展示彩色小点（可注释掉）
-        public override Color? GetAlpha(Color lightColor) => Color.White;
     }
 }

@@ -49,8 +49,9 @@ namespace WuDao.Content.Items.Weapons.Melee
         protected override void BuildStatRules(Player player, Item item, IList<StatRule> rules)
         {
             rules.Add(new StatRule(BuffConditions.Always,
-                // 手持时免疫“着火了/燃烧”（下面第3点用得到）
-                StatEffect.ImmuneTo(BuffID.OnFire, BuffID.Burning)
+                // 手持时免疫“着火了/燃烧/岩浆”（下面第3点用得到）
+                StatEffect.ImmuneTo(BuffID.OnFire, BuffID.Burning),
+                StatEffect.LavaImmune()
             ));
         }
         // 武器本体挥砍命中

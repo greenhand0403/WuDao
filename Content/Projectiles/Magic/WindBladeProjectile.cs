@@ -117,7 +117,9 @@ namespace WuDao.Content.Projectiles.Magic
             if (totalFrames <= 0) totalFrames = 1;
 
             int frameHeight = tex.Height / totalFrames;
-            int frameY = frameHeight * (Projectile.frame % totalFrames);
+            // 可以只取某一帧作为射弹贴图
+            // int frameY = frameHeight * (Projectile.frame % totalFrames);
+            int frameY = frameHeight * (2 % totalFrames);
             Rectangle src = new Rectangle(0, frameY, tex.Width, frameHeight);
 
             Vector2 origin = src.Size() * 0.5f;
