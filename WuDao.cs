@@ -7,6 +7,7 @@ using Terraria;
 using Terraria.ModLoader;
 using WuDao.Content.Players;
 using WuDao.Content.Global.Systems;
+using WuDao.Systems;
 
 namespace WuDao
 {
@@ -43,6 +44,8 @@ namespace WuDao
 				"CookbookRegisterHintMany" => (object)RegisterHintManyCall(args),
 				"GetCookingSkill" => (object)(cp?.CookingSkill ?? 0),
 				"GetDeliciousness" => (object)(cp?.Deliciousness ?? 0),
+				"RegisterWellBossBag" => (object)RegisterWellBossBag(args),
+				"RegisterWellBossItem" => (object)RegisterWellBossItem(args),
 				_ => null
 			};
 			/*
@@ -72,6 +75,18 @@ namespace WuDao
 				// 用法：Mod.Call("CookbookRegisterHintMany", new int[]{ItemID.Apple,ItemID.Apricot}, "摇晃森林的树木获得");
 				if (argv.Length >= 3 && argv[1] is int[] arr && argv[2] is string hint)
 					CuisineSystem.RegisterHintMany(arr, hint);
+				return null;
+			}
+			static object RegisterWellBossBag(object[] args)
+			{
+				if (args.Length >= 3 && args[0] is string key && args[1] is int bossID && args[2] is int itemType)
+					WishingWellSystem.BagToBoss[itemType] = bossID;
+				return null;
+			}
+			static object RegisterWellBossItem(object[] args)
+			{
+				if (args.Length >= 3 && args[0] is string key && args[1] is int bossID && args[2] is int itemType)
+					WishingWellSystem.ItemToBoss[itemType] = bossID;
 				return null;
 			}
 		}

@@ -188,6 +188,11 @@ Items: {
 		DisplayName: Food Log Item
 		Tooltip: ""
 	}
+
+	WishingWellItem: {
+		DisplayName: Wishing Well Item
+		Tooltip: ""
+	}
 }
 
 Projectiles: {
@@ -253,5 +258,21 @@ Buffs: {
 	RewinderCicadasCooldown: {
 		DisplayName: Rewinder Cicadas Cooldown
 		Description: Mods.WuDao.Buffs.RewinderCicadasCooldown.Description
+	}
+}
+
+Configs: {
+	WishingWellConfig: {
+		DoubleRewardPercent: {
+			Label: Double Reward Chance (%)
+			Tooltip: Chance that the wishing well gives double loot instead of summoning a boss
+		}
+
+		DisplayName: Wishing Well Config
+
+		Chance: {
+			Label: Chance
+			Tooltip: ""
+		}
 	}
 }

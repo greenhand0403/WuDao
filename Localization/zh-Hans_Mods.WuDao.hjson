@@ -1,0 +1,278 @@
+Items: {
+	NebulaRocket: {
+		// DisplayName: Nebula Rocket
+		// Tooltip: ""
+	}
+
+	SolarBullet: {
+		// DisplayName: Solar Bullet
+		// Tooltip: ""
+	}
+
+	SteelHeavySword: {
+		// DisplayName: Steel Heavy Sword
+		// Tooltip: ""
+	}
+
+	WoodenShuriken: {
+		// DisplayName: Wooden Shuriken
+		// Tooltip: ""
+	}
+
+	GoldenShuriken: {
+		// DisplayName: Golden Shuriken
+		// Tooltip: ""
+	}
+
+	FlyStone: {
+		// DisplayName: Fly Stone
+		// Tooltip: ""
+	}
+
+	WeaponBundleItem: {
+		// DisplayName: Weapon Bundle Item
+		// Tooltip: ""
+	}
+
+	FlameShuriken: {
+		// DisplayName: Flame Shuriken
+		// Tooltip: ""
+	}
+
+	IceShuriken: {
+		// DisplayName: Ice Shuriken
+		// Tooltip: ""
+	}
+
+	PoisonedShuriken: {
+		// DisplayName: Poisoned Shuriken
+		// Tooltip: ""
+	}
+
+	CactusNeedle: {
+		// DisplayName: Cactus Needle
+		// Tooltip: ""
+	}
+
+	OceanBlueSword: {
+		// DisplayName: Ocean Blue Sword
+		// Tooltip: ""
+	}
+
+	HellfireSword: {
+		// DisplayName: Hellfire Sword
+		// Tooltip: ""
+	}
+
+	NormalScissors: {
+		// DisplayName: Normal Scissors
+		// Tooltip: ""
+	}
+
+	TimeStopItem: {
+		// DisplayName: Time Stop Item
+		// Tooltip: ""
+	}
+
+	CloudArrow: {
+		// DisplayName: Cloud Arrow
+		// Tooltip: ""
+	}
+
+	BrightVerdict: {
+		// DisplayName: Bright Verdict
+		// Tooltip: ""
+	}
+
+	MagicHorn: {
+		// DisplayName: Magic Horn
+		// Tooltip: ""
+	}
+
+	Mimicker: {
+		// DisplayName: Mimicker
+		// Tooltip: ""
+	}
+
+	WindBlade: {
+		// DisplayName: Wind Blade
+		// Tooltip: ""
+	}
+
+	ForestSword: {
+		// DisplayName: Forest Sword
+		// Tooltip: ""
+	}
+
+	ImmortalSword: {
+		// DisplayName: Immortal Sword
+		// Tooltip: ""
+	}
+
+	RainBowGolfClubs: {
+		// DisplayName: Rain Bow Golf Clubs
+		// Tooltip: ""
+	}
+
+	SteelBroadSword: {
+		// DisplayName: Steel Broad Sword
+		// Tooltip: ""
+	}
+
+	SteelShortSword: {
+		// DisplayName: Steel Short Sword
+		// Tooltip: ""
+	}
+
+	HarpyWingSword: {
+		// DisplayName: Harpy Wing Sword
+		// Tooltip: ""
+	}
+
+	GritShotgun: {
+		// DisplayName: Grit Shotgun
+		// Tooltip: ""
+	}
+
+	SmokeGrenade: {
+		// DisplayName: Smoke Grenade
+		// Tooltip: ""
+	}
+
+	TheOutlaw: {
+		// DisplayName: The Outlaw
+		// Tooltip: ""
+	}
+
+	GhostChakram: {
+		// DisplayName: Ghost Chakram
+		// Tooltip: ""
+	}
+
+	InvincibleBlade: {
+		// DisplayName: Invincible Blade
+		// Tooltip: ""
+	}
+
+	DevolutionCharm: {
+		// DisplayName: Devolution Charm
+		// Tooltip: ""
+	}
+
+	WrathLotus: {
+		// DisplayName: Wrath Lotus
+		// Tooltip: ""
+	}
+
+	DiscoBallRemote: {
+		// DisplayName: Disco Ball Remote
+		// Tooltip: ""
+	}
+
+	BlasterPliers: {
+		// DisplayName: Blaster Pliers
+		// Tooltip: ""
+	}
+
+	RewinderCicadas: {
+		// Tooltip: ""
+		// DisplayName: Rewinder Cicadas
+	}
+
+	Cookbook: {
+		// DisplayName: Cookbook
+		// Tooltip: ""
+	}
+
+	FoodLogItem: {
+		// DisplayName: Food Log Item
+		// Tooltip: ""
+	}
+
+	WishingWellItem: {
+		// DisplayName: Wishing Well Item
+		// Tooltip: ""
+	}
+}
+
+Projectiles: {
+	// NebulaRocketProjectile.DisplayName: Nebula Rocket Projectile
+	// SolarBulletProjectile.DisplayName: Solar Bullet Projectile
+	// WoodenShurikenProjectile.DisplayName: Wooden Shuriken Projectile
+	// GoldenShurikenProjectile.DisplayName: Golden Shuriken Projectile
+	// FlyStoneProjectile.DisplayName: Fly Stone Projectile
+	// FlameShurikenProjectile.DisplayName: Flame Shuriken Projectile
+	// IceShurikenProjectile.DisplayName: Ice Shuriken Projectile
+	// PoisonedShurikenProjectile.DisplayName: Poisoned Shuriken Projectile
+	// CactusNeedleProjectile.DisplayName: Cactus Needle Projectile
+	// OceanBlueSwordProjectile.DisplayName: Ocean Blue Sword Projectile
+	// HellfireSwordProjectile.DisplayName: Hellfire Sword Projectile
+	// ChargedSlashProj.DisplayName: Charged Slash Proj
+	// DashSlashProj.DisplayName: Dash Slash Proj
+	// BrightVerdictProjectile.DisplayName: Bright Verdict Projectile
+	// CloudArrowProjectile.DisplayName: Cloud Arrow Projectile
+	// HolyDiamondSpinHitbox.DisplayName: Holy Diamond Spin Hitbox
+	// HolyKiteBurstHitbox.DisplayName: Holy Kite Burst Hitbox
+	// WindBladeProjectile.DisplayName: Wind Blade Projectile
+	// RainbowGolfBall.DisplayName: Rainbow Golf Ball
+	// SteelBroadSwordProjectile.DisplayName: Steel Broad Sword Projectile
+	// SteelShortSwordProjectile.DisplayName: Steel Short Sword Projectile
+	// BasiliskChargeProj.DisplayName: Basilisk Charge Proj
+	// InstantExplosion.DisplayName: Instant Explosion
+	// SmokeCloud.DisplayName: Smoke Cloud
+	// SmokeGrenadeProj.DisplayName: Smoke Grenade Proj
+	// TheOutlawFirewall.DisplayName: The Outlaw Firewall
+	// TheOutlawPellet.DisplayName: The Outlaw Pellet
+	// TheOutlawSplitBomblet.DisplayName: The Outlaw Split Bomblet
+	// TheOutlawSplitShot.DisplayName: The Outlaw Split Shot
+	// TheOutlawUltimateBomb.DisplayName: The Outlaw Ultimate Bomb
+	// GhostChakramProj.DisplayName: Ghost Chakram Proj
+	// InvincibleArcShot.DisplayName: Invincible Arc Shot
+	// WrathLotusProj.DisplayName: Wrath Lotus Proj
+	// DiscoBallPetProj.DisplayName: Disco Ball Pet Proj
+}
+
+DamageClasses: {
+	// ExternalPowerDamageClass.DisplayName: External Power Damage Class
+	// InternalPowerDamageClass.DisplayName: Internal Power Damage Class
+	// ChiEnergyDamageClass.DisplayName: Chi Energy Damage Class
+	// SupremeDamageClass.DisplayName: Supreme Damage Class
+}
+
+Buffs: {
+	OutlawBackstepCooldown: {
+		// DisplayName: Outlaw Backstep Cooldown
+		// Description: Mods.WuDao.Buffs.OutlawBackstepCooldown.Description
+	}
+
+	NormalScissorsDashCooldownBuff: {
+		// DisplayName: Normal Scissors Dash Cooldown Buff
+		// Description: Mods.WuDao.Buffs.NormalScissorsDashCooldownBuff.Description
+	}
+
+	DiscoBallPetBuff: {
+		// DisplayName: Disco Ball Pet Buff
+		// Description: Mods.WuDao.Buffs.DiscoBallPetBuff.Description
+	}
+
+	RewinderCicadasCooldown: {
+		// DisplayName: Rewinder Cicadas Cooldown
+		// Description: Mods.WuDao.Buffs.RewinderCicadasCooldown.Description
+	}
+}
+
+Configs: {
+	WishingWellConfig: {
+		DoubleRewardPercent: {
+			// Label: Double Reward Chance (%)
+			// Tooltip: Chance that the wishing well gives double loot instead of summoning a boss
+		}
+
+		// DisplayName: Wishing Well Config
+
+		Chance: {
+			// Label: Chance
+			// Tooltip: ""
+		}
+	}
+}
