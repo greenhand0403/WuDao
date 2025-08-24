@@ -193,6 +193,16 @@ Items: {
 		// DisplayName: Wishing Well Item
 		// Tooltip: ""
 	}
+
+	DesignFlaw: {
+		// DisplayName: Design Flaw
+		// Tooltip: ""
+	}
+
+	FirstBlood: {
+		// DisplayName: First Blood
+		// Tooltip: ""
+	}
 }
 
 Projectiles: {
