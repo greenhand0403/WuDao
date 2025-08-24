@@ -173,6 +173,11 @@ Items: {
 		DisplayName: Blaster Pliers
 		Tooltip: ""
 	}
+
+	RewinderCicadas: {
+		Tooltip: ""
+		DisplayName: Rewinder Cicadas
+	}
 }
 
 Projectiles: {
@@ -233,5 +238,10 @@ Buffs: {
 	DiscoBallPetBuff: {
 		DisplayName: Disco Ball Pet Buff
 		Description: Mods.WuDao.Buffs.DiscoBallPetBuff.Description
+	}
+
+	RewinderCicadasCooldown: {
+		DisplayName: Rewinder Cicadas Cooldown
+		Description: Mods.WuDao.Buffs.RewinderCicadasCooldown.Description
 	}
 }
