@@ -29,6 +29,25 @@ namespace WuDao.Content.Players
         // —— 新增：食谱随机 6 个未品尝条目 —— 
         public readonly List<int> SuggestedFoods6 = new(6);
         private bool _foodLogLastTick = false;
+        /// <summary>
+        /// 厨艺数：用于“首次制作”判定（独立于奖励资格池）
+        /// </summary>
+        public readonly HashSet<int> CraftedEverFoods = new();  // 曾经制作过的食物（无论是否携带菜谱）
+
+        /// <summary>
+        /// 美味值：用于“首次品尝”判定（独立于奖励资格池）
+        /// </summary>
+        public readonly HashSet<int> EatenEverFoods = new();  // 曾经吃过的食物（无论是否携带收藏）
+
+        // —— 新增：总数值 —— 
+        /// <summary>
+        /// 厨艺数：首次制作时 += 食物.buffTime
+        /// </summary>
+        public int CookingSkill;
+        /// <summary>
+        /// 美味值：首次品尝时 += 食物.buffTime
+        /// </summary>
+        public int Deliciousness;
         public override void ResetEffects()
         {
             HasCookbook = false;
@@ -72,20 +91,27 @@ namespace WuDao.Content.Players
                 (list[i], list[j]) = (list[j], list[i]);
             }
         }
-        
+
         public override void SaveData(TagCompound tag)
         {
             tag["CraftedFoodTypes"] = new List<int>(CraftedFoodTypes);
             tag["FoodsEatenAll"] = new List<int>(FoodsEatenAll);
             tag["TodayStartIndex"] = TodayStartIndex;
             tag["TodayStartDay"] = TodayStartDay;
+            tag["CraftedEverFoods"] = new List<int>(CraftedEverFoods);
+            tag["CookingSkill"] = CookingSkill;
+            tag["Deliciousness"] = Deliciousness;
         }
         public override void LoadData(TagCompound tag)
         {
             CraftedFoodTypes.Clear();
             FoodsEatenAll.Clear();
+            CraftedEverFoods.Clear();
             if (tag.ContainsKey("CraftedFoodTypes")) CraftedFoodTypes.UnionWith(tag.Get<List<int>>("CraftedFoodTypes"));
             if (tag.ContainsKey("FoodsEatenAll")) FoodsEatenAll.UnionWith(tag.Get<List<int>>("FoodsEatenAll"));
+            if (tag.ContainsKey("CraftedEverFoods")) CraftedEverFoods.UnionWith(tag.Get<List<int>>("CraftedEverFoods"));
+            if (tag.ContainsKey("CookingSkill")) CookingSkill = tag.GetInt("CookingSkill");
+            if (tag.ContainsKey("Deliciousness")) Deliciousness = tag.GetInt("Deliciousness");
             TodayStartIndex = tag.GetInt("TodayStartIndex");
             TodayStartDay = tag.GetInt("TodayStartDay");
         }

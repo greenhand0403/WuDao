@@ -41,9 +41,21 @@ namespace WuDao
 				// 用法：Mod.Call("CookbookRegisterHint", itemType, "由XXX掉落/购买/宝匣…")
 				"CookbookRegisterHint" => (object)RegisterHint(args),
 				"CookbookRegisterHintMany" => (object)RegisterHintManyCall(args),
+				"GetCookingSkill" => (object)(cp?.CookingSkill ?? 0),
+				"GetDeliciousness" => (object)(cp?.Deliciousness ?? 0),
 				_ => null
 			};
+			/*
+			// 本模组内
+			var cp = Main.LocalPlayer.GetModPlayer<CuisinePlayer>();
+			int cooking = cp.CookingSkill;
+			int tasty   = cp.Deliciousness;
 
+			// 跨模组
+			var your = ModLoader.GetMod("YourModInternalName");
+			int cooking2 = (int)(your?.Call("GetCookingSkill", Main.LocalPlayer) ?? 0);
+			int tasty2   = (int)(your?.Call("GetDeliciousness", Main.LocalPlayer) ?? 0);
+			*/
 			static int[] CuisineSystemGetTwo(Player plr)
 			{
 				CuisineSystem.GetTodayTwo(plr, out int a, out int b);

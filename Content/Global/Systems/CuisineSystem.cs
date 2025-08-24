@@ -425,9 +425,12 @@ namespace WuDao.Content.Global.Systems
             if (ItemID.Sets.IsFood[item.type])
             {
                 CuisinePlayer p = player.GetModPlayer<CuisinePlayer>();
-                if (p.FoodsEatenAll.Add(item.type))  // 只要被标记 Food 的都记
+                if (p.FoodsEatenAll.Add(item.type))
                 {
-                    CombatText.NewText(player.Hitbox, Color.Green, $"品尝新食物");
+                    // 首次‘品尝’累加美味值
+                    int bt = ContentSamples.ItemsByType[item.type].buffTime; // 帧
+                    if (bt > 0) p.Deliciousness += bt;
+                    CombatText.NewText(player.Hitbox, Color.Green, "品尝新食物");
                 }
             }
         }
@@ -438,7 +441,13 @@ namespace WuDao.Content.Global.Systems
             var cp = player.GetModPlayer<CuisinePlayer>();
 
             bool hasCookbook = HasCookbookNow(player); // ✅ 以制作当帧的真实背包为准
-
+            // —— 首次‘制作’累加厨艺值（与是否携带菜谱无关）——
+            if (ItemID.Sets.IsFood[item.type] && cp.CraftedEverFoods.Add(item.type))
+            {
+                int bt = ContentSamples.ItemsByType[item.type].buffTime; // 单位：帧（60 = 1秒）
+                if (bt > 0) cp.CookingSkill += bt;
+            }
+            // 仅当携带菜谱时才消耗‘首次双倍资格’与发奖励
             if (!hasCookbook || !ItemID.Sets.IsFood[item.type])
                 return;
 

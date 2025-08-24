@@ -52,7 +52,7 @@ namespace WuDao.Content.Items
             int totalFood = CuisineSystem.TotalFoodCount;
 
             tooltips.Add(new TooltipLine(Mod, "FoodEatenProgress", $"已吃过：{cp.FoodsEatenAll.Count} / {totalFood} 种食物"));
-
+            tooltips.Add(new TooltipLine(Mod, "FoodDeliciousness", $"美味值：{cp.Deliciousness}"));
             if (cp.HasFoodLogItem && cp.SuggestedFoods6.Count > 0)
             {
                 tooltips.Add(new TooltipLine(Mod, "FoodHintsTitle", "快去品尝这些食物吧："));

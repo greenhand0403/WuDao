@@ -31,6 +31,7 @@ namespace WuDao.Content.Items
             var cp = p.GetModPlayer<CuisinePlayer>();
             // 显示“已制作过/总数（食物池）”
             tooltips.Add(new TooltipLine(Mod, "CookbookMadeCount", $"已制作：{cp.CraftedFoodTypes.Count} / {CuisineSystem.FoodPool.Count} 种食物"));
+            tooltips.Add(new TooltipLine(Mod, "CookbookCookingSkill", $"厨艺值：{cp.CookingSkill}"));
             CuisineSystem.GetTodayTwo(p, out int a, out int b);
             if (a > 0)
             {
