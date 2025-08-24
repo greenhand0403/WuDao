@@ -11,7 +11,7 @@ namespace WuDao.Content.Projectiles.Melee
 	// Values chosen mostly correspond to Iron Shortsword
 	public class SteelShortSwordProjectile : ModProjectile
 	{
-        public override string Texture => "WuDao/Content/Items/Weapons/Melee/SteelShortSword";
+		public override string Texture => "WuDao/Content/Items/Weapons/Melee/SteelShortSword";
 		public const int FadeInDuration = 7;
 		public const int FadeOutDuration = 4;
 
@@ -20,12 +20,14 @@ namespace WuDao.Content.Projectiles.Melee
 		// The "width" of the blade
 		public float CollisionWidth => 10f * Projectile.scale;
 
-		public int Timer {
+		public int Timer
+		{
 			get => (int)Projectile.ai[0];
 			set => Projectile.ai[0] = value;
 		}
 
-		public override void SetDefaults() {
+		public override void SetDefaults()
+		{
 			Projectile.Size = new Vector2(18); // This sets width and height to the same value (important when projectiles can rotate)
 			Projectile.aiStyle = -1; // Use our own AI to customize how it behaves, if you don't want that, keep this at ProjAIStyleID.ShortSword. You would still need to use the code in SetVisualOffsets() though
 			Projectile.friendly = true;
@@ -38,16 +40,19 @@ namespace WuDao.Content.Projectiles.Melee
 			Projectile.timeLeft = 360; // This value does not matter since we manually kill it earlier, it just has to be higher than the duration we use in AI
 			Projectile.hide = true; // Important when used alongside player.heldProj. "Hidden" projectiles have special draw conditions
 		}
-		public override void AI() {
+		public override void AI()
+		{
 			Player player = Main.player[Projectile.owner];
 
 			Timer += 1;
-			if (Timer >= TotalDuration) {
+			if (Timer >= TotalDuration)
+			{
 				// Kill the projectile if it reaches it's intended lifetime
 				Projectile.Kill();
 				return;
 			}
-			else {
+			else
+			{
 				// Important so that the sprite draws "in" the player's hand and not fully in front or behind the player
 				player.heldProj = Projectile.whoAmI;
 			}
@@ -71,8 +76,9 @@ namespace WuDao.Content.Projectiles.Melee
 			// The code in this method is important to align the sprite with the hitbox how we want it to
 			SetVisualOffsets();
 		}
-        
-		private void SetVisualOffsets() {
+
+		private void SetVisualOffsets()
+		{
 			// 32 is the sprite size (here both width and height equal)
 			const int HalfSpriteWidth = 32 / 2;
 			const int HalfSpriteHeight = 32 / 2;
@@ -98,12 +104,14 @@ namespace WuDao.Content.Projectiles.Melee
 			//}
 		}
 
-		public override bool ShouldUpdatePosition() {
+		public override bool ShouldUpdatePosition()
+		{
 			// Update Projectile.Center manually
 			return false;
 		}
 
-		public override void CutTiles() {
+		public override void CutTiles()
+		{
 			// "cutting tiles" refers to breaking pots, grass, queen bee larva, etc.
 			DelegateMethods.tilecut_0 = TileCuttingContext.AttackProjectile;
 			Vector2 start = Projectile.Center;
@@ -111,7 +119,8 @@ namespace WuDao.Content.Projectiles.Melee
 			Utils.PlotTileLine(start, end, CollisionWidth, DelegateMethods.CutTiles);
 		}
 
-		public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {
+		public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
+		{
 			// "Hit anything between the player and the tip of the sword"
 			// shootSpeed is 2.1f for reference, so this is basically plotting 12 pixels ahead from the center
 			Vector2 start = Projectile.Center;

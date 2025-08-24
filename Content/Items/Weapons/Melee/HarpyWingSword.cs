@@ -132,7 +132,7 @@ namespace WuDao.Content.Items.Weapons.Melee
             CreateRecipe()
                 .AddIngredient(ItemID.HarpyWings, 5)
                 .AddIngredient(ItemID.CopperShortsword, 1)
-                .AddIngredient(ItemID.Umbrella,1)
+                .AddIngredient(ItemID.Umbrella, 1)
                 .AddTile(TileID.Anvils);
         }
     }

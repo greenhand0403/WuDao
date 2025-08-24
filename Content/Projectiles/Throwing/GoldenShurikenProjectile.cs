@@ -32,7 +32,7 @@ namespace WuDao.Content.Projectiles.Throwing
         protected override int DebuffChanceDenom => 3;      // 1/3 概率
 
         protected override bool DrawMainSpriteInPreDraw => true;
-        
+
         // 如果想额外做什么（这里用Dust模拟你原来的CreateGoldenDusts），可以在命中扩展里加
         protected override void OnHitNPCExt(NPC target, NPC.HitInfo hit, int damageDone)
         {

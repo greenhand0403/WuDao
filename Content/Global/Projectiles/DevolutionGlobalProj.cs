@@ -14,7 +14,7 @@ namespace WuDao.Content.Global.Projectiles
         {
             if (!proj.hostile) return; // 只影响敌方弹幕
                                        // 敌方弹幕以“离最近的持有者”的判断来近似屏幕范围
-            // 屏幕半径（近似）：用对角线一半，或你自定常量例如 900f
+                                       // 屏幕半径（近似）：用对角线一半，或你自定常量例如 900f
             float radius = (float)Math.Sqrt(Main.screenWidth * Main.screenWidth + Main.screenHeight * Main.screenHeight) * 0.5f;
             for (int i = 0; i < Main.maxPlayers; i++)
             {

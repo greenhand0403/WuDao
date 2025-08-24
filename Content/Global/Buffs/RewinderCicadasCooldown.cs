@@ -2,7 +2,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace Wudao.Content.Global.Buffs
+namespace WuDao.Content.Global.Buffs
 {
     public class RewinderCicadasCooldown : ModBuff
     {

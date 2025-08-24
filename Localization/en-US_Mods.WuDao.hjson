@@ -178,6 +178,16 @@ Items: {
 		Tooltip: ""
 		DisplayName: Rewinder Cicadas
 	}
+
+	Cookbook: {
+		DisplayName: Cookbook
+		Tooltip: ""
+	}
+
+	FoodLogItem: {
+		DisplayName: Food Log Item
+		Tooltip: ""
+	}
 }
 
 Projectiles: {

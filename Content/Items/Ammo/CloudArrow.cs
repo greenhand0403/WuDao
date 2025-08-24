@@ -36,7 +36,7 @@ namespace WuDao.Content.Items.Ammo
             CreateRecipe(30)
                 .AddIngredient(ItemID.WoodenArrow, 30)
                 .AddIngredient(ItemID.Cloud, 5)
-                .AddIngredient(ItemID.SunplateBlock,5)
+                .AddIngredient(ItemID.SunplateBlock, 5)
                 .AddTile(TileID.SkyMill)
                 .Register();
         }

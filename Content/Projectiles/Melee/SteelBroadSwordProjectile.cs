@@ -78,7 +78,7 @@ namespace WuDao.Content.Projectiles.Melee
                 coloredDust.fadeIn = 0.4f + Main.rand.NextFloat() * 0.15f;
                 coloredDust.noGravity = true;
             }
-            
+
             if (Projectile.localAI[0] >= Projectile.ai[1])
                 Projectile.Kill();
 

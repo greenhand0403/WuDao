@@ -60,6 +60,34 @@ namespace WuDao.Common.Buffs
 
         // 自定义
         public static Func<Player, Item, bool> FromPlayerPredicate(Func<Player, bool> pred) => (p, i) => pred(p);
+
+        /// <summary>当玩家身上存在任意一个给定的 BuffId 时返回 true。</summary>
+        public static Func<Player, Item, bool> HasBuff(params int[] buffIds)
+            => (p, i) =>
+            {
+                for (int k = 0; k < buffIds.Length; k++)
+                    if (p.HasBuff(buffIds[k])) return true;
+                return false;
+            };
+
+        /// <summary>
+		/// 是否处于任意“吃得饱”系列增益（Well Fed/Well Fed 2/3）。
+        /// <br>用法示例rules.Add(new StatRule(</br>
+        /// <br>BuffConditions.InForest.And(BuffConditions.IsWellFedAny),</br>
+        /// <br>StatEffect.LifeRegen(2)</br>
+		/// </summary>
+        public static Func<Player, Item, bool> IsWellFedAny
+            => (p, i) =>
+            {
+                // 利用官方集合，兼容全系“吃得饱”Buff
+                for (int idx = 0; idx < p.buffType.Length; idx++)
+                {
+                    int t = p.buffType[idx];
+                    if (t > 0 && BuffID.Sets.IsWellFed[t]) // 见 BuffID.Sets.IsWellFed
+                        return true;
+                }
+                return false;
+            };
     }
     #endregion
 

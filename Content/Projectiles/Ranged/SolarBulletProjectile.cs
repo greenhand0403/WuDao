@@ -23,7 +23,7 @@ namespace WuDao.Content.Projectiles.Ranged
             Projectile.DamageType = DamageClass.Ranged;
 
             Projectile.ignoreWater = true;
-            
+
             AIType = ProjectileID.Bullet;
         }
 
@@ -46,7 +46,7 @@ namespace WuDao.Content.Projectiles.Ranged
         public override void OnKill(int timeLeft)
         {
             SoundEngine.PlaySound(SoundID.Item14.WithVolumeScale(0.5f).WithPitchOffset(0.8f), Projectile.position);
-            
+
             Collision.HitTiles(Projectile.position + Projectile.velocity, Projectile.velocity, Projectile.width, Projectile.height);
 
             if (Main.myPlayer == Projectile.owner)

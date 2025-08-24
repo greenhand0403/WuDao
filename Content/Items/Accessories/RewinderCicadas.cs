@@ -1,9 +1,9 @@
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Wudao.Content.Cooldowns;
+using WuDao.Content.Cooldowns;
 
-namespace Wudao.Content.Items.Accessories
+namespace WuDao.Content.Items.Accessories
 {
     public class RewinderCicadas : ModItem
     {

@@ -30,12 +30,12 @@ namespace WuDao.Content.Items.Accessories
                 StatEffect.ManaRegenMultiplier(MULT),
 
                 // 攻速/伤害/移速/防御
-                StatEffect.DamageAdd(-(1-MULT)),
-                StatEffect.AttackSpeedAdd(-(1-MULT)),
-                StatEffect.MoveSpeed(-(1-MULT)),
+                StatEffect.DamageAdd(-(1 - MULT)),
+                StatEffect.AttackSpeedAdd(-(1 - MULT)),
+                StatEffect.MoveSpeed(-(1 - MULT)),
                 StatEffect.DefenseMultiplier(MULT)
             ));
         }
-        
+
     }
 }

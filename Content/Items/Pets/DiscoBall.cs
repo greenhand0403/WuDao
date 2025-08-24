@@ -4,13 +4,13 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace Wudao.Content.Items.Pets
+namespace WuDao.Content.Items.Pets
 {
     // TODO: 绘制贴图 物品：用于召唤照明宠物
     public class DiscoBallRemote : ModItem
     {
         public override string Texture => $"Terraria/Images/Item_{ItemID.GolfBall}";
-        
+
         public override void SetDefaults()
         {
             Item.width = 26;
@@ -27,7 +27,7 @@ namespace Wudao.Content.Items.Pets
         }
         public override void UseStyle(Player player, Rectangle heldItemFrame)
         {
-            if (player.whoAmI==Main.myPlayer && player.itemTime==0)
+            if (player.whoAmI == Main.myPlayer && player.itemTime == 0)
             {
                 player.AddBuff(Item.buffType, 360);
             }
@@ -47,7 +47,7 @@ namespace Wudao.Content.Items.Pets
         public override void Update(Player player, ref int buffIndex)
         {
             bool unused = false;
-            player.BuffHandle_SpawnPetIfNeededAndSetTime(buffIndex,ref unused,ModContent.ProjectileType<DiscoBallPetProj>());
+            player.BuffHandle_SpawnPetIfNeededAndSetTime(buffIndex, ref unused, ModContent.ProjectileType<DiscoBallPetProj>());
         }
     }
 

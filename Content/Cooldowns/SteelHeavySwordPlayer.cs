@@ -15,7 +15,7 @@ namespace WuDao.Content.Cooldowns
             if (RightClickCooldown > 0)
             {
                 RightClickCooldown--;
-                if (RightClickCooldown==0)
+                if (RightClickCooldown == 0)
                 {
                     SoundEngine.PlaySound(SoundID.MaxMana, Player.position);
                 }

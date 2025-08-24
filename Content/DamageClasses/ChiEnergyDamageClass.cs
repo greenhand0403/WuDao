@@ -18,7 +18,7 @@ namespace WuDao.Content.DamageClasses
                 data.knockbackInheritance = 0.5f;     // 击退（可选）
                 data.attackSpeedInheritance = 0.5f;   // 攻速（可选）
                 data.armorPenInheritance = 0.5f; // 护甲穿透（可选）
-                                                         // 还有 flatDamageInheritance / scalingArmorPenetration 等字段，可按需使用
+                                                 // 还有 flatDamageInheritance / scalingArmorPenetration 等字段，可按需使用
             }
             return data;
         }

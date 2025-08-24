@@ -122,7 +122,8 @@ namespace WuDao.Content.Projectiles.Ranged
                 if (k == 1)
                 {
                     speedMulti = 0.6f;
-                }else if (k == 2)
+                }
+                else if (k == 2)
                 {
                     speedMulti = 0.9f;
                 }

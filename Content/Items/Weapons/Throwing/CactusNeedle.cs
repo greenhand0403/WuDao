@@ -26,7 +26,7 @@ namespace WuDao.Content.Items.Weapons.Throwing
 
             Item.DamageType = DamageClass.Throwing; // 如需兼容，可改为 DamageClass.Ranged
             Item.damage = 4;
-            
+
             Item.rare = ItemRarityID.Green;
             Item.value = 1;
 

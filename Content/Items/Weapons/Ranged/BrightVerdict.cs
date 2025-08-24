@@ -71,7 +71,7 @@ namespace WuDao.Content.Items.Weapons.Ranged
             CreateRecipe()
                 .AddIngredient(ItemID.Shotgun)
                 .AddIngredient(ItemID.LightShard, 2)
-                .AddIngredient(ItemID.SoulofLight,10)
+                .AddIngredient(ItemID.SoulofLight, 10)
                 .AddTile(TileID.MythrilAnvil)
                 .Register();
         }

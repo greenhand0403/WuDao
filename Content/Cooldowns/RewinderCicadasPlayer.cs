@@ -4,10 +4,10 @@ using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ModLoader;
-using Wudao.Content.Global.Buffs;
-using Wudao.Content.Items.Accessories;
+using WuDao.Content.Global.Buffs;
+using WuDao.Content.Items.Accessories;
 
-namespace Wudao.Content.Cooldowns
+namespace WuDao.Content.Cooldowns
 {
     public class RewinderCicadasPlayer : ModPlayer
     {
