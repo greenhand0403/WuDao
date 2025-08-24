@@ -33,7 +33,6 @@ namespace WuDao.Content.Items.Accessories
                 StatEffect.DamageAdd(-(1-MULT)),
                 StatEffect.AttackSpeedAdd(-(1-MULT)),
                 StatEffect.MoveSpeed(-(1-MULT)),
-                
                 StatEffect.DefenseMultiplier(MULT)
             ));
         }

@@ -230,6 +230,10 @@ namespace WuDao.Common
                 layerDepth);
         }
     }
+    /// <summary>
+    /// 绘制按行排列的精灵 精灵网格（行优先多行帧）
+    /// 注意：如果最后一行不满，超出的 idx 会被 TotalFrames 限制住
+    /// </summary>
     public struct SpriteGrid // 行优先多行帧
     {
         public Rectangle Start;   // 左上首帧矩形（x,y,w,h）

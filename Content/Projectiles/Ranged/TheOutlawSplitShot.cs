@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
@@ -195,23 +196,18 @@ namespace WuDao.Content.Projectiles.Ranged
             // ★ 命中后补墙：未生成 → 优先贴地，其次至少放在“身体中心”
             if (!_spawnedFirewall && NPC.downedPlantBoss && Projectile.owner == Main.myPlayer)
             {
-                // 1) 先找“脚下实心”
-                //   从脚底往下“投两刀”：10px/16px；三点取样（中、左1/4、右1/4）增强容错
+                // 1) 三列X位（左1/4、中、右1/4），向下扫描若干格，找“最近的实心顶面”
                 Vector2 footMid = new Vector2(target.Center.X, target.Bottom.Y);
                 float quarter = target.width * 0.25f;
-                Vector2 footL = footMid + new Vector2(-quarter, 0f);
-                Vector2 footR = footMid + new Vector2(+quarter, 0f);
+                float[] xs = new float[] { footMid.X - quarter, footMid.X, footMid.X + quarter };
 
-                bool solidBelow(Vector2 p) =>
-                    IsStrictSolidBlockAtWorld(p + new Vector2(0f, 10f)) ||
-                    IsStrictSolidBlockAtWorld(p + new Vector2(0f, 16f));
+                // 最多向下找几格地（按需要调，8~12格较稳）
+                const int maxTilesDown = 12;
 
-                if (solidBelow(footMid) || solidBelow(footL) || solidBelow(footR))
+                if (TryFindSolidTopUnder(xs, footMid.Y, maxTilesDown, out Vector2 groundPos))
                 {
-                    // 贴“实心地面”：把火墙中心放到“方块顶面”附近
-                    // 简化：用脚底Y当作基准（你的火墙AI第一帧会沿法向上抬10px，正好离地）实测需要降低9像素
-                    Vector2 pos = new Vector2(target.Center.X, target.Bottom.Y - 9);
-                    SpawnFirewall(0, pos); // 0 = 水平火墙
+                    // 把火墙中心放到这块砖的顶面（火墙AI里会再沿法向上抬你设定的像素，比如10~16px）
+                    SpawnFirewall(0, groundPos + new Vector2(0, -4));
                     return;
                 }
 
@@ -220,7 +216,35 @@ namespace WuDao.Content.Projectiles.Ranged
                 SpawnFirewall(0, target.Center);
             }
         }
+        // 尝试在给定的 X 列（数组）中，从 startY 往下最多 maxTilesDown 格，找到第一个“严格实心”的顶面；找到则返回那个世界坐标
+        private bool TryFindSolidTopUnder(float[] xs, float startY, int maxTilesDown, out Vector2 pos)
+        {
+            // 从最靠近的那一列往下找，谁先找到用谁
+            for (int xi = 0; xi < xs.Length; xi++)
+            {
+                int startTy = (int)(startY / 16f);
+                int tx = (int)(xs[xi] / 16f);
 
+                for (int ty = startTy; ty <= startTy + maxTilesDown; ty++)
+                {
+                    if (!WorldGen.InWorld(tx, ty, 10)) break;
+
+                    Tile t = Framing.GetTileSafely(tx, ty);
+                    // 必须未激活 + 不是平台 + 实心/斜坡/半砖
+                    if (t.HasUnactuatedTile &&
+                        !TileID.Sets.Platforms[t.TileType] &&
+                        (WorldGen.SolidOrSlopedTile(tx, ty) || (Main.tileSolid[t.TileType] && !Main.tileSolidTop[t.TileType])))
+                    {
+                        float topY = ty * 16f;                  // 砖块顶面（世界坐标）
+                        pos = new Vector2(xs[xi], topY);        // 以该列X + 顶面Y 作为火墙中心的基准
+                        return true;
+                    }
+                }
+            }
+
+            pos = default;
+            return false;
+        }
         private void DoSplit()
         {
             if (_split) return; // 双保险
@@ -344,16 +368,20 @@ namespace WuDao.Content.Projectiles.Ranged
                                            // 用于命中/绘制的一致几何（你可以按贴图像素改）
         public const float TotalLen = 120f; // 墙“长度”
         public const float Thickness = 28f;  // 墙“厚度”
+        public const int LifeTicks = 120;
         public override string Texture => $"Terraria/Images/Projectile_{ProjectileID.SnowBallFriendly}";
-        // 取精灵图表里面的火墙
-        private SpriteSheet _sheet;
-        private SpriteAnimator _anim = new SpriteAnimator();
         // 读取方位（ai1存的 int：-1 / 0 / +1）
         private int Orientation => (int)Projectile.ai[1]; // -1右墙,0水平,+1左墙
         private bool IsVertical => Orientation != 0;
         // 选择要用的精灵索引（根据你 AddSprite 的顺序）
         // 根据 Common/SpriteSheetsSys.cs 中添加精灵图的顺序
-        public int SpriteIndex = 1;
+        // public int SpriteIndex = 1;
+        // 取精灵图表里面的火墙
+        // private SpriteSheet _sheet;
+        // 行优先精灵网格
+        private SpriteGrid _grid;
+        private Texture2D _tex;
+        private SpriteAnimator _anim = new SpriteAnimator();
         public override void SetDefaults()
         {
             Projectile.width = (int)TotalLen; // 视觉上是一堵墙，可按需调
@@ -364,19 +392,32 @@ namespace WuDao.Content.Projectiles.Ranged
             Projectile.penetrate = -1;
             Projectile.tileCollide = false;
             Projectile.ignoreWater = true;
-            Projectile.timeLeft = 120; // 2秒
+            Projectile.timeLeft = LifeTicks; // 2秒
             Projectile.usesLocalNPCImmunity = true;
             Projectile.netImportant = true;
             Projectile.localNPCHitCooldown = LocalHitCD;
-            _sheet = SpriteSheets.Get(SpriteAtlasId.RedEffect);
+            Projectile.light = 0.3f;
+
+            // _sheet = SpriteSheets.Get(SpriteAtlasId.RedEffect);
+            // 加载问题，放到load里面无法加载
+            // 如上初始化，或在 OnSpawn 里按贴图实际尺寸/行列计算
+            _grid = new SpriteGrid(
+                start: new Rectangle(0, 0, 32, 32), // 表内左上角第一帧
+                frameSize: new Point(32, 32),
+                spacing: Point.Zero,                // 帧之间没有像素空隙就填 0
+                across: 6,                          // 每行 6 帧
+                down: 2,                            // 2 行
+                total: 11                          // 实际总帧数 11
+            );
+            _tex = ModContent.Request<Texture2D>("WuDao/Content/Projectiles/Ranged/TheOutlawFirewall").Value;
         }
 
         public override void AI()
         {
             // 根据 SpriteIndex 对应的帧数来更新动画（这里假设大多数是3帧；单帧也 ok）
-            int frameCount = _sheet.Sprites[SpriteIndex].FrameCount;
-            _anim.Update(ticksPerFrame: 4, frameCount: frameCount, loop: true);
-
+            // int frameCount = _sheet.Sprites[SpriteIndex].FrameCount;
+            // _anim.Update(ticksPerFrame: 4, frameCount: frameCount, loop: true);
+            _anim.Update(ticksPerFrame: LifeTicks / 2 / _grid.TotalFrames, frameCount: _grid.TotalFrames, loop: true);
             // 仅用于“贴图方向”的rotation
             Projectile.rotation = Orientation switch
             {
@@ -425,27 +466,37 @@ namespace WuDao.Content.Projectiles.Ranged
             // 朝向判断（能识别 +90° / -90°）
             float rot = MathHelper.WrapAngle(Projectile.rotation);
             bool vertical = Math.Abs(Math.Abs(rot) - MathHelper.PiOver2) < MathHelper.PiOver4;
-
+            Rectangle rec = _grid.GetFrameRect(1);
             // ★ 仅在“水平”时抬高贴图 10px（命中盒子不动）
             Vector2 drawCenter = Projectile.Center;
-
+            float halfExtentAlongNormal = rec.Width / 2; // 未缩放时 “半边” 长度（像素）
             // 贴图偏移
-
+            const float scale = 4f;
             Vector2 snap = Vector2.Zero;
-            const float floorLift = 16f; // 地面抬高
-            const float wallPush = 18f; // 贴墙外推 26px（左右一致）
 
-            if (Orientation == 0) snap = new Vector2(0f, -floorLift); // 贴地向上抬
-            else if (Orientation == 1) snap = new Vector2(+wallPush, 0f);  // 贴左墙→向右推
-            else if (Orientation == -1) snap = new Vector2(-wallPush, 0f);  // 贴右墙→向左推
+            if (Orientation == 0)
+            {
+                snap = new Vector2(0f, -1);// 贴地向上抬
+            }
+            else if (Orientation == 1)
+            {
+                snap = new Vector2(+1, 0f);// 贴左墙→向右推
+            }
+            else if (Orientation == -1)
+            {
+                snap = new Vector2(-1, 0f);// 贴右墙→向左推
+            }
 
             if (snap != Vector2.Zero)
             {
-                drawCenter += snap;
+                drawCenter += snap * ((scale - 1f) * halfExtentAlongNormal) + 4 * snap;//额外抬4像素
                 Projectile.netUpdate = true;
             }
 
-            _sheet.Draw(SpriteIndex, _anim.Frame, drawCenter, lightColor, rot, Projectile.scale * 2);
+            // _sheet.Draw(SpriteIndex, _anim.Frame, drawCenter, lightColor, rot, Projectile.scale * 2);
+            // _grid.Draw(_tex, _anim.Frame, drawCenter, lightColor,
+            //    rot, Projectile.scale * 4);
+            _grid.Draw(_tex, _anim.Frame, drawCenter, lightColor, rot, scale);
             return false;
         }
         // ★★ 关键：用 Colliding 覆盖默认碰撞，按朝向给出“水平/竖直”的 AABB

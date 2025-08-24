@@ -15,22 +15,38 @@ namespace WuDao.Content.Global.NPCs
         {
             HasDevolutionAura = false; // 每帧重置
         }
+        public override void PostUpdate()
+        {
+            // 测试用，画圈表示作用范围
+            if (HasDevolutionAura && Main.netMode != NetmodeID.Server)
+            {
+                const float radius = 16f * 30;
+                for (int k = 0; k < 12; k++)
+                {
+                    float ang = MathHelper.TwoPi * k / 12f;
+                    Vector2 p = Player.Center + radius * ang.ToRotationVector2();
+                    int d = Dust.NewDust(p - new Vector2(4), 8, 8, DustID.MagicMirror, 0, 0, 150, default, 1f);
+                    Main.dust[d].noGravity = true;
+                }
+            }
+        }
     }
     public class DevolutionGlobalNPC : GlobalNPC
     {
         static bool AnyAuraHolderAffecting(NPC npc)
         {
-            // 距离玩家的半径r的敌怪将受到削弱 屏幕半径（近似）：用对角线一半，或你自定常量例如 900f
-            // float radius = (float)Math.Sqrt(Main.screenWidth * Main.screenWidth + Main.screenHeight * Main.screenHeight) * 0.5f;
-            float radius = 10f;// 仅供测试
+            // 距离玩家的半径30格内的敌怪将受到削弱 大约15.78像素1格
+            const float radius = 16f * 30;
+            float r2 = radius * radius;
             for (int i = 0; i < Main.maxPlayers; i++)
             {
                 Player plr = Main.player[i];
-                if (plr == null || !plr.active) continue;
+                if (plr == null || !plr.active || plr.dead) continue;
 
                 if (plr.GetModPlayer<DevolutionPlayer>().HasDevolutionAura)
                 {
-                    if (Vector2.Distance(plr.Center, npc.Center) <= radius)
+                    // 用平方距离，别每次开方；用 Center 即可（需要更稳可改用 Hitbox.Center）
+                    if (Vector2.DistanceSquared(plr.Center, npc.Center) <= r2)
                         return true;
                 }
             }
@@ -40,9 +56,9 @@ namespace WuDao.Content.Global.NPCs
 
         public override void ModifyHitPlayer(NPC npc, Player target, ref Player.HurtModifiers modifiers)
         {
-            // 敌怪打玩家 → 伤害 ×0.8
+            // 敌怪打玩家 → 伤害 ×0.6
             if (!npc.friendly && AnyAuraHolderAffecting(npc))
-                modifiers.SourceDamage *= 0.8f;
+                modifiers.SourceDamage *= 0.6f;
         }
 
         public override void ModifyIncomingHit(NPC npc, ref NPC.HitModifiers modifiers)
@@ -50,8 +66,8 @@ namespace WuDao.Content.Global.NPCs
             if (npc.friendly) return;
             if (!AnyAuraHolderAffecting(npc)) return;
 
-            // 提高敌怪承受的伤害 25% 
-            modifiers.FinalDamage *= 1.25f;
+            // 提高敌怪承受的伤害
+            modifiers.FinalDamage *= 1.4f;
         }
 
         public override void UpdateLifeRegen(NPC npc, ref int damage)
@@ -59,7 +75,7 @@ namespace WuDao.Content.Global.NPCs
             if (npc.friendly) return;
             if (!AnyAuraHolderAffecting(npc)) return;
 
-            npc.lifeRegen = (int)(npc.lifeRegen * 0.8f);
+            npc.lifeRegen = (int)(npc.lifeRegen * 0.6f);
         }
     }
 

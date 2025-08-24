@@ -66,7 +66,7 @@ namespace WuDao.Content.Items.Weapons.Ranged
 
                 // 触发后跳：后撤一小段距离 + 短暂无敌帧
                 // 以玩家面向的反方向位移
-                float backSpeed = 8f;
+                float backSpeed = 14f;
                 player.velocity = new Vector2(-player.direction * backSpeed, -3f);
                 player.immune = true;
                 player.immuneTime = 20; // ~1/3秒
@@ -89,6 +89,8 @@ namespace WuDao.Content.Items.Weapons.Ranged
                 // 终极爆弹：基础伤害*5
                 int dmg = (int)(damage * 5f);
                 int proj = Projectile.NewProjectile(source, position, velocity, ModContent.ProjectileType<TheOutlawUltimateBomb>(), dmg, knockback, player.whoAmI);
+                // Main.NewText($"终极爆弹！", 255, 240, 150);
+                CombatText.NewText(new Rectangle((int)player.position.X, (int)player.position.Y, 150, 30), Color.Red, $"终极爆弹！");
                 // 不走普通扇形逻辑
                 return false;
             }

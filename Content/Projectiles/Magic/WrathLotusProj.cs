@@ -7,6 +7,8 @@ using Microsoft.Xna.Framework;
 using Terraria.GameContent;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using WuDao.Content.Items.Accessories;
+using Terraria.Audio;
 
 namespace WuDao.Content.Projectiles.Magic
 {
@@ -16,7 +18,7 @@ namespace WuDao.Content.Projectiles.Magic
         // 视觉参数（可按审美微调）
         private const float StartScale = 1.15f;  // 出生时缩放
         private const float EndScale = 2.10f;  // 呼吸峰值
-        private const int LifeTicks = 120;    // 2 秒存活
+        private const int LifeTicks = 60;    // 1 秒存活
         private const int RingDustCount = 20;  // 出生/命中一圈尘粒数量
                                                // 在 Projectile 里做动画：
         private SpriteAnimator _anim = new SpriteAnimator();
@@ -30,8 +32,8 @@ namespace WuDao.Content.Projectiles.Magic
         }
         public override void SetDefaults()
         {
-            Projectile.width = 32; // 命中箱基准（不需要等于贴图）
-            Projectile.height = 32;
+            Projectile.width = 64; // 命中箱基准（不需要等于贴图）
+            Projectile.height = 64;
             Projectile.scale = 2.5f;
 
             Projectile.friendly = true;
@@ -46,16 +48,17 @@ namespace WuDao.Content.Projectiles.Magic
             // 同一 NPC 的命中冷却
             Projectile.usesLocalNPCImmunity = true;     // 
             Projectile.localNPCHitCooldown = 12;        // 12 tick ≈ 0.2 秒 
+            Projectile.light = 0.3f;
 
             // 加载问题，放到load里面无法加载
             // 如上初始化，或在 OnSpawn 里按贴图实际尺寸/行列计算
             _grid = new SpriteGrid(
-                start: new Rectangle(0, 0, 32, 32), // 表内左上角第一帧
-                frameSize: new Point(32, 32),
+                start: new Rectangle(0, 0, 64, 64), // 表内左上角第一帧
+                frameSize: new Point(64, 64),
                 spacing: Point.Zero,                // 帧之间没有像素空隙就填 0
-                across: 6,                          // 每行 6 帧
-                down: 2,                            // 2 行
-                total: 11                          // 实际总帧数 11
+                across: 15,                          // 每行 15 帧
+                down: 1,                            // 1 行
+                total: 15                          // 实际总帧数 15
             );
             _tex = ModContent.Request<Texture2D>("WuDao/Content/Projectiles/Magic/WrathLotusProj").Value;
         }
@@ -65,15 +68,11 @@ namespace WuDao.Content.Projectiles.Magic
             // 出生时在周围画一圈“灵气”粒子向外扩散
             SpawnAuraDust(Projectile.Center, RingDustCount, startRadius: 12f, speed: 3.2f);
         }
-        public override bool PreDraw(ref Color lightColor)
-        {
-            _grid.Draw(_tex, _anim.Frame, Projectile.Center, lightColor,
-                   Projectile.rotation, Projectile.scale);
-            return false;
-        }
+
         public override void AI()
         {
-            _anim.Update(ticksPerFrame: 11, frameCount: _grid.TotalFrames, loop: true);
+            // 根据 SpriteIndex 对应的帧数来更新动画（这里假设大多数是3帧；单帧也 ok）
+            _anim.Update(ticksPerFrame: LifeTicks / _grid.TotalFrames, frameCount: _grid.TotalFrames, loop: true);
             Projectile.rotation = Projectile.velocity.ToRotation();
 
             // 轻微旋转
@@ -89,9 +88,14 @@ namespace WuDao.Content.Projectiles.Magic
 
             // 每 10 tick 喷一圈较小的外扩尘粒，强化“灵气”感觉
             // if (Projectile.timeLeft % 5 == 0)
-                // SpawnAuraDust(Projectile.Center, 10, startRadius: 8f, speed: 2.0f);
+            // SpawnAuraDust(Projectile.Center, 10, startRadius: 8f, speed: 2.0f);
         }
-
+        public override bool PreDraw(ref Color lightColor)
+        {
+            _grid.Draw(_tex, _anim.Frame, Projectile.Center, lightColor,
+                   Projectile.rotation, Projectile.scale);
+            return false;
+        }
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             // 命中瞬间再放一圈更亮的尘粒

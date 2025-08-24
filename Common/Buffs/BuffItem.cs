@@ -215,11 +215,11 @@ namespace WuDao.Common.Buffs
             Player.moveSpeed += MoveSpeedAdd;
             // 取最大的鞋子设置的冲刺速度
             // if (AccRunSpeedCandidate > 3f)
-                // Player.accRunSpeed = Math.Max(Player.accRunSpeed, AccRunSpeedCandidate);
+            // Player.accRunSpeed = Math.Max(Player.accRunSpeed, AccRunSpeedCandidate);
             // 跳跃放这里，手持正常
             Player.jumpSpeedBoost += JumpSpeedBoostAdd;
             Player.extraFall += ExtraFall;
-            
+
             Player.jumpSpeed += JumpSpeed;
             Player.jumpHeight += JumpHeightAdd;
 
@@ -267,13 +267,13 @@ namespace WuDao.Common.Buffs
             Player.GetDamage(DamageClass.Magic) += MagicDamageAdd;
             Player.GetDamage(DamageClass.Summon) += SummonDamageAdd;
             Player.GetDamage(DamageClass.Throwing) += ThrowingDamageAdd;
-            // 攻速最终乘数
+            // 攻速最终乘数 普通类的攻速加成会影响到所有类别的攻速
             Player.GetAttackSpeed(DamageClass.Generic) += AttackSpeed;
-            Player.GetAttackSpeed(DamageClass.Melee) += AttackSpeedMelee;
-            Player.GetAttackSpeed(DamageClass.Ranged) += AttackSpeedRanged;
-            Player.GetAttackSpeed(DamageClass.Magic) += AttackSpeedMagic;
-            Player.GetAttackSpeed(DamageClass.Summon) += AttackSpeedSummon;
-            Player.GetAttackSpeed(DamageClass.Throwing) += AttackSpeedThrowing;
+            Player.GetAttackSpeed(DamageClass.Melee) += AttackSpeedMelee + AttackSpeed;
+            Player.GetAttackSpeed(DamageClass.Ranged) += AttackSpeedRanged + AttackSpeed;
+            Player.GetAttackSpeed(DamageClass.Magic) += AttackSpeedMagic + AttackSpeed;
+            Player.GetAttackSpeed(DamageClass.Summon) += AttackSpeedSummon + AttackSpeed;
+            Player.GetAttackSpeed(DamageClass.Throwing) += AttackSpeedThrowing + AttackSpeed;
             // 挖矿速度怎么做？Player.pickSpeed
             // +30 代表 +30%
             Player.GetCritChance(DamageClass.Generic) += CritGenericAdd;
@@ -287,7 +287,7 @@ namespace WuDao.Common.Buffs
             Player.endurance += EnduranceAdd;
             if (FlagkbGlove) Player.kbGlove = true;
             if (MeleeScaleGlove) Player.meleeScaleGlove = true;
-            
+
             // +750 表示 +750 仇恨
             // Player.aggro
             // 召唤物击退怎么做？
@@ -313,7 +313,7 @@ namespace WuDao.Common.Buffs
             // 一般都是先乘后加
             Player.statDefense *= DefenseMult;
             Player.statDefense += DefenseAdd;
-            
+
             if (FlagNoFallDmg) Player.noFallDmg = true;
         }
 
