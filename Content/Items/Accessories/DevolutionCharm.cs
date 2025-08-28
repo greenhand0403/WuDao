@@ -6,14 +6,12 @@ using System.Collections.Generic;
 using WuDao.Content.Global.NPCs;
 namespace WuDao.Content.Items.Accessories
 {
-    // TODO: 贴图置换 压制力场
     public class DevolutionCharm : BuffItem
     {
-        public override string Texture => $"Terraria/Images/Item_{ItemID.OldShoe}";
         public const float MULT = 0.8f;
         public override void SetDefaults()
         {
-            Item.width = 28; Item.height = 28;
+            Item.width = 32; Item.height = 32;
             Item.accessory = true;
             Item.rare = ItemRarityID.Yellow;
             Item.value = Item.buyPrice(0, 5, 0, 0);

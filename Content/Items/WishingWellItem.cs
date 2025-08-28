@@ -4,7 +4,6 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using WuDao.Content.Tiles;
 
-// TODO: 改贴图
 namespace WuDao.Content.Items
 {
     /// <summary>
@@ -12,13 +11,11 @@ namespace WuDao.Content.Items
     /// </summary>
     public class WishingWellItem : ModItem
     {
-        // 物品贴图直接用原版抽取机
-        public override string Texture => "Terraria/Images/Item_" + ItemID.Extractinator;
 
         public override void SetDefaults()
         {
-            Item.width = 28;
-            Item.height = 28;
+            Item.width = 32;
+            Item.height = 32;
             Item.maxStack = 99;
             Item.useTurn = true;
             Item.autoReuse = true;

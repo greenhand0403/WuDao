@@ -7,13 +7,11 @@ namespace WuDao.Content.Items.Accessories
 {
     public class RewinderCicadas : ModItem
     {
-        // TODO: 换贴图
-        public override string Texture => $"Terraria/Images/Item_{ItemID.Dragonfruit}";
 
         public override void SetDefaults()
         {
-            Item.width = 28;
-            Item.height = 28;
+            Item.width = 32;
+            Item.height = 32;
             Item.accessory = true;
             Item.rare = ItemRarityID.Pink;
             Item.value = Item.buyPrice(gold: 5);

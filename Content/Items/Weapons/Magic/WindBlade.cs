@@ -7,12 +7,13 @@ using WuDao.Content.Projectiles.Magic;
 
 namespace WuDao.Content.Items.Weapons.Magic
 {
-    // TODO: 重绘贴图 风刃
     public class WindBlade : ModItem
     {
         public override void SetDefaults()
         {
             Item.DamageType = DamageClass.Magic;
+            Item.width = 28;
+            Item.height = 30;
             Item.damage = 17;
             Item.knockBack = 2.2f;
             Item.mana = 7;

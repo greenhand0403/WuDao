@@ -1,8 +1,11 @@
 
 using System;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Utilities;
@@ -17,10 +20,6 @@ namespace WuDao.Content.Items
     {
         public override void SetStaticDefaults()
         {
-            // ① 注册物品竖直动画：6tick 切一帧，共3帧（可按喜好调快/调慢）
-            Main.RegisterItemAnimation(Item.type, new DrawAnimationVertical(18 / 3, 3));
-
-            // ② 标记为“食物”，显示刀叉角标，并启用吃东西时的粒子
             ItemID.Sets.IsFood[Item.type] = true;
         }
         public override void SetDefaults()
@@ -37,7 +36,6 @@ namespace WuDao.Content.Items
             Item.value = Item.buyPrice(0, 3, 0);
             Item.noMelee = true;
         }
-
         public override bool? UseItem(Player player)
         {
             // 强力食物增益（1.4.4：WellFed3 = Exquisitely Stuffed）

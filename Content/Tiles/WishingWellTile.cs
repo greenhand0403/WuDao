@@ -13,7 +13,7 @@ namespace WuDao.Content.Tiles
     public class WishingWellTile : ModTile
     {
         // 如需直接引用原版贴图，可取消注释（不同版本路径可能不同，若编译报错，请改用自带贴图）：
-        public override string Texture => $"Terraria/Images/Tiles_219"; // Extractinator
+        // public override string Texture => $"Terraria/Images/Tiles_219"; // Extractinator
         // 明确告知：没有智能交互（不占右键）
         public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings) => false;
         public override void SetStaticDefaults()

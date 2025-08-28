@@ -8,11 +8,8 @@ using System.Collections.Generic;
 
 namespace WuDao.Content.Items.Accessories
 {
-    // TODO ：贴图置换 佛怒火莲
     public class WrathLotus : BuffItem
-    // public class WrathLotus : ModItem
     {
-        public override string Texture => $"Terraria/Images/Item_{ItemID.HellCake}";
         public override void SetDefaults()
         {
             Item.width = 32;

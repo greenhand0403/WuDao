@@ -7,7 +7,7 @@ using Terraria;
 using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
-// TODO: 加载外部资源用 load 其他地方要改；顺便换贴图
+// TODO: 加载外部资源用 load 其他地方要改
 namespace WuDao.Content.Items.Accessories
 {
     /*
@@ -17,7 +17,6 @@ namespace WuDao.Content.Items.Accessories
     */
     public class FirstBlood : ModItem
     {
-        public override string Texture => $"Terraria/Images/Item_{ItemID.BloodFishingRod}";
         // 备用贴图（勇者之证）
         private static Asset<Texture2D> _heroTex;
 
@@ -26,7 +25,8 @@ namespace WuDao.Content.Items.Accessories
             if (!Main.dedServ)
             {
                 // _heroTex = ModContent.Request<Texture2D>($"Terraria/Images/Item_{ItemID.HolyWater}");
-                _heroTex = TextureAssets.Item[ItemID.HolyWater]; // 现成的 Vanilla 贴图
+                // _heroTex = TextureAssets.Item[ItemID.HolyWater]; // 现成的 Vanilla 贴图
+                _heroTex = ModContent.Request<Texture2D>($"{nameof(WuDao)}/Assets/Textures/Items/Accessories/FirstBlood_Hero");
             }
         }
 

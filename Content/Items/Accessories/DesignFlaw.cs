@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 using System;
 using Terraria.GameContent.ItemDropRules;
 using System.Collections.Generic;
-// TODO: 换贴图
+
 namespace WuDao.Content.Items.Accessories
 {
     /*
@@ -18,12 +18,6 @@ namespace WuDao.Content.Items.Accessories
     */
     public class DesignFlaw : ModItem
     {
-        // public override void SetStaticDefaults()
-        // {
-        //     DisplayName.SetDefault("设计败笔");
-        //     Tooltip.SetDefault("无初始效果\n记录上一个击败玩家的NPC，并强化对它的伤害");
-        // }
-        public override string Texture => $"Terraria/Images/Item_{ItemID.Pengfish}";
         public override void SetDefaults()
         {
             Item.width = 32;

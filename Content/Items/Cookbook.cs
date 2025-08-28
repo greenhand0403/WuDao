@@ -4,16 +4,15 @@ using Terraria.ModLoader;
 using WuDao.Content.Players;
 using WuDao.Content.Global.Systems;
 using System.Collections.Generic;
-// TODO: 改贴图
+
 namespace WuDao.Content.Items
 {
     public class Cookbook : ModItem
     {
-        public override string Texture => $"Terraria/Images/Item_{ItemID.CombatBook}";
         public override void SetDefaults()
         {
-            Item.width = 22;
-            Item.height = 26;
+            Item.width = 28;
+            Item.height = 30;
             Item.rare = ItemRarityID.Orange;
             Item.value = Item.buyPrice(0, 1);
             Item.maxStack = 1;

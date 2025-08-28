@@ -70,13 +70,17 @@ Items: {
 	}
 
 	TimeStopItem: {
-		// DisplayName: Time Stop Item
-		// Tooltip: ""
+		DisplayName: 静止游鱼
+		Tooltip: [
+			"短暂地冻结时间",
+			"冻结后只能移动",
+			"[c/aaaaaa:（他终于明白，人生不是在溺水前上岸，而是不断地游啊游，直到停止思考）]"
+		]
 	}
 
 	CloudArrow: {
-		// DisplayName: Cloud Arrow
-		// Tooltip: ""
+		DisplayName: 穿云箭
+		Tooltip: "一支穿云箭，千军万马来相见"
 	}
 
 	BrightVerdict: {
@@ -95,8 +99,8 @@ Items: {
 	}
 
 	WindBlade: {
-		// DisplayName: Wind Blade
-		// Tooltip: ""
+		DisplayName: 风刃
+		Tooltip: "消耗魔法发射风刃"
 	}
 
 	ForestSword: {
@@ -155,13 +159,13 @@ Items: {
 	}
 
 	DevolutionCharm: {
-		// DisplayName: Devolution Charm
-		// Tooltip: ""
+		DisplayName: 压制力场
+		Tooltip: "削弱玩家和敌怪的大部分属性"
 	}
 
 	WrathLotus: {
-		// DisplayName: Wrath Lotus
-		// Tooltip: ""
+		DisplayName: 佛怒火莲
+		Tooltip: "受伤时对敌怪的伤害，免疫燃烧和着火了"
 	}
 
 	DiscoBallRemote: {
@@ -175,8 +179,11 @@ Items: {
 	}
 
 	RewinderCicadas: {
-		// Tooltip: ""
-		// DisplayName: Rewinder Cicadas
+		Tooltip: [
+			"时间回溯，即将死亡时，你的生命值回到3秒前"
+			"[c/ffd700:（春秋蝉鸣少年归）]"
+		]
+		DisplayName: 春秋蝉
 	}
 
 	Cookbook: {
@@ -190,18 +197,24 @@ Items: {
 	}
 
 	WishingWellItem: {
-		// DisplayName: Wishing Well Item
-		// Tooltip: ""
+		DisplayName: 许愿井
+		Tooltip: "将BOSS的战利品丢进去可能发生意想不到的事"
 	}
 
 	DesignFlaw: {
-		// DisplayName: Design Flaw
-		// Tooltip: ""
+		DisplayName: 败笔
+		Tooltip: [
+			"对上一个击败你的NPC造成更多的伤害",
+			"[c/ffd700:（虽败犹荣）]"
+		]
 	}
 
 	FirstBlood: {
-		// DisplayName: First Blood
-		// Tooltip: ""
+		DisplayName: 第一滴血
+		Tooltip: [
+			"你对尚未击败的Boss造成的伤害增加",
+			"[c/c040ff:（击败所有BOSS，解锁最终形态）]"
+		]
 	}
 
 	Candy: {

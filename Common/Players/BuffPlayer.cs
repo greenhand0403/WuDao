@@ -48,10 +48,8 @@ namespace WuDao.Common.Players
                     bool solidBelow = IsStandingOnGround(Player);
                     if (standingStill && solidBelow)
                     {
-                        for (int i = 0; i < 12; i++)
-                        {
-                            Dust.NewDust(Player.Center, Player.width, Player.height, DustID.Gold, 10, 10, 100, default, 1.5f);
-                        }
+                        // 粒子特效：金色粒子
+                        Dust.NewDust(Player.Center, Player.width, Player.height, DustID.Gold, 2, 2, 100, default, 1.5f);
                         Player.endurance += 0.50f;
                     }
                 }
