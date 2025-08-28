@@ -203,6 +203,21 @@ Items: {
 		DisplayName: First Blood
 		Tooltip: ""
 	}
+
+	Candy: {
+		DisplayName: Candy
+		Tooltip: ""
+	}
+
+	GlowingMeal: {
+		DisplayName: Glowing Meal
+		Tooltip: ""
+	}
+
+	PyramidStatue: {
+		DisplayName: Pyramid Statue
+		Tooltip: ""
+	}
 }
 
 Projectiles: {
@@ -269,6 +284,96 @@ Buffs: {
 		DisplayName: Rewinder Cicadas Cooldown
 		Description: Mods.WuDao.Buffs.RewinderCicadasCooldown.Description
 	}
+
+	BrokenDreams: {
+		DisplayName: Broken Dreams
+		Description: Mods.WuDao.Buffs.BrokenDreams.Description
+	}
+
+	Capitalism: {
+		DisplayName: Capitalism
+		Description: Mods.WuDao.Buffs.Capitalism.Description
+	}
+
+	Clumsy: {
+		DisplayName: Clumsy
+		Description: Mods.WuDao.Buffs.Clumsy.Description
+	}
+
+	Collector: {
+		DisplayName: Collector
+		Description: Mods.WuDao.Buffs.Collector.Description
+	}
+
+	FiveDecay: {
+		DisplayName: Five Decay
+		Description: Mods.WuDao.Buffs.FiveDecay.Description
+	}
+
+	GiantWeapon: {
+		DisplayName: Giant Weapon
+		Description: Mods.WuDao.Buffs.GiantWeapon.Description
+	}
+
+	Impatient: {
+		DisplayName: Impatient
+		Description: Mods.WuDao.Buffs.Impatient.Description
+	}
+
+	LifeCurse: {
+		DisplayName: Life Curse
+		Description: Mods.WuDao.Buffs.LifeCurse.Description
+	}
+
+	Procrastination: {
+		DisplayName: Procrastination
+		Description: Mods.WuDao.Buffs.Procrastination.Description
+	}
+
+	PyramidWard: {
+		DisplayName: Pyramid Ward
+		Description: Mods.WuDao.Buffs.PyramidWard.Description
+	}
+
+	Shiver: {
+		DisplayName: Shiver
+		Description: Mods.WuDao.Buffs.Shiver.Description
+	}
+
+	Suicidal: {
+		DisplayName: Suicidal
+		Description: Mods.WuDao.Buffs.Suicidal.Description
+	}
+
+	SweetAgile: {
+		DisplayName: Sweet Agile
+		Description: Mods.WuDao.Buffs.SweetAgile.Description
+	}
+
+	SweetLucky: {
+		DisplayName: Sweet Lucky
+		Description: Mods.WuDao.Buffs.SweetLucky.Description
+	}
+
+	SweetRegen: {
+		DisplayName: Sweet Regen
+		Description: Mods.WuDao.Buffs.SweetRegen.Description
+	}
+
+	Weakness: {
+		DisplayName: Weakness
+		Description: Mods.WuDao.Buffs.Weakness.Description
+	}
+
+	WitheredMind: {
+		DisplayName: Withered Mind
+		Description: Mods.WuDao.Buffs.WitheredMind.Description
+	}
+
+	SacrificialBranding: {
+		DisplayName: Sacrificial Branding
+		Description: Mods.WuDao.Buffs.SacrificialBranding.Description
+	}
 }
 
 Configs: {
@@ -286,3 +391,5 @@ Configs: {
 		}
 	}
 }
+
+Tiles.PyramidStatueTile.MapEntry: Pyramid Statue Tile

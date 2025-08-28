@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 using System;
 using Terraria.GameContent.ItemDropRules;
 using System.Collections.Generic;
-
+// TODO: 换贴图
 namespace WuDao.Content.Items.Accessories
 {
     /*
@@ -73,8 +73,16 @@ namespace WuDao.Content.Items.Accessories
                 NPC npc = Main.npc[damageSource.SourceNPCIndex];
                 if (npc.active)
                 {
-                    recordedNPCType = npc.type;
-                    defeatCount++;
+                    if (recordedNPCType == -1)
+                    {
+                        recordedNPCType = npc.type;
+                        defeatCount = 1;
+                    }
+                    else if (recordedNPCType == npc.type)
+                    {
+                        Main.NewText($" {npc.FullName} 已将你击败 {defeatCount} 次");
+                        defeatCount += 1;
+                    }
                 }
             }
         }

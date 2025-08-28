@@ -258,6 +258,7 @@ namespace WuDao.Common.Buffs
             if (FlagSlowFall) Player.slowFall = true;
             if (FlagFireWalk) Player.fireWalk = true;
             if (FlagLavaImmune) Player.lavaImmune = true;
+            // 十字项链延长无敌帧
             if (FlagLongInvince) Player.longInvince = true;
             // 应用本帧声明的免疫
             foreach (var buffId in ImmuneBuffs)

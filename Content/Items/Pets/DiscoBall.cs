@@ -6,11 +6,8 @@ using Terraria.ModLoader;
 
 namespace WuDao.Content.Items.Pets
 {
-    // TODO: 绘制贴图 物品：用于召唤照明宠物
     public class DiscoBallRemote : ModItem
     {
-        public override string Texture => $"Terraria/Images/Item_{ItemID.GolfBall}";
-
         public override void SetDefaults()
         {
             Item.width = 26;
@@ -37,7 +34,7 @@ namespace WuDao.Content.Items.Pets
     // 2) BUFF：标记为 LightPet，维持弹幕存在
     public class DiscoBallPetBuff : ModBuff
     {
-        public override string Texture => $"Terraria/Images/Item_{ItemID.GolfBall}";
+        public override string Texture => $"WuDao/Common/Buffs/DiscoBallPetBuff";
         public override void SetStaticDefaults()
         {
             Main.buffNoTimeDisplay[Type] = true;
@@ -54,7 +51,7 @@ namespace WuDao.Content.Items.Pets
     // 3) 宠物弹幕本体：参考猩红之心移动逻辑，加入“圆锥方向光 + 颜色循环 + 缓慢旋转”
     public class DiscoBallPetProj : ModProjectile
     {
-        public override string Texture => $"Terraria/Images/Item_{ItemID.GolfBall}";
+        public override string Texture => $"WuDao/Content/Projectiles/DiscoBallPetProj";
         // 配置参数（可根据需要调节/做成 ModConfig）
         private const int BeamLengthTiles = 30;      // 期望照亮 45 格（~720 像素）
         private const int BeamStepTiles = 2;         // 取样步长（每 4 格一个采样点）

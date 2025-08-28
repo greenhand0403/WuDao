@@ -203,6 +203,34 @@ Items: {
 		// DisplayName: First Blood
 		// Tooltip: ""
 	}
+
+	Candy: {
+		DisplayName: 混合糖果
+		Tooltip:
+			'''
+			混合了不同类型的糖果
+			使用后获得随机增益
+			'''
+	}
+
+	GlowingMeal: {
+		DisplayName: 发光料理
+		Tooltip:
+			'''
+			极其丰盛的料理
+			使用后获得强力食物增益
+			并从增益池中随机获得 5 种增益
+			'''
+	}
+
+	PyramidStatue: {
+		DisplayName: 微型金字塔
+		Tooltip:
+			'''
+			散发古老守护之力
+			静止站立在实心块上时获得强力减伤
+			'''
+	}
 }
 
 Projectiles: {
@@ -261,28 +289,120 @@ Buffs: {
 	}
 
 	DiscoBallPetBuff: {
-		// DisplayName: Disco Ball Pet Buff
-		// Description: Mods.WuDao.Buffs.DiscoBallPetBuff.Description
+		DisplayName: Disco Ball Pet Buff
+		Description: Mods.WuDao.Buffs.DiscoBallPetBuff.Description
 	}
 
 	RewinderCicadasCooldown: {
 		// DisplayName: Rewinder Cicadas Cooldown
 		// Description: Mods.WuDao.Buffs.RewinderCicadasCooldown.Description
 	}
+
+	BrokenDreams: {
+		DisplayName: 幻想破灭
+		Description: 减少一定的伤害、暴击、耐力和速度
+	}
+
+	Capitalism: {
+		DisplayName: 金钱之力
+		Description: 携带 10 铂金以上时增加 10% 伤害与耐力，否则减少 10%
+	}
+
+	Clumsy: {
+		DisplayName: 笨拙
+		Description: 暴击率减少90%
+	}
+
+	Collector: {
+		DisplayName: 收藏家
+		Description: 根据武器稀有度提升伤害；根据饰品稀有度提升防御
+	}
+
+	FiveDecay: {
+		DisplayName: 天人五衰
+		Description: 每 2 秒随机获得一个可怕的减益
+	}
+
+	GiantWeapon: {
+		DisplayName: 武器巨大化
+		Description: 近战武器尺寸增加20%
+	}
+
+	Impatient: {
+		DisplayName: 急性子
+		Description: 移动速度大幅增加
+	}
+
+	LifeCurse: {
+		DisplayName: 生命诅咒
+		Description: 基于最大生命受到持续伤害
+	}
+
+	Procrastination: {
+		DisplayName: 拖延症
+		Description: 移动速度大幅减少
+	}
+
+	PyramidWard: {
+		DisplayName: 金字塔守护
+		Description: 站在实心块上不动时，为你提供伤害减免
+	}
+
+	Shiver: {
+		DisplayName: 战栗
+		Description: 你害怕地颤抖，使用物品时有可能脱手
+	}
+
+	Suicidal: {
+		DisplayName: 寻死
+		Description: 防御大幅减少
+	}
+
+	SweetAgile: {
+		DisplayName: 酸味糖果
+		Description: 移动速度提升
+	}
+
+	SweetLucky: {
+		DisplayName: 香味糖果
+		Description: 暴击率提升
+	}
+
+	SweetRegen: {
+		DisplayName: 甜味糖果
+		Description: 生命回复上升
+	}
+
+	Weakness: {
+		DisplayName: 软弱
+		Description: 你造成的伤害减少90%
+	}
+
+	WitheredMind: {
+		DisplayName: 心灵枯萎
+		Description: 你的法力不断流逝，难以恢复
+	}
+
+	SacrificialBranding: {
+		DisplayName: 祭品烙印
+		Description: 承受BOSS的伤害增加50%
+	}
 }
 
 Configs: {
 	WishingWellConfig: {
 		DoubleRewardPercent: {
-			// Label: Double Reward Chance (%)
-			// Tooltip: Chance that the wishing well gives double loot instead of summoning a boss
+			Label: Double Reward Chance (%)
+			Tooltip: 许愿井掉落双倍奖励的几率
 		}
 
-		// DisplayName: Wishing Well Config
+		DisplayName: Wishing Well Config
 
 		Chance: {
-			// Label: Chance
-			// Tooltip: ""
+			Label: Chance
+			Tooltip: 许愿井掉落奖励的几率
 		}
 	}
 }
+
+// Tiles.PyramidStatueTile.MapEntry: Pyramid Statue Tile

@@ -7,7 +7,7 @@ using Terraria;
 using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
-
+// TODO: 加载外部资源用 load 其他地方要改；顺便换贴图
 namespace WuDao.Content.Items.Accessories
 {
     /*
@@ -20,6 +20,20 @@ namespace WuDao.Content.Items.Accessories
         public override string Texture => $"Terraria/Images/Item_{ItemID.BloodFishingRod}";
         // 备用贴图（勇者之证）
         private static Asset<Texture2D> _heroTex;
+
+        public override void Load()
+        {
+            if (!Main.dedServ)
+            {
+                // _heroTex = ModContent.Request<Texture2D>($"Terraria/Images/Item_{ItemID.HolyWater}");
+                _heroTex = TextureAssets.Item[ItemID.HolyWater]; // 现成的 Vanilla 贴图
+            }
+        }
+
+        public override void Unload()
+        {
+            _heroTex = null;
+        }
 
         // public override void SetStaticDefaults()
         // {
@@ -88,10 +102,9 @@ namespace WuDao.Content.Items.Accessories
 
             if (AllVanillaBossesDowned() && _heroTex?.IsLoaded == true)
             {
-                var asset = Terraria.GameContent.TextureAssets.Item[ItemID.HolyWater];
-                // 资产在客户端绘制时会被按需加载；此处直接用 .Value 即可
-                spriteBatch.Draw(asset.Value, position, asset.Value.Bounds, drawColor, 0f, origin, scale, SpriteEffects.None, 0f);
-                return false; // 不绘制默认贴图
+                // 用勇者之证贴图替代默认绘制
+                spriteBatch.Draw(_heroTex.Value, position, _heroTex.Value.Bounds, drawColor, 0f, origin, scale, SpriteEffects.None, 0f);
+                return false;
             }
             return true; // 正常绘制原贴图
         }
@@ -104,9 +117,8 @@ namespace WuDao.Content.Items.Accessories
 
             if (AllVanillaBossesDowned() && _heroTex?.IsLoaded == true)
             {
-                var asset = Terraria.GameContent.TextureAssets.Item[ItemID.HolyWater];
-                Vector2 pos = Item.position - Main.screenPosition + new Vector2(Item.width / 2f, Item.height - asset.Height() * 0.5f);
-                spriteBatch.Draw(asset.Value, pos, null, alphaColor, rotation, asset.Size() * 0.5f, scale, SpriteEffects.None, 0f);
+                Vector2 pos = Item.position - Main.screenPosition + new Vector2(Item.width / 2f, Item.height - _heroTex.Height() * 0.5f);
+                spriteBatch.Draw(_heroTex.Value, pos, null, alphaColor, rotation, _heroTex.Size() * 0.5f, scale, SpriteEffects.None, 0f);
                 return false;
             }
             return true;
