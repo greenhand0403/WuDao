@@ -8,14 +8,8 @@ using WuDao.Content.Cooldowns;
 
 namespace WuDao.Content.Items.Weapons.Melee
 {
-    // TODO: 重绘贴图
     public class GhostChakram : ModItem
     {
-        public override void SetStaticDefaults()
-        {
-            // DisplayName / Tooltip 按需加本地化
-        }
-        public override string Texture => $"Terraria/Images/Item_{ItemID.LightDisc}";
         public override void SetDefaults()
         {
             Item.damage = 48;

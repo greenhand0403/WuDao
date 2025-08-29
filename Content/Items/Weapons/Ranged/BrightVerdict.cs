@@ -6,7 +6,6 @@ using Microsoft.Xna.Framework;
 
 namespace WuDao.Content.Items.Weapons.Ranged
 {
-    // TODO: 重绘贴图
     public class BrightVerdict : ModItem
     {
         public override void SetDefaults()

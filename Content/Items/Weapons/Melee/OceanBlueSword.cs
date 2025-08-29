@@ -11,7 +11,6 @@ namespace WuDao.Content.Items.Weapons.Melee
 {
     public class OceanBlueSword : BuffItem
     {
-        // TODO: 重绘贴图 海洋刀合成表
         public override void SetDefaults()
         {
             Item.width = 48;

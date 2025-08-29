@@ -11,7 +11,7 @@ namespace WuDao.Content.Projectiles.Melee
 {
     public class GhostChakramProj : ModProjectile
     {
-        public override string Texture => $"Terraria/Images/Projectile_{ProjectileID.LightDisc}";
+        public override string Texture => "WuDao/Content/Items/Weapons/Melee/GhostChakram";
         // —— 图集索引：BlueEffect 的 index=0（单帧图标）
         private const int BLUE_INDEX = 0;
 

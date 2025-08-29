@@ -5,7 +5,7 @@ using WuDao.Content.Projectiles.Throwing;
 
 namespace WuDao.Content.Items.Weapons.Throwing
 {
-    // TODO: 仙人掌飞针 改贴图 需要抽象出飞针基类
+    // TODO: 仙人掌飞针 需要抽象出飞针基类
     public class CactusNeedle : ModItem
     {
         public override void SetDefaults()

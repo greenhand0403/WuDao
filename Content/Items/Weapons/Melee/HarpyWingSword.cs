@@ -8,7 +8,6 @@ using System.Collections.Generic;
 
 namespace WuDao.Content.Items.Weapons.Melee
 {
-    // TODO: 重绘翼剑贴图
     public class HarpyWingSword : BuffItem
     {
         // tML 1.4.4：这两个乘子越大，出手越快（冷却越短）

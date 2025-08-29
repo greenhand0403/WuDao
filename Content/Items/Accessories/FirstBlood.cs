@@ -35,12 +35,6 @@ namespace WuDao.Content.Items.Accessories
             _heroTex = null;
         }
 
-        // public override void SetStaticDefaults()
-        // {
-        //     DisplayName.SetDefault("第一滴血");
-        //     Tooltip.SetDefault("对尚未击败的原版Boss造成+10%伤害");
-        // }
-
         public override void SetDefaults()
         {
             Item.width = 32;

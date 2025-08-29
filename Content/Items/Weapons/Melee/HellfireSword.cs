@@ -9,7 +9,6 @@ namespace WuDao.Content.Items.Weapons.Melee
 {
     public class HellfireSword : BuffItem
     {
-        // TODO: 重绘贴图 地狱刀合成表
         public override void SetDefaults()
         {
             Item.width = 48;

@@ -5,7 +5,6 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using WuDao.Content.Cooldowns;
 
-// TODO: 重置贴图 玄铁重剑 用到了额外的 ModPlayer 右键下劈 冷却
 namespace WuDao.Content.Items.Weapons.Melee
 {
     public class SteelHeavySword : ModItem

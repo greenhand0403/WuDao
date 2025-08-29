@@ -7,7 +7,6 @@ using WuDao.Content.Projectiles.Melee;
 
 namespace WuDao.Content.Items.Weapons.Melee
 {
-    // TODO: 改贴图 玄铁短剑 射弹的碰撞箱在中间不在剑尖是 bug
     public class SteelShortSword : BuffItem
     {
         public override void SetDefaults()

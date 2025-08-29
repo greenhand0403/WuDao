@@ -3,7 +3,7 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
-// TODO: 改贴图
+
 namespace WuDao.Content.Items.Weapons.Magic
 {
     // =====================
@@ -36,8 +36,8 @@ namespace WuDao.Content.Items.Weapons.Magic
 
         public override void SetDefaults()
         {
-            Item.width = 40;
-            Item.height = 26;
+            Item.width = 48;
+            Item.height = 48;
             Item.rare = ItemRarityID.Orange; // 同时代中后期魔法武器稀有度
             Item.value = Item.buyPrice(gold: 5);
 

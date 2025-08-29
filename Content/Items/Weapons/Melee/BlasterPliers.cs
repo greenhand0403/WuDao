@@ -6,10 +6,9 @@ using WuDao.Content.Players;
 
 namespace WuDao.Content.Items.Weapons.Melee
 {
-    // TODO: 重绘贴图 爆破钳
     class BlasterPliers : ModItem
     {
-        public override string Texture => $"Terraria/Images/Item_{ItemID.CombatWrench}";
+        private int foodCount;
         public override void SetDefaults()
         {
             Item.CloneDefaults(ItemID.CombatWrench);
@@ -21,6 +20,8 @@ namespace WuDao.Content.Items.Weapons.Melee
             Item.shoot = ProjectileID.None;
             Item.noUseGraphic = false;
             Item.autoReuse = true;
+            Item.width = 48;
+            Item.height = 48;
         }
         public override void ModifyWeaponDamage(Player player, ref StatModifier damage)
         {
@@ -30,6 +31,8 @@ namespace WuDao.Content.Items.Weapons.Melee
             // 根据厨艺值加成伤害
             int madeCount = (int)(cp.CookingSkill * 0.01f);
             damage.Flat += madeCount;
+
+            damage.Flat += foodCount;
         }
         public override float UseSpeedMultiplier(Player player)
         {
@@ -49,7 +52,17 @@ namespace WuDao.Content.Items.Weapons.Melee
         //     // 控制台/聊天栏直接打印
         //     Main.NewText($"Cookbook已制作：{madeCount}，FoodLog已品尝：{eatenCount}");
         // }
-
+        public override void UpdateEquip(Player player)
+        {
+            foodCount = 0;
+            for (int i = 0; i < 50; i++)
+            {
+                if (player.inventory[i].type == ItemID.Hotdog)
+                {
+                    foodCount+=player.inventory[i].stack;
+                }
+            }
+        }
         public override void ModifyHitNPC(Player player, NPC target, ref NPC.HitModifiers modifiers)
         {
             int g = target.rarity;

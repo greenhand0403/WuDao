@@ -19,20 +19,8 @@ using WuDao.Content.Projectiles.Ranged;
 */
 namespace WuDao.Content.Items.Weapons.Ranged
 {
-    // TODO: 重绘贴图 成长型散弹枪（法外狂徒风格）
     public class TheOutlaw : ModItem
     {
-        // public override void SetStaticDefaults()
-        // {
-        //     DisplayName.SetDefault("法外碎星 · 散弹枪");
-        //     Tooltip.SetDefault(
-        //         "每秒2次射击，扇形霰弹，穿透3个目标并每穿透-10%伤害\n" +
-        //         "成长：击败史莱姆王/蜂王/巨鹿/血肉墙/任意机械/世纪之花/拜月邪教徒 解锁不同效果\n" +
-        //         "右键（血肉墙后）：后跳并获得短暂无敌（2分钟冷却，暴击-10秒冷却）"
-        //     );
-        // }
-        // 试验一下，它到底会用同名的PNG还是自己选定的原版贴图
-        public override string Texture => $"Terraria/Images/Item_{ItemID.QuadBarrelShotgun}";
         public override void SetDefaults()
         {
             Item.damage = 30;              // 基础伤害（会被成长与技能修改）

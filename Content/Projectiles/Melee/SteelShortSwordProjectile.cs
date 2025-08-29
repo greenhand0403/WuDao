@@ -65,7 +65,7 @@ namespace WuDao.Content.Projectiles.Melee
 
 			// Keep locked onto the player, but extend further based on the given velocity (Requires ShouldUpdatePosition returning false to work)
 			Vector2 playerCenter = player.RotatedRelativePoint(player.MountedCenter, reverseRotation: false, addGfxOffY: false);
-			Projectile.Center = playerCenter + Projectile.velocity * (Timer - 1f);
+			Projectile.Center = playerCenter + 1.1f * Projectile.velocity * (Timer - 1f);
 
 			// Set spriteDirection based on moving left or right. Left -1, right 1
 			Projectile.spriteDirection = (Vector2.Dot(Projectile.velocity, Vector2.UnitX) >= 0f).ToDirectionInt();

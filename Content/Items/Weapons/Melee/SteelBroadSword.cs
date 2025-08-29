@@ -7,7 +7,6 @@ using WuDao.Content.Projectiles.Melee;
 
 namespace WuDao.Content.Items.Weapons.Melee
 {
-    // TODO: 近战刀光武器，完全不能用，重做 崇阳铁剑
     public class SteelBroadSword : ModItem
     {
         // 允许右键

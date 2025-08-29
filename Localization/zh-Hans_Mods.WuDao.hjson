@@ -1,72 +1,72 @@
 Items: {
 	NebulaRocket: {
-		// DisplayName: Nebula Rocket
-		// Tooltip: ""
+		DisplayName: 星云火箭
+		Tooltip: "发射出一个星云火箭"
 	}
 
 	SolarBullet: {
-		// DisplayName: Solar Bullet
-		// Tooltip: ""
+		DisplayName: 日耀弹
+		Tooltip: "发射出一个爆炸子弹，有几率造成日耀减益"
 	}
 
 	SteelHeavySword: {
-		// DisplayName: Steel Heavy Sword
-		// Tooltip: ""
+		DisplayName: 玄铁重剑
+		Tooltip: "右键向前重劈"
 	}
 
 	WoodenShuriken: {
-		// DisplayName: Wooden Shuriken
-		// Tooltip: ""
+		DisplayName: 木质飞镖
+		Tooltip: "发射出一个飞镖"
 	}
 
 	GoldenShuriken: {
-		// DisplayName: Golden Shuriken
-		// Tooltip: ""
+		DisplayName: 金飞镖
+		Tooltip: "发射出一个飞镖，有几率造成迈达斯之手减益"
 	}
 
 	FlyStone: {
-		// DisplayName: Fly Stone
-		// Tooltip: ""
+		DisplayName: 飞蝗石
+		Tooltip: "发射出一个飞石"
 	}
 
 	WeaponBundleItem: {
-		// DisplayName: Weapon Bundle Item
-		// Tooltip: ""
+		DisplayName: 武器礼包
+		Tooltip: "包含武道模组的武器、弹药、工具、配件等"
 	}
 
 	FlameShuriken: {
-		// DisplayName: Flame Shuriken
-		// Tooltip: ""
+		DisplayName: 火焰飞镖
+		Tooltip: "发射出一个飞镖，有几率造成着火减益"
 	}
 
 	IceShuriken: {
-		// DisplayName: Ice Shuriken
-		// Tooltip: ""
+		DisplayName: 冰冻飞镖
+		Tooltip: "发射出一个飞镖，有几率造成冰冻减益"
 	}
 
 	PoisonedShuriken: {
-		// DisplayName: Poisoned Shuriken
-		// Tooltip: ""
+		DisplayName: 毒飞镖
+		Tooltip: "发射出一个飞镖，有几率造成中毒减益"
 	}
 
 	CactusNeedle: {
-		// DisplayName: Cactus Needle
-		// Tooltip: ""
+		DisplayName: 仙人掌飞针
+		Tooltip: "发射出一个飞针"
 	}
 
 	OceanBlueSword: {
-		// DisplayName: Ocean Blue Sword
-		// Tooltip: ""
+		DisplayName: 海蓝军刀
+		Tooltip: "拥有水下呼吸/水上漂/游泳能力，免疫霜冻/寒冷，发射海蓝旋涡，攻击有几率造成霜冻减益"
 	}
 
 	HellfireSword: {
-		// DisplayName: Hellfire Sword
-		// Tooltip: ""
+		DisplayName: 地狱之锋
+		Tooltip: "火环护身，免疫着火了/燃烧/岩浆，发射地狱斩击，攻击有几率造成着火减益"
 	}
 
 	NormalScissors: {
-		// DisplayName: Normal Scissors
-		// Tooltip: ""
+		DisplayName: 御剪
+		Tooltip: "以气御剪，随游戏进度增强"
 	}
 
 	TimeStopItem: {
@@ -84,18 +84,18 @@ Items: {
 	}
 
 	BrightVerdict: {
-		// DisplayName: Bright Verdict
-		// Tooltip: ""
+		DisplayName: 圣光裁决
+		Tooltip: "射出神圣十字星"
 	}
 
 	MagicHorn: {
-		// DisplayName: Magic Horn
-		// Tooltip: ""
+		DisplayName: 魔法号角
+		Tooltip: "随游戏进度发射随机的魔法射弹"
 	}
 
 	Mimicker: {
-		// DisplayName: Mimicker
-		// Tooltip: ""
+		DisplayName: 模仿者
+		Tooltip: "击败特定数量的敌怪可以习得它们的射弹"
 	}
 
 	WindBlade: {
@@ -104,58 +104,53 @@ Items: {
 	}
 
 	ForestSword: {
-		// DisplayName: Forest Sword
-		// Tooltip: ""
+		DisplayName: 茂林剑
+		Tooltip: "在森林中走得更快"
 	}
 
 	ImmortalSword: {
-		// DisplayName: Immortal Sword
-		// Tooltip: ""
+		DisplayName: 长生剑
+		Tooltip: "提升生命力"
 	}
 
 	RainBowGolfClubs: {
-		// DisplayName: Rain Bow Golf Clubs
-		// Tooltip: ""
+		DisplayName: 彩虹高尔夫球杆
+		Tooltip: "发射随机高尔夫球"
 	}
 
 	SteelBroadSword: {
-		// DisplayName: Steel Broad Sword
-		// Tooltip: ""
+		DisplayName: 崇阳铁剑
+		Tooltip: "挥舞时产生剑光"
 	}
 
 	SteelShortSword: {
-		// DisplayName: Steel Short Sword
-		// Tooltip: ""
+		DisplayName: 玄铁短剑
+		Tooltip: "在白天走得更快"
 	}
 
 	HarpyWingSword: {
-		// DisplayName: Harpy Wing Sword
-		// Tooltip: ""
-	}
-
-	GritShotgun: {
-		// DisplayName: Grit Shotgun
-		// Tooltip: ""
+		DisplayName: 翼剑
+		Tooltip: "发射鸟妖之羽，在空中作战能力更强"
 	}
 
 	SmokeGrenade: {
-		// DisplayName: Smoke Grenade
-		// Tooltip: ""
+		DisplayName: 烟雾手榴弹
+		Tooltip: "留下一团伤害性烟雾"
 	}
 
 	TheOutlaw: {
-		// DisplayName: The Outlaw
-		// Tooltip: ""
+		DisplayName: 法外狂徒
+		Tooltip: "一次射出四到五发子弹，随游戏进度变强"
 	}
 
 	GhostChakram: {
-		// DisplayName: Ghost Chakram
-		// Tooltip: ""
+		DisplayName: 幽魂飞盘
+		Tooltip: "穿过敌人时增加尺寸和伤害"
 	}
 
 	InvincibleBlade: {
-		// DisplayName: Invincible Blade
-		// Tooltip: ""
+		DisplayName: 无敌之刃
+		Tooltip: "对敌怪造成生命值百分比的伤害"
 	}
 
 	DevolutionCharm: {
@@ -169,13 +164,16 @@ Items: {
 	}
 
 	DiscoBallRemote: {
-		// DisplayName: Disco Ball Remote
-		// Tooltip: ""
+		DisplayName: 迪斯科灯球
+		Tooltip: "闪耀的灯球"
 	}
 
 	BlasterPliers: {
-		// DisplayName: Blaster Pliers
-		// Tooltip: ""
+		DisplayName: 海虎爆破钳
+		Tooltip: [
+			"背包中的热狗会增加武器的伤害"
+			"[c/ff4040:（劲口牙）]"
+		]
 	}
 
 	RewinderCicadas: {
@@ -187,13 +185,13 @@ Items: {
 	}
 
 	Cookbook: {
-		// DisplayName: Cookbook
-		// Tooltip: ""
+		DisplayName: 菜谱
+		Tooltip: "给你一些食物配方，快去制作今日美食吧，可以获得双倍奖励并积累厨艺值"
 	}
 
 	FoodLogItem: {
-		// DisplayName: Food Log Item
-		// Tooltip: ""
+		DisplayName: 食谱
+		Tooltip: "给你一些食物线索，快去品尝美食，积累美味值吧"
 	}
 
 	WishingWellItem: {
@@ -247,58 +245,54 @@ Items: {
 }
 
 Projectiles: {
-	// NebulaRocketProjectile.DisplayName: Nebula Rocket Projectile
-	// SolarBulletProjectile.DisplayName: Solar Bullet Projectile
-	// WoodenShurikenProjectile.DisplayName: Wooden Shuriken Projectile
-	// GoldenShurikenProjectile.DisplayName: Golden Shuriken Projectile
-	// FlyStoneProjectile.DisplayName: Fly Stone Projectile
-	// FlameShurikenProjectile.DisplayName: Flame Shuriken Projectile
-	// IceShurikenProjectile.DisplayName: Ice Shuriken Projectile
-	// PoisonedShurikenProjectile.DisplayName: Poisoned Shuriken Projectile
-	// CactusNeedleProjectile.DisplayName: Cactus Needle Projectile
-	// OceanBlueSwordProjectile.DisplayName: Ocean Blue Sword Projectile
-	// HellfireSwordProjectile.DisplayName: Hellfire Sword Projectile
-	// ChargedSlashProj.DisplayName: Charged Slash Proj
-	// DashSlashProj.DisplayName: Dash Slash Proj
-	// BrightVerdictProjectile.DisplayName: Bright Verdict Projectile
-	// CloudArrowProjectile.DisplayName: Cloud Arrow Projectile
-	// HolyDiamondSpinHitbox.DisplayName: Holy Diamond Spin Hitbox
-	// HolyKiteBurstHitbox.DisplayName: Holy Kite Burst Hitbox
-	// WindBladeProjectile.DisplayName: Wind Blade Projectile
-	// RainbowGolfBall.DisplayName: Rainbow Golf Ball
-	// SteelBroadSwordProjectile.DisplayName: Steel Broad Sword Projectile
-	// SteelShortSwordProjectile.DisplayName: Steel Short Sword Projectile
-	// BasiliskChargeProj.DisplayName: Basilisk Charge Proj
-	// InstantExplosion.DisplayName: Instant Explosion
-	// SmokeCloud.DisplayName: Smoke Cloud
-	// SmokeGrenadeProj.DisplayName: Smoke Grenade Proj
-	// TheOutlawFirewall.DisplayName: The Outlaw Firewall
-	// TheOutlawPellet.DisplayName: The Outlaw Pellet
-	// TheOutlawSplitBomblet.DisplayName: The Outlaw Split Bomblet
-	// TheOutlawSplitShot.DisplayName: The Outlaw Split Shot
-	// TheOutlawUltimateBomb.DisplayName: The Outlaw Ultimate Bomb
-	// GhostChakramProj.DisplayName: Ghost Chakram Proj
-	// InvincibleArcShot.DisplayName: Invincible Arc Shot
-	// WrathLotusProj.DisplayName: Wrath Lotus Proj
-	// DiscoBallPetProj.DisplayName: Disco Ball Pet Proj
+	NebulaRocketProjectile.DisplayName: 星云火箭
+	SolarBulletProjectile.DisplayName: 日耀弹
+	WoodenShurikenProjectile.DisplayName: 木质飞镖
+	GoldenShurikenProjectile.DisplayName: 金飞镖
+	FlyStoneProjectile.DisplayName: 飞蝗石
+	FlameShurikenProjectile.DisplayName: 火焰飞镖
+	IceShurikenProjectile.DisplayName: 寒冰飞镖
+	PoisonedShurikenProjectile.DisplayName: 毒飞镖
+	CactusNeedleProjectile.DisplayName: 仙人掌飞针
+	OceanBlueSwordProjectile.DisplayName: 海蓝旋涡
+	HellfireSwordProjectile.DisplayName: 狱火斩击
+	DashSlashProj.DisplayName: 御剪直刺
+	BrightVerdictProjectile.DisplayName: 神圣裁决
+	CloudArrowProjectile.DisplayName: 穿云箭
+	HolyKiteBurstHitbox.DisplayName: 神圣十字星
+	WindBladeProjectile.DisplayName: 风刃
+	RainbowGolfBall.DisplayName: 彩虹高尔夫球
+	SteelBroadSwordProjectile.DisplayName: 崇阳剑刃
+	SteelShortSwordProjectile.DisplayName: 玄铁短剑
+	BasiliskChargeProj.DisplayName: 石化蜥冲撞
+	InstantExplosion.DisplayName: 分裂弹爆炸
+	SmokeCloud.DisplayName: 烟雾云
+	SmokeGrenadeProj.DisplayName: 烟雾手榴弹
+	TheOutlawFirewall.DisplayName: 火墙
+	TheOutlawPellet.DisplayName: 狂徒霰弹
+	TheOutlawSplitBomblet.DisplayName: 分裂弹
+	TheOutlawSplitShot.DisplayName: 分裂射击
+	TheOutlawUltimateBomb.DisplayName: 终极爆弹
+	GhostChakramProj.DisplayName: 幽魂飞盘
+	InvincibleArcShot.DisplayName: 无敌之刃
+	WrathLotusProj.DisplayName: 佛怒火莲
+	DiscoBallPetProj.DisplayName: 迪斯科灯球
 }
 
 DamageClasses: {
-	// ExternalPowerDamageClass.DisplayName: External Power Damage Class
-	// InternalPowerDamageClass.DisplayName: Internal Power Damage Class
-	// ChiEnergyDamageClass.DisplayName: Chi Energy Damage Class
-	// SupremeDamageClass.DisplayName: Supreme Damage Class
+	ChiEnergyDamageClass.DisplayName: 真气
+	SupremeDamageClass.DisplayName: 念气
 }
 
 Buffs: {
 	OutlawBackstepCooldown: {
-		// DisplayName: Outlaw Backstep Cooldown
-		// Description: Mods.WuDao.Buffs.OutlawBackstepCooldown.Description
+		DisplayName: 极速后仰冷却中
+		Description: 暂时无法使用后仰
 	}
 
 	NormalScissorsDashCooldownBuff: {
-		// DisplayName: Normal Scissors Dash Cooldown Buff
-		// Description: Mods.WuDao.Buffs.NormalScissorsDashCooldownBuff.Description
+		DisplayName: 御剪冲刺冷却中
+		Description: 暂时无法使用冲刺
 	}
 
 	DiscoBallPetBuff: {
@@ -307,8 +301,8 @@ Buffs: {
 	}
 
 	RewinderCicadasCooldown: {
-		// DisplayName: Rewinder Cicadas Cooldown
-		// Description: Mods.WuDao.Buffs.RewinderCicadasCooldown.Description
+		DisplayName: 蝉蜕之时
+		Description: 春秋蝉正在积蓄力量，暂时无法使用
 	}
 
 	BrokenDreams: {

@@ -11,7 +11,6 @@ using WuDao.Content.Players;
 using WuDao.Content.Global.Systems;
 using WuDao.Content.Global.Projectiles;
 
-// TODO: 改贴图
 namespace WuDao.Content.Items.Weapons.Magic
 {
     // =====================
@@ -22,10 +21,14 @@ namespace WuDao.Content.Items.Weapons.Magic
     // =====================
     public class Mimicker : ModItem
     {
+        public override void SetStaticDefaults()
+        {
+            Main.RegisterItemAnimation(Item.type, new DrawAnimationVertical(90, 4));
+        }
         public override void SetDefaults()
         {
-            Item.width = 40;
-            Item.height = 26;
+            Item.width = 28;
+            Item.height = 30;
             Item.rare = ItemRarityID.LightRed; // 困难模式早中期
             Item.value = Item.buyPrice(gold: 5);
 

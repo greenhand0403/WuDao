@@ -10,10 +10,8 @@ using WuDao.Content.Projectiles.Melee;
 
 namespace WuDao.Content.Items.Weapons.Melee
 {
-    // TODO: 贴图 无敌 以及百分比伤害未测试
     public class InvincibleBlade : ModItem
     {
-        public override string Texture => $"Terraria/Images/Item_{ItemID.Zenith}";
         // 固定冷却（帧），不受攻速影响
         public const int CooldownFrames = 10; // 约 1/6 秒，可自行调
 
