@@ -5,7 +5,7 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
-using WuDao.Content.Cooldowns;
+using WuDao.Content.Players;
 using WuDao.Content.Projectiles.Melee;
 
 namespace WuDao.Content.Items.Weapons.Melee
@@ -37,14 +37,14 @@ namespace WuDao.Content.Items.Weapons.Melee
 
         public override bool CanUseItem(Player player)
         {
-            var mp = player.GetModPlayer<InvincibleBladeCooldown>();
+            var mp = player.GetModPlayer<InvincibleBladePlayer>();
             return mp.Cooldown <= 0; // 冷却未到则可用
         }
 
         public override bool? UseItem(Player player)
         {
             // 设定自定义冷却（不吃攻速）
-            player.GetModPlayer<InvincibleBladeCooldown>().Cooldown = CooldownFrames;
+            player.GetModPlayer<InvincibleBladePlayer>().Cooldown = CooldownFrames;
             return true;
         }
 
@@ -54,7 +54,7 @@ namespace WuDao.Content.Items.Weapons.Melee
 
             // 在鼠标附近随机生成
             Vector2 spawnPos = Main.MouseWorld + 150 * (new Vector2(Main.rand.NextFloat(-1, 1f), Main.rand.NextFloat(-1, 1f)));
-            InvincibleBladeCooldown mp = player.GetModPlayer<InvincibleBladeCooldown>();
+            InvincibleBladePlayer mp = player.GetModPlayer<InvincibleBladePlayer>();
             // 发射的射弹随着使用时间增多
             int cold = mp.Cooldown;
             for (int i = 0; i < 1 + (CooldownFrames - cold) / 2; i++)

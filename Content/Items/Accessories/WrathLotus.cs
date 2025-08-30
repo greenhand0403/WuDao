@@ -2,7 +2,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
-using WuDao.Common.Buffs;
+using WuDao.Common;
 using WuDao.Content.Projectiles.Magic;
 using System.Collections.Generic;
 

@@ -3,7 +3,7 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
-using WuDao.Common.Buffs;
+using WuDao.Common;
 using System.Collections.Generic;
 
 namespace WuDao.Content.Items.Weapons.Melee

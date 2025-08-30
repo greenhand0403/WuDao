@@ -9,7 +9,7 @@ using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Utilities;
-using WuDao.Common.Buffs;
+using WuDao.Content.Buffs;
 
 namespace WuDao.Content.Items
 {

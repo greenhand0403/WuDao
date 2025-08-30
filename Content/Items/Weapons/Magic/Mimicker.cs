@@ -8,7 +8,7 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using WuDao.Content.Players;
-using WuDao.Content.Global.Systems;
+using WuDao.Content.Systems;
 using WuDao.Content.Global.Projectiles;
 
 namespace WuDao.Content.Items.Weapons.Magic

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Terraria;
 using Terraria.ModLoader;
 using WuDao.Content.Players;
-using WuDao.Content.Global.Systems;
+using WuDao.Content.Systems;
 using WuDao.Systems;
 
 namespace WuDao

@@ -5,8 +5,8 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
-using WuDao.Config;
-using WuDao.Systems;
+using WuDao.Content.Config;
+using WuDao.Content.Systems;
 
 namespace WuDao.Content.Tiles
 {

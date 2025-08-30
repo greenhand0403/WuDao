@@ -418,6 +418,21 @@ Buffs: {
 		DisplayName: 祭品烙印
 		Description: 承受BOSS的伤害增加50%
 	}
+
+	RewinderCicadasBuff: {
+		// DisplayName: Rewinder Cicadas Buff
+		// Description: Mods.WuDao.Buffs.RewinderCicadasBuff.Description
+	}
+
+	NormalScissorsDashBuff: {
+		// DisplayName: Normal Scissors Dash Buff
+		// Description: Mods.WuDao.Buffs.NormalScissorsDashBuff.Description
+	}
+
+	OutlawBackstepBuff: {
+		// DisplayName: Outlaw Backstep Buff
+		// Description: Mods.WuDao.Buffs.OutlawBackstepBuff.Description
+	}
 }
 
 Configs: {

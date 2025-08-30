@@ -34,7 +34,7 @@ namespace WuDao.Content.Items.Pets
     // 2) BUFF：标记为 LightPet，维持弹幕存在
     public class DiscoBallPetBuff : ModBuff
     {
-        public override string Texture => $"WuDao/Common/Buffs/DiscoBallPetBuff";
+        public override string Texture => $"WuDao/Content/Buffs/DiscoBallPetBuff";
         public override void SetStaticDefaults()
         {
             Main.buffNoTimeDisplay[Type] = true;

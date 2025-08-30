@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ModLoader;
-using WuDao.Content.Global.Buffs;
+using WuDao.Content.Buffs;
 using WuDao.Content.Items.Accessories;
 
 namespace WuDao.Content.Players
@@ -89,7 +89,7 @@ namespace WuDao.Content.Players
             nextReadyTick = now + CooldownTicks;
 
             // 可选：给一个冷却 Buff（如果你实现了，下方有 Buff 示例）
-            Player.AddBuff(ModContent.BuffType<RewinderCicadasCooldown>(), CooldownTicks);
+            Player.AddBuff(ModContent.BuffType<RewinderCicadasBuff>(), CooldownTicks);
 
             // 播个简洁特效（非必须）
             Terraria.Audio.SoundEngine.PlaySound(Terraria.ID.SoundID.Item29, Player.Center); // 魔法“倒带”音效

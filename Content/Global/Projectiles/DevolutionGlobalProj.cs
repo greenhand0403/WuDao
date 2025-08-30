@@ -3,7 +3,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using System;
 using Microsoft.Xna.Framework;
-using WuDao.Content.Global.NPCs;
+using WuDao.Content.Players;
 
 namespace WuDao.Content.Global.Projectiles
 {

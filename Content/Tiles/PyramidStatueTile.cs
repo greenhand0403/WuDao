@@ -6,8 +6,7 @@ using Terraria.ObjectData;
 using Terraria.Enums;
 using Terraria.ID;
 using Terraria.DataStructures;
-using WuDao.Common.Buffs;
-using WuDao.Common.Players;
+using WuDao.Content.Buffs;
 
 namespace WuDao.Content.Tiles
 {

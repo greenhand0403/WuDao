@@ -1,14 +1,11 @@
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using WuDao.Common.Buffs;
+using WuDao.Content.Buffs;
 using WuDao.Common;
 using Microsoft.Xna.Framework;
 using Terraria.GameContent;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using WuDao.Content.Items.Accessories;
-using Terraria.Audio;
 
 namespace WuDao.Content.Projectiles.Magic
 {

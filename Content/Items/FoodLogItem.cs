@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using WuDao.Content.Global.Systems;
+using WuDao.Content.Systems;
 using WuDao.Content.Players;
 
 namespace WuDao.Content.Items

@@ -405,6 +405,21 @@ Buffs: {
 		DisplayName: Sacrificial Branding
 		Description: Mods.WuDao.Buffs.SacrificialBranding.Description
 	}
+
+	RewinderCicadasBuff: {
+		DisplayName: Rewinder Cicadas Buff
+		Description: Mods.WuDao.Buffs.RewinderCicadasBuff.Description
+	}
+
+	NormalScissorsDashBuff: {
+		DisplayName: Normal Scissors Dash Buff
+		Description: Mods.WuDao.Buffs.NormalScissorsDashBuff.Description
+	}
+
+	OutlawBackstepBuff: {
+		DisplayName: Outlaw Backstep Buff
+		Description: Mods.WuDao.Buffs.OutlawBackstepBuff.Description
+	}
 }
 
 Configs: {

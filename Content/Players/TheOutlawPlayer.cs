@@ -1,6 +1,6 @@
 using Terraria;
 using Terraria.ModLoader;
-using WuDao.Content.Cooldowns;
+using WuDao.Content.Buffs;
 
 namespace WuDao.Common.Players
 {
@@ -53,7 +53,7 @@ namespace WuDao.Common.Players
             if (dashBackCooldownTicks < 0) dashBackCooldownTicks = 0;
 
             // 立刻刷新 Buff 显示（如果你用 Buff 展示冷却）
-            int buffType = ModContent.BuffType<OutlawBackstepCooldown>();
+            int buffType = ModContent.BuffType<OutlawBackstepBuff>();
             if (dashBackCooldownTicks > 0)
             {
                 Player.ClearBuff(buffType); // 先清一次，避免残留更长时间
@@ -79,7 +79,7 @@ namespace WuDao.Common.Players
             if (dashBackCooldownTicks > 0)
             {
                 dashBackCooldownTicks--;
-                int buffType = ModContent.BuffType<OutlawBackstepCooldown>();
+                int buffType = ModContent.BuffType<OutlawBackstepBuff>();
                 Player.ClearBuff(buffType);
                 Player.AddBuff(buffType, dashBackCooldownTicks);
             }

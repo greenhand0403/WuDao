@@ -4,7 +4,7 @@ using Terraria.ModLoader;
 using WuDao.Content.Global.Projectiles;
 using WuDao.Content.Players;
 using Microsoft.Xna.Framework;
-using WuDao.Content.Global.Systems;
+using WuDao.Content.Systems;
 
 namespace WuDao.Content.Global.NPCs
 {

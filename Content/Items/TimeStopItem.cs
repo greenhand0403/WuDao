@@ -1,6 +1,6 @@
 using Terraria;
 using Terraria.ID;
-using WuDao.Content.Global.Systems;
+using WuDao.Content.Systems;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 
