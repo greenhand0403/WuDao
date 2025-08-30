@@ -218,6 +218,36 @@ Items: {
 		DisplayName: Pyramid Statue
 		Tooltip: ""
 	}
+
+	GuixinAccessory: {
+		DisplayName: Guixin Accessory
+		Tooltip: ""
+	}
+
+	SoulGem: {
+		DisplayName: Soul Gem
+		Tooltip: ""
+	}
+
+	YanfanAccessory: {
+		DisplayName: Yanfan Accessory
+		Tooltip: ""
+	}
+
+	YueshengAccessory: {
+		DisplayName: Yuesheng Accessory
+		Tooltip: ""
+	}
+
+	HeartArrow: {
+		DisplayName: Heart Arrow
+		Tooltip: ""
+	}
+
+	CupidBow: {
+		DisplayName: Cupid Bow
+		Tooltip: ""
+	}
 }
 
 Projectiles: {
@@ -255,6 +285,7 @@ Projectiles: {
 	InvincibleArcShot.DisplayName: Invincible Arc Shot
 	WrathLotusProj.DisplayName: Wrath Lotus Proj
 	DiscoBallPetProj.DisplayName: Disco Ball Pet Proj
+	HeartArrowProj.DisplayName: Heart Arrow Proj
 }
 
 DamageClasses: {

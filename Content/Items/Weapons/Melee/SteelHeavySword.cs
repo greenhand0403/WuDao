@@ -3,7 +3,7 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using WuDao.Content.Cooldowns;
+using WuDao.Content.Players;
 
 namespace WuDao.Content.Items.Weapons.Melee
 {

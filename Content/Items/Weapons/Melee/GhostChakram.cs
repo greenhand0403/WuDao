@@ -4,7 +4,7 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using WuDao.Content.Projectiles.Melee;
-using WuDao.Content.Cooldowns;
+using WuDao.Content.Players;
 
 namespace WuDao.Content.Items.Weapons.Melee
 {

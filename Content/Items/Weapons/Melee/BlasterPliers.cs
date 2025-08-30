@@ -8,7 +8,6 @@ namespace WuDao.Content.Items.Weapons.Melee
 {
     class BlasterPliers : ModItem
     {
-        private int foodCount;
         public override void SetDefaults()
         {
             Item.CloneDefaults(ItemID.CombatWrench);
@@ -32,7 +31,14 @@ namespace WuDao.Content.Items.Weapons.Melee
             int madeCount = (int)(cp.CookingSkill * 0.01f);
             damage.Flat += madeCount;
 
-            damage.Flat += foodCount;
+            // 直接统计本次结算时玩家背包里的热狗数量（联机安全）
+            int hotdogs = 0;
+            for (int i = 0; i < player.inventory.Length; i++)
+            {
+                if (player.inventory[i].type == ItemID.Hotdog)
+                    hotdogs += player.inventory[i].stack;
+            }
+            damage.Flat += hotdogs * 0.1f;
         }
         public override float UseSpeedMultiplier(Player player)
         {
@@ -52,17 +58,6 @@ namespace WuDao.Content.Items.Weapons.Melee
         //     // 控制台/聊天栏直接打印
         //     Main.NewText($"Cookbook已制作：{madeCount}，FoodLog已品尝：{eatenCount}");
         // }
-        public override void UpdateEquip(Player player)
-        {
-            foodCount = 0;
-            for (int i = 0; i < 50; i++)
-            {
-                if (player.inventory[i].type == ItemID.Hotdog)
-                {
-                    foodCount+=player.inventory[i].stack;
-                }
-            }
-        }
         public override void ModifyHitNPC(Player player, NPC target, ref NPC.HitModifiers modifiers)
         {
             int g = target.rarity;

@@ -3,7 +3,7 @@ using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace WuDao.Content.Cooldowns
+namespace WuDao.Content.Players
 {
     // 玄铁重剑的冷却时间
     public class SteelHeavySwordPlayer : ModPlayer

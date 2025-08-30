@@ -7,7 +7,7 @@ using Terraria.ModLoader;
 using WuDao.Content.Global.Buffs;
 using WuDao.Content.Items.Accessories;
 
-namespace WuDao.Content.Cooldowns
+namespace WuDao.Content.Players
 {
     public class RewinderCicadasPlayer : ModPlayer
     {

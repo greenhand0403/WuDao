@@ -1,6 +1,6 @@
 using Terraria.ModLoader;
 
-namespace WuDao.Content.Cooldowns
+namespace WuDao.Content.Players
 {
     public class GhostChakramPlayer : ModPlayer
     {

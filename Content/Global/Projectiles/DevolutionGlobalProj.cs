@@ -3,11 +3,11 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using System;
 using Microsoft.Xna.Framework;
-using WuDao.Content.Items.Accessories;
 using WuDao.Content.Global.NPCs;
 
 namespace WuDao.Content.Global.Projectiles
 {
+    // 压制力场削弱敌方射弹
     public class DevolutionGlobalProj : GlobalProjectile
     {
         public override void ModifyHitPlayer(Projectile proj, Player target, ref Player.HurtModifiers modifiers)

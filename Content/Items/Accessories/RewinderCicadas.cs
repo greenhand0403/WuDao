@@ -1,7 +1,7 @@
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using WuDao.Content.Cooldowns;
+using WuDao.Content.Players;
 
 namespace WuDao.Content.Items.Accessories
 {

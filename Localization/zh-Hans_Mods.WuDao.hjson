@@ -1,218 +1,207 @@
 Items: {
 	NebulaRocket: {
 		DisplayName: 星云火箭
-		Tooltip: "发射出一个星云火箭"
+		Tooltip: 发射出一个星云火箭
 	}
 
 	SolarBullet: {
 		DisplayName: 日耀弹
-		Tooltip: "发射出一个爆炸子弹，有几率造成日耀减益"
+		Tooltip: 发射出一个爆炸子弹，有几率造成日耀减益
 	}
 
 	SteelHeavySword: {
 		DisplayName: 玄铁重剑
-		Tooltip: "右键向前重劈"
+		Tooltip: 右键向前重劈
 	}
 
 	WoodenShuriken: {
 		DisplayName: 木质飞镖
-		Tooltip: "发射出一个飞镖"
+		Tooltip: 发射出一个飞镖
 	}
 
 	GoldenShuriken: {
 		DisplayName: 金飞镖
-		Tooltip: "发射出一个飞镖，有几率造成迈达斯之手减益"
+		Tooltip: 发射出一个飞镖，有几率造成迈达斯之手减益
 	}
 
 	FlyStone: {
 		DisplayName: 飞蝗石
-		Tooltip: "发射出一个飞石"
+		Tooltip: 发射出一个飞石
 	}
 
 	WeaponBundleItem: {
 		DisplayName: 武器礼包
-		Tooltip: "包含武道模组的武器、弹药、工具、配件等"
+		Tooltip: 包含武道模组的武器、弹药、工具、配件等
 	}
 
 	FlameShuriken: {
 		DisplayName: 火焰飞镖
-		Tooltip: "发射出一个飞镖，有几率造成着火减益"
+		Tooltip: 发射出一个飞镖，有几率造成着火减益
 	}
 
 	IceShuriken: {
 		DisplayName: 冰冻飞镖
-		Tooltip: "发射出一个飞镖，有几率造成冰冻减益"
+		Tooltip: 发射出一个飞镖，有几率造成冰冻减益
 	}
 
 	PoisonedShuriken: {
 		DisplayName: 毒飞镖
-		Tooltip: "发射出一个飞镖，有几率造成中毒减益"
+		Tooltip: 发射出一个飞镖，有几率造成中毒减益
 	}
 
 	CactusNeedle: {
 		DisplayName: 仙人掌飞针
-		Tooltip: "发射出一个飞针"
+		Tooltip: 发射出一个飞针
 	}
 
 	OceanBlueSword: {
 		DisplayName: 海蓝军刀
-		Tooltip: "拥有水下呼吸/水上漂/游泳能力，免疫霜冻/寒冷，发射海蓝旋涡，攻击有几率造成霜冻减益"
+		Tooltip: 拥有水下呼吸/水上漂/游泳能力，免疫霜冻/寒冷，发射海蓝旋涡，攻击有几率造成霜冻减益
 	}
 
 	HellfireSword: {
 		DisplayName: 地狱之锋
-		Tooltip: "火环护身，免疫着火了/燃烧/岩浆，发射地狱斩击，攻击有几率造成着火减益"
+		Tooltip: 火环护身，免疫着火了/燃烧/岩浆，发射地狱斩击，攻击有几率造成着火减益
 	}
 
 	NormalScissors: {
 		DisplayName: 御剪
-		Tooltip: "以气御剪，随游戏进度增强"
+		Tooltip: 以气御剪，随游戏进度增强
 	}
 
 	TimeStopItem: {
 		DisplayName: 静止游鱼
-		Tooltip: [
-			"短暂地冻结时间",
-			"冻结后只能移动",
-			"[c/aaaaaa:（他终于明白，人生不是在溺水前上岸，而是不断地游啊游，直到停止思考）]"
-		]
+		// Tooltip: ""
 	}
 
 	CloudArrow: {
 		DisplayName: 穿云箭
-		Tooltip: "一支穿云箭，千军万马来相见"
+		Tooltip: 一支穿云箭，千军万马来相见
 	}
 
 	BrightVerdict: {
 		DisplayName: 圣光裁决
-		Tooltip: "射出神圣十字星"
+		Tooltip: 射出神圣十字星
 	}
 
 	MagicHorn: {
 		DisplayName: 魔法号角
-		Tooltip: "随游戏进度发射随机的魔法射弹"
+		Tooltip: 随游戏进度发射随机的魔法射弹
 	}
 
 	Mimicker: {
 		DisplayName: 模仿者
-		Tooltip: "击败特定数量的敌怪可以习得它们的射弹"
+		Tooltip: 击败特定数量的敌怪可以习得它们的射弹
 	}
 
 	WindBlade: {
 		DisplayName: 风刃
-		Tooltip: "消耗魔法发射风刃"
+		Tooltip: 消耗魔法发射风刃
 	}
 
 	ForestSword: {
 		DisplayName: 茂林剑
-		Tooltip: "在森林中走得更快"
+		Tooltip: 在森林中走得更快
 	}
 
 	ImmortalSword: {
 		DisplayName: 长生剑
-		Tooltip: "提升生命力"
+		Tooltip: 提升生命力
 	}
 
 	RainBowGolfClubs: {
 		DisplayName: 彩虹高尔夫球杆
-		Tooltip: "发射随机高尔夫球"
+		Tooltip: 发射随机高尔夫球
 	}
 
 	SteelBroadSword: {
 		DisplayName: 崇阳铁剑
-		Tooltip: "挥舞时产生剑光"
+		Tooltip: 挥舞时产生剑光
 	}
 
 	SteelShortSword: {
 		DisplayName: 玄铁短剑
-		Tooltip: "在白天走得更快"
+		Tooltip: 在白天走得更快
 	}
 
 	HarpyWingSword: {
 		DisplayName: 翼剑
-		Tooltip: "发射鸟妖之羽，在空中作战能力更强"
+		Tooltip: 发射鸟妖之羽，在空中作战能力更强
+	}
+
+	GritShotgun: {
+		// DisplayName: Grit Shotgun
+		// Tooltip: ""
 	}
 
 	SmokeGrenade: {
 		DisplayName: 烟雾手榴弹
-		Tooltip: "留下一团伤害性烟雾"
+		Tooltip: 留下一团伤害性烟雾
 	}
 
 	TheOutlaw: {
 		DisplayName: 法外狂徒
-		Tooltip: "一次射出四到五发子弹，随游戏进度变强"
+		Tooltip: 一次射出四到五发子弹，随游戏进度变强
 	}
 
 	GhostChakram: {
 		DisplayName: 幽魂飞盘
-		Tooltip: "穿过敌人时增加尺寸和伤害"
+		Tooltip: 穿过敌人时增加尺寸和伤害
 	}
 
 	InvincibleBlade: {
 		DisplayName: 无敌之刃
-		Tooltip: "对敌怪造成生命值百分比的伤害"
+		Tooltip: 对敌怪造成生命值百分比的伤害
 	}
 
 	DevolutionCharm: {
 		DisplayName: 压制力场
-		Tooltip: "削弱玩家和敌怪的大部分属性"
+		Tooltip: 削弱玩家和敌怪的大部分属性
 	}
 
 	WrathLotus: {
 		DisplayName: 佛怒火莲
-		Tooltip: "受伤时对敌怪的伤害，免疫燃烧和着火了"
+		Tooltip: 受伤时对敌怪的伤害，免疫燃烧和着火了
 	}
 
 	DiscoBallRemote: {
 		DisplayName: 迪斯科灯球
-		Tooltip: "闪耀的灯球"
+		Tooltip: 闪耀的灯球
 	}
 
 	BlasterPliers: {
 		DisplayName: 海虎爆破钳
-		Tooltip: [
-			"背包中的热狗会增加武器的伤害"
-			"[c/ff4040:（劲口牙）]"
-		]
+		// Tooltip: ""
 	}
 
 	RewinderCicadas: {
-		Tooltip: [
-			"时间回溯，即将死亡时，你的生命值回到3秒前"
-			"[c/ffd700:（春秋蝉鸣少年归）]"
-		]
+		// Tooltip: ""
 		DisplayName: 春秋蝉
 	}
 
 	Cookbook: {
 		DisplayName: 菜谱
-		Tooltip: "给你一些食物配方，快去制作今日美食吧，可以获得双倍奖励并积累厨艺值"
+		Tooltip: 给你一些食物配方，快去制作今日美食吧，可以获得双倍奖励并积累厨艺值
 	}
 
 	FoodLogItem: {
 		DisplayName: 食谱
-		Tooltip: "给你一些食物线索，快去品尝美食，积累美味值吧"
+		Tooltip: 给你一些食物线索，快去品尝美食，积累美味值吧
 	}
 
 	WishingWellItem: {
 		DisplayName: 许愿井
-		Tooltip: "将BOSS的战利品丢进去可能发生意想不到的事"
+		Tooltip: 将BOSS的战利品丢进去可能发生意想不到的事
 	}
 
 	DesignFlaw: {
 		DisplayName: 败笔
-		Tooltip: [
-			"对上一个击败你的NPC造成更多的伤害",
-			"[c/ffd700:（虽败犹荣）]"
-		]
+		// Tooltip: ""
 	}
 
 	FirstBlood: {
 		DisplayName: 第一滴血
-		Tooltip: [
-			"你对尚未击败的Boss造成的伤害增加",
-			"[c/c040ff:（击败所有BOSS，解锁最终形态）]"
-		]
+		// Tooltip: ""
 	}
 
 	Candy: {
@@ -242,6 +231,36 @@ Items: {
 			静止站立在实心块上时获得强力减伤
 			'''
 	}
+
+	GuixinAccessory: {
+		// DisplayName: Guixin Accessory
+		// Tooltip: ""
+	}
+
+	SoulGem: {
+		// DisplayName: Soul Gem
+		// Tooltip: ""
+	}
+
+	YanfanAccessory: {
+		// DisplayName: Yanfan Accessory
+		// Tooltip: ""
+	}
+
+	YueshengAccessory: {
+		// DisplayName: Yuesheng Accessory
+		// Tooltip: ""
+	}
+
+	HeartArrow: {
+		// DisplayName: Heart Arrow
+		// Tooltip: ""
+	}
+
+	CupidBow: {
+		// DisplayName: Cupid Bow
+		// Tooltip: ""
+	}
 }
 
 Projectiles: {
@@ -256,9 +275,11 @@ Projectiles: {
 	CactusNeedleProjectile.DisplayName: 仙人掌飞针
 	OceanBlueSwordProjectile.DisplayName: 海蓝旋涡
 	HellfireSwordProjectile.DisplayName: 狱火斩击
+	// ChargedSlashProj.DisplayName: Charged Slash Proj
 	DashSlashProj.DisplayName: 御剪直刺
 	BrightVerdictProjectile.DisplayName: 神圣裁决
 	CloudArrowProjectile.DisplayName: 穿云箭
+	// HolyDiamondSpinHitbox.DisplayName: Holy Diamond Spin Hitbox
 	HolyKiteBurstHitbox.DisplayName: 神圣十字星
 	WindBladeProjectile.DisplayName: 风刃
 	RainbowGolfBall.DisplayName: 彩虹高尔夫球
@@ -277,9 +298,12 @@ Projectiles: {
 	InvincibleArcShot.DisplayName: 无敌之刃
 	WrathLotusProj.DisplayName: 佛怒火莲
 	DiscoBallPetProj.DisplayName: 迪斯科灯球
+	// HeartArrowProj.DisplayName: Heart Arrow Proj
 }
 
 DamageClasses: {
+	// ExternalPowerDamageClass.DisplayName: External Power Damage Class
+	// InternalPowerDamageClass.DisplayName: Internal Power Damage Class
 	ChiEnergyDamageClass.DisplayName: 真气
 	SupremeDamageClass.DisplayName: 念气
 }

@@ -26,7 +26,7 @@ namespace WuDao.Content.Items.Accessories
             {
                 // _heroTex = ModContent.Request<Texture2D>($"Terraria/Images/Item_{ItemID.HolyWater}");
                 // _heroTex = TextureAssets.Item[ItemID.HolyWater]; // 现成的 Vanilla 贴图
-                _heroTex = ModContent.Request<Texture2D>($"{nameof(WuDao)}/Assets/Textures/Items/Accessories/FirstBlood_Hero");
+                _heroTex = ModContent.Request<Texture2D>($"{nameof(WuDao)}/Content/Items/Accessories/FirstBlood_Hero");
             }
         }
 
