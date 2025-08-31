@@ -94,7 +94,10 @@ namespace WuDao.Content.Projectiles.Melee
 
             // 让玩家手臂随挥砍摆动（示例同款）
             t = Projectile.localAI[0] / Projectile.ai[1]; // 0..1
-            float armRot = Projectile.rotation - MathHelper.PiOver2 * Projectile.ai[0]; // 贴合刀身
+            float armRot = Projectile.rotation - MathHelper.PiOver2; // 贴合刀身
+            if (player.gravDir == -1f)
+                armRot += MathHelper.Pi;
+                
             player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, armRot);
 
             // 维持持有态
@@ -143,8 +146,8 @@ namespace WuDao.Content.Projectiles.Melee
             Vector2 origin = new Vector2(frameMain.Width * 0.5f, fh * 0.5f);
             Vector2 pos = Projectile.Center - Main.screenPosition;
             float scale = Projectile.scale * 1.06f;
-
-            SpriteEffects fx = (Projectile.ai[0] >= 0f) ? SpriteEffects.None : SpriteEffects.FlipVertically;
+            var owner = Main.player[Projectile.owner];
+            SpriteEffects fx = (owner.gravDir == -1f) ? SpriteEffects.FlipVertically : SpriteEffects.None;
 
             float t = Projectile.localAI[0] / Projectile.ai[1];
             float lerp = Utils.Remap(t, 0f, 0.6f, 0f, 1f) * Utils.Remap(t, 0.6f, 1f, 1f, 0f);

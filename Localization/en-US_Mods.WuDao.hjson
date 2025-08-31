@@ -170,8 +170,8 @@ Items: {
 	}
 
 	RewinderCicadas: {
-		Tooltip: ""
 		DisplayName: Rewinder Cicadas
+		Tooltip: ""
 	}
 
 	Cookbook: {

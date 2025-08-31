@@ -40,6 +40,11 @@ namespace WuDao.Content.Items.Weapons.Melee
             }
             damage.Flat += hotdogs * 0.1f;
         }
+        public override Vector2? HoldoutOffset()
+        {
+            // 向下偏移 6 像素，向左偏移 2 像素
+            return new Vector2(-2f, 6f);
+        }
         public override float UseSpeedMultiplier(Player player)
         {
             var cp = player.GetModPlayer<CuisinePlayer>();

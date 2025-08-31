@@ -56,24 +56,24 @@ Items: {
 
 	OceanBlueSword: {
 		DisplayName: 海蓝军刀
-		Tooltip: 
-		'''
+		Tooltip:
+			'''
 			拥有水下呼吸/水上漂/游泳能力
 			免疫霜冻/寒冷
 			发射海蓝旋涡
 			攻击有几率造成霜冻减益
-		'''
+			'''
 	}
 
 	HellfireSword: {
 		DisplayName: 地狱之锋
-		Tooltip: 
-		'''
+		Tooltip:
+			'''
 			火环护身
 			免疫着火了/燃烧/岩浆
 			发射地狱斩击
 			攻击有几率造成着火减益
-		'''
+			'''
 	}
 
 	NormalScissors: {
@@ -83,16 +83,16 @@ Items: {
 
 	TimeStopItem: {
 		DisplayName: 静止游鱼
-		Tooltip: 
-		'''
+		Tooltip:
+			'''
 			冻结时间，你能移动但仍会受到伤害
-			有一天他终于意识到人生不是在溺水前上岸，而是不断地游啊游，直到停止思考
-		'''
+			[c/AAAAAA:有一天他终于意识到人生不是在溺水前上岸，而是不断地游啊游，直到停止思考]
+			'''
 	}
 
 	CloudArrow: {
 		DisplayName: 穿云箭
-		Tooltip: 一支穿云箭，千军万马来相见
+		Tooltip: "[c/AAAAAA:一支穿云箭，千军万马来相见]"
 	}
 
 	BrightVerdict: {
@@ -182,39 +182,40 @@ Items: {
 
 	BlasterPliers: {
 		DisplayName: 海虎爆破钳
-		Tooltip: 
-		'''
+		Tooltip:
+			'''
 			背包中的热狗会增加武器的伤害
-			劲口牙
-		'''
+			[c/C040FF:劲口牙]
+			'''
 	}
 
 	RewinderCicadas: {
 		DisplayName: 春秋蝉
-		Tooltip: 
-		'''
+		Tooltip:
+			'''
 			受到致命伤时，将生命值恢复到3秒前
-			春秋蝉鸣少年归
-		'''
+			[c/FFD700:春秋蝉鸣少年归]
+			'''
 	}
 
 	Cookbook: {
 		DisplayName: 菜谱
-		Tooltip: 
-		'''
+		Tooltip:
+			'''
 			给你一些食物配方
 			快去制作今日美食吧
 			可以获得双倍奖励并积累厨艺值
-		'''
+			'''
 	}
 
 	FoodLogItem: {
 		DisplayName: 食谱
-		Tooltip: '''
+		Tooltip:
+			'''
 			给你一些食物线索
 			快去品尝美食
 			积累美味值吧
-		'''
+			'''
 	}
 
 	WishingWellItem: {
@@ -224,88 +225,88 @@ Items: {
 
 	DesignFlaw: {
 		DisplayName: 败笔
-		Tooltip: 
-		'''
+		Tooltip:
+			'''
 			记录将你击败的BOSS
 			增加你对BOSS的伤害
-		'''
+			'''
 	}
 
 	FirstBlood: {
 		DisplayName: 第一滴血
-		Tooltip: 
-		'''
+		Tooltip:
+			'''
 			对未击败的BOSS造成的伤害增加
 			击败所有BOSS后转化为新饰品
-		'''
+			'''
 	}
 
 	Candy: {
 		DisplayName: 混合糖果
 		Tooltip:
-		'''
+			'''
 			混合了不同类型的糖果
 			使用后获得随机增益
-		'''
+			'''
 	}
 
 	GlowingMeal: {
 		DisplayName: 发光料理
 		Tooltip:
-		'''
+			'''
 			极其丰盛的料理
 			使用后获得强力食物增益
 			并从增益池中随机获得 5 种增益
-		'''
+			'''
 	}
 
 	PyramidStatue: {
 		DisplayName: 微型金字塔
 		Tooltip:
-		'''
+			'''
 			散发古老守护之力
 			静止站立在实心块上时获得强力减伤
-		'''
+			'''
 	}
 
 	GuixinAccessory: {
 		DisplayName: 归心似箭
-		Tooltip: "你的回旋镖返程时速度增加"
+		Tooltip: 你的回旋镖返程时速度增加
 	}
 
 	SoulGem: {
 		DisplayName: 心灵宝石
-		Tooltip: "心箭不消耗生命，且追踪能力增强"
+		Tooltip: 心箭不消耗生命，且追踪能力增强
 	}
 
 	YanfanAccessory: {
 		DisplayName: 燕返
-		Tooltip: "你的回旋镖返程时造成的伤害翻倍"
+		Tooltip: 你的回旋镖返程时造成的伤害翻倍
 	}
 
 	YueshengAccessory: {
 		DisplayName: 跃升
-		Tooltip: "你的回旋镖可以穿透物块和敌人"
+		Tooltip: 你的回旋镖可以穿透物块和敌人
 	}
 
 	HeartArrow: {
 		DisplayName: 心箭
-		Tooltip: 
-		'''
+		Tooltip:
+			'''
 			消耗2生命
 			有弱追踪能力
 			击中敌人恢复1生命
-			即使是爱，也无法阻挡生命的流逝。
-		'''
+			[c/FF4040:即使是爱，也无法阻挡生命的流逝]
+			'''
 	}
 
 	CupidBow: {
 		DisplayName: 丘比特弓
-		Tooltip: 
-		'''
+		Tooltip:
+			'''
 			将木箭转化为心箭
 			心箭只消耗1生命
-		'''
+			'''
 	}
 }
 
@@ -469,14 +470,14 @@ Buffs: {
 Configs: {
 	WishingWellConfig: {
 		DoubleRewardPercent: {
-			Label: Double Reward Chance (%)
+			Label: 奖励触发概率
 			Tooltip: 许愿井掉落双倍奖励的几率
 		}
 
-		DisplayName: Wishing Well Config
+		DisplayName: 许愿井配置
 
 		Chance: {
-			Label: Chance
+			Label: 概率
 			Tooltip: 许愿井掉落奖励的几率
 		}
 	}
