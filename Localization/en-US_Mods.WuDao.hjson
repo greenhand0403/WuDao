@@ -129,11 +129,6 @@ Items: {
 		Tooltip: ""
 	}
 
-	GritShotgun: {
-		DisplayName: Grit Shotgun
-		Tooltip: ""
-	}
-
 	SmokeGrenade: {
 		DisplayName: Smoke Grenade
 		Tooltip: ""
@@ -296,24 +291,9 @@ DamageClasses: {
 }
 
 Buffs: {
-	OutlawBackstepCooldown: {
-		DisplayName: Outlaw Backstep Cooldown
-		Description: Mods.WuDao.Buffs.OutlawBackstepCooldown.Description
-	}
-
-	NormalScissorsDashCooldownBuff: {
-		DisplayName: Normal Scissors Dash Cooldown Buff
-		Description: Mods.WuDao.Buffs.NormalScissorsDashCooldownBuff.Description
-	}
-
 	DiscoBallPetBuff: {
 		DisplayName: Disco Ball Pet Buff
 		Description: Mods.WuDao.Buffs.DiscoBallPetBuff.Description
-	}
-
-	RewinderCicadasCooldown: {
-		DisplayName: Rewinder Cicadas Cooldown
-		Description: Mods.WuDao.Buffs.RewinderCicadasCooldown.Description
 	}
 
 	BrokenDreams: {
