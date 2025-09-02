@@ -75,8 +75,8 @@ namespace WuDao.Content.Projectiles.Melee
 
         public override void SetDefaults()
         {
-            Projectile.width = 48;
-            Projectile.height = 48;
+            Projectile.width = 64;
+            Projectile.height = 64;
             Projectile.friendly = true;
             Projectile.hostile = false;
             Projectile.penetrate = -1;        // 无限穿透（如需要首撞即散，改为 1）
@@ -135,9 +135,9 @@ namespace WuDao.Content.Projectiles.Melee
         }
         public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
-            // 固定伤害：敌怪生命上限 1% + 玩家生命上限 10%，不吃暴击
+            // 固定伤害：敌怪生命上限 10% + 玩家生命上限 10%，不吃暴击
             Player owner = Main.player[Projectile.owner];
-            int fixedDamage = (int)(target.lifeMax * 0.01f + owner.statLifeMax2 * 0.10f);
+            int fixedDamage = (int)(target.lifeMax * 0.1f + owner.statLifeMax2 * 0.10f);
 
             modifiers.SourceDamage *= 0f;
             modifiers.FlatBonusDamage += fixedDamage;

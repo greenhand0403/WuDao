@@ -9,6 +9,7 @@ namespace WuDao.Content.Items.Weapons.Melee
 {
     public class SteelHeavySword : ModItem
     {
+        private const int RightClickCooldown = 90;
         public override void SetDefaults()
         {
             Item.width = 40; // Width of the item
@@ -38,8 +39,8 @@ namespace WuDao.Content.Items.Weapons.Melee
             int cd = player.GetModPlayer<SteelHeavySwordPlayer>().RightClickCooldown;
 
             // 根据冷却时间动态调整缩放 只在 90~120 的窗口内做分段缩放
-            const int start = 90;
-            const int end = 120;
+            const int start = (int)(RightClickCooldown * 0.75f);
+            const int end = RightClickCooldown;
             const int window = end - start; // 30
 
             if (cd > start && cd <= end)
@@ -74,7 +75,7 @@ namespace WuDao.Content.Items.Weapons.Melee
         {
             // 右键时至少挥舞了1/2的动画，才判定碰撞
             // 90~120是右击挥舞动画，110~120期间不碰撞，确保至少挥出1/3的动画
-            if (!noHitbox && (player.altFunctionUse == 2) && (player.GetModPlayer<SteelHeavySwordPlayer>().RightClickCooldown > 110))
+            if (!noHitbox && (player.altFunctionUse == 2) && (player.GetModPlayer<SteelHeavySwordPlayer>().RightClickCooldown > (RightClickCooldown * 0.92f)))
             {
                 noHitbox = true;
                 return;
@@ -91,7 +92,7 @@ namespace WuDao.Content.Items.Weapons.Melee
                 Item.damage = 30;
                 Item.knockBack = 10f; // Increase knockback for the alternate use
                 Item.UseSound = SoundID.Item71; // Use the same sound for the alternate use
-                player.GetModPlayer<SteelHeavySwordPlayer>().RightClickCooldown = 120; // 2秒冷却 (60 tick/s)
+                player.GetModPlayer<SteelHeavySwordPlayer>().RightClickCooldown = RightClickCooldown; // 1.5秒冷却 (60 tick/s)
             }
             else
             {

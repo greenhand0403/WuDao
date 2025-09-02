@@ -85,8 +85,10 @@ Items: {
 		DisplayName: 静止游鱼
 		Tooltip:
 			'''
-			冻结时间，你能移动但仍会受到伤害
-			[c/AAAAAA:有一天他终于意识到人生不是在溺水前上岸，而是不断地游啊游，直到停止思考]
+			冻结时间 5 秒
+			只有你能移动，但仍会受到伤害
+			[c/AAAAAA:人生不是在溺水前上岸]
+			[c/AAAAAA:而是不断地游啊游，直到停止思考]
 			'''
 	}
 
@@ -161,8 +163,13 @@ Items: {
 	}
 
 	InvincibleBlade: {
-		DisplayName: 无敌之刃
-		Tooltip: 对敌怪造成生命值百分比的伤害
+		DisplayName: 无敌
+		Tooltip:
+			'''
+			对敌人造成最大生命值百分比的伤害
+			[c/C040FF:没有无法战胜的敌人]
+			[c/AAAAAA:该死的我许愿无敌结果攻击力变成零]
+			'''
 	}
 
 	DevolutionCharm: {
@@ -229,6 +236,7 @@ Items: {
 			'''
 			记录将你击败的BOSS
 			增加你对BOSS的伤害
+			[c/FFD700:经历的胜利]
 			'''
 	}
 
@@ -308,6 +316,32 @@ Items: {
 			心箭只消耗1生命
 			'''
 	}
+
+	PaleFist: {
+		// DisplayName: Pale Fist
+		// Tooltip: ""
+	}
+
+	ApeTouch: {
+		DisplayName: 猩之触
+		Tooltip:
+			'''
+			当生命低于 51%
+			受伤时消耗双倍法力以抵消 50%接触伤害（法力不足无效）
+			每秒触碰友方单位时回复 5生命
+			'''
+	}
+
+	NearsightedGlasses: {
+		DisplayName: 近视眼镜
+		Tooltip:
+			'''
+			对不同距离的敌怪产生不同的效果
+			近距离: 增加 10%伤害
+			中距离: 增加 15%伤害并减少 15%来自射弹伤害
+			远距离: 减少 10%来自射弹伤害
+			'''
+	}
 }
 
 Projectiles: {
@@ -346,6 +380,8 @@ Projectiles: {
 	WrathLotusProj.DisplayName: 佛怒火莲
 	DiscoBallPetProj.DisplayName: 迪斯科灯球
 	HeartArrowProj.DisplayName: 心箭
+	// PaleGuardian.DisplayName: Pale Guardian
+	// PaleFistPunch.DisplayName: Pale Fist Punch
 }
 
 DamageClasses: {
@@ -464,6 +500,11 @@ Buffs: {
 	OutlawBackstepBuff: {
 		DisplayName: 极速后仰冷却中
 		Description: 暂时无法使用后仰
+	}
+
+	BaldHead: {
+		DisplayName: 光头
+		Description: +4% 伤害，+4% 暴击，受到的伤害 +4%
 	}
 }
 

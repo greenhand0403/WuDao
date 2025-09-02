@@ -20,8 +20,8 @@ namespace WuDao.Content.Projectiles.Melee
 
         public override void SetDefaults()
         {
-            Projectile.width = 11;//22
-            Projectile.height = 32;//64
+            Projectile.width = 22;
+            Projectile.height = 64;
             Projectile.friendly = true;
             Projectile.timeLeft = 300;
             Projectile.tileCollide = false;

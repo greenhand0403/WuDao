@@ -30,7 +30,7 @@ namespace WuDao.Content.Items.Weapons.Melee
             Item.rare = ItemRarityID.Red;
             Item.value = Item.buyPrice(0, 50, 0, 0);
             Item.DamageType = DamageClass.Melee; // 外观剑型
-            Item.damage = 1;           // 无效占位，实际伤害在射弹里计算
+            Item.damage = 0;           // 无效占位，实际伤害在射弹里计算
             Item.knockBack = 0f;
             Item.channel = false;
         }

@@ -243,6 +243,21 @@ Items: {
 		DisplayName: Cupid Bow
 		Tooltip: ""
 	}
+
+	PaleFist: {
+		DisplayName: Pale Fist
+		Tooltip: ""
+	}
+
+	ApeTouch: {
+		DisplayName: Ape Touch
+		Tooltip: ""
+	}
+
+	NearsightedGlasses: {
+		DisplayName: Nearsighted Glasses
+		Tooltip: ""
+	}
 }
 
 Projectiles: {
@@ -281,6 +296,8 @@ Projectiles: {
 	WrathLotusProj.DisplayName: Wrath Lotus Proj
 	DiscoBallPetProj.DisplayName: Disco Ball Pet Proj
 	HeartArrowProj.DisplayName: Heart Arrow Proj
+	PaleGuardian.DisplayName: Pale Guardian
+	PaleFistPunch.DisplayName: Pale Fist Punch
 }
 
 DamageClasses: {
@@ -399,6 +416,11 @@ Buffs: {
 	OutlawBackstepBuff: {
 		DisplayName: Outlaw Backstep Buff
 		Description: Mods.WuDao.Buffs.OutlawBackstepBuff.Description
+	}
+
+	BaldHead: {
+		DisplayName: Bald Head
+		Description: Mods.WuDao.Buffs.BaldHead.Description
 	}
 }
 

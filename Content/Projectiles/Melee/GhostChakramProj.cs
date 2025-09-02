@@ -23,7 +23,7 @@ namespace WuDao.Content.Projectiles.Melee
         private const float Steering = 0.15f;        // 回归转向平滑
 
         // —— 穿透与成长
-        private const int MaxPierce = 3;             // 最多穿透 3 敌人
+        private const int MaxPierce = 6;             // 最多穿透 6 敌人
         private const float GrowPerPierce = 0.25f;   // 穿透伤害每次 +25%
         private int pierced;                         // 已穿透次数
         private float sizeScale = 1f;                // 碰撞/绘制缩放同步增长

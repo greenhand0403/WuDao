@@ -6,80 +6,116 @@ using WuDao.Content.Items.Weapons.Melee;
 
 namespace WuDao.Content.Global.Projectiles
 {
-    // 修改原版高尔夫球的行为
     public class GolfBallMeleeGlobal : GlobalProjectile
     {
         public override bool InstancePerEntity => true;
-        // 给“彩虹杆生成的高尔夫球”打标记
-        private bool fromRainbowClub;
-        // 命中计数
-        private int hits;
-        private int lifeTicks; // 我们自己的寿命计数器
-        // 识别“是否为我们要接管的高尔夫球”
-        private static bool IsGolfBall(int type)
+
+        // ai[1] = 1 标记来自彩虹杆； ai[0] = 剩余寿命 tick
+        private const int MaxLife = 360;
+
+        private static bool IsGolfBall(int type) =>
+            type == ProjectileID.DirtGolfBall
+            || type == ProjectileID.GolfBallDyedRed
+            || type == ProjectileID.GolfBallDyedOrange
+            || type == ProjectileID.GolfBallDyedYellow
+            || type == ProjectileID.GolfBallDyedGreen          // 绿色
+            || type == ProjectileID.GolfBallDyedLimeGreen      // 黄绿色
+            || type == ProjectileID.GolfBallDyedCyan
+            || type == ProjectileID.GolfBallDyedSkyBlue
+            || type == ProjectileID.GolfBallDyedBlue
+            || type == ProjectileID.GolfBallDyedPurple
+            || type == ProjectileID.GolfBallDyedViolet
+            || type == ProjectileID.GolfBallDyedPink
+            || type == ProjectileID.GolfBallDyedBrown
+            || type == ProjectileID.GolfBallDyedBlack;
+
+        private static bool IsFromRainbowClub(Projectile projectile, IEntitySource source)
         {
-            // 把你在 Shoot 里用到的“各色高尔夫球 ProjectileID”都放进来
-            return type == ProjectileID.DirtGolfBall
-                || type == ProjectileID.GolfBallDyedRed
-                || type == ProjectileID.GolfBallDyedOrange
-                || type == ProjectileID.GolfBallDyedYellow
-                || type == ProjectileID.GolfBallDyedGreen
-                || type == ProjectileID.GolfBallDyedLimeGreen
-                || type == ProjectileID.GolfBallDyedCyan
-                || type == ProjectileID.GolfBallDyedBlue
-                || type == ProjectileID.GolfBallDyedPurple
-                || type == ProjectileID.GolfBallDyedViolet
-                || type == ProjectileID.GolfBallDyedPink
-                || type == ProjectileID.GolfBallDyedBrown
-                || type == ProjectileID.GolfBallDyedBlack
-                || type == ProjectileID.GolfBallDyedSkyBlue;
+            // 放宽：ItemUse / ItemUse_WithAmmo 都算；另外用持有物兜底
+            bool bySource =
+                source is EntitySource_ItemUse_WithAmmo isrc1 && isrc1.Item?.type == ModContent.ItemType<RainBowGolfClubs>()
+             || source is EntitySource_ItemUse isrc2 && isrc2.Item?.type == ModContent.ItemType<RainBowGolfClubs>();
+
+            if (bySource) return true;
+
+            // 兜底：看发射者当帧的持有物（有时 source 不带 item）
+            int owner = projectile.owner;
+            if (owner >= 0 && owner < Main.maxPlayers)
+            {
+                var p = Main.player[owner];
+                if (p?.HeldItem?.type == ModContent.ItemType<RainBowGolfClubs>())
+                    return true;
+            }
+            return false;
         }
+
+        private static void InitRainbowGolfBall(Projectile projectile)
+        {
+            // 标记 + 初始化（同步字段）
+            projectile.ai[1] = 1f;
+            projectile.ai[0] = MaxLife;
+
+            projectile.DamageType = DamageClass.Melee;
+
+            // 用引擎穿透更稳（若你要自数命中，改为 ai[2] 亦可）
+            if (projectile.penetrate <= 0 || projectile.penetrate > 10)
+                projectile.penetrate = 5;
+
+            projectile.usesLocalNPCImmunity = true;
+            projectile.localNPCHitCooldown = 10;
+
+            projectile.netUpdate = true;
+        }
+
         public override void OnSpawn(Projectile projectile, IEntitySource source)
         {
-            if (!IsGolfBall(projectile.type))
-                return;
-            if (source is EntitySource_ItemUse_WithAmmo isrc && isrc.Item?.type == ModContent.ItemType<RainBowGolfClubs>())
-            {
-                fromRainbowClub = true;
-                // 1) 伤害类型改为近战（吃近战加成）
-                projectile.DamageType = DamageClass.Melee;
-                // 3) 用本地免疫 + 命中计数来实现“最多打 5 次”
-                lifeTicks = 360;
-                //    （有些高尔夫球原本是非穿透、靠弹跳命中，这里用计数来控制）
-                projectile.usesLocalNPCImmunity = true;
-                projectile.localNPCHitCooldown = 10; // 两次命中间隔，避免一帧多次
-            }
-        }
+            if (!IsGolfBall(projectile.type)) return;
 
-        public override void OnHitNPC(Projectile projectile, NPC target, NPC.HitInfo hit, int damageDone)
-        {
-            if (!fromRainbowClub) return;
-
-            hits++;
-            if (hits >= 5)
+            if (IsFromRainbowClub(projectile, source))
             {
-                projectile.Kill(); // 第 5 次命中后立刻消失
+                InitRainbowGolfBall(projectile);
             }
         }
 
         public override void PostAI(Projectile projectile)
         {
-            if (!fromRainbowClub) return;
-
-            // 每帧在 AI 之后递减寿命；到点强制 Kill
-            if (lifeTicks > 0)
+            // —— 补课式初始化：有些生成路径拿不到 item/source，这里兜底一次 ——
+            if (projectile.ai[1] != 1f && IsGolfBall(projectile.type))
             {
-                lifeTicks--;
-                if (lifeTicks <= 0)
+                // 只在前几帧尝试补一次，避免误伤别的来源的高尔夫玩法
+                if (projectile.timeLeft > 1800 - 5) // 高尔夫类原版通常长寿命；“刚生成”的一个粗略判据
                 {
-                    projectile.Kill();
-                    return;
+                    InitRainbowGolfBall(projectile);
                 }
             }
 
-            // （可选）把原版被拉高的 timeLeft 往下压，避免网络端显示差异
-            if (projectile.timeLeft > lifeTicks)
-                projectile.timeLeft = lifeTicks;
+            if (projectile.ai[1] != 1f) return; // 仍未标记则不接管
+
+            // —— 服务端权威地递减寿命，并在到期时 Kill ——
+            if (Main.netMode != NetmodeID.MultiplayerClient) // 服务器/单机
+            {
+                float remain = projectile.ai[0];
+                if (remain > 0f)
+                {
+                    remain -= 1f;
+                    projectile.ai[0] = remain;
+
+                    if (remain <= 0f)
+                    {
+                        projectile.Kill();
+                        return;
+                    }
+                }
+            }
+
+            // —— 反向钳制，覆盖原版每帧刷新 timeLeft 的行为 ——
+            int remainInt = (int)projectile.ai[0];
+            if (remainInt > 0 && projectile.timeLeft > remainInt)
+                projectile.timeLeft = remainInt;
+
+            // —— 防止“可见但不伤害” ——
+            if (!projectile.friendly)
+                projectile.friendly = true;
         }
     }
 }

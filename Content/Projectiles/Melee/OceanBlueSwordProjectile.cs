@@ -24,8 +24,8 @@ namespace WuDao.Content.Projectiles.Melee
 
         public override void SetDefaults()
         {
-            Projectile.width = 25;   // 碰撞箱
-            Projectile.height = 25;
+            Projectile.width = 54;   // 碰撞箱
+            Projectile.height = 54;
             Projectile.friendly = true;
             Projectile.tileCollide = true;
             Projectile.penetrate = -1;

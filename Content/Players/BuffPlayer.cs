@@ -21,7 +21,35 @@ namespace WuDao.Content.Players
 
         // —— 天人五衰计时 ——
         private int fiveDecayTimer;
+        private int? _baldOriginalHair = null;
+        public override void ResetEffects()
+        {
+            if (!Player.HasBuff(ModContent.BuffType<BaldHead>()) && _baldOriginalHair.HasValue)
+            {
+                Player.hair = _baldOriginalHair.Value;
+                _baldOriginalHair = null;
+            }
+        }
+        public override void FrameEffects()
+        {
+            if (Player.HasBuff(ModContent.BuffType<BaldHead>()))
+            {
+                if (!_baldOriginalHair.HasValue)
+                    _baldOriginalHair = Player.hair; // 仅第一次进入时记录原发型
 
+                Player.hair = 15; // 强制光头（发型 15）
+            }
+        }
+        public override void PostUpdateMiscEffects()
+        {
+            if (Player.HasBuff(ModContent.BuffType<BaldHead>()))
+            {
+                Player.GetDamage(DamageClass.Generic) *= 1.04f; // 伤害 +4%
+                Player.GetCritChance(DamageClass.Generic) += 4f; // 暴击 +4
+            }
+
+            // ……保留你文件里其它需要放在 PostUpdateMiscEffects 的效果（若有）……
+        }
         public override void PreUpdate()
         {
             // 战栗锁定计时
@@ -49,7 +77,7 @@ namespace WuDao.Content.Players
                     if (standingStill && solidBelow)
                     {
                         // 粒子特效：金色粒子
-                        Dust.NewDust(Player.Center, Player.width, Player.height, DustID.Gold, 2, 2, 100, default, 1.5f);
+                        // Dust.NewDust(Player.Center, Player.width, Player.height, DustID.Gold, 2, 2, 100, default, 1.5f);
                         Player.endurance += 0.50f;
                     }
                 }
@@ -255,6 +283,13 @@ namespace WuDao.Content.Players
             foreach (var it in p.bank3?.item ?? Array.Empty<Item>()) Count(it);
             foreach (var it in p.bank4?.item ?? Array.Empty<Item>()) Count(it);
             return total;
+        }
+        public override void ModifyHurt(ref Player.HurtModifiers modifiers)
+        {
+            if (Player.HasBuff<BaldHead>())
+            {
+                modifiers.FinalDamage *= 1.04f;
+            }
         }
     }
 }

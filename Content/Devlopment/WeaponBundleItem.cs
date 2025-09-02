@@ -21,62 +21,50 @@ namespace WuDao.Content.Devlopment
 
         public override bool CanRightClick() => true;
 
-        private bool IsInventoryFull(Player player)
-        {
-            for (int i = 0; i < Main.InventorySlotsTotal; i++)
-            {
-                if (player.inventory[i] == null || player.inventory[i].IsAir)
-                    return false;
-            }
-            return true;
-        }
-
         public override void RightClick(Player player)
         {
-            int added = 0, dropped = 0;
+            int addedKinds = 0;            // 完整进入背包的“物品种类”数
+            int droppedKinds = 0;          // 有任意剩余被丢在地上的“物品种类”数
+            int droppedTotalStacks = 0;    // 实际丢在地上的总数量（件/叠）
 
-            // 遍历所有加载的物品类型
+            var src = player.GetSource_Misc("WuDaoBundle");
+
             for (int type = 1; type < ItemLoader.ItemCount; type++)
             {
-                // 用临时 Item 来读取该 type 的信息
-                Item temp = new Item();
-                temp.SetDefaults(type);
-
-                // 只发放本模组(WuDao)的物品，且排除礼包本体，排除无效物品
-                // 注意：在 ModItem 类里，this.Mod 指向当前模组
-                if (temp == null || temp.IsAir)
+                // 只处理本模组的物品，且排除礼包本体
+                Item probe = new Item();
+                probe.SetDefaults(type);
+                if (probe.IsAir || probe.ModItem?.Mod != Mod || type == Type)
                     continue;
 
-                var mi = temp.ModItem;
-                if (mi == null || mi.Mod != Mod)
-                    continue;
+                int stack = probe.maxStack > 1 ? probe.maxStack : 1;
 
-                if (type == Type) // 不把礼包本体也送给玩家，避免循环刷包
-                    continue;
-
-                // 设置堆叠数：可堆叠就满堆叠，否则为 1
-                int stack = temp.maxStack > 1 ? temp.maxStack : 1;
-
-                // 构造将要给予的实例
+                // 构造要给予的物品
                 Item give = new Item();
                 give.SetDefaults(type);
                 give.stack = stack;
 
-                if (IsInventoryFull(player))
+                // 尝试放入玩家背包，返回“剩余拿不下”的部分
+                Item leftover = player.GetItem(player.whoAmI, give, GetItemSettings.LootAllSettings);
+
+                if (leftover != null && leftover.stack > 0)
                 {
-                    // 背包已满：掉落在脚下
-                    Item.NewItem(player.GetSource_Misc("WuDaoBundle"), player.Center, give.type, give.stack);
-                    dropped++;
+                    // 有剩余：把剩余那部分丢在地上
+                    Item.NewItem(src, player.getRect(), leftover.type, leftover.stack);
+                    droppedKinds++;
+                    droppedTotalStacks += leftover.stack;
                 }
                 else
                 {
-                    // 背包未满：直接放入背包
-                    player.QuickSpawnClonedItemDirect(player.GetSource_Misc("WuDaoBundle"), give);
-                    added++;
+                    // 全部成功进入背包
+                    addedKinds++;
                 }
             }
 
-            Main.NewText($"添加到背包: {added} 件WuDao物品，掉落到地面: {dropped} 件", 255, 240, 20);
+            Main.NewText(
+                $"WuDao礼包结算：进入背包 {addedKinds} 种；掉落地面 {droppedKinds} 种（共 {droppedTotalStacks} 件/叠）",
+                255, 240, 20
+            );
         }
     }
 }

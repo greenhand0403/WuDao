@@ -152,16 +152,80 @@ namespace WuDao.Content.Systems
     {
         public override bool InstancePerEntity => true;
 
-        public override void AI(Projectile projectile)
+        // —— 冻结期的“钉住值”缓存 —— //
+        private bool cacheValid;
+        private Vector2 cachedVel;
+        private float cachedRot;
+        private int? cachedExtraUpdates;
+
+        private void Capture(Projectile p)
         {
-            if (TimeStopSystem.IsFrozen)
+            if (cacheValid) return;
+            cachedVel = p.velocity;
+            cachedRot = p.rotation;
+            
+            cachedExtraUpdates = p.extraUpdates; // 少数弹幕依赖它
+            cacheValid = true;
+        }
+
+        private void ClearCache()
+        {
+            cacheValid = false;
+            cachedExtraUpdates = null;
+        }
+
+        // 冻结：阻断原生 AI，避免它在冻结中“自行播音/改状态”
+        public override bool PreAI(Projectile p)
+        {
+            if (!TimeStopSystem.IsFrozen)
             {
-                // 玩家自己的投射物依然存在，但不移动
-                projectile.velocity = Vector2.Zero;
-                projectile.ai[0] = projectile.ai[1] = 0;
-                projectile.timeLeft++; // 防止自然消失
+                // 解冻：如果之前冻结过，恢复一次关键状态
+                if (cacheValid)
+                {
+                    // 只恢复一次速度（多数情况已足够）
+                    p.velocity = cachedVel;
+                    if (cachedExtraUpdates.HasValue) p.extraUpdates = cachedExtraUpdates.Value;
+                    // 其余（friendly/hostile/rotation）通常会在后续原生AI中自然更新，无需强行改回
+                    ClearCache();
+                }
+                return true; // 允许正常 AI
+            }
+
+            // 冻结：第一次进入冻结时，抓备份
+            Capture(p);
+
+            // 维持原位置/朝向，但速度为0（画面“悬停”）
+            p.velocity = Vector2.Zero;
+            p.rotation = cachedRot;
+
+            // 让寿命不减少（否则冻结时会提前消失）
+            p.timeLeft++;
+
+            // 如果你之前为“静音”做过声音 Hook，这里无需处理；否则可在全局 Hook 里拦
+            // 关键：跳过本帧 AI，防止 AI 内部继续改状态/播音
+            return false;
+        }
+
+        public override void PostAI(Projectile p)
+        {
+            // 冻结状态下，双保险再钉一次速度
+            if (TimeStopSystem.IsFrozen && cacheValid)
+            {
+                p.velocity = Vector2.Zero;
+                p.rotation = cachedRot;
             }
         }
+
+        // 冻结时彻底禁用命中（玩家与NPC都不应被已存在弹幕打到）
+        public override bool CanHitPlayer(Projectile p, Player t)
+            => !TimeStopSystem.IsFrozen;
+        public override bool? CanHitNPC(Projectile projectile, NPC target)
+        {
+            return !TimeStopSystem.IsFrozen;
+        }
+
+        public override bool? CanDamage(Projectile p)
+            => TimeStopSystem.IsFrozen ? false : null;
     }
 
 }
