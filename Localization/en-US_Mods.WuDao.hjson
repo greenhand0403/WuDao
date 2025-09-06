@@ -258,6 +258,111 @@ Items: {
 		DisplayName: Nearsighted Glasses
 		Tooltip: ""
 	}
+
+	Baozi: {
+		DisplayName: Baozi
+		Tooltip: ""
+	}
+
+	LingZhi: {
+		DisplayName: Ling Zhi
+		Tooltip: ""
+	}
+
+	XianCao: {
+		DisplayName: Xian Cao
+		Tooltip: ""
+	}
+
+	DiamondSkin: {
+		DisplayName: Diamond Skin
+		Tooltip: ""
+	}
+
+	Kamehameha: {
+		DisplayName: Kamehameha
+		Tooltip: ""
+	}
+
+	MagneticHeavenBlade: {
+		DisplayName: Magnetic Heaven Blade
+		Tooltip: ""
+	}
+
+	QiankunShift: {
+		DisplayName: Qiankun Shift
+		Tooltip: ""
+	}
+
+	TenThousandSwords: {
+		DisplayName: Ten Thousand Swords
+		Tooltip: ""
+	}
+
+	HeavenlyPetals: {
+		DisplayName: Heavenly Petals
+		Tooltip: ""
+	}
+
+	SharkWhaleFist: {
+		DisplayName: Shark Whale Fist
+		Tooltip: ""
+	}
+
+	PassionFruit: {
+		Tooltip: ""
+		DisplayName: Passion Fruit
+	}
+
+	Kyubey: {
+		DisplayName: Kyubey
+		Tooltip: ""
+	}
+
+	ReiShi: {
+		DisplayName: Rei Shi
+		Tooltip: ""
+	}
+
+	SteamedBun: {
+		DisplayName: Steamed Bun
+		Tooltip: ""
+	}
+
+	BladeWaltz: {
+		DisplayName: Blade Waltz
+		Tooltip: ""
+	}
+
+	Feixian: {
+		DisplayName: Feixian
+		Tooltip: ""
+	}
+
+	LingboWeibu: {
+		DisplayName: Lingbo Weibu
+		Tooltip: ""
+	}
+
+	ShengLongBa: {
+		DisplayName: Sheng Long Ba
+		Tooltip: ""
+	}
+
+	Stampede: {
+		DisplayName: Stampede
+		Tooltip: ""
+	}
+
+	WhiteBoneClaw: {
+		DisplayName: White Bone Claw
+		Tooltip: ""
+	}
+
+	XiangLong18: {
+		DisplayName: Xiang Long18
+		Tooltip: ""
+	}
 }
 
 Projectiles: {
@@ -298,6 +403,7 @@ Projectiles: {
 	HeartArrowProj.DisplayName: Heart Arrow Proj
 	PaleGuardian.DisplayName: Pale Guardian
 	PaleFistPunch.DisplayName: Pale Fist Punch
+	KyubeyPetProjectile.DisplayName: Kyubey Pet Projectile
 }
 
 DamageClasses: {
@@ -422,6 +528,21 @@ Buffs: {
 		DisplayName: Bald Head
 		Description: Mods.WuDao.Buffs.BaldHead.Description
 	}
+
+	DiamondSkinBuff: {
+		DisplayName: Diamond Skin Buff
+		Description: Mods.WuDao.Buffs.DiamondSkinBuff.Description
+	}
+
+	ShortInvulnBuff: {
+		DisplayName: Short Invuln Buff
+		Description: Mods.WuDao.Buffs.ShortInvulnBuff.Description
+	}
+
+	KyubeyPetBuff: {
+		Description: Mods.WuDao.Buffs.KyubeyPetBuff.Description
+		DisplayName: Kyubey Pet Buff
+	}
 }
 
 Configs: {
@@ -475,3 +596,5 @@ Configs: {
 }
 
 Tiles.PyramidStatueTile.MapEntry: Pyramid Statue Tile
+"Keybinds.Cast/Charge Juexue.DisplayName": Cast/ Charge  Juexue
+NPCs.WanderingBeggar.DisplayName: Wandering Beggar

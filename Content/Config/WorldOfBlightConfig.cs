@@ -7,8 +7,9 @@ using Terraria.ModLoader.Config;
 
 namespace WuDao.Content.Config
 {
+    // TODO: 翻译世界之毒配置
     // ================================
-    // 1) 配置：在模组配置菜单可调
+    // 1) 配置：在模组配置菜单可调 人间之毒 人生病了产生白细胞，地球生病了产生生物，活着的都是勇者，每时每刻都在承受世界之毒。随游戏进度增强。
     // ================================
     public class WorldOfBlightConfig : ModConfig
     {

@@ -5,18 +5,42 @@ using Microsoft.Xna.Framework;
 
 namespace WuDao.Content.Systems
 {
-    // 静止怀表 冻结时间的辅助类
+    public enum FreezeScope { None, Global, Feixian }
+    // 冻结时间的辅助类
     public static class TimeStopSystem
     {
         public static bool IsFrozen = false;
         public static int Timer = 0;
-
+        // ★ 新增：冻结作用域 & 允许放行的玩家（飞仙施法者）
+        public static FreezeScope Scope = FreezeScope.None;
+        public static int AllowedPlayer = -1;
         public static void StartFreeze(int duration = 300)
         {
             IsFrozen = true;
             Timer = duration;
+            Scope = FreezeScope.Global;
+            AllowedPlayer = -1;
+        }
+        // ★ 新增：仅用于天外飞仙的“定向冻结”，放行某位玩家的友方弹幕
+        public static void StartFeixianFreeze(int playerWhoAmI, int duration)
+        {
+            IsFrozen = true;
+            Timer = duration;
+            Scope = FreezeScope.Feixian;
+            AllowedPlayer = playerWhoAmI;
         }
 
+        // ★ 新增：如果当前是飞仙冻结，就结束它（避免误停在全局冻结状态）
+        public static void StopIfFeixian()
+        {
+            if (Scope == FreezeScope.Feixian)
+            {
+                IsFrozen = false;
+                Timer = 0;
+                Scope = FreezeScope.None;
+                AllowedPlayer = -1;
+            }
+        }
         public static void Update()
         {
             if (IsFrozen)
@@ -26,6 +50,8 @@ namespace WuDao.Content.Systems
                 {
                     IsFrozen = false;
                     Timer = 0;
+                    Scope = FreezeScope.None;
+                    AllowedPlayer = -1;
                 }
             }
         }
@@ -179,31 +205,28 @@ namespace WuDao.Content.Systems
         {
             if (!TimeStopSystem.IsFrozen)
             {
-                // 解冻：如果之前冻结过，恢复一次关键状态
                 if (cacheValid)
                 {
-                    // 只恢复一次速度（多数情况已足够）
                     p.velocity = cachedVel;
                     if (cachedExtraUpdates.HasValue) p.extraUpdates = cachedExtraUpdates.Value;
-                    // 其余（friendly/hostile/rotation）通常会在后续原生AI中自然更新，无需强行改回
                     ClearCache();
                 }
-                return true; // 允许正常 AI
+                return true;
             }
 
-            // 冻结：第一次进入冻结时，抓备份
-            Capture(p);
+            // ★ 飞仙定向冻结：放行施法者的友方弹幕
+            if (TimeStopSystem.Scope == FreezeScope.Feixian
+                && p.owner == TimeStopSystem.AllowedPlayer
+                && p.friendly && !p.hostile)
+            {
+                return true; // 不冻结本人的友方弹幕
+            }
 
-            // 维持原位置/朝向，但速度为0（画面“悬停”）
+            Capture(p);
             p.velocity = Vector2.Zero;
             p.rotation = cachedRot;
-
-            // 让寿命不减少（否则冻结时会提前消失）
             p.timeLeft++;
-
-            // 如果你之前为“静音”做过声音 Hook，这里无需处理；否则可在全局 Hook 里拦
-            // 关键：跳过本帧 AI，防止 AI 内部继续改状态/播音
-            return false;
+            return false; // 冻结其余弹幕
         }
 
         public override void PostAI(Projectile p)
@@ -221,11 +244,27 @@ namespace WuDao.Content.Systems
             => !TimeStopSystem.IsFrozen;
         public override bool? CanHitNPC(Projectile projectile, NPC target)
         {
-            return !TimeStopSystem.IsFrozen;
+            if (!TimeStopSystem.IsFrozen) return null;
+
+            // ★ 飞仙定向冻结：仅放行施法者的友方弹幕命中
+            if (TimeStopSystem.Scope == FreezeScope.Feixian
+                && projectile.owner == TimeStopSystem.AllowedPlayer
+                && projectile.friendly && !projectile.hostile)
+                return true;
+
+            return false;
         }
 
         public override bool? CanDamage(Projectile p)
-            => TimeStopSystem.IsFrozen ? false : null;
+        {
+            // ★ 冻结期默认禁伤，但放行“飞仙施法者的友方弹幕”
+            if (!TimeStopSystem.IsFrozen) return null;
+            if (TimeStopSystem.Scope == FreezeScope.Feixian
+                && p.owner == TimeStopSystem.AllowedPlayer
+                && p.friendly && !p.hostile)
+                return true;
+            return false;
+        }
     }
 
 }
