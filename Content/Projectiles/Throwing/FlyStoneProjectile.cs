@@ -4,6 +4,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Terraria.GameContent;
 
 namespace WuDao.Content.Projectiles.Throwing
 {
@@ -73,7 +74,7 @@ namespace WuDao.Content.Projectiles.Throwing
 
         public override bool PreDraw(ref Color lightColor)
         {
-            Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
+            Texture2D texture = TextureAssets.Projectile[Projectile.type].Value;
             Vector2 origin = new Vector2(texture.Width / 2, texture.Height / 2);
             // 画拖尾
             for (int i = Projectile.oldPos.Length - 1; i > 0; i--)

@@ -304,7 +304,7 @@ namespace WuDao.Content.Players
                         Player.GetSource_Misc("BladeWaltz"),
                         spawn,
                         dir * speed,
-                        Terraria.ID.ProjectileID.FirstFractal, // ★ 第一分形视觉 / 伤害体
+                        ProjectileID.FirstFractal, // ★ 第一分形视觉 / 伤害体
                         damage,
                         knockback,
                         Player.whoAmI
@@ -312,7 +312,7 @@ namespace WuDao.Content.Players
 
                     if (projEnt != null)
                     {
-                        projEnt.timeLeft = 45;
+                        projEnt.timeLeft = 30;
                         projEnt.tileCollide = false;
                         projEnt.friendly = true;    // ★ 强制友方，确保命中
                         projEnt.hostile = false;
@@ -322,9 +322,9 @@ namespace WuDao.Content.Players
                     // 残影/特效（可选）
                 for (int i = 0; i < 16; i++)
                 {
-                    var d = Terraria.Dust.NewDustPerfect(
+                    var d = Dust.NewDustPerfect(
                         spawn + Main.rand.NextVector2Circular(18, 18),
-                        Terraria.ID.DustID.SilverFlame,
+                        DustID.SilverFlame,
                         Main.rand.NextVector2Circular(2, 2),
                         150, default, 1.1f
                     );

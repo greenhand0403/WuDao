@@ -447,6 +447,11 @@ Items: {
 		// DisplayName: Xiang Long18
 		// Tooltip: ""
 	}
+
+	LoveHook: {
+		// Tooltip: ""
+		// DisplayName: Love Hook
+	}
 }
 
 Projectiles: {
@@ -488,6 +493,7 @@ Projectiles: {
 	// PaleGuardian.DisplayName: Pale Guardian
 	// PaleFistPunch.DisplayName: Pale Fist Punch
 	// KyubeyPetProjectile.DisplayName: Kyubey Pet Projectile
+	// LoveHookProjectile.DisplayName: Love Hook Projectile
 }
 
 DamageClasses: {

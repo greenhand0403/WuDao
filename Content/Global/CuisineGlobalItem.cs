@@ -6,11 +6,57 @@ using WuDao.Content.Players;
 using Terraria.DataStructures;
 using Microsoft.Xna.Framework;
 using WuDao.Content.Items;
+using System.Collections.Generic;
+using WuDao.Content.Items.Weapons.Melee;
 
 namespace WuDao.Content.Global
 {
+    /// <summary>
+    /// “厨具 / 美食”集合及查询。
+    /// 只要把物品 type 放到相应集合里，系统就会在伤害结算时给出加成。
+    /// </summary>
+    public static class CuisineCollections
+    {
+        /// <summary>厨具集合：会吃“厨艺值”乘区加成</summary>
+        public static readonly HashSet<int> Cookware = new()
+        {
+            // 华夫饼烘烤模
+            ItemID.WaffleIron,
+            ModContent.ItemType<BlasterPliers>(),
+        };
+
+        /// <summary>美食集合：会吃“美味值”乘区加成</summary>
+        public static readonly HashSet<int> Gourmet = new()
+        {
+            // 糖棒剑、火腿棍、蜂巢球、水果蛋糕旋刃、香蕉回旋镖、玉米糖步枪、星形茴香、（饰品）蜂巢
+            ItemID.CandyCaneSword,
+            ItemID.HamBat,
+            ItemID.HiveFive,            // 蜂巢球（悠悠球）
+            ItemID.FruitcakeChakram,    // 水果蛋糕旋刃
+            ItemID.Bananarang,          // 香蕉回旋镖
+            ItemID.CandyCornRifle,      // 玉米糖步枪
+            ItemID.StarAnise,           // 星形茴香（投掷）
+            ItemID.HoneyComb,           // 饰品蜂巢（本身无伤害，仅做分类展示/拓展用）
+        };
+
+        public static bool IsCookware(int type) => Cookware.Contains(type);
+        public static bool IsGourmet(int type) => Gourmet.Contains(type);
+
+        /// <summary>便捷注册（可在 Mod.Load 里调用动态扩充）</summary>
+        public static void AddCookware(params int[] types) { foreach (var t in types) Cookware.Add(t); }
+        public static void AddGourmet(params int[] types) { foreach (var t in types) Gourmet.Add(t); }
+    }
+
     public class CuisineGlobalItem : GlobalItem
     {
+        // 每点数值折算为多少“额外倍数”。举例：0.01 => 100 点 = +100% = ×2
+        // 你可以按自己的数值膨胀度调这两个常量。
+        public const float PerCookingPointToBonus = 0.01f;
+        public const float PerDeliciousPointToBonus = 0.01f;
+
+        // “最高 300%”→ 额外倍数上限为 +3.0（最终乘区为 1 + 3 = ×4）
+        public const float MaxExtraMultiplier = 3f;
+
         // 更稳妥：制作瞬间直接扫描背包，而不是仅依赖 HasCookbook 标志
         private static bool HasCookbookNow(Player player)
         {
@@ -66,6 +112,38 @@ namespace WuDao.Content.Global
                 CuisineSystem.OnCraftedAndRefresh(player, item.type);
             }
         }
+        // 把“厨艺值 / 美味值”转成伤害乘区（上限 +300%）
+        public override void ModifyWeaponDamage(Item item, Player player, ref StatModifier damage)
+        {
+            var cp = player.GetModPlayer<CuisinePlayer>();
 
+            // 厨具 → 厨艺值乘区
+            if (CuisineCollections.IsCookware(item.type))
+            {
+                float extra = MathHelper.Clamp(cp.CookingSkill * PerCookingPointToBonus, 0f, MaxExtraMultiplier);
+                damage *= (1f + extra);
+            }
+
+            // 美食 → 美味值乘区
+            if (CuisineCollections.IsGourmet(item.type))
+            {
+                float extra = MathHelper.Clamp(cp.Deliciousness * PerDeliciousPointToBonus, 0f, MaxExtraMultiplier);
+                damage *= (1f + extra);
+            }
+        }
+
+        // 仅做标记展示（可选）
+        public override void ModifyTooltips(Item item, List<Terraria.ModLoader.TooltipLine> tooltips)
+        {
+            if (CuisineCollections.IsCookware(item.type))
+                tooltips.Add(new TooltipLine(Mod, "CuisineTag", "厨具"));
+            if (CuisineCollections.IsGourmet(item.type))
+                tooltips.Add(new TooltipLine(Mod, "CuisineTag", "美食"));
+        }
+
+        // 说明：饰品一般无直接伤害，这里不做处理。
+        // 若你以后做“会发射弹幕的饰品/召唤类饰品”，其伤害会在生成时读取玩家面板，
+        // 上面 ModifyWeaponDamage 的乘区已能覆盖到。
+        public override bool InstancePerEntity => false;
     }
 }
