@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 using WuDao.Content.Players;
 using WuDao.Content.Systems;
@@ -11,9 +13,48 @@ using WuDao.Systems;
 
 namespace WuDao
 {
+	// 把消息枚举放到一个公共位置，避免到处重复定义
+	public enum MessageType : byte
+	{
+		SyncLifePenalty
+	}
 	// Please read https://github.com/tModLoader/tModLoader/wiki/Basic-tModLoader-Modding-Guide#mod-skeleton-contents for more information about the various files in a mod.
 	public class WuDao : Mod
 	{
+		public override void HandlePacket(BinaryReader reader, int whoAmI)
+		{
+			MessageType msg = (MessageType)reader.ReadByte();
+
+			switch (msg)
+			{
+				case MessageType.SyncLifePenalty:
+					{
+						byte plr = reader.ReadByte();
+						int penalty = reader.ReadInt32();
+
+						if (plr >= 0 && plr < Main.maxPlayers)
+						{
+							Player player = Main.player[plr];
+							if (player != null && player.active)
+							{
+								// 把同步到的惩罚值赋给 ModPlayer
+								player.GetModPlayer<PotionPlayer>().maxLifePenalty = penalty;
+							}
+						}
+
+						// 服务端把这个包转发给所有其他客户端（避免只同步给发起者）
+						if (Main.netMode == NetmodeID.Server)
+						{
+							ModPacket echo = GetPacket();
+							echo.Write((byte)MessageType.SyncLifePenalty);
+							echo.Write(plr);
+							echo.Write(penalty);
+							echo.Send(toClient: -1, ignoreClient: whoAmI);
+						}
+						break;
+					}
+			}
+		}
 		/// <summary>
 		/// var wudao = ModLoader.GetMod("WuDao");
 		/// <br>int made = (int)(wudao?.Call("GetCookbookMadeCount", Main.LocalPlayer) ?? 0);</br>

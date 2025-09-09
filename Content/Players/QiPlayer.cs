@@ -7,6 +7,7 @@ using WuDao.Content.Juexue.Base;
 using WuDao.Content.Juexue.Active;
 using Terraria.ID;
 using WuDao.Content.Systems;
+using System;
 
 namespace WuDao.Content.Players
 {
@@ -231,16 +232,64 @@ namespace WuDao.Content.Players
                 else
                 {
                     Player.velocity = dir * speed;
+                    int damage = 120;                     // 伤害自行调
 
                     // 每 2 帧在当前位置生成极短命友方投射物（路径伤害；放行已在 TimeStopSystem 里处理）
                     if ((FeixianTicks % 2) == 0)
                     {
                         int projType = ProjectileID.FirstFractal;  // 天顶剑视觉；也可换成 EnchantedBeam
-                        int damage = 120;                     // 伤害自行调
-                        int proj = Projectile.NewProjectile(Player.GetSource_Misc("FeixianTrail"), Player.Center, dir * 26f,
+                        int proj = Projectile.NewProjectile(
+                            Player.GetSource_Misc("FeixianTrail"),
+                            Player.Center,
+                            dir * 26f,
                             projType, damage, 4f, Player.whoAmI);
                         Main.projectile[proj].timeLeft = 30;
                         Main.projectile[proj].tileCollide = false;
+                    }
+                    // ★ 在飞行路径四周生成“花瓣环”：每 6 帧一圈，6~8 片
+                    if ((FeixianTicks % 6) == 0)
+                    {
+                        int petals = 6;                 // 每圈花瓣数量
+                        float radius = 32f;             // 出生半径（围绕玩家）
+                        float forwardSpeed = 18f;       // 沿路径前进分量
+                        float outwardMin = 3f;          // 向外发散速度范围
+                        float outwardMax = 7f;
+
+                        // 法线（与 dir 垂直），用于做环
+                        Vector2 normal = new Vector2(-dir.Y, dir.X);
+                        float baseAngle = Main.rand.NextFloat(0f, MathHelper.TwoPi);
+
+                        for (int i = 0; i < petals; i++)
+                        {
+                            float ang = baseAngle + i * MathHelper.TwoPi / petals;
+                            // 以 dir/normal 为正交基构造圆环点
+                            Vector2 ringOffset = (float)Math.Cos(ang) * normal + (float)Math.Sin(ang) * dir;
+                            Vector2 spawnPos = Player.Center + ringOffset * radius;
+
+                            // 速度 = 沿路线前进 + 径向微外扩
+                            Vector2 outward = (spawnPos - Player.Center).SafeNormalize(Vector2.UnitX);
+                            Vector2 vel = dir * forwardSpeed + outward * Main.rand.NextFloat(outwardMin, outwardMax);
+
+                            var p = Projectile.NewProjectileDirect(
+                                Player.GetSource_Misc("FeixianPetals"),
+                                spawnPos,
+                                vel,
+                                ProjectileID.FlowerPetal,        // 原版花瓣
+                                damage, 3f, Player.whoAmI
+                            );
+                            if (p != null)
+                            {
+                                p.friendly = true;
+                                p.hostile = false;
+                                p.tileCollide = false;           // 防止被地形卡住（看喜好可改为 true）
+                                p.timeLeft = 45;                 // 花瓣寿命
+                                p.penetrate = 1;                 // 每片最多命中 1 次（按需调整）
+                                p.usesLocalNPCImmunity = true;   // 本地免疫，避免一群花瓣同帧狂打
+                                p.localNPCHitCooldown = 12;
+                                // 可选：近战系数
+                                p.DamageType = DamageClass.Melee; // 或 Generic
+                            }
+                        }
                     }
                 }
 

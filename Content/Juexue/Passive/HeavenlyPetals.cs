@@ -9,7 +9,6 @@ using WuDao.Common;
 
 namespace WuDao.Content.Juexue.Passive
 {
-    // TODO: 增加花瓣射弹
     public class HeavenlyPetals : JuexueItem
     {
         public override bool IsActive => false; // 被动
@@ -32,8 +31,7 @@ namespace WuDao.Content.Juexue.Passive
             if (Main.rand.NextFloat() > Chance) return;
             if (!qi.TrySpendQi(Cost)) return;
 
-            // 原版占位弹幕：花瓣可用花叶/水晶碎片等
-            int projType = ProjectileID.CrystalLeafShot;
+            int projType = ProjectileID.FlowerPowPetal;
             Vector2 mouse = Main.MouseWorld;
             float count = 12.0f;
             for (int i = 0; i < 12; i++)
