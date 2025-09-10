@@ -79,6 +79,8 @@ namespace WuDao.Content.Global
                     int bt = ContentSamples.ItemsByType[item.type].buffTime; // 帧
                     if (bt > 0) p.Deliciousness += bt;
                     CombatText.NewText(player.Hitbox, Color.Green, "品尝新食物");
+                    // 触发食物海事件
+                    FoodRainSystem.TryTrigger(player);
                 }
             }
         }

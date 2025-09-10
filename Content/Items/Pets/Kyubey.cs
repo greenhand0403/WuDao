@@ -79,6 +79,13 @@ namespace WuDao.Content.Items.Pets
         {
             Main.projFrames[Projectile.type] = RunCount;  // ← 使用我们刚做好的 6 帧精灵表
             Main.projPet[Projectile.type] = true;
+
+            // 人物选择界面的宠物预览（静态展示用，不跑 AI）
+            ProjectileID.Sets.CharacterPreviewAnimations[Projectile.type] =
+                ProjectileID.Sets.SimpleLoop(0, Main.projFrames[Projectile.type], frameSpeed)
+                    .WithOffset(-10, -20f)     // 预览相对位置，可按需要微调
+                    .WithSpriteDirection(-1)   // 朝向
+                    .WithCode(DelegateMethods.CharacterPreview.Float); // 浮空效果
         }
 
         public override void SetDefaults()

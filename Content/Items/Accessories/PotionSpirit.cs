@@ -5,7 +5,6 @@ using WuDao.Content.Players;
 
 namespace WuDao.Content.Items.Accessories
 {
-    [AutoloadEquip(EquipType.Neck)] // 随意：项链位
     public class PotionSpirit : ModItem
     {
         // public override void SetStaticDefaults()

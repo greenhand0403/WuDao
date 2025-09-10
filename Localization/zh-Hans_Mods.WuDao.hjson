@@ -452,6 +452,21 @@ Items: {
 		// Tooltip: ""
 		// DisplayName: Love Hook
 	}
+
+	PotionSpirit: {
+		// DisplayName: Potion Spirit
+		// Tooltip: ""
+	}
+
+	EverlastingWine: {
+		// DisplayName: Everlasting Wine
+		// Tooltip: ""
+	}
+
+	FoodGodSummonItem: {
+		// DisplayName: Food God Summon Item
+		// Tooltip: ""
+	}
 }
 
 Projectiles: {
@@ -494,6 +509,7 @@ Projectiles: {
 	// PaleFistPunch.DisplayName: Pale Fist Punch
 	// KyubeyPetProjectile.DisplayName: Kyubey Pet Projectile
 	// LoveHookProjectile.DisplayName: Love Hook Projectile
+	// FoodRainProjectile.DisplayName: Food Rain Projectile
 }
 
 DamageClasses: {
@@ -633,6 +649,11 @@ Buffs: {
 		// Description: Mods.WuDao.Buffs.KyubeyPetBuff.Description
 		// DisplayName: Kyubey Pet Buff
 	}
+
+	WineCooldownBuff: {
+		// DisplayName: Wine Cooldown Buff
+		// Description: Mods.WuDao.Buffs.WineCooldownBuff.Description
+	}
 }
 
 Configs: {
@@ -687,4 +708,8 @@ Configs: {
 
 // Tiles.PyramidStatueTile.MapEntry: Pyramid Statue Tile
 // "Keybinds.Cast/Charge Juexue.DisplayName": Cast/ Charge  Juexue
-// NPCs.WanderingBeggar.DisplayName: Wandering Beggar
+
+NPCs: {
+	// WanderingBeggar.DisplayName: Wandering Beggar
+	// FoodGodBoss.DisplayName: Food God Boss
+}
