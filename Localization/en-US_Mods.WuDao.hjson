@@ -383,6 +383,11 @@ Items: {
 		DisplayName: Food God Summon Item
 		Tooltip: ""
 	}
+
+	GlitteringClaw: {
+		Tooltip: ""
+		DisplayName: Glittering Claw
+	}
 }
 
 Projectiles: {
@@ -426,6 +431,11 @@ Projectiles: {
 	KyubeyPetProjectile.DisplayName: Kyubey Pet Projectile
 	LoveHookProjectile.DisplayName: Love Hook Projectile
 	FoodRainProjectile.DisplayName: Food Rain Projectile
+	SharkProjectile.DisplayName: Shark Projectile
+	GlitteringClawHoldout.DisplayName: Glittering Claw Holdout
+	HorseItemVariantProjectile.DisplayName: Horse Item Variant Projectile
+	UnicornProjectile.DisplayName: Unicorn Projectile
+	WyvernCompositeProjectile.DisplayName: Wyvern Composite Projectile
 }
 
 DamageClasses: {
