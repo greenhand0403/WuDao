@@ -10,8 +10,18 @@ namespace WuDao.Content.Items.Weapons.Magic
     public class BasiliskChargeProj : ModProjectile
     {
         public override string Texture => $"Terraria/Images/NPC_{NPCID.DesertBeast}";
-
-
+        private Texture2D tex;
+        public override void Load()
+        {
+            if (!Main.dedServ)
+            {
+                tex = ModContent.Request<Texture2D>(Texture).Value;
+            }
+        }
+        public override void Unload()
+        {
+            tex = null;
+        }
         public override void SetStaticDefaults()
         {
             // 原版石化蜥有多帧
@@ -103,7 +113,7 @@ namespace WuDao.Content.Items.Weapons.Magic
         }
         public override bool PreDraw(ref Color lightColor)
         {
-            Texture2D tex = ModContent.Request<Texture2D>(Texture).Value;
+            // Texture2D tex = ModContent.Request<Texture2D>(Texture).Value;
             int frames = Main.projFrames[Projectile.type];
             int frameHeight = tex.Height / frames;
             Rectangle src = new Rectangle(0, frameHeight * Projectile.frame, tex.Width, frameHeight);

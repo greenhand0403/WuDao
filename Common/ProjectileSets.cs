@@ -51,6 +51,16 @@ namespace WuDao.Common
     }
     public static class ItemSets
     {
+        public static readonly HashSet<int> GemSet = new()
+        {
+            ItemID.Diamond,
+            ItemID.Amber,
+            ItemID.Emerald,
+            ItemID.Ruby,
+            ItemID.Sapphire,
+            ItemID.Topaz,
+            ItemID.Amethyst
+        };
         public static readonly HashSet<int> FruitSet = new()
         {
             ItemID.Apple,
@@ -187,6 +197,32 @@ namespace WuDao.Common
             ProjectileID.MinecartMechLaser,
             ProjectileID.ScutlixLaser,
             ProjectileID.MoonlordTurretLaser
+        };
+    }
+    public static class NPCSets
+    {
+        // 变形怪
+        public static readonly HashSet<int> MorphingSet = new()
+        {
+            NPCID.Harpy,
+            NPCID.Nymph,
+            NPCID.DesertLamiaLight,
+            NPCID.DesertLamiaDark,
+            NPCID.Medusa,
+            NPCID.TheBride,
+            NPCID.PirateCrossbower
+        };
+        // 蝙蝠
+        public static readonly HashSet<int> BatSet = new()
+        {
+            NPCID.CaveBat,
+            NPCID.Hellbat,
+            NPCID.IceBat,
+            NPCID.JungleBat,
+            NPCID.SporeBat,
+            NPCID.GiantBat,
+            NPCID.IlluminantBat,
+            NPCID.Lavabat
         };
     }
 }

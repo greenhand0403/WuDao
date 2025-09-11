@@ -27,6 +27,17 @@ namespace WuDao.Content.Projectiles.Magic
             // ProjectileID.Sets.TrailCacheLength[Type] = 6;
             // ProjectileID.Sets.TrailingMode[Type] = 2;
         }
+        public override void Load()
+        {
+            if (!Main.dedServ)
+            {
+                _tex = ModContent.Request<Texture2D>("WuDao/Content/Projectiles/Magic/WrathLotusProj").Value;
+            }
+        }
+        public override void Unload()
+        {
+            _tex = null;
+        }
         public override void SetDefaults()
         {
             Projectile.width = 64; // 命中箱基准（不需要等于贴图）
@@ -57,7 +68,7 @@ namespace WuDao.Content.Projectiles.Magic
                 down: 1,                            // 1 行
                 total: 15                          // 实际总帧数 15
             );
-            _tex = ModContent.Request<Texture2D>("WuDao/Content/Projectiles/Magic/WrathLotusProj").Value;
+            // _tex = ModContent.Request<Texture2D>("WuDao/Content/Projectiles/Magic/WrathLotusProj").Value;
         }
 
         public override void OnSpawn(Terraria.DataStructures.IEntitySource source)

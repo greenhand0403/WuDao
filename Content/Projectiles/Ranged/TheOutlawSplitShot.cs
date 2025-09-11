@@ -382,6 +382,17 @@ namespace WuDao.Content.Projectiles.Ranged
         private SpriteGrid _grid;
         private Texture2D _tex;
         private SpriteAnimator _anim = new SpriteAnimator();
+        public override void Load()
+        {
+            if (!Main.dedServ)
+            {
+                _tex = ModContent.Request<Texture2D>("WuDao/Content/Projectiles/Ranged/TheOutlawFirewall").Value;
+            }
+        }
+        public override void Unload()
+        {
+            _tex = null;
+        }
         public override void SetDefaults()
         {
             Projectile.width = (int)TotalLen; // 视觉上是一堵墙，可按需调
@@ -409,7 +420,7 @@ namespace WuDao.Content.Projectiles.Ranged
                 down: 2,                            // 2 行
                 total: 11                          // 实际总帧数 11
             );
-            _tex = ModContent.Request<Texture2D>("WuDao/Content/Projectiles/Ranged/TheOutlawFirewall").Value;
+            // _tex = ModContent.Request<Texture2D>("WuDao/Content/Projectiles/Ranged/TheOutlawFirewall").Value;
         }
 
         public override void AI()

@@ -7,7 +7,7 @@ using Terraria;
 using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
-// TODO: 加载外部资源用 load 其他地方要改
+
 namespace WuDao.Content.Items.Accessories
 {
     /*
