@@ -10,7 +10,7 @@ using WuDao.Content.Juexue.Base;
 
 namespace WuDao.Content.Juexue.Passive
 {
-    // TODO: 龙形射弹从下而上，需要额外制作
+    // TODO: 龙形射弹从下而上，需要额外制作，黄龙虚影
     public class XiangLong18 : JuexueItem
     {
         public override bool IsActive => false;

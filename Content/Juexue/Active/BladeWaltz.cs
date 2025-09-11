@@ -7,6 +7,7 @@ using WuDao.Content.Juexue.Base;
 
 namespace WuDao.Content.Juexue.Active
 {
+    // 剑舞虚影
     public class BladeWaltz : JuexueItem
     {
         public override JuexueID JuexueId => JuexueID.Active_BladeWaltz;
@@ -39,7 +40,7 @@ namespace WuDao.Content.Juexue.Active
             qi.BladeWaltzStepTimer = 1;      // 立刻进入第一段
             qi.BladeWaltzTicks = 8 * 54;     // 8x0.9s
             qi.BladeWaltzTarget = -1;
-            
+
             player.RemoveAllGrapplingHooks();
 
             // 盖章冷却（含 2s 公共冷却）

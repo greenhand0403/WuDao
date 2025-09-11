@@ -25,8 +25,8 @@ namespace WuDao.Content.Players
         public Item JuexueSlot = new Item();
 
         // —— 上限道具使用次数 —— //
-        public int Used_LingZhi = 0;            // 最多 1
-        public int Used_XianCao = 0;            // 最多 5
+        public int Used_ReiShi = 0;            // 最多 1
+        public int Used_PassionFruit = 0;            // 最多 5
 
         // —— 主动技能冷却 —— //
         public readonly Dictionary<int, uint> perSkillNextUseTick = new();   // key = item.type
@@ -78,8 +78,8 @@ namespace WuDao.Content.Players
         public override void SaveData(TagCompound tag)
         {
             tag["QiMaxFromItems"] = QiMaxFromItems;
-            tag["Used_LingZhi"] = Used_LingZhi;
-            tag["Used_XianCao"] = Used_XianCao;
+            tag["Used_ReiShi"] = Used_ReiShi;
+            tag["Used_PassionFruit"] = Used_PassionFruit;
 
             // 保存绝学槽
             if (!JuexueSlot.IsAir)
@@ -89,8 +89,8 @@ namespace WuDao.Content.Players
         public override void LoadData(TagCompound tag)
         {
             QiMaxFromItems = tag.GetInt("QiMaxFromItems");
-            Used_LingZhi = tag.GetInt("Used_LingZhi");
-            Used_XianCao = tag.GetInt("Used_XianCao");
+            Used_ReiShi = tag.GetInt("Used_ReiShi");
+            Used_PassionFruit = tag.GetInt("Used_PassionFruit");
 
             if (tag.ContainsKey("JuexueSlot"))
             {

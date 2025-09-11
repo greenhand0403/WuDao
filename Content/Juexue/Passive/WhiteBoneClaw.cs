@@ -11,6 +11,7 @@ using System.Collections.Generic;
 
 namespace WuDao.Content.Juexue.Passive
 {
+    // TODO: 爪虚影
     public class WhiteBoneClaw : JuexueItem
     {
         public override bool IsActive => false;

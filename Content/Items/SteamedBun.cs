@@ -23,6 +23,11 @@ namespace WuDao.Content.Items
 
         public override bool? UseItem(Player player)
         {
+            // 50% 的几率召唤流浪乞丐
+            if (Main.rand.NextBool(2))
+            {
+                return false;
+            }
             BeggarSystem.SpawnBeggarNear(player);
             Main.NewText("你招来了流浪乞丐。", Microsoft.Xna.Framework.Color.LightGreen);
             return true;

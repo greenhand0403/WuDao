@@ -10,7 +10,7 @@ using WuDao.Content.Juexue.Base;
 
 namespace WuDao.Content.Juexue.Active
 {
-    // TODO: 万马奔腾，补射弹
+    // TODO: 万马奔腾，补射弹，马虚影
     public class Stampede : JuexueItem
     {
         public override JuexueID JuexueId => JuexueID.Active_Stampede;

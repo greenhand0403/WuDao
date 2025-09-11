@@ -317,11 +317,6 @@ Items: {
 			'''
 	}
 
-	PaleFist: {
-		// DisplayName: Pale Fist
-		// Tooltip: ""
-	}
-
 	ApeTouch: {
 		DisplayName: 猩之触
 		Tooltip:
@@ -343,134 +338,119 @@ Items: {
 			'''
 	}
 
-	Baozi: {
-		// DisplayName: Baozi
-		// Tooltip: ""
-	}
-
-	LingZhi: {
-		// DisplayName: Ling Zhi
-		// Tooltip: ""
-	}
-
-	XianCao: {
-		// DisplayName: Xian Cao
-		// Tooltip: ""
-	}
-
 	DiamondSkin: {
-		// DisplayName: Diamond Skin
-		// Tooltip: ""
+		DisplayName: 绝学·金刚不坏
+		Tooltip: "短时间内增加 70% 耐力"
 	}
 
 	Kamehameha: {
-		// DisplayName: Kamehameha
-		// Tooltip: ""
+		DisplayName: 绝学·龟派气功
+		Tooltip: "蓄力发射气功波"
 	}
 
 	MagneticHeavenBlade: {
-		// DisplayName: Magnetic Heaven Blade
-		// Tooltip: ""
+		DisplayName: 绝学·磁场天刀
+		Tooltip: "转动磁场将敌怪牵引聚集，施展天刀御敌"
 	}
 
 	QiankunShift: {
-		// DisplayName: Qiankun Shift
-		// Tooltip: ""
+		DisplayName: 绝学·乾坤大挪移
+		Tooltip: "瞬移到光标位置"
 	}
 
 	TenThousandSwords: {
-		// DisplayName: Ten Thousand Swords
-		// Tooltip: ""
+		DisplayName: 绝学·万剑归宗
+		Tooltip: "施展剑雨御敌"
 	}
 
 	HeavenlyPetals: {
-		// DisplayName: Heavenly Petals
-		// Tooltip: ""
+		DisplayName: 绝学·天女散花
+		Tooltip: "攻击时有概率朝四周发射额外射弹"
 	}
 
 	SharkWhaleFist: {
-		// DisplayName: Shark Whale Fist
-		// Tooltip: ""
+		DisplayName: 绝学·鲨鲸霸拳
+		Tooltip: "攻击时有概率发射鲨鱼和鲸鱼射弹"
 	}
 
 	PassionFruit: {
-		// Tooltip: ""
-		// DisplayName: Passion Fruit
+		Tooltip: "每次使用增加10点气力上限，最多可增加50点"
+		DisplayName: 异果
 	}
 
 	Kyubey: {
-		// DisplayName: Kyubey
-		// Tooltip: ""
+		DisplayName: 丘比
+		Tooltip: "魔法少女的契约兽"
 	}
 
 	ReiShi: {
-		// DisplayName: Rei Shi
-		// Tooltip: ""
+		DisplayName: 灵芝
+		Tooltip: "使用增加50点气力上限，限一次"
 	}
 
 	SteamedBun: {
-		// DisplayName: Steamed Bun
-		// Tooltip: ""
+		DisplayName: 馒头
+		Tooltip: "可能吸引流浪乞丐的到来"
 	}
 
 	BladeWaltz: {
-		// DisplayName: Blade Waltz
-		// Tooltip: ""
+		DisplayName: 绝学·利刃华尔兹
+		Tooltip: "利刃华尔兹！"
 	}
 
 	Feixian: {
-		// DisplayName: Feixian
-		// Tooltip: ""
+		DisplayName: 绝学·天外飞仙
+		Tooltip: "解除异常状态朝路径冲刺并发射射弹"
 	}
 
 	LingboWeibu: {
-		// DisplayName: Lingbo Weibu
-		// Tooltip: ""
+		DisplayName: 绝学·凌波微步
+		Tooltip: "施展期间有概率躲避敌怪的攻击"
 	}
 
 	ShengLongBa: {
-		// DisplayName: Sheng Long Ba
-		// Tooltip: ""
+		DisplayName: 绝学·庐山升龙霸
+		Tooltip: "自下而上打出龙形射弹"
 	}
 
 	Stampede: {
-		// DisplayName: Stampede
-		// Tooltip: ""
+		DisplayName: 绝学·万马奔腾
+		Tooltip: "召唤飞马冲击敌人"
 	}
 
 	WhiteBoneClaw: {
-		// DisplayName: White Bone Claw
-		// Tooltip: ""
+		DisplayName: 绝学·九阴白骨爪
+		Tooltip: "攻击时召唤暗影爪撕裂敌怪"
 	}
 
 	XiangLong18: {
-		// DisplayName: Xiang Long18
-		// Tooltip: ""
-	}
-
-	LoveHook: {
-		// Tooltip: ""
-		// DisplayName: Love Hook
+		DisplayName: 降龙十八掌
+		Tooltip: "攻击时发射额外射弹，并在第8次和第10次造成8倍和10倍伤害"
 	}
 
 	PotionSpirit: {
-		// DisplayName: Potion Spirit
-		// Tooltip: ""
+		DisplayName: 药水之灵
+		Tooltip: "濒死时自动喝药，优先使用背包中靠前的治疗药水"
 	}
 
 	EverlastingWine: {
-		// DisplayName: Everlasting Wine
-		// Tooltip: ""
+		DisplayName: 永生之酒
+		Tooltip: "有概率获得无敌帧，濒死时自动使用"
 	}
 
 	FoodGodSummonItem: {
-		// DisplayName: Food God Summon Item
-		// Tooltip: ""
+		DisplayName: 米饭
+		Tooltip: "召唤食神"
 	}
 
 	GlitteringClaw: {
-		// Tooltip: ""
-		// DisplayName: Glittering Claw
+		Tooltip: "锋利的爪子闪耀着金铁的寒光"
+		DisplayName: 闪亮爪套
+	}
+
+	ScallionSword: {
+		Tooltip: "大葱鸭好吃又能打"
+		DisplayName: 葱剑
 	}
 }
 
@@ -486,11 +466,9 @@ Projectiles: {
 	CactusNeedleProjectile.DisplayName: 仙人掌飞针
 	OceanBlueSwordProjectile.DisplayName: 海蓝旋涡
 	HellfireSwordProjectile.DisplayName: 狱火斩击
-	// ChargedSlashProj.DisplayName: Charged Slash Proj
 	DashSlashProj.DisplayName: 御剪直刺
 	BrightVerdictProjectile.DisplayName: 神圣裁决
 	CloudArrowProjectile.DisplayName: 穿云箭
-	// HolyDiamondSpinHitbox.DisplayName: Holy Diamond Spin Hitbox
 	HolyKiteBurstHitbox.DisplayName: 神圣十字星
 	WindBladeProjectile.DisplayName: 风刃
 	RainbowGolfBall.DisplayName: 彩虹高尔夫球
@@ -510,21 +488,17 @@ Projectiles: {
 	WrathLotusProj.DisplayName: 佛怒火莲
 	DiscoBallPetProj.DisplayName: 迪斯科灯球
 	HeartArrowProj.DisplayName: 心箭
-	// PaleGuardian.DisplayName: Pale Guardian
-	// PaleFistPunch.DisplayName: Pale Fist Punch
-	// KyubeyPetProjectile.DisplayName: Kyubey Pet Projectile
-	// LoveHookProjectile.DisplayName: Love Hook Projectile
-	// FoodRainProjectile.DisplayName: Food Rain Projectile
-	// SharkProjectile.DisplayName: Shark Projectile
-	// GlitteringClawHoldout.DisplayName: Glittering Claw Holdout
-	// HorseItemVariantProjectile.DisplayName: Horse Item Variant Projectile
-	// UnicornProjectile.DisplayName: Unicorn Projectile
-	// WyvernCompositeProjectile.DisplayName: Wyvern Composite Projectile
+	KyubeyPetProjectile.DisplayName: 丘比
+	FoodRainProjectile.DisplayName: 食物海射弹
+	SharkProjectile.DisplayName: 鲨射弹
+	GlitteringClawHoldout.DisplayName: 闪亮爪套射弹
+	HorseItemVariantProjectile.DisplayName: 骏马射弹
+	UnicornProjectile.DisplayName: 独角兽射弹
+	WyvernCompositeProjectile.DisplayName: 飞龙射弹
+	ScallionSwordProj.DisplayName: 葱剑射弹
 }
 
 DamageClasses: {
-	// ExternalPowerDamageClass.DisplayName: External Power Damage Class
-	// InternalPowerDamageClass.DisplayName: Internal Power Damage Class
 	ChiEnergyDamageClass.DisplayName: 真气
 	SupremeDamageClass.DisplayName: 念气
 }
@@ -646,23 +620,23 @@ Buffs: {
 	}
 
 	DiamondSkinBuff: {
-		// DisplayName: Diamond Skin Buff
-		// Description: Mods.WuDao.Buffs.DiamondSkinBuff.Description
+		DisplayName: 金刚不坏
+		Description: 佛门金身护佑着你
 	}
 
 	ShortInvulnBuff: {
-		// DisplayName: Short Invuln Buff
-		// Description: Mods.WuDao.Buffs.ShortInvulnBuff.Description
+		DisplayName: 乾坤大挪移冷却中
+		Description: 暂时无法施展挪移绝学
 	}
 
 	KyubeyPetBuff: {
-		// Description: Mods.WuDao.Buffs.KyubeyPetBuff.Description
-		// DisplayName: Kyubey Pet Buff
+		Description: 丘比跟随着你
+		DisplayName: 魔法少女契约兽
 	}
 
 	WineCooldownBuff: {
-		// DisplayName: Wine Cooldown Buff
-		// Description: Mods.WuDao.Buffs.WineCooldownBuff.Description
+		DisplayName: 永生之酒冷却中
+		Description: 暂时无法使用永生之酒
 	}
 }
 
@@ -682,44 +656,44 @@ Configs: {
 	}
 
 	WorldOfBlightConfig: {
-		// DisplayName: World Of Blight Config
+		DisplayName: 世界之毒配置
 
 		Enabled: {
-			// Label: 启用世界之毒全局效果
-			// Tooltip: ""
+			Label: 启用世界之毒全局效果
+			Tooltip: ""
 		}
 
 		DamagePenaltyPerStep: {
-			// Label: 每个进度的伤害减少(%)
-			// Tooltip: 每达成一个进度，玩家造成的所有伤害按百分比减少。范围 0%~10%。默认 4%。
+			Label: 每个进度的伤害减少(%)
+			Tooltip: 每达成一个进度，玩家造成的所有伤害按百分比减少。范围 0%~10%。默认 4%。
 		}
 
 		LifeRegenPenaltyPerStep: {
-			// Label: 每个进度的生命再生减少(每秒)
-			// Tooltip: 每达成一个进度，玩家生命再生每秒减少的数值。范围 0~20。默认 4。提示：Terraria内部以每秒*2结算，代码中会自动换算。
+			Label: 每个进度的生命再生减少(每秒)
+			Tooltip: 每达成一个进度，玩家生命再生每秒减少的数值。范围 0~20。默认 4。提示：Terraria内部以每秒*2结算，代码中会自动换算。
 		}
 
 		DefensePenaltyPerStep: {
-			// Label: 每个进度的防御减少
-			// Tooltip: 每达成一个进度，玩家防御减少的数值。范围 0~30。默认 4。
+			Label: 每个进度的防御减少
+			Tooltip: 每达成一个进度，玩家防御减少的数值。范围 0~30。默认 4。
 		}
 
 		DamageFloorMultiplier: {
-			// Label: 伤害最小倍率下限
-			// Tooltip: 为避免伤害被削成0，这里设置一个下限。例如 0.1 表示最低保留10%伤害。设置为0则不设下限。
+			Label: 伤害最小倍率下限
+			Tooltip: 为避免伤害被削成0，这里设置一个下限。例如 0.1 表示最低保留10%伤害。设置为0则不设下限。
 		}
 
 		ClampLifeRegenNonNegative: {
-			// Label: 防止本DEBUFF把生命再生降为负数
-			// Tooltip: 勾选后：世界之毒在削减生命再生时，最多把正向生命再生削到 0，不会由本效果导致负数。默认启用。
+			Label: 防止本DEBUFF把生命再生降为负数
+			Tooltip: 勾选后：世界之毒在削减生命再生时，最多把正向生命再生削到 0，不会由本效果导致负数。默认启用。
 		}
 	}
 }
 
-// Tiles.PyramidStatueTile.MapEntry: Pyramid Statue Tile
-// "Keybinds.Cast/Charge Juexue.DisplayName": Cast/ Charge  Juexue
+Tiles.PyramidStatueTile.MapEntry: 迷你金字塔物块
+"Keybinds.Cast/Charge Juexue.DisplayName": 施展绝学键
 
 NPCs: {
-	// WanderingBeggar.DisplayName: Wandering Beggar
-	// FoodGodBoss.DisplayName: Food God Boss
+	WanderingBeggar.DisplayName: 流浪乞丐
+	FoodGodBoss.DisplayName: 食神
 }

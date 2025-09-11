@@ -9,7 +9,7 @@ using WuDao.Content.Juexue.Base;
 
 namespace WuDao.Content.Juexue.Active
 {
-    // TODO: 庐山升龙霸，补贴图
+    // TODO: 庐山升龙霸，补贴图，青龙虚影
     public class ShengLongBa : JuexueItem
     {
         public override JuexueID JuexueId => JuexueID.Active_ShengLongBa;

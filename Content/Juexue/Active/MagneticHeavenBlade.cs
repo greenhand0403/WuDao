@@ -11,7 +11,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace WuDao.Content.Juexue.Active
 {
-    // TODO: 增加磁场天刀射弹的贴图
+    // TODO: 增加磁场天刀射弹的贴图，绘制天刀的虚影
     public class MagneticHeavenBlade : JuexueItem
     {
         public override JuexueID JuexueId => JuexueID.Active_MagneticHeavenBlade;

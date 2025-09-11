@@ -7,6 +7,7 @@ namespace WuDao.Content.Items
 {
     public class EverlastingWine : ModItem
     {
+        // TODO: 补贴图
         // public override void SetStaticDefaults()
         // {
         //     DisplayName.SetDefault("永生之酒");

@@ -244,11 +244,6 @@ Items: {
 		Tooltip: ""
 	}
 
-	PaleFist: {
-		DisplayName: Pale Fist
-		Tooltip: ""
-	}
-
 	ApeTouch: {
 		DisplayName: Ape Touch
 		Tooltip: ""
@@ -256,21 +251,6 @@ Items: {
 
 	NearsightedGlasses: {
 		DisplayName: Nearsighted Glasses
-		Tooltip: ""
-	}
-
-	Baozi: {
-		DisplayName: Baozi
-		Tooltip: ""
-	}
-
-	LingZhi: {
-		DisplayName: Ling Zhi
-		Tooltip: ""
-	}
-
-	XianCao: {
-		DisplayName: Xian Cao
 		Tooltip: ""
 	}
 
@@ -364,11 +344,6 @@ Items: {
 		Tooltip: ""
 	}
 
-	LoveHook: {
-		Tooltip: ""
-		DisplayName: Love Hook
-	}
-
 	PotionSpirit: {
 		DisplayName: Potion Spirit
 		Tooltip: ""
@@ -388,6 +363,11 @@ Items: {
 		Tooltip: ""
 		DisplayName: Glittering Claw
 	}
+
+	ScallionSword: {
+		Tooltip: ""
+		DisplayName: Scallion Sword
+	}
 }
 
 Projectiles: {
@@ -402,11 +382,9 @@ Projectiles: {
 	CactusNeedleProjectile.DisplayName: Cactus Needle Projectile
 	OceanBlueSwordProjectile.DisplayName: Ocean Blue Sword Projectile
 	HellfireSwordProjectile.DisplayName: Hellfire Sword Projectile
-	ChargedSlashProj.DisplayName: Charged Slash Proj
 	DashSlashProj.DisplayName: Dash Slash Proj
 	BrightVerdictProjectile.DisplayName: Bright Verdict Projectile
 	CloudArrowProjectile.DisplayName: Cloud Arrow Projectile
-	HolyDiamondSpinHitbox.DisplayName: Holy Diamond Spin Hitbox
 	HolyKiteBurstHitbox.DisplayName: Holy Kite Burst Hitbox
 	WindBladeProjectile.DisplayName: Wind Blade Projectile
 	RainbowGolfBall.DisplayName: Rainbow Golf Ball
@@ -426,21 +404,17 @@ Projectiles: {
 	WrathLotusProj.DisplayName: Wrath Lotus Proj
 	DiscoBallPetProj.DisplayName: Disco Ball Pet Proj
 	HeartArrowProj.DisplayName: Heart Arrow Proj
-	PaleGuardian.DisplayName: Pale Guardian
-	PaleFistPunch.DisplayName: Pale Fist Punch
 	KyubeyPetProjectile.DisplayName: Kyubey Pet Projectile
-	LoveHookProjectile.DisplayName: Love Hook Projectile
 	FoodRainProjectile.DisplayName: Food Rain Projectile
 	SharkProjectile.DisplayName: Shark Projectile
 	GlitteringClawHoldout.DisplayName: Glittering Claw Holdout
 	HorseItemVariantProjectile.DisplayName: Horse Item Variant Projectile
 	UnicornProjectile.DisplayName: Unicorn Projectile
 	WyvernCompositeProjectile.DisplayName: Wyvern Composite Projectile
+	ScallionSwordProj.DisplayName: Scallion Sword Proj
 }
 
 DamageClasses: {
-	ExternalPowerDamageClass.DisplayName: External Power Damage Class
-	InternalPowerDamageClass.DisplayName: Internal Power Damage Class
 	ChiEnergyDamageClass.DisplayName: Chi Energy Damage Class
 	SupremeDamageClass.DisplayName: Supreme Damage Class
 }

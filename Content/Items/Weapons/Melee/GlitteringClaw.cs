@@ -10,7 +10,6 @@ namespace WuDao.Content.Items.Weapons.Melee
 {
     public class GlitteringClaw : ModItem
     {
-        public override string Texture => $"Terraria/Images/Item_{ItemID.FetidBaghnakhs}";
         public override void SetStaticDefaults()
         {
             // DisplayName.SetDefault("闪光爪套");

@@ -9,6 +9,7 @@ using WuDao.Common;
 
 namespace WuDao.Content.Juexue.Passive
 {
+    // TODO: 花瓣虚影
     public class HeavenlyPetals : JuexueItem
     {
         public override bool IsActive => false; // 被动

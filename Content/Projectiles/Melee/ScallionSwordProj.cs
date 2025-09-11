@@ -39,7 +39,7 @@ namespace WuDao.Content.Projectiles.Melee
         {
             if (!Main.dedServ)
             {
-                tex = ModContent.Request<Texture2D>("TestMod/Images/SwordLightTail_2").Value;//获取刀光的拖尾贴图
+                tex = ModContent.Request<Texture2D>("WuDao/Content/Projectiles/Melee/ScallionSwordTail").Value;//获取刀光的拖尾贴图
             }
         }
         public override void Unload()

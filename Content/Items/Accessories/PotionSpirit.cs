@@ -7,6 +7,7 @@ namespace WuDao.Content.Items.Accessories
 {
     public class PotionSpirit : ModItem
     {
+        // TODO: 补贴图
         // public override void SetStaticDefaults()
         // {
         //     DisplayName.SetDefault("药水之灵");

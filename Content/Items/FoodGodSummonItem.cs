@@ -7,7 +7,6 @@ namespace WuDao.Content.Items
 {
     public class FoodGodSummonItem : ModItem
     {
-        public override string Texture => $"Terraria/Images/Item_{ItemID.ApplePie}";
         public override void SetDefaults()
         {
             Item.width = 20; Item.height = 20;

@@ -23,12 +23,12 @@ namespace WuDao.Content.Items
         public override bool CanUseItem(Player player)
         {
             var qi = player.GetModPlayer<QiPlayer>();
-            return qi.Used_XianCao < 5;
+            return qi.Used_PassionFruit < 5;
         }
         public override bool? UseItem(Player player)
         {
             var qi = player.GetModPlayer<QiPlayer>();
-            qi.Used_XianCao++;
+            qi.Used_PassionFruit++;
             qi.QiMaxFromItems += 10;
             Main.NewText("你感到内息更稳（气力上限 +10）。", Microsoft.Xna.Framework.Color.LightSeaGreen);
             return true;

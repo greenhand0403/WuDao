@@ -9,7 +9,7 @@ using WuDao.Common;
 
 namespace WuDao.Content.Juexue.Active
 {
-    // TODO: 气功波贴图
+    // TODO: 气功波贴图，绘制乌龟虚影
     public class Kamehameha : JuexueItem
     {
         public override JuexueID JuexueId => JuexueID.Active_Kamehameha;

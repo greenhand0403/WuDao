@@ -10,7 +10,7 @@ using WuDao.Content.Projectiles.Ranged;
 
 namespace WuDao.Content.Juexue.Passive
 {
-    // TODO: 增加鲸射弹和鲨射弹
+    // TODO: 增加鲸射弹和鲨射弹，鲸鱼虚影
     public class SharkWhaleFist : JuexueItem
     {
         public override bool IsActive => false; // 被动

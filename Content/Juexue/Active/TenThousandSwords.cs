@@ -10,7 +10,7 @@ using Terraria.Utilities;
 
 namespace WuDao.Content.Juexue.Active
 {
-    // TODO: 增加剑类射弹
+    // TODO: 增加剑类射弹，剑之虚影
     public class TenThousandSwords : JuexueItem
     {
         public override JuexueID JuexueId => JuexueID.Active_TenThousandSwords;

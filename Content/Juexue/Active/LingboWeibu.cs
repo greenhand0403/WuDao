@@ -8,6 +8,7 @@ using WuDao.Content.Juexue.Base;
 
 namespace WuDao.Content.Juexue.Active
 {
+    // 步法虚影
     public class LingboWeibu : JuexueItem
     {
         public override JuexueID JuexueId => JuexueID.Active_LingboWeibu;
