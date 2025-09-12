@@ -340,116 +340,116 @@ Items: {
 
 	DiamondSkin: {
 		DisplayName: 绝学·金刚不坏
-		Tooltip: "短时间内增加 70% 耐力"
+		Tooltip: 短时间内增加 70% 耐力
 	}
 
 	Kamehameha: {
 		DisplayName: 绝学·龟派气功
-		Tooltip: "蓄力发射气功波"
+		Tooltip: 蓄力发射气功波
 	}
 
 	MagneticHeavenBlade: {
 		DisplayName: 绝学·磁场天刀
-		Tooltip: "转动磁场将敌怪牵引聚集，施展天刀御敌"
+		Tooltip: 转动磁场将敌怪牵引聚集，施展天刀御敌
 	}
 
 	QiankunShift: {
 		DisplayName: 绝学·乾坤大挪移
-		Tooltip: "瞬移到光标位置"
+		Tooltip: 瞬移到光标位置
 	}
 
 	TenThousandSwords: {
 		DisplayName: 绝学·万剑归宗
-		Tooltip: "施展剑雨御敌"
+		Tooltip: 施展剑雨御敌
 	}
 
 	HeavenlyPetals: {
 		DisplayName: 绝学·天女散花
-		Tooltip: "攻击时有概率朝四周发射额外射弹"
+		Tooltip: 攻击时有概率朝四周发射额外射弹
 	}
 
 	SharkWhaleFist: {
 		DisplayName: 绝学·鲨鲸霸拳
-		Tooltip: "攻击时有概率发射鲨鱼和鲸鱼射弹"
+		Tooltip: 攻击时有概率发射鲨鱼和鲸鱼射弹
 	}
 
 	PassionFruit: {
-		Tooltip: "每次使用增加10点气力上限，最多可增加50点"
+		Tooltip: 每次使用增加10点气力上限，最多可增加50点
 		DisplayName: 异果
 	}
 
 	Kyubey: {
 		DisplayName: 丘比
-		Tooltip: "魔法少女的契约兽"
+		Tooltip: 魔法少女的契约兽
 	}
 
 	ReiShi: {
 		DisplayName: 灵芝
-		Tooltip: "使用增加50点气力上限，限一次"
+		Tooltip: 使用增加50点气力上限，限一次
 	}
 
 	SteamedBun: {
 		DisplayName: 馒头
-		Tooltip: "可能吸引流浪乞丐的到来"
+		Tooltip: 可能吸引流浪乞丐的到来
 	}
 
 	BladeWaltz: {
 		DisplayName: 绝学·利刃华尔兹
-		Tooltip: "利刃华尔兹！"
+		Tooltip: 利刃华尔兹！
 	}
 
 	Feixian: {
 		DisplayName: 绝学·天外飞仙
-		Tooltip: "解除异常状态朝路径冲刺并发射射弹"
+		Tooltip: 解除异常状态朝路径冲刺并发射射弹
 	}
 
 	LingboWeibu: {
 		DisplayName: 绝学·凌波微步
-		Tooltip: "施展期间有概率躲避敌怪的攻击"
+		Tooltip: 施展期间有概率躲避敌怪的攻击
 	}
 
 	ShengLongBa: {
 		DisplayName: 绝学·庐山升龙霸
-		Tooltip: "自下而上打出龙形射弹"
+		Tooltip: 自下而上打出龙形射弹
 	}
 
 	Stampede: {
 		DisplayName: 绝学·万马奔腾
-		Tooltip: "召唤飞马冲击敌人"
+		Tooltip: 召唤飞马冲击敌人
 	}
 
 	WhiteBoneClaw: {
 		DisplayName: 绝学·九阴白骨爪
-		Tooltip: "攻击时召唤暗影爪撕裂敌怪"
+		Tooltip: 攻击时召唤暗影爪撕裂敌怪
 	}
 
 	XiangLong18: {
 		DisplayName: 降龙十八掌
-		Tooltip: "攻击时发射额外射弹，并在第8次和第10次造成8倍和10倍伤害"
+		Tooltip: 攻击时发射额外射弹，并在第8次和第10次造成8倍和10倍伤害
 	}
 
 	PotionSpirit: {
 		DisplayName: 药水之灵
-		Tooltip: "濒死时自动喝药，优先使用背包中靠前的治疗药水"
+		Tooltip: 濒死时自动喝药，优先使用背包中靠前的治疗药水
 	}
 
 	EverlastingWine: {
 		DisplayName: 永生之酒
-		Tooltip: "有概率获得无敌帧，濒死时自动使用"
+		Tooltip: 有概率获得无敌帧，濒死时自动使用
 	}
 
 	FoodGodSummonItem: {
 		DisplayName: 米饭
-		Tooltip: "召唤食神"
+		Tooltip: 召唤食神
 	}
 
 	GlitteringClaw: {
-		Tooltip: "锋利的爪子闪耀着金铁的寒光"
+		Tooltip: 锋利的爪子闪耀着金铁的寒光
 		DisplayName: 闪亮爪套
 	}
 
 	ScallionSword: {
-		Tooltip: "大葱鸭好吃又能打"
+		Tooltip: 大葱鸭好吃又能打
 		DisplayName: 葱剑
 	}
 }

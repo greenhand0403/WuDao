@@ -20,7 +20,7 @@ namespace WuDao.Content.Items.Weapons.Melee
             Item.value = Item.buyPrice(silver: 1);
             Item.rare = ItemRarityID.Blue;
             Item.UseSound = SoundID.Item1;
-            Item.autoReuse = true;
+            Item.autoReuse = false;
             Item.shoot = ModContent.ProjectileType<ScallionSwordProj>();
             Item.noUseGraphic = true;
         }

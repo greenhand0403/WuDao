@@ -6,6 +6,7 @@ using WuDao.Common;
 using Microsoft.Xna.Framework;
 using Terraria.GameContent;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 
 namespace WuDao.Content.Projectiles.Magic
 {
@@ -20,23 +21,18 @@ namespace WuDao.Content.Projectiles.Magic
                                                // 在 Projectile 里做动画：
         private SpriteAnimator _anim = new SpriteAnimator();
         private SpriteGrid _grid;
-        private Texture2D _tex;
-        public override void SetStaticDefaults()
-        {
-            // 需要拖尾可在此启用（可选）
-            // ProjectileID.Sets.TrailCacheLength[Type] = 6;
-            // ProjectileID.Sets.TrailingMode[Type] = 2;
-        }
+        private static Asset<Texture2D> TexAsset;
         public override void Load()
         {
             if (!Main.dedServ)
             {
-                _tex = ModContent.Request<Texture2D>("WuDao/Content/Projectiles/Magic/WrathLotusProj").Value;
+                TexAsset = ModContent.Request<Texture2D>("WuDao/Content/Projectiles/Magic/WrathLotusProj",
+                    AssetRequestMode.AsyncLoad);
             }
         }
         public override void Unload()
         {
-            _tex = null;
+            TexAsset = null;
         }
         public override void SetDefaults()
         {
@@ -68,7 +64,6 @@ namespace WuDao.Content.Projectiles.Magic
                 down: 1,                            // 1 行
                 total: 15                          // 实际总帧数 15
             );
-            // _tex = ModContent.Request<Texture2D>("WuDao/Content/Projectiles/Magic/WrathLotusProj").Value;
         }
 
         public override void OnSpawn(Terraria.DataStructures.IEntitySource source)
@@ -100,7 +95,7 @@ namespace WuDao.Content.Projectiles.Magic
         }
         public override bool PreDraw(ref Color lightColor)
         {
-            _grid.Draw(_tex, _anim.Frame, Projectile.Center, lightColor,
+            _grid.Draw(TexAsset.Value, _anim.Frame, Projectile.Center, lightColor,
                    Projectile.rotation, Projectile.scale);
             return false;
         }

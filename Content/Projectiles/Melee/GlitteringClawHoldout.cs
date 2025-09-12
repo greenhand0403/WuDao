@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
@@ -17,21 +18,17 @@ namespace WuDao.Content.Projectiles.Melee
         private const float HitboxWidth = 26f;         // 贴脸矩形宽度（越大越宽容）
         private const float RecoilSpeed = 5.2f;        // 命中后玩家轻微后坐
         private const int LocalIFrames = 8;            // 对同一NPC的本地无敌帧
-        private Texture2D tex;
-        public override void SetStaticDefaults()
-        {
-            // DisplayName.SetDefault("闪光爪套（持有）");
-        }
+        private static Asset<Texture2D> TexAsset;
         public override void Load()
         {
             if (!Main.dedServ)
             {
-                tex = ModContent.Request<Texture2D>(Texture).Value;
+                TexAsset = ModContent.Request<Texture2D>(Texture,AssetRequestMode.AsyncLoad);
             }
         }
         public override void Unload()
         {
-            tex = null;
+            TexAsset = null;
         }
         public override void SetDefaults()
         {
@@ -49,7 +46,7 @@ namespace WuDao.Content.Projectiles.Melee
             Projectile.usesLocalNPCImmunity = true;
             Projectile.localNPCHitCooldown = LocalIFrames;
 
-            Projectile.ownerHitCheck = true;           // 只在玩家能触及处命中（防穿墙）
+            Projectile.ownerHitCheck = true;           // 只在玩家能触及处命中（防穿墙
         }
 
         public override void AI()
@@ -129,8 +126,7 @@ namespace WuDao.Content.Projectiles.Melee
         public override bool PreDraw(ref Color lightColor)
         {
             // 自绘：把爪套贴在手上
-            // Texture2D tex = ModContent.Request<Texture2D>(Texture).Value;
-
+            Texture2D tex = TexAsset.Value;
             // 计算 origin：你的贴图请把“握把/手心”画在贴图的某个像素点，这里用(12, 24)举例
             Vector2 origin = new Vector2(12f, 24f);
 

@@ -39,7 +39,7 @@ namespace WuDao.Content.Items.Weapons.Ranged
             Item.shoot = ModContent.ProjectileType<TheOutlawPellet>();
             Item.shootSpeed = 6f;
             Item.useAmmo = AmmoID.None;    // 内置子弹，不消耗弹药
-            Item.crit = 90;//测试
+            Item.crit = 10;
         }
 
         public override bool AltFunctionUse(Player player) => Main.hardMode; // 血肉墙后可右键

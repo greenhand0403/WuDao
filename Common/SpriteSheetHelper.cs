@@ -77,7 +77,7 @@ namespace WuDao.Common
 
         public static SpriteSheet FromTexture(string assetPath)
         {
-            return new SpriteSheet { TextureAsset = ModContent.Request<Texture2D>(assetPath) };
+            return new SpriteSheet { TextureAsset = ModContent.Request<Texture2D>(assetPath, AssetRequestMode.AsyncLoad) };
         }
 
         /// <summary>

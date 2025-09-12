@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using Terraria;
 using Terraria.GameContent;
 using Terraria.ID;
@@ -34,17 +35,20 @@ namespace WuDao.Content.Projectiles.Melee
     class ScallionSwordProj : ModProjectile
     {
         public override string Texture => "WuDao/Content/Items/Weapons/Melee/ScallionSword";
-        private Texture2D tex;
+        // 用静态句柄存资源：所有实例共享
+        private static Asset<Texture2D> TexAsset;
         public override void Load()
         {
             if (!Main.dedServ)
             {
-                tex = ModContent.Request<Texture2D>("WuDao/Content/Projectiles/Melee/ScallionSwordTail").Value;//获取刀光的拖尾贴图
+                TexAsset = ModContent.Request<Texture2D>(
+                    "WuDao/Content/Projectiles/Melee/ScallionSwordTail",
+                    AssetRequestMode.AsyncLoad);
             }
         }
         public override void Unload()
         {
-            tex = null;
+            TexAsset = null;
         }
         public override void SetDefaults()
         {
@@ -57,8 +61,7 @@ namespace WuDao.Content.Projectiles.Melee
             Projectile.ignoreWater = true;//无视液体
 
             //或者让它不死 一直转(
-            //Projectile.timeLeft = 20;//弹幕 趋势 的时间
-
+            Projectile.timeLeft = 10;//弹幕 趋势 的时间
             base.SetDefaults();
         }
         public override void SetStaticDefaults()//以下照抄
@@ -71,7 +74,7 @@ namespace WuDao.Content.Projectiles.Melee
         Player player => Main.player[Projectile.owner];//获取玩家
         public override void AI()//模拟"刀"的挥舞逻辑
         {
-            player.itemTime = player.itemAnimation = 3;//防止弹幕没有 趋势 玩家就又可以使用武器了
+            // player.itemTime = player.itemAnimation = 3;//防止弹幕没有 趋势 玩家就又可以使用武器了
             Projectile.Center = player.Center;//绑定玩家和弹幕的位置
             Projectile.velocity = new Vector2(0, -10).RotatedBy(Projectile.rotation);//给弹幕一个速度 仅仅用于击退方向
             Projectile.rotation += 0.32f * player.direction;//弹幕每帧旋转角度
@@ -84,9 +87,8 @@ namespace WuDao.Content.Projectiles.Melee
             if (Projectile.rotation < -MathHelper.Pi)
                 Projectile.rotation = MathHelper.Pi;
             */
-            if (player.controlUseItem)
-                Projectile.timeLeft = 2;//让弹幕一直转圈圈的方法之一
-            base.AI();
+            // if (player.controlUseItem)
+                // Projectile.timeLeft = 2;//让弹幕一直转圈圈的方法之一
         }
         public override bool ShouldUpdatePosition()
         {
@@ -105,25 +107,23 @@ namespace WuDao.Content.Projectiles.Melee
             //开始顶点绘制
 
             List<Vertex> ve = new List<Vertex>();
-            
-            float lenf = 9.0f;
-            for (int i = 0; i < (int)lenf; i++)
-            {
-                Color b = Color.Lerp(Color.Red, Color.Blue, i / lenf);
 
-                //存顶点,从这一—————————————到这里都是乱弄的 你可以随便改改数据看看能发生什么
+            for (int i = 0; i < 9; i++)
+            {
+                Color b = Color.Lerp(Color.Red, Color.Blue, i / 9f);
+
+                //存顶点																										从这一—————————————到这里都是乱弄的 你可以随便改改数据看看能发生什么
                 ve.Add(new Vertex(Projectile.Center - Main.screenPosition + new Vector2(0, -80).RotatedBy(Projectile.oldRot[i]) * (1 + (float)Math.Cos(Projectile.oldRot[i] - MathHelper.PiOver2) * player.direction),
-                          new Vector3(i / lenf, 1, 1),
+                          new Vector3(i / 9f, 1, 1),
                           b));
                 ve.Add(new Vertex(Projectile.Center - Main.screenPosition + new Vector2(0, -20).RotatedBy(Projectile.oldRot[i]) * (1 + (float)Math.Cos(Projectile.oldRot[i] - MathHelper.PiOver2) * player.direction),
-                          new Vector3(i / lenf, 0, 1),
+                          new Vector3(i / 9f, 0, 1),
                           b));
             }
 
             if (ve.Count >= 3)//因为顶点需要围成一个三角形才能画出来 所以需要判顶点数>=3 否则报错
             {
-                // gd.Textures[0] = ModContent.Request<Texture2D>("TestMod/Images/SwordLightTail_2").Value;//获取刀光的拖尾贴图
-                gd.Textures[0] = tex;
+                gd.Textures[0] = TexAsset.Value;
                 gd.DrawUserPrimitives(PrimitiveType.TriangleStrip, ve.ToArray(), 0, ve.Count - 2);//画
             }
 

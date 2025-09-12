@@ -17,24 +17,19 @@ namespace WuDao.Content.Items.Accessories
     */
     public class FirstBlood : ModItem
     {
-        // 备用贴图（勇者之证）
-        private static Asset<Texture2D> _heroTex;
-
+        private static Asset<Texture2D> TexAsset;
         public override void Load()
         {
             if (!Main.dedServ)
             {
-                // _heroTex = ModContent.Request<Texture2D>($"Terraria/Images/Item_{ItemID.HolyWater}");
-                // _heroTex = TextureAssets.Item[ItemID.HolyWater]; // 现成的 Vanilla 贴图
-                _heroTex = ModContent.Request<Texture2D>($"{nameof(WuDao)}/Content/Items/Accessories/FirstBlood_Hero");
+                // TODO: TextureAssets.Item[ItemID.HolyWater]; // 使用现成的 Vanilla 贴图
+                TexAsset = ModContent.Request<Texture2D>($"{nameof(WuDao)}/Content/Items/Accessories/FirstBlood_Hero", AssetRequestMode.AsyncLoad);
             }
         }
-
         public override void Unload()
         {
-            _heroTex = null;
+            TexAsset = null;
         }
-
         public override void SetDefaults()
         {
             Item.width = 32;
@@ -94,10 +89,10 @@ namespace WuDao.Content.Items.Accessories
         {
             if (Main.dedServ) return true;
 
-            if (AllVanillaBossesDowned() && _heroTex?.IsLoaded == true)
+            if (AllVanillaBossesDowned() && TexAsset?.IsLoaded == true)
             {
                 // 用勇者之证贴图替代默认绘制
-                spriteBatch.Draw(_heroTex.Value, position, _heroTex.Value.Bounds, drawColor, 0f, origin, scale, SpriteEffects.None, 0f);
+                spriteBatch.Draw(TexAsset.Value, position, TexAsset.Value.Bounds, drawColor, 0f, origin, scale, SpriteEffects.None, 0f);
                 return false;
             }
             return true; // 正常绘制原贴图
@@ -109,10 +104,10 @@ namespace WuDao.Content.Items.Accessories
         {
             if (Main.dedServ) return true; // 服务器不绘制
 
-            if (AllVanillaBossesDowned() && _heroTex?.IsLoaded == true)
+            if (AllVanillaBossesDowned() && TexAsset?.IsLoaded == true)
             {
-                Vector2 pos = Item.position - Main.screenPosition + new Vector2(Item.width / 2f, Item.height - _heroTex.Height() * 0.5f);
-                spriteBatch.Draw(_heroTex.Value, pos, null, alphaColor, rotation, _heroTex.Size() * 0.5f, scale, SpriteEffects.None, 0f);
+                Vector2 pos = Item.position - Main.screenPosition + new Vector2(Item.width / 2f, Item.height - TexAsset.Height() * 0.5f);
+                spriteBatch.Draw(TexAsset.Value, pos, null, alphaColor, rotation, TexAsset.Size() * 0.5f, scale, SpriteEffects.None, 0f);
                 return false;
             }
             return true;

@@ -15,7 +15,6 @@ namespace WuDao.Content.Players
         }
         public override void PostUpdate()
         {
-            // 测试用，画圈表示作用范围
             if (HasDevolutionAura && Main.netMode != NetmodeID.Server)
             {
                 const float radius = 16f * 30;

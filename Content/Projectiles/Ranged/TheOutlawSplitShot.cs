@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
@@ -380,19 +381,22 @@ namespace WuDao.Content.Projectiles.Ranged
         // private SpriteSheet _sheet;
         // 行优先精灵网格
         private SpriteGrid _grid;
-        private Texture2D _tex;
         private SpriteAnimator _anim = new SpriteAnimator();
+        private static Asset<Texture2D> TexAsset;
         public override void Load()
         {
             if (!Main.dedServ)
             {
-                _tex = ModContent.Request<Texture2D>("WuDao/Content/Projectiles/Ranged/TheOutlawFirewall").Value;
+                TexAsset = ModContent.Request<Texture2D>(
+                    "WuDao/Content/Projectiles/Ranged/TheOutlawFirewall",
+                    AssetRequestMode.AsyncLoad);
             }
         }
         public override void Unload()
         {
-            _tex = null;
+            TexAsset = null;
         }
+
         public override void SetDefaults()
         {
             Projectile.width = (int)TotalLen; // 视觉上是一堵墙，可按需调
@@ -420,7 +424,6 @@ namespace WuDao.Content.Projectiles.Ranged
                 down: 2,                            // 2 行
                 total: 11                          // 实际总帧数 11
             );
-            // _tex = ModContent.Request<Texture2D>("WuDao/Content/Projectiles/Ranged/TheOutlawFirewall").Value;
         }
 
         public override void AI()
@@ -507,7 +510,7 @@ namespace WuDao.Content.Projectiles.Ranged
             // _sheet.Draw(SpriteIndex, _anim.Frame, drawCenter, lightColor, rot, Projectile.scale * 2);
             // _grid.Draw(_tex, _anim.Frame, drawCenter, lightColor,
             //    rot, Projectile.scale * 4);
-            _grid.Draw(_tex, _anim.Frame, drawCenter, lightColor, rot, scale);
+            _grid.Draw(TexAsset.Value, _anim.Frame, drawCenter, lightColor, rot, scale);
             return false;
         }
         // ★★ 关键：用 Colliding 覆盖默认碰撞，按朝向给出“水平/竖直”的 AABB

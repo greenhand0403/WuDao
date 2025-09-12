@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -10,17 +11,17 @@ namespace WuDao.Content.Items.Weapons.Magic
     public class BasiliskChargeProj : ModProjectile
     {
         public override string Texture => $"Terraria/Images/NPC_{NPCID.DesertBeast}";
-        private Texture2D tex;
+        private static Asset<Texture2D> TexAsset;
         public override void Load()
         {
             if (!Main.dedServ)
             {
-                tex = ModContent.Request<Texture2D>(Texture).Value;
+                TexAsset = ModContent.Request<Texture2D>(Texture, AssetRequestMode.AsyncLoad);
             }
         }
         public override void Unload()
         {
-            tex = null;
+            TexAsset = null;
         }
         public override void SetStaticDefaults()
         {
@@ -113,7 +114,7 @@ namespace WuDao.Content.Items.Weapons.Magic
         }
         public override bool PreDraw(ref Color lightColor)
         {
-            // Texture2D tex = ModContent.Request<Texture2D>(Texture).Value;
+            Texture2D tex = TexAsset.Value;
             int frames = Main.projFrames[Projectile.type];
             int frameHeight = tex.Height / frames;
             Rectangle src = new Rectangle(0, frameHeight * Projectile.frame, tex.Width, frameHeight);
