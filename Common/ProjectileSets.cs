@@ -51,6 +51,15 @@ namespace WuDao.Common
     }
     public static class ItemSets
     {
+        public static readonly HashSet<int> BladeTrailSet = new()
+        {
+            ItemID.CopperBroadsword,
+            ItemID.IronBroadsword,
+            ItemID.SilverBroadsword,
+            ItemID.GoldBroadsword,
+            ItemID.PlatinumBroadsword,
+            ItemID.Seedler
+        };
         public static readonly HashSet<int> GemSet = new()
         {
             ItemID.Diamond,

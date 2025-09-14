@@ -496,6 +496,7 @@ Projectiles: {
 	UnicornProjectile.DisplayName: 独角兽射弹
 	WyvernCompositeProjectile.DisplayName: 飞龙射弹
 	ScallionSwordProj.DisplayName: 葱剑射弹
+	BladeTrailProj.DisplayName: 全局刀光拖尾
 }
 
 DamageClasses: {

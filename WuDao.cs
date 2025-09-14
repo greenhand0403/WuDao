@@ -10,9 +10,15 @@ using Terraria.ModLoader;
 using WuDao.Content.Players;
 using WuDao.Content.Systems;
 using WuDao.Systems;
+using WuDao.Common.Rendering;
 
 namespace WuDao
 {
+	// 共享顶点缓冲，避免每个 proj 都 new List
+	public static class BladeTrailScratchBuffer
+	{
+		public static readonly List<BladeTrailRenderer.V> Verts = new();
+	}
 	// 把消息枚举放到一个公共位置，避免到处重复定义
 	public enum MessageType : byte
 	{

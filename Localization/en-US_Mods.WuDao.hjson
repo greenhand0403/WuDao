@@ -412,6 +412,7 @@ Projectiles: {
 	UnicornProjectile.DisplayName: Unicorn Projectile
 	WyvernCompositeProjectile.DisplayName: Wyvern Composite Projectile
 	ScallionSwordProj.DisplayName: Scallion Sword Proj
+	BladeTrailProj.DisplayName: Blade Trail Proj
 }
 
 DamageClasses: {
