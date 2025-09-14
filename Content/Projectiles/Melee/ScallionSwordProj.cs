@@ -155,6 +155,37 @@ namespace WuDao.Content.Projectiles.Melee
             // 用拖尾的帧数进行顶点绘制刀光
             int len = ProjectileID.Sets.TrailCacheLength[Type];
             if (len < 2) return false;
+            // —— 收藏武器 → 贴图与 UV —— //
+            bool useWeaponTex = player.HeldItem.favorited;
+            Texture2D tex;
+            Func<int, Vector2> uvOuter, uvInner;
+
+            if (useWeaponTex)
+            {
+                // 直接用武器贴图做顶点绘制
+                tex = TextureAssets.Projectile[Type].Value;
+                uvOuter = (i) => new Vector2(Math.Max(len - i, len * 0.5f) / (float)len,
+                                             (0.5f + Math.Min(i, len * 0.5f)) / (float)len);
+                uvInner = (i) => new Vector2((Math.Max(len - i, len * 0.5f) - 1.0f) / (float)len, 0);
+            }
+            else
+            {
+                // 使用额外的顶点贴图作为遮罩
+                tex = SwordTailTexAsset.Value;
+                uvOuter = (i) => new Vector2(i / (float)(len - 1), 1f);
+                uvInner = (i) => new Vector2(i / (float)(len - 1), 0f);
+            }
+
+            // —— 首个收藏染料 —— //
+            int? dyeId = null;
+            foreach (var inv in player.inventory)
+            {
+                if (inv != null && inv.favorited && inv.dye > 0)
+                {
+                    dyeId = inv.type;
+                    break;
+                }
+            }
 
             // —— 组装参数 —— //
             BladeTrailParams p = new BladeTrailParams
@@ -186,23 +217,11 @@ namespace WuDao.Content.Projectiles.Melee
                     c.A = (byte)(180 * (len - i) / (float)len);
                     return c;
                 },
-
-                // 经典三角形刀光 UV 从 外圈(0,1) 内圈(0,0) 到 外圈(1,1) 内圈(1,0)
-                // UvOuter = (i) => new Vector2(i / (float)(len - 1), 1f),
-                // UvInner = (i) => new Vector2(i / (float)(len - 1), 0f),
-                // 直接从物品贴图中取对角线的顶点颜色 从 外圈(1,0.5+1/len) 内圈(1-1/len,0) 到 外圈(0.5,0.5+1/len) 内圈(0.5-1/len,0)
-                UvOuter = (i) => new Vector2(Math.Max(len - i, len * 0.5f) / (float)len, (0.5f + Math.Min(i, len * 0.5f)) / (float)len),
-                UvInner = (i) => new Vector2((Math.Max(len - i, len * 0.5f) - 1.0f) / (float)len, 0),
-
-                // 原版染料：示例 RedDye；若不需要，设为 null
-                // ArmorDyeShaderItemId = null,
-                ArmorDyeShaderItemId = ItemID.RedDye,
-
-                // 贴图/着色器：可用遮罩/或直接 Projectile 贴图；自定义 Effect 可空
-                // 使用额外的顶点贴图作为遮罩
-                // Texture0 = SwordTailTexAsset.Value,
-                // 直接用武器贴图做顶点绘制
-                Texture0 = TextureAssets.Projectile[Type].Value,
+                
+                UvOuter = uvOuter,
+                UvInner = uvInner,
+                ArmorDyeShaderItemId = dyeId,
+                Texture0 = tex,
 
                 Effect = null,  // 若你写了 BladeTrail.fx，就换成那个 Effect
                 Additive = true,

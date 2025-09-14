@@ -7,7 +7,9 @@ using WuDao.Common;
 using Terraria.GameContent;
 using System;
 using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;   // 你的 ItemSets.BladeTrailSet
+using ReLogic.Content;
+using System.Collections.Generic;
+using Terraria.DataStructures;   // 你的 ItemSets.BladeTrailSet
 
 namespace WuDao.Content.Projectiles.Melee
 {
@@ -16,6 +18,16 @@ namespace WuDao.Content.Projectiles.Melee
         public override string Texture => "Terraria/Images/Star_4";
         Player player => Main.player[Projectile.owner];//获取玩家
         private static float SwordShaderExtraLen = 0.8f;
+        private HashSet<int> hitNPCs = new();
+        public Color[] diagColors;
+        public override bool? CanHitNPC(NPC target)
+        {
+            return hitNPCs.Contains(target.whoAmI) ? false : null;
+        }
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+        {
+            hitNPCs.Add(target.whoAmI);
+        }
         public override void SetStaticDefaults()
         {
             ProjectileID.Sets.TrailCacheLength[Type] = 9;
@@ -33,10 +45,38 @@ namespace WuDao.Content.Projectiles.Melee
             Projectile.ignoreWater = true;
 
             Projectile.timeLeft = 10;//弹幕 趋势 的时间
-            Projectile.usesLocalNPCImmunity = true;
-            Projectile.localNPCHitCooldown = 20;
+            // Projectile.usesLocalNPCImmunity = true;
+            // Projectile.localNPCHitCooldown = Projectile.timeLeft;
             Projectile.ownerHitCheck = true;     // 防止隔墙命中
+
+            Projectile.usesLocalNPCImmunity = false;
+            Projectile.usesIDStaticNPCImmunity = true;
+            // 这个冷却要覆盖“同一把刀的两次生成间隔”
+            // 建议 ≥ item.useAnimation 或根据你的刀光 timeLeft/生成频率来定
+            Projectile.idStaticNPCHitCooldown = 16; // 例：16帧，可按手感调
         }
+        public override void OnSpawn(IEntitySource source)
+        {
+            base.OnSpawn(source);
+
+            // 取对角线色带（可配置方向、剔除规则、带宽）：
+            diagColors = TrailColorSampler.SampleDiagonalColors(
+                TextureAssets.Item[player.HeldItem.type].Value,
+                samples: ProjectileID.Sets.TrailCacheLength[Type],// 9段
+                dir: DiagDir.RightUp_to_LeftDown,          // ← 你可以切换成 LeftDown_to_RightUp
+                exclude: ExcludeMode.ExcludeBlackOrTransparent, // ← 4 种模式任选
+                bandWidth: 2                                // 抗锯齿带宽，1~3 都可
+            );
+
+            // 可选：把接近黑的颜色做透明（再保险一次）
+            // for (int i = 0; i < diagColors.Length; i++)
+            // {
+            //     var c = diagColors[i];
+            //     if (c.R < 6 && c.G < 6 && c.B < 6) c.A = 0;
+            //     diagColors[i] = c;
+            // }
+        }
+
         public override bool PreAI()
         {
             // 预热拖尾 刀光三角带初始生成角度
@@ -52,6 +92,8 @@ namespace WuDao.Content.Projectiles.Melee
         {
             Player player = Main.player[Projectile.owner];
             Projectile.Center = player.Center;
+
+            player.GetModPlayer<BladeTrailPlayer>().TrailActive = true;
 
             Projectile.rotation = player.itemRotation + MathHelper.PiOver4 * player.direction;
             // 解决旧刀光带结束点与新刀光带初始点之间错误的生成刀光带
@@ -84,6 +126,7 @@ namespace WuDao.Content.Projectiles.Melee
 
             if (useWeaponTex)
             {
+                // 直接从物品贴图中取对角线的顶点颜色 从 外圈(1,0.5+1/len) 内圈(1-1/len,0) 到 外圈(0.5,0.5+1/len) 内圈(0.5-1/len,0)
                 tex = TextureAssets.Item[player.HeldItem.type].Value;
                 uvOuter = (i) => new Vector2(Math.Max(len - i, len * 0.5f) / (float)len,
                                              (0.5f + Math.Min(i, len * 0.5f)) / (float)len);
@@ -91,6 +134,7 @@ namespace WuDao.Content.Projectiles.Melee
             }
             else
             {
+                // 经典三角形刀光 UV 从 外圈(0,1) 内圈(0,0) 到 外圈(1,1) 内圈(1,0)
                 tex = ScallionSwordProj.SwordTailTexAsset.Value;
                 uvOuter = (i) => new Vector2(i / (float)(len - 1), 1f);
                 uvInner = (i) => new Vector2(i / (float)(len - 1), 0f);
@@ -106,6 +150,13 @@ namespace WuDao.Content.Projectiles.Melee
                     break;
                 }
             }
+            // 使用武器贴图的对角线颜色
+            // 绑定到参数的 ColorAt（i 从尾到头/头到尾你都可选）
+            Func<int, Color> colorAt = (i) =>
+            {
+                int idx = (int)MathHelper.Clamp(i, 0, diagColors.Length - 1);
+                return diagColors[idx];
+            };
 
             BladeTrailParams p = new BladeTrailParams
             {
@@ -113,8 +164,8 @@ namespace WuDao.Content.Projectiles.Melee
                 RotAt = (i) => Projectile.oldRot[i],
                 TrailLen = len,
                 // 半径太小会出现刀光带头尾瞬间绘制出错误三角带的情况
-                OuterRadius = 1.68f * reach,
-                InnerRadius = 0.42f * reach,
+                OuterRadius = 1.64f * reach,
+                InnerRadius = 0.41f * reach,
                 // OuterRadius = 80f,
                 // InnerRadius = 20f,
                 HalfWidth = (i) =>
@@ -123,12 +174,13 @@ namespace WuDao.Content.Projectiles.Melee
                     //  + (float)Math.Cos(Projectile.oldRot[i] - MathHelper.PiOver2) * player.direction * SwordShaderExtraLen
                     return wf;
                 },
-                ColorAt = (i) =>
-                {
-                    var c = Color.White;
-                    c.A = (byte)(180 * (len - i) / (float)len);
-                    return c;
-                },
+                ColorAt = colorAt,
+                // ColorAt = (i) =>
+                // {
+                //     var c = Color.DarkGray;
+                //     c.A = (byte)(200 * (len - i) / (float)len);
+                //     return c;
+                // },
 
                 UvOuter = uvOuter,
                 UvInner = uvInner,
@@ -149,9 +201,16 @@ namespace WuDao.Content.Projectiles.Melee
 
             return BladeTrailCollision.CheckCollision(
                 Projectile.Center, Projectile.oldRot, len,
-                1.9f * reach, 0.8f * reach, Main.player[Projectile.owner].direction, SwordShaderExtraLen,
+                1.6f * reach, 0.8f * reach, Main.player[Projectile.owner].direction, SwordShaderExtraLen,
                 targetHitbox
             );
         }
     }
+    public class BladeTrailPlayer : ModPlayer
+    {
+        public bool TrailActive;
+
+        public override void ResetEffects() => TrailActive = false;
+    }
+
 }

@@ -12,7 +12,7 @@ namespace WuDao.Content.Global
     {
         public override bool? UseItem(Item item, Player player)
         {
-            if (ItemSets.BladeTrailSet.Contains(item.type))
+            if (ItemSets.BladeTrailSet.Contains(item.type) || ItemSets.PhasebladeSet.Contains(item.type))
             {
                 if (player.whoAmI == Main.myPlayer)
                 {
@@ -28,6 +28,18 @@ namespace WuDao.Content.Global
                 }
             }
             return base.UseItem(item, player);
+        }
+
+        public override void UseItemHitbox(Item item, Player player, ref Rectangle hitbox, ref bool noHitbox)
+        {
+            // 只对白名单近战、且当前有我的刀光时，禁用原版近战 hitbox
+            if ((ItemSets.BladeTrailSet.Contains(item.type) || ItemSets.PhasebladeSet.Contains(item.type))
+                && item.DamageType.CountsAsClass(DamageClass.Melee)
+                && !item.noMelee
+                && player.GetModPlayer<BladeTrailPlayer>().TrailActive)
+            {
+                noHitbox = true; // 原版近战不再造成伤害
+            }
         }
     }
 }

@@ -1,8 +1,10 @@
+// 最初始版本
 using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.Graphics.Shaders;
 using Terraria.ID;
 
@@ -60,12 +62,13 @@ namespace WuDao.Common.Rendering
             for (int i = 0; i < len; i++)
             {
                 float rot = p.RotAt(i);
-                float hw = p.HalfWidth(i); // 半宽下限避免消失
+                float hw = p.HalfWidth(i); // 半宽下限避免消失 可以用一个限制 Math.Max(1.1f, hw)
                 // “半径缩放”交给 HalfWidth/或你自己的 tmp 因子，这里只管几何
                 Vector2 outer = p.WorldCenter + new Vector2(0f, -p.OuterRadius).RotatedBy(rot) * hw;
                 Vector2 inner = p.WorldCenter + new Vector2(0f, -p.InnerRadius).RotatedBy(rot) * hw;
 
                 Color c = p.ColorAt(i);
+                
                 Vector2 uvO = p.UvOuter(i);
                 Vector2 uvI = p.UvInner(i);
 
@@ -78,15 +81,18 @@ namespace WuDao.Common.Rendering
         // 渲染：提交到 GPU
         public static void Draw(List<V> verts, Texture2D tex0, Effect fx, bool additive)
         {
-            var gd = Main.graphics.GraphicsDevice;
-            // 结束 spriteBatch，切顶点管线
-            Main.spriteBatch.End();
+            if (verts == null || verts.Count < 3) return;
 
-            if (verts.Count >= 3)
+            var gd = Main.graphics.GraphicsDevice;
+            // 放在这里染料效果会大打折扣 挪到 Render 了
+            // Main.spriteBatch.End();
+
+            // if (verts.Count >= 3)
             {
                 gd.RasterizerState = RasterizerState.CullNone;
                 gd.SamplerStates[0] = SamplerState.AnisotropicClamp;
                 gd.BlendState = additive ? BlendState.Additive : BlendState.AlphaBlend;
+
                 gd.Textures[0] = tex0;
 
                 if (fx != null)
@@ -119,9 +125,16 @@ namespace WuDao.Common.Rendering
 
             BuildStrip(scratch, p);
 
-            // test 放到后面行不行呢？可选：套原版染料（Armor Shader）
+            // 重置着色器设置，再开始应用染料，效果更明显
+            Main.spriteBatch.End();
+            // 可选：套原版染料（Armor Shader）
             if (p.ArmorDyeShaderItemId.HasValue)
-                GameShaders.Armor.Apply(GameShaders.Armor.GetShaderIdFromItemId(p.ArmorDyeShaderItemId.Value), null);
+            {   
+                int shaderId = GameShaders.Armor.GetShaderIdFromItemId(p.ArmorDyeShaderItemId.Value);
+                // 给 ArmorShader 提供一个 DrawData，确保正确绑定贴图和 UV
+                var dd = new DrawData(p.Texture0, Vector2.Zero, null, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None);
+                GameShaders.Armor.Apply(shaderId, null, dd);
+            }
 
             Draw(scratch, p.Texture0, p.Effect, p.Additive);
         }
