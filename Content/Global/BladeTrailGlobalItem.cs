@@ -23,7 +23,8 @@ namespace WuDao.Content.Global
                         ModContent.ProjectileType<BladeTrailProj>(),
                         item.damage,
                         item.knockBack,
-                        player.whoAmI
+                        player.whoAmI,
+                        ai0: item.useAnimation   // 传给弹幕
                     );
                 }
             }

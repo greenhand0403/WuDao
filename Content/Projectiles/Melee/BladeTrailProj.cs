@@ -19,7 +19,8 @@ namespace WuDao.Content.Projectiles.Melee
         Player player => Main.player[Projectile.owner];//获取玩家
         private static float SwordShaderExtraLen = 0.8f;
         private HashSet<int> hitNPCs = new();
-        public Color[] diagColors;
+        public Color[] DiagColors;
+        public Color[] RowWeightedColors;
         public override bool? CanHitNPC(NPC target)
         {
             return hitNPCs.Contains(target.whoAmI) ? false : null;
@@ -44,7 +45,7 @@ namespace WuDao.Content.Projectiles.Melee
             Projectile.tileCollide = false;
             Projectile.ignoreWater = true;
 
-            Projectile.timeLeft = 10;//弹幕 趋势 的时间
+            Projectile.timeLeft = 2;//弹幕 趋势 的时间
             // Projectile.usesLocalNPCImmunity = true;
             // Projectile.localNPCHitCooldown = Projectile.timeLeft;
             Projectile.ownerHitCheck = true;     // 防止隔墙命中
@@ -58,14 +59,30 @@ namespace WuDao.Content.Projectiles.Melee
         public override void OnSpawn(IEntitySource source)
         {
             base.OnSpawn(source);
+            if (Projectile.ai[0] > 0)
+                Projectile.timeLeft = (int)Projectile.ai[0];
+
+            Texture2D texForColor = TextureAssets.Item[player.HeldItem.type].Value;
+            int len = ProjectileID.Sets.TrailCacheLength[Type];
 
             // 取对角线色带（可配置方向、剔除规则、带宽）：
-            diagColors = TrailColorSampler.SampleDiagonalColors(
-                TextureAssets.Item[player.HeldItem.type].Value,
-                samples: ProjectileID.Sets.TrailCacheLength[Type],// 9段
-                dir: DiagDir.RightUp_to_LeftDown,          // ← 你可以切换成 LeftDown_to_RightUp
-                exclude: ExcludeMode.ExcludeBlackOrTransparent, // ← 4 种模式任选
-                bandWidth: 2                                // 抗锯齿带宽，1~3 都可
+            // diagColors = TrailColorSampler.SampleDiagonalColors(
+            //     texForColor,
+            //     samples: len,// 9段
+            //     dir: DiagDir.RightUp_to_LeftDown,          // ← 你可以切换成 LeftDown_to_RightUp
+            //     exclude: ExcludeMode.ExcludeBlackOrTransparent, // ← 4 种模式任选
+            //     bandWidth: 2                                // 抗锯齿带宽，1~3 都可
+            // );
+
+            // 取行加权色带（可配置方向、剔除规则、带宽）：
+            RowWeightedColors = TrailColorSampler.SampleDiagonalRowWeightedColors(
+                texForColor,
+                samples: len,
+                dir: DiagDir.RightUp_to_LeftDown, // 可切换方向
+                exclude: ExcludeMode.ExcludeBlackOrTransparent, // 可选过滤
+                rowRadius: 1,       // 行邻域（0~2）
+                sigma: 6f,          // 横向带宽
+                profile: TrailColorSampler.WeightProfile.Gaussian
             );
 
             // 可选：把接近黑的颜色做透明（再保险一次）
@@ -128,9 +145,13 @@ namespace WuDao.Content.Projectiles.Melee
             {
                 // 直接从物品贴图中取对角线的顶点颜色 从 外圈(1,0.5+1/len) 内圈(1-1/len,0) 到 外圈(0.5,0.5+1/len) 内圈(0.5-1/len,0)
                 tex = TextureAssets.Item[player.HeldItem.type].Value;
-                uvOuter = (i) => new Vector2(Math.Max(len - i, len * 0.5f) / (float)len,
-                                             (0.5f + Math.Min(i, len * 0.5f)) / (float)len);
-                uvInner = (i) => new Vector2((Math.Max(len - i, len * 0.5f) - 1.0f) / (float)len, 0);
+                // uvOuter = (i) => new Vector2(Math.Max(len - i, len * 0.5f) / (float)len,
+                                            //  (0.5f + Math.Min(i, len * 0.5f)) / (float)len);
+                // uvInner = (i) => new Vector2((Math.Max(len - i, len * 0.5f) - 1.0f) / (float)len, 0);
+
+                uvOuter = (i) => new Vector2(Math.Max(len - i, len * 0.4f) / (float)len,
+                                             (0.5f + Math.Min(i, len * 0.6f)) / (float)len);
+                uvInner = (i) => new Vector2((Math.Max(len - i, len * 0.4f) - 1.0f) / (float)len, 0);
             }
             else
             {
@@ -138,6 +159,15 @@ namespace WuDao.Content.Projectiles.Melee
                 tex = ScallionSwordProj.SwordTailTexAsset.Value;
                 uvOuter = (i) => new Vector2(i / (float)(len - 1), 1f);
                 uvInner = (i) => new Vector2(i / (float)(len - 1), 0f);
+                // xy轴调换一下，UV方向测试
+                // uvOuter = (i) => new Vector2(0f, 1 - i / (float)(len - 1));
+                // uvInner = (i) => new Vector2(1f, 1 - i / (float)(len - 1));
+                // 测试方向
+                // uvOuter = (i) => new Vector2(1f, i / (float)(len - 1));
+                // uvInner = (i) => new Vector2(0f, i / (float)(len - 1));
+                // 再测试
+                // uvOuter = (i) => new Vector2(0f, 1 - i / (float)(len - 1));
+                // uvInner = (i) => new Vector2(1 - i / (float)(len - 1), 1 - i / (float)(len - 1));
             }
 
             // —— 首个收藏染料 —— //
@@ -154,8 +184,8 @@ namespace WuDao.Content.Projectiles.Melee
             // 绑定到参数的 ColorAt（i 从尾到头/头到尾你都可选）
             Func<int, Color> colorAt = (i) =>
             {
-                int idx = (int)MathHelper.Clamp(i, 0, diagColors.Length - 1);
-                return diagColors[idx];
+                int idx = (int)MathHelper.Clamp(i, 0, DiagColors.Length - 1);
+                return DiagColors[idx];
             };
 
             BladeTrailParams p = new BladeTrailParams
@@ -174,7 +204,10 @@ namespace WuDao.Content.Projectiles.Melee
                     //  + (float)Math.Cos(Projectile.oldRot[i] - MathHelper.PiOver2) * player.direction * SwordShaderExtraLen
                     return wf;
                 },
-                ColorAt = colorAt,
+                // 对角线采样
+                // ColorAt = colorAt,
+                // 行加权采样
+                ColorAt = i => RowWeightedColors[Math.Clamp(i, 0, RowWeightedColors.Length - 1)],
                 // ColorAt = (i) =>
                 // {
                 //     var c = Color.DarkGray;

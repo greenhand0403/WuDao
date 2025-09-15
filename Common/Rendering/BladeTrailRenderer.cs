@@ -7,6 +7,8 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.Graphics.Shaders;
 using Terraria.ID;
+using Terraria.ModLoader;
+using WuDao.Content.Projectiles.Melee;
 
 namespace WuDao.Common.Rendering
 {
@@ -59,6 +61,7 @@ namespace WuDao.Common.Rendering
             verts.Clear();
             int len = p.TrailLen;
             Vector2 screenOfs = Main.screenPosition;
+
             for (int i = 0; i < len; i++)
             {
                 float rot = p.RotAt(i);
@@ -67,14 +70,27 @@ namespace WuDao.Common.Rendering
                 Vector2 outer = p.WorldCenter + new Vector2(0f, -p.OuterRadius).RotatedBy(rot) * hw;
                 Vector2 inner = p.WorldCenter + new Vector2(0f, -p.InnerRadius).RotatedBy(rot) * hw;
 
-                Color c = p.ColorAt(i);
-                
+                // Color c = p.ColorAt(i);
+
                 Vector2 uvO = p.UvOuter(i);
                 Vector2 uvI = p.UvInner(i);
 
+                // 测试刀光颜色沿径向分布而不是沿圆弧轨迹分布
+                // 归一化弧向位置（0..1）：i 越大越靠后
+                // float tAlong = i / (float)(p.TrailLen - 1);
+                // 径向：外圈=0，内圈=1
+                // Vector2 uvO = new Vector2(0f, tAlong);
+                // Vector2 uvI = new Vector2(1f, tAlong);
+
+                // 从 radial LUT 取色：外圈用 u=0，内圈用 u=1
+                Color colOuter = p.ColorAt(i);
+                // Color colInner = p.ColorAt(len - i);
+                Color colInner = colOuter;
+
                 // 注意：这里不再乘“tmp(=1+cos*dir)”去拉半径，建议把这种“宽度/形变”逻辑放入 HalfWidth/UV 里
-                verts.Add(new V(outer - screenOfs, c, uvO));
-                verts.Add(new V(inner - screenOfs, c, uvI));
+                verts.Add(new V(inner - screenOfs, colOuter, uvI));
+                verts.Add(new V(outer - screenOfs, colInner, uvO));
+                // 改颜色测试
             }
         }
 
@@ -112,7 +128,7 @@ namespace WuDao.Common.Rendering
                     gd.DrawUserPrimitives(PrimitiveType.TriangleStrip, verts.ToArray(), 0, verts.Count - 2);
                 }
             }
-            
+
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend,
                 SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone,
                 null, Main.GameViewMatrix.TransformationMatrix);
@@ -129,7 +145,7 @@ namespace WuDao.Common.Rendering
             Main.spriteBatch.End();
             // 可选：套原版染料（Armor Shader）
             if (p.ArmorDyeShaderItemId.HasValue)
-            {   
+            {
                 int shaderId = GameShaders.Armor.GetShaderIdFromItemId(p.ArmorDyeShaderItemId.Value);
                 // 给 ArmorShader 提供一个 DrawData，确保正确绑定贴图和 UV
                 var dd = new DrawData(p.Texture0, Vector2.Zero, null, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None);

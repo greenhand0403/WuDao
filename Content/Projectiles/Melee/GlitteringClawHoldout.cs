@@ -23,7 +23,7 @@ namespace WuDao.Content.Projectiles.Melee
         {
             if (!Main.dedServ)
             {
-                TexAsset = ModContent.Request<Texture2D>(Texture,AssetRequestMode.AsyncLoad);
+                TexAsset = ModContent.Request<Texture2D>("WuDao/Content/Items/Weapons/Melee/GlitteringClaw",AssetRequestMode.AsyncLoad);
             }
         }
         public override void Unload()
