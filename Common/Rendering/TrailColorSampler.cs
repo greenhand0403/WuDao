@@ -230,71 +230,37 @@ namespace WuDao.Common.Rendering
                     yCenter = (H - 1) * (1f - t);
                 }
 
-                long r = 0, g = 0, b = 0, a = 0; double wSum = 0;
+                long r = 0, g = 0, b = 0, a = 0;
+                double wSum = 0;
 
                 // 行采样
-                // int y0 = (int)Math.Round(yCenter);
-
+                int y0 = (int)Math.Round(yCenter);
                 // 行邻域：只要 rowRadius > 0，就把上下行加进来（可给行间权重=1，也可加个行间高斯，这里简单处理）
-                // for (int ry = -rowRadius; ry <= rowRadius; ry++)
-                // {
-                //     int y = y0 + ry;
-                //     if ((uint)y >= (uint)H) continue;
-
-                //     // 行间权重（可选高斯，这里给个弱衰减）
-                //     float wy = rowRadius > 0 ? (float)Math.Exp(-0.5f * (ry * ry) / Math.Max(1f, rowRadius * rowRadius)) : 1f;
-
-                //     // 该行中心列
-                //     float xc = xCenter; // 也可考虑随 ry 做一点斜向偏移，这里保持不变
-                //     int xC = (int)Math.Round(xc);
-
-                //     // 横向遍历整行（也可只遍历 [xC - R, xC + R] 窗口以提速）
-                //     int R = (int)Math.Ceiling(sigma * (profile == WeightProfile.Gaussian ? 3f : 1f)); // 窗口
-                //     int xL = Math.Max(0, xC - R), xR = Math.Min(W - 1, xC + R);
-
-                //     for (int x = xL; x <= xR; x++)
-                //     {
-                //         var c = pixels[y * W + x];
-                //         if (Skip(c)) continue;
-                //         int dxAbs = Math.Abs(x - xC);
-                //         float wx = WtX(dxAbs);
-                //         if (wx <= 0) continue;
-
-                //         double w = wx * wy;
-                //         r += (long)(c.R * w);
-                //         g += (long)(c.G * w);
-                //         b += (long)(c.B * w);
-                //         a += (long)(c.A * w);
-                //         wSum += w;
-                //     }
-                // }
-                // 列采样
-                int x0 = (int)Math.Round(xCenter);
-
-                for (int rx = -rowRadius; rx <= rowRadius; rx++)
+                for (int ry = -rowRadius; ry <= rowRadius; ry++)
                 {
-                    int x = x0 + rx;
-                    if ((uint)x >= (uint)W) continue;
+                    int y = y0 + ry;
+                    if ((uint)y >= (uint)H) continue;
 
-                    float wx = rowRadius > 0
-                        ? (float)Math.Exp(-0.5f * (rx * rx) / Math.Max(1f, rowRadius * rowRadius))
-                        : 1f;
+                    // 行间权重（可选高斯，这里给个弱衰减）
+                    float wy = rowRadius > 0 ? (float)Math.Exp(-0.5f * (ry * ry) / Math.Max(1f, rowRadius * rowRadius)) : 1f;
 
-                    float yc = yCenter;
-                    int yC = (int)Math.Round(yc);
+                    // 该行中心列
+                    float xc = xCenter; // 也可考虑随 ry 做一点斜向偏移，这里保持不变
+                    int xC = (int)Math.Round(xc);
 
-                    int R = (int)Math.Ceiling(sigma * (profile == WeightProfile.Gaussian ? 3f : 1f));
-                    int yT = Math.Max(0, yC - R), yB = Math.Min(H - 1, yC + R);
+                    // 横向遍历整行（也可只遍历 [xC - R, xC + R] 窗口以提速）
+                    int R = (int)Math.Ceiling(sigma * (profile == WeightProfile.Gaussian ? 3f : 1f)); // 窗口
+                    int xL = Math.Max(0, xC - R), xR = Math.Min(W - 1, xC + R);
 
-                    for (int y = yT; y <= yB; y++)
+                    for (int x = xL; x <= xR; x++)
                     {
                         var c = pixels[y * W + x];
                         if (Skip(c)) continue;
-                        int dyAbs = Math.Abs(y - yC);
-                        float wy = WtX(dyAbs);      // 这里用同一权重函数对“纵向距离”加权
-                        if (wy <= 0) continue;
+                        int dxAbs = Math.Abs(x - xC);
+                        float wx = WtX(dxAbs);
+                        if (wx <= 0) continue;
 
-                        double w = wy * wx;
+                        double w = wx * wy;
                         r += (long)(c.R * w);
                         g += (long)(c.G * w);
                         b += (long)(c.B * w);
@@ -302,6 +268,40 @@ namespace WuDao.Common.Rendering
                         wSum += w;
                     }
                 }
+                // 列采样
+                // int x0 = (int)Math.Round(xCenter);
+
+                // for (int rx = -rowRadius; rx <= rowRadius; rx++)
+                // {
+                //     int x = x0 + rx;
+                //     if ((uint)x >= (uint)W) continue;
+
+                //     float wx = rowRadius > 0
+                //         ? (float)Math.Exp(-0.5f * (rx * rx) / Math.Max(1f, rowRadius * rowRadius))
+                //         : 1f;
+
+                //     float yc = yCenter;
+                //     int yC = (int)Math.Round(yc);
+
+                //     int R = (int)Math.Ceiling(sigma * (profile == WeightProfile.Gaussian ? 3f : 1f));
+                //     int yT = Math.Max(0, yC - R), yB = Math.Min(H - 1, yC + R);
+
+                //     for (int y = yT; y <= yB; y++)
+                //     {
+                //         var c = pixels[y * W + x];
+                //         if (Skip(c)) continue;
+                //         int dyAbs = Math.Abs(y - yC);
+                //         float wy = WtX(dyAbs);      // 这里用同一权重函数对“纵向距离”加权
+                //         if (wy <= 0) continue;
+
+                //         double w = wy * wx;
+                //         r += (long)(c.R * w);
+                //         g += (long)(c.G * w);
+                //         b += (long)(c.B * w);
+                //         a += (long)(c.A * w);
+                //         wSum += w;
+                //     }
+                // }
 
                 if (wSum <= 1e-6)
                 {

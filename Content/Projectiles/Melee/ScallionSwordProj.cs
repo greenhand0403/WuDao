@@ -12,6 +12,7 @@ using WuDao.Common.Rendering;
 
 namespace WuDao.Content.Projectiles.Melee
 {
+    // BUG: 没有画出手臂挥舞的动画
     class ScallionSwordProj : ModProjectile
     {
         public override string Texture => "WuDao/Content/Items/Weapons/Melee/ScallionSword";
@@ -193,8 +194,8 @@ namespace WuDao.Content.Projectiles.Melee
                 WorldCenter = Projectile.Center,
                 RotAt = (i) => Projectile.oldRot[i],
                 TrailLen = len,
-                OuterRadius = 1.67f * player.itemWidth,
-                InnerRadius = 0.42f * player.itemWidth,
+                OuterRadius = 1.64f * player.itemWidth,
+                InnerRadius = 0.41f * player.itemWidth,
 
                 // 半宽：用你的“1 + cos * dir * ExtraLen”，并给下限避免外圈消失
                 // 需要自己根据初始旋转角度推导刀光前向延长距离的缩放关系 水平刀光=abs+sin 垂直刀光=cos
@@ -213,11 +214,11 @@ namespace WuDao.Content.Projectiles.Melee
                     // 配合顶点遮罩使用
                     // var c = Color.Lerp(Color.OrangeRed, new Color(10, 60, 200), (i + 1) / (float)len);
                     // 适合直接用顶点颜色
-                    var c = Color.White;
-                    c.A = (byte)(180 * (len - i) / (float)len);
+                    var c = Color.DarkGray;
+                    c.A = (byte)(200 * (len - i) / (float)len);
                     return c;
                 },
-                
+
                 UvOuter = uvOuter,
                 UvInner = uvInner,
                 ArmorDyeShaderItemId = dyeId,

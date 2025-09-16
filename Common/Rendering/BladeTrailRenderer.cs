@@ -90,7 +90,6 @@ namespace WuDao.Common.Rendering
                 // 注意：这里不再乘“tmp(=1+cos*dir)”去拉半径，建议把这种“宽度/形变”逻辑放入 HalfWidth/UV 里
                 verts.Add(new V(inner - screenOfs, colOuter, uvI));
                 verts.Add(new V(outer - screenOfs, colInner, uvO));
-                // 改颜色测试
             }
         }
 

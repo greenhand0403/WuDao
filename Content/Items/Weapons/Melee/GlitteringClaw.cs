@@ -8,6 +8,7 @@ using WuDao.Content.Projectiles.Melee;
 
 namespace WuDao.Content.Items.Weapons.Melee
 {
+    // TODO: 爪套需要重做
     public class GlitteringClaw : ModItem
     {
         public override void SetStaticDefaults()
@@ -43,29 +44,29 @@ namespace WuDao.Content.Items.Weapons.Melee
             Item.UseSound = SoundID.Item1;
         }
 
-        // public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
-        // {
-        //     // 生成一个“短生命”的持有弹幕；把方向传过去
-        //     Vector2 aim = (Main.MouseWorld - player.MountedCenter);
-        //     if (aim.LengthSquared() < 0.001f)
-        //         aim = new Vector2(player.direction, 0f);
+        public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
+        {
+            // 生成一个“短生命”的持有弹幕；把方向传过去
+            Vector2 aim = (Main.MouseWorld - player.MountedCenter);
+            if (aim.LengthSquared() < 0.001f)
+                aim = new Vector2(player.direction, 0f);
 
-        //     aim.Normalize();
+            aim.Normalize();
 
-        //     int proj = Projectile.NewProjectile(
-        //         source,
-        //         player.MountedCenter,
-        //         aim, // 初速度无所谓，AI里会接管
-        //         type,
-        //         damage,
-        //         knockback,
-        //         player.whoAmI
-        //     );
+            int proj = Projectile.NewProjectile(
+                source,
+                player.MountedCenter,
+                aim, // 初速度无所谓，AI里会接管
+                type,
+                damage,
+                knockback,
+                player.whoAmI
+            );
 
-        //     // 可传递初始旋转与连击段位等自定义参数
-        //     Main.projectile[proj].rotation = aim.ToRotation();
+            // 可传递初始旋转与连击段位等自定义参数
+            Main.projectile[proj].rotation = aim.ToRotation();
 
-        //     return false; // 不由 tML 再生成默认弹幕
-        // }
+            return false; // 不由 tML 再生成默认弹幕
+        }
     }
 }

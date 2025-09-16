@@ -66,31 +66,31 @@ namespace WuDao.Content.Projectiles.Melee
             int len = ProjectileID.Sets.TrailCacheLength[Type];
 
             // 取对角线色带（可配置方向、剔除规则、带宽）：
-            // diagColors = TrailColorSampler.SampleDiagonalColors(
-            //     texForColor,
-            //     samples: len,// 9段
-            //     dir: DiagDir.RightUp_to_LeftDown,          // ← 你可以切换成 LeftDown_to_RightUp
-            //     exclude: ExcludeMode.ExcludeBlackOrTransparent, // ← 4 种模式任选
-            //     bandWidth: 2                                // 抗锯齿带宽，1~3 都可
-            // );
+            DiagColors = TrailColorSampler.SampleDiagonalColors(
+                texForColor,
+                samples: len,// 9段
+                dir: DiagDir.RightUp_to_LeftDown,          // ← 你可以切换成 LeftDown_to_RightUp
+                exclude: ExcludeMode.ExcludePureBlack, // ← 4 种模式任选
+                bandWidth: 2                                // 抗锯齿带宽，1~3 都可
+            );
 
             // 取行加权色带（可配置方向、剔除规则、带宽）：
             RowWeightedColors = TrailColorSampler.SampleDiagonalRowWeightedColors(
                 texForColor,
                 samples: len,
                 dir: DiagDir.RightUp_to_LeftDown, // 可切换方向
-                exclude: ExcludeMode.ExcludeBlackOrTransparent, // 可选过滤
+                exclude: ExcludeMode.ExcludePureBlack, // 可选过滤
                 rowRadius: 1,       // 行邻域（0~2）
                 sigma: 6f,          // 横向带宽
                 profile: TrailColorSampler.WeightProfile.Gaussian
             );
 
             // 可选：把接近黑的颜色做透明（再保险一次）
-            // for (int i = 0; i < diagColors.Length; i++)
+            // for (int i = 0; i < DiagColors.Length; i++)
             // {
-            //     var c = diagColors[i];
+            //     var c = DiagColors[i];
             //     if (c.R < 6 && c.G < 6 && c.B < 6) c.A = 0;
-            //     diagColors[i] = c;
+            //     DiagColors[i] = c;
             // }
         }
 
@@ -134,7 +134,7 @@ namespace WuDao.Content.Projectiles.Melee
             // 调用你的 BladeTrailRenderer
             int len = ProjectileID.Sets.TrailCacheLength[Type];
             if (len < 2) return false;
-            float reach = (player.itemWidth + player.itemHeight) * 0.5f;
+            float reach = player.itemHeight;
 
             // —— 收藏武器 → 贴图与 UV —— //
             bool useWeaponTex = player.HeldItem.favorited;
@@ -146,7 +146,7 @@ namespace WuDao.Content.Projectiles.Melee
                 // 直接从物品贴图中取对角线的顶点颜色 从 外圈(1,0.5+1/len) 内圈(1-1/len,0) 到 外圈(0.5,0.5+1/len) 内圈(0.5-1/len,0)
                 tex = TextureAssets.Item[player.HeldItem.type].Value;
                 // uvOuter = (i) => new Vector2(Math.Max(len - i, len * 0.5f) / (float)len,
-                                            //  (0.5f + Math.Min(i, len * 0.5f)) / (float)len);
+                //  (0.5f + Math.Min(i, len * 0.5f)) / (float)len);
                 // uvInner = (i) => new Vector2((Math.Max(len - i, len * 0.5f) - 1.0f) / (float)len, 0);
 
                 uvOuter = (i) => new Vector2(Math.Max(len - i, len * 0.4f) / (float)len,
@@ -168,25 +168,36 @@ namespace WuDao.Content.Projectiles.Melee
                 // 再测试
                 // uvOuter = (i) => new Vector2(0f, 1 - i / (float)(len - 1));
                 // uvInner = (i) => new Vector2(1 - i / (float)(len - 1), 1 - i / (float)(len - 1));
+                // 刀光
+                // uvOuter = (i) => new Vector2(0, 1 - i / (float)(len - 1));
+                // uvInner = (i) => new Vector2(0.5f * (1 - i / (float)(len - 1)), 1 - i / (float)(len - 1));
             }
 
+            Func<int, Color> colorAt;
+
+            // 使用武器贴图的对角线颜色
+            // 绑定到参数的 ColorAt（i 从尾到头/头到尾你都可选）
+            // colorAt = (i) => {
+            //     int idx = (int)MathHelper.Clamp(i, 0, DiagColors.Length - 1);
+            //     return DiagColors[idx];
+            // };
+            // 贴图行加权采样颜色刀光
+            colorAt = (i) => RowWeightedColors[Math.Clamp(i, 0, RowWeightedColors.Length - 1)];
             // —— 首个收藏染料 —— //
             int? dyeId = null;
             foreach (var inv in player.inventory)
             {
                 if (inv != null && inv.favorited && inv.dye > 0)
                 {
+                    // 如果用了染料但是没有收藏武器，用灰色画刀光，这样染色效果更明显
                     dyeId = inv.type;
+                    if (!useWeaponTex)
+                    {
+                        colorAt = (i) => Color.DarkGray;
+                    }
                     break;
                 }
             }
-            // 使用武器贴图的对角线颜色
-            // 绑定到参数的 ColorAt（i 从尾到头/头到尾你都可选）
-            Func<int, Color> colorAt = (i) =>
-            {
-                int idx = (int)MathHelper.Clamp(i, 0, DiagColors.Length - 1);
-                return DiagColors[idx];
-            };
 
             BladeTrailParams p = new BladeTrailParams
             {
@@ -194,20 +205,23 @@ namespace WuDao.Content.Projectiles.Melee
                 RotAt = (i) => Projectile.oldRot[i],
                 TrailLen = len,
                 // 半径太小会出现刀光带头尾瞬间绘制出错误三角带的情况
-                OuterRadius = 1.64f * reach,
-                InnerRadius = 0.41f * reach,
+                OuterRadius = 1.64f * player.itemHeight,
+                InnerRadius = 0.41f * player.itemHeight,
                 // OuterRadius = 80f,
                 // InnerRadius = 20f,
                 HalfWidth = (i) =>
                 {
-                    float wf = 1f;
-                    //  + (float)Math.Cos(Projectile.oldRot[i] - MathHelper.PiOver2) * player.direction * SwordShaderExtraLen
+                    float wf = 1f + 0.1f * (i / len);
                     return wf;
                 },
-                // 对角线采样
+
+                ColorAt = (i) => {
+                    var c = colorAt(i);
+                    c.A = (byte)(200 * (len - i) / (float)len);
+                    return c;
+                },
                 // ColorAt = colorAt,
-                // 行加权采样
-                ColorAt = i => RowWeightedColors[Math.Clamp(i, 0, RowWeightedColors.Length - 1)],
+                // 纯灰色刀光
                 // ColorAt = (i) =>
                 // {
                 //     var c = Color.DarkGray;
@@ -230,11 +244,11 @@ namespace WuDao.Content.Projectiles.Melee
         {
             // 用提取好的 BladeTrailCollision 工具检测
             int len = ProjectileID.Sets.TrailCacheLength[Type];
-            float reach = (player.itemWidth + player.itemHeight) * 0.5f;
-
+            float reach = player.itemHeight;
+            // 按比例调整碰撞体 跟刀光适配 1.1倍刀光
             return BladeTrailCollision.CheckCollision(
                 Projectile.Center, Projectile.oldRot, len,
-                1.6f * reach, 0.8f * reach, Main.player[Projectile.owner].direction, SwordShaderExtraLen,
+                1.2f * reach, 0.6f * reach, Main.player[Projectile.owner].direction, SwordShaderExtraLen,
                 targetHitbox
             );
         }
