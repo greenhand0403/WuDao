@@ -30,7 +30,8 @@ namespace WuDao.Content.Players
 
         // —— 主动技能冷却 —— //
         public readonly Dictionary<int, uint> perSkillNextUseTick = new();   // key = item.type
-        public uint nextGlobalActiveTick = 0;                                 // 公共冷却（2秒）
+        public uint nextGlobalActiveTick = 0;
+        // 公共冷却（2秒）
         public const int GlobalActiveCooldownTicks = 60 * 2;
 
         // —— 蓄力（龟派气功） —— //
@@ -73,6 +74,12 @@ namespace WuDao.Content.Players
         {
             JuexueSlot = new Item();
             JuexueSlot.TurnToAir();
+            // 使用真名时气力的恢复速度加快
+            if (Player.name == "unkvcc")
+            {
+                QiRegenStand = 100;
+                QiRegenMove = 50;
+            }
         }
 
         public override void SaveData(TagCompound tag)

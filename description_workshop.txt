@@ -1,1 +1,38 @@
-This description will show up on the steam page, check out https://steamcommunity.com/comment/Guide/formattinghelp.
+[center][size=5][b]WuDao - 武道传说：泰拉瑞亚武侠大型模组[/b][/size][/center]
+
+[hr]
+[size=3][b]模组简介[/b][/size]
+“不断重生的玩家才是泰拉世界的污染源。”
+本模组以独特的武侠世界观为核心，讲述异世界武道强者破碎虚空，降临泰拉瑞亚，改变了世界的部分规则，引入诸多新颖内容和机制。
+
+[hr]
+[size=3][b]主要特色[/b][/size]
+[list]
+[*][b]世界之毒[/b]：随游戏进度递增的全局惩罚机制，挑战不断升级。
+[*][b]绝学系统[/b]：装备或携带绝学，消耗气力值释放专属武侠绝技。
+[*][b]美味值&厨艺值[/b]：首次品尝食物提升美味值，首次制作提升厨艺值，部分武器和饰品可获得额外加成。
+[*][b]成长型武器/投掷武器[/b]：武器随使用逐步成长，体验武侠成长的乐趣。
+[*][b]丰富内容与彩蛋[/b]：包含多样新物品、机制与隐藏惊喜，等待玩家探索发现。
+[*]与原版Boss、物品及事件的深度融合，独创“世界之毒”与绝学玩法。
+[/list]
+
+[hr]
+[url=https://docs.google.com/spreadsheets/d/e/2PACX-1vSNLFvdxSPaI9X9J_gbIMaN42z2TKeINIYdKISJyRcCD1zr71McKra1bxVNFPK-PvhAUQqNMwqcF92Q/pubhtml] 模组物品表格 [/url]
+[size=3][b]当前进度[/b][/size]
+[list]
+[*]已实现世界之毒机制，随Boss进度加强
+[*]绝学系统及气力值条
+[*]美味值/厨艺值统计与奖励
+[*]部分成长型武器和飞镖投掷类武器
+[*]部分UI、菜单与交互系统
+[*]部分Boss掉落/召唤机制调整
+[*]致敬诸多经典武侠设定与玩法
+[*]更多内容持续开发中，欢迎关注与反馈！
+[/list]
+
+[hr]
+[size=3][b]开发者的话[/b][/size]
+制作模组最有趣的，是设计、畅想、分享与埋下彩蛋。希望每位玩家都能体验到武侠的魅力和独特成长乐趣！
+
+[hr]
+[i]如喜欢本模组，欢迎点赞、订阅、评论与反馈！[/i]
