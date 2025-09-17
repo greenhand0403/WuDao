@@ -123,6 +123,30 @@ namespace WuDao.Common
             ItemID.ChristmasTreeSword,
             ItemID.Seedler
         };
+        public static readonly HashSet<int> SwordItemSet = new()
+        {
+            ItemID.CopperBroadsword,
+            ItemID.LightsBane,
+            ItemID.Muramasa,
+            ItemID.Terragrim,
+            ItemID.BloodButcherer,
+            ItemID.Starfury,
+            ItemID.EnchantedSword,
+            ItemID.BeeKeeper,
+            ItemID.BladeofGrass,
+            ItemID.FieryGreatsword,
+            ItemID.NightsEdge,
+            ItemID.TrueNightsEdge,
+            ItemID.TrueExcalibur,
+            ItemID.Excalibur,
+            ItemID.Seedler,
+            ItemID.TerraBlade,
+            ItemID.TheHorsemansBlade,
+            ItemID.StarWrath,
+            ItemID.Meowmere,
+            ItemID.InfluxWaver,
+            ItemID.Zenith
+        };
         public static readonly HashSet<int> PhasebladeSet = new()
         {
             ItemID.RedPhaseblade,

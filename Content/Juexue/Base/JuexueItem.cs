@@ -1,4 +1,5 @@
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 using WuDao.Common;
@@ -6,7 +7,6 @@ using WuDao.Content.Players;
 
 namespace WuDao.Content.Juexue.Base
 {
-    // TODO: 右键自动装备到绝学栏，或者自动替换绝学栏里面已装备的绝学
     public abstract class JuexueItem : ModItem
     {
         public override string Texture => $"Terraria/Images/Item_{ItemID.Book}";
@@ -14,13 +14,14 @@ namespace WuDao.Content.Juexue.Base
         public virtual bool IsActive => true;         // 主动 or 被动
         public virtual int QiCost => 0;               // 主动技能消耗
         public virtual int SpecialCooldownTicks => 0; // 各自较长冷却（单位tick）
-
+        public override bool CanRightClick() => true;
         public override void SetDefaults()
         {
             Item.width = 28;
             Item.height = 28;
             Item.rare = Terraria.ID.ItemRarityID.Green;
             Item.value = Terraria.Item.buyPrice(0, 5);
+            Item.maxStack = 1;
         }
 
         // 主动释放：默认检查气力、公冷却、专属冷却

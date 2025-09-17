@@ -43,6 +43,7 @@ namespace WuDao.Content.Items
             if (!cp.HasFoodLogItem)
             {
                 tooltips.Clear();
+                tooltips.Add(new TooltipLine(Mod, "ItemName", "食谱"));
                 tooltips.Add(new TooltipLine(Mod, "Title", "收藏后，会显示未品尝的食物建议"));
                 return;
             }

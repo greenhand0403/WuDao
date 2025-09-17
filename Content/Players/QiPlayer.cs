@@ -69,17 +69,19 @@ namespace WuDao.Content.Players
             }
             return false;
         }
-
+        public override void OnEnterWorld()
+        {
+            // 使用真名时气力的恢复速度加快
+            if (Main.worldName == "wudao")
+            {
+                QiRegenStand = 180;
+                QiRegenMove = 120;
+            }
+        }
         public override void Initialize()
         {
             JuexueSlot = new Item();
             JuexueSlot.TurnToAir();
-            // 使用真名时气力的恢复速度加快
-            if (Player.name == "unkvcc")
-            {
-                QiRegenStand = 100;
-                QiRegenMove = 50;
-            }
         }
 
         public override void SaveData(TagCompound tag)

@@ -47,6 +47,7 @@ namespace WuDao.Content.Items.Weapons.Melee
         {
             // 颜色循环：按你之前的 ModPlayer 索引来
             int vanillaType = ProjectileID.GolfBallDyedBlack + ballIndex;
+            // 索引 14 种高尔夫球，循环切换
             ballIndex = (++ballIndex) % 14;
             // 随机偏角/速度（保持你原始手感）
             float angleOffset = MathHelper.ToRadians(Main.rand.NextFloat(-12, 12));

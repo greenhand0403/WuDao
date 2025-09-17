@@ -7,6 +7,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.GameContent;
+using WuDao.Common;
 
 namespace WuDao.Content.Projectiles.Melee
 {
@@ -20,32 +21,6 @@ namespace WuDao.Content.Projectiles.Melee
     public class InvincibleArcShot : ModProjectile
     {
         public override string Texture => $"Terraria/Images/Projectile_{ProjectileID.FinalFractal}";
-        // ========== 你可以自由编辑 ==========
-        // 1) 循环贴图用的原版剑 Item 列表
-        public static int[] SwordItemIDs = new int[]
-        {
-            ItemID.CopperBroadsword,
-            ItemID.LightsBane,
-            ItemID.Muramasa,
-            ItemID.Terragrim,
-            ItemID.BloodButcherer,
-            ItemID.Starfury,
-            ItemID.EnchantedSword,
-            ItemID.BeeKeeper,
-            ItemID.BladeofGrass,
-            ItemID.FieryGreatsword,
-            ItemID.NightsEdge,
-            ItemID.TrueNightsEdge,
-            ItemID.TrueExcalibur,
-            ItemID.Excalibur,
-            ItemID.Seedler,
-            ItemID.TerraBlade,
-            ItemID.TheHorsemansBlade,
-            ItemID.StarWrath,
-            ItemID.Meowmere,
-            ItemID.InfluxWaver,
-            ItemID.Zenith
-        };
 
         // 2) 剑尖对齐角修正（度）。键：ItemID；值：让“贴图”绕中心旋转多少度后，剑尖指向“贴图的朝前方向”。
         //    正值=顺时针。你只要校一次即可（在地图里看看哪把不准，微调到对准）。
@@ -116,7 +91,7 @@ namespace WuDao.Content.Projectiles.Melee
             // 这颗射弹整生存期固定使用同一把剑
             if (Projectile.ai[1] >= 0)
             {
-                Projectile.ai[1] = Main.rand.Next(SwordItemIDs.Length);
+                Projectile.ai[1] = ItemSets.SwordItemSet.Get(SelectionMode.Random);
             }
             Projectile.ai[2] = (Main.rand.NextBool(2) ? 0.4f : -0.4f) * (MathHelper.PiOver4 + Main.rand.NextFloat(MathHelper.PiOver4));
         }
@@ -147,14 +122,12 @@ namespace WuDao.Content.Projectiles.Melee
 
         public override bool PreDraw(ref Color lightColor)
         {
-            if (SwordItemIDs == null || SwordItemIDs.Length == 0) return false;
-
             // 计算当前应显示的剑贴图
-            int idx = (int)Projectile.ai[1] % SwordItemIDs.Length;
+            int idx = (int)Projectile.ai[1] % ItemSets.SwordItemSet.Count;
             int itemId;
             if (Projectile.ai[1] >= 0)
             {
-                itemId = SwordItemIDs[idx];
+                itemId = ItemSets.SwordItemSet.Get(SelectionMode.Ordered,idx);
             }
             else
             {

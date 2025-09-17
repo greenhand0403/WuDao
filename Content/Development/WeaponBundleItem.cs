@@ -27,7 +27,7 @@ namespace WuDao.Content.Development
         {
             Item.width = 20;
             Item.height = 20;
-            Item.maxStack = 1;
+            Item.maxStack = 5;
             Item.useStyle = ItemUseStyleID.HoldUp;
             Item.useTime = 20;
             Item.useAnimation = 20;
@@ -115,7 +115,7 @@ namespace WuDao.Content.Development
                 case BundleCategory.Others:
                 default:
                     // 其余全部算“其他”（包括护甲、防具、药水、材料、方块等）
-                    return !(it.accessory) && (it.damage <= 0 && it.ammo == 0 || it.pick > 0 || it.axe > 0 || it.hammer > 0);
+                    return !(it.accessory) && (it.type != ModContent.ItemType<WeaponBundleItem>()) && (it.damage <= 0 && it.ammo == 0 || it.pick > 0 || it.axe > 0 || it.hammer > 0);
             }
         }
     }

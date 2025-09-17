@@ -67,78 +67,112 @@ namespace WuDao.Content.Systems
             var qi = player.GetModPlayer<QiPlayer>();
             var sb = Main.spriteBatch;
 
-            // === 按“第6行第1列”定位 ===
-            float scale = Main.inventoryScale; // 通常 0.85
+            // —— 尺寸（随 UI 缩放）——
+            float scale = Main.inventoryScale;
             int slotW = (int)(TextureAssets.InventoryBack.Value.Width * scale);
             int slotH = (int)(TextureAssets.InventoryBack.Value.Height * scale);
 
-            int columns = 29;
-            int gridWidth = columns * slotW;
-            int gridLeft = Main.screenWidth / 2 - gridWidth;
+            // —— Vanilla 背包的“底边 y”——
+            int inventoryBottom = Main.instance.invBottom;
 
-            // 重点：invBottom 是第4行的“底边”，先反推首行，再取第6行
-            int baseTop = Main.instance.invBottom - 4 * slotH; // 背包首行(第1行)顶边
-            int rowIndex = 5;   // 第6行（从0开始）
-            int colIndex = 0;   // 第1列（从0开始）
-            int x = gridLeft + colIndex * slotW;
-            int y = baseTop + rowIndex * slotH - 2;
+            int leftPadding = (int)(16 * scale); // 适配不同缩放
 
-            // 背板 & 标题
+            // —— 目标位置：贴在“底行最左格”的正下方（略留间距）——
+            int margin = (int)(8 * scale);
+            int x = leftPadding + 2 * slotW;
+            int y = inventoryBottom + margin;
+
+            // —— 背板与标题（可选）——
             Rectangle slotRect = new Rectangle(x, y, slotW, slotH);
-            Rectangle panelRect = new Rectangle(x - 6, y - 6, slotW + 12, slotH + 12);
+            // Rectangle panelRect = new Rectangle(x - 6, y - 6, slotW + 12, slotH + 12);
+            // DrawRect(sb, panelRect, new Color(20, 20, 20, 160));
+            // Utils.DrawBorderString(sb, "绝学栏", new Vector2(x - 4, y + 28), Color.Goldenrod);
 
-            DrawRect(sb, panelRect, new Color(20, 20, 20, 160));
-            // 稍微往左上移动一点点
-            Utils.DrawBorderString(sb, "绝学栏", new Vector2(x - 4, y - 28), Color.Goldenrod);
+            // —— 命中测试，阻断背包交互 —— 
+            // if (slotRect.Contains(Main.mouseX, Main.mouseY))
+            //     player.mouseInterface = true;
 
-            // 在自定义槽上悬浮：阻断背包默认交互
-            if (slotRect.Contains(Main.mouseX, Main.mouseY))
-            {
-                player.mouseInterface = true;
-            }
-
-            // 绘制物品（仅负责显示，不用 Handle）
+            // —— 绘制物品（ItemSlot.Draw 会使用 Main.inventoryScale）——
             ItemSlot.Draw(sb, ref qi.JuexueSlot, ItemSlot.Context.InventoryItem, new Vector2(x, y));
 
-            // —— 手动处理鼠标交互（左键交换/放入/取出）——
-            if (slotRect.Contains(Main.mouseX, Main.mouseY) && Main.mouseLeft && Main.mouseLeftRelease)
+            if (slotRect.Contains(Main.mouseX, Main.mouseY))
             {
-                // 只允许放“绝学”或拿起；如果鼠标为空则拿起，如果鼠标有物品则尝试放入
                 var mouse = Main.mouseItem;
-
                 bool mouseIsJuexue = !mouse.IsAir && mouse.ModItem is JuexueItem;
-                bool slotIsJuexue = !qi.JuexueSlot.IsAir && qi.JuexueSlot.ModItem is JuexueItem;
 
-                if (mouse.IsAir)
+                // —— 左键交换：你的原逻辑不变 ——
+                if (Main.mouseLeft && Main.mouseLeftRelease)
                 {
-                    // 鼠标空：从槽位拿起（不限制类型，因为槽里只可能有绝学或空）
-                    Main.mouseItem = qi.JuexueSlot.Clone();
-                    qi.JuexueSlot.TurnToAir();
+                    if (mouse.IsAir)
+                    {
+                        Main.mouseItem = qi.JuexueSlot.Clone();
+                        qi.JuexueSlot.TurnToAir();
+                    }
+                    else if (mouseIsJuexue)
+                    {
+                        Utils.Swap(ref Main.mouseItem, ref qi.JuexueSlot);
+                    }
+                    else
+                    {
+                        Main.NewText("该槽位只能放入“绝学”类物品。", Color.OrangeRed);
+                    }
+                    Main.mouseLeftRelease = false;
                 }
-                else if (mouseIsJuexue)
+                // —— 右键：从绝学栏卸下到背包空格 ——
+                // 放在左键交换处理之后
+                if (Main.mouseRight && Main.mouseRightRelease)
                 {
-                    // 鼠标拿着绝学：与槽交换
-                    Utils.Swap(ref Main.mouseItem, ref qi.JuexueSlot);
+                    if (!qi.JuexueSlot.IsAir)
+                    {
+                        // 寻找主背包空格（0..49：含热键栏与主包，不含钱币/弹药栏）
+                        int emptyIndex = -1;
+                        for (int i = 0; i <= 49; i++)
+                        {
+                            if (player.inventory[i].IsAir) { emptyIndex = i; break; }
+                        }
+
+                        if (emptyIndex != -1)
+                        {
+                            // 放入空格，并清空绝学槽
+                            player.inventory[emptyIndex] = qi.JuexueSlot.Clone();
+                            qi.JuexueSlot.TurnToAir();
+
+                            // 可选：音效反馈
+                            Terraria.Audio.SoundEngine.PlaySound(Terraria.ID.SoundID.Grab, player.Center);
+                        }
+                        else
+                        {
+                            Main.NewText("背包已满，无法卸下绝学。", Microsoft.Xna.Framework.Color.OrangeRed);
+                        }
+                    }
+
+                    // 阻断右键连击与本帧交互冒泡
+                    Main.mouseRightRelease = false;
                 }
-                else
+                // 默认显示
+                Main.HoverItem = new Item();
+                Main.hoverItemName = "放入一件绝学以激活其效果";
+                // 这句话会在拿着绝学物品，光标移到绝学槽时显示
+                Main.instance.MouseText("将绝学放置到绝学槽中");
+
+                if (!qi.JuexueSlot.IsAir)
                 {
-                    // 鼠标不是绝学，拒绝并提示
-                    Main.NewText("该槽位只能放入“绝学”类物品。", Color.OrangeRed);
+                    Main.HoverItem = qi.JuexueSlot.Clone();
+                    Main.hoverItemName = "可以装备绝学";
                 }
 
-                // 吞掉这次点击，避免传导到背包空格导致“又放回去”
-                Main.mouseLeftRelease = false;
+                // 阻断其它 UI 交互
                 player.mouseInterface = true;
             }
 
-            // —— 冗余防御：如果槽里被塞了非绝学（理论上不会出现），弹回鼠标 —— 
-            if (!qi.JuexueSlot.IsAir && qi.JuexueSlot.ModItem is not JuexueItem)
-            {
-                if (Main.mouseItem.IsAir) Main.mouseItem = qi.JuexueSlot.Clone();
-                else player.QuickSpawnItem(player.GetSource_Misc("QiSlotReject"), qi.JuexueSlot.Clone());
-                qi.JuexueSlot.TurnToAir();
-                Main.NewText("该槽位只能放入“绝学”类物品。", Color.OrangeRed);
-            }
+            // —— 冗余防御 —— 
+            // if (!qi.JuexueSlot.IsAir && qi.JuexueSlot.ModItem is not JuexueItem)
+            // {
+            //     if (Main.mouseItem.IsAir) Main.mouseItem = qi.JuexueSlot.Clone();
+            //     else player.QuickSpawnItem(player.GetSource_Misc("QiSlotReject"), qi.JuexueSlot.Clone());
+            //     qi.JuexueSlot.TurnToAir();
+            //     Main.NewText("该槽位只能放入“绝学”类物品。", Color.OrangeRed);
+            // }
         }
 
         private static void DrawRect(SpriteBatch sb, Rectangle r, Color c)
