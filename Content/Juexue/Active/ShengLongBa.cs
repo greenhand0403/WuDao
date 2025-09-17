@@ -6,6 +6,7 @@ using Terraria.ModLoader;
 using WuDao.Common;
 using WuDao.Content.Players;
 using WuDao.Content.Juexue.Base;
+using WuDao.Content.Projectiles;
 
 namespace WuDao.Content.Juexue.Active
 {
@@ -26,7 +27,7 @@ namespace WuDao.Content.Juexue.Active
             {
                 Vector2 v = new Vector2(Main.rand.NextFloat(-2.2f, 2.2f), -Main.rand.NextFloat(16f, 22f));
                 int proj = Projectile.NewProjectile(player.GetSource_ItemUse(Item), at, v,
-                    ProjectileID.DD2BetsyFireball, 95, 3f, player.whoAmI);
+                    ModContent.ProjectileType<WyvernCompositeProjectile>(), 95, 3f, player.whoAmI);
                 var p = Main.projectile[proj];
                 p.tileCollide = false;
                 p.penetrate = -1; // 无限穿透

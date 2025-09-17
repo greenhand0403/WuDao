@@ -7,6 +7,7 @@ using Terraria.ModLoader;
 using WuDao.Common;
 using WuDao.Content.Players;
 using WuDao.Content.Juexue.Base;
+using WuDao.Content.Projectiles.Melee;
 
 namespace WuDao.Content.Juexue.Active
 {
@@ -37,7 +38,7 @@ namespace WuDao.Content.Juexue.Active
                 Vector2 dir = (new Vector2(targetX, y + Main.rand.Next(-40, 40)) - spawn).SafeNormalize(Vector2.UnitX) * Main.rand.NextFloat(14f, 19f);
 
                 int proj = Projectile.NewProjectile(player.GetSource_ItemUse(Item), spawn, dir,
-                    ProjectileID.EnchantedBeam, 85, 2f, player.whoAmI);
+                    ModContent.ProjectileType<HorseItemVariantProjectile>(), 85, 2f, player.whoAmI);
                 var p = Main.projectile[proj];
                 p.tileCollide = false;
                 p.penetrate = 20;
