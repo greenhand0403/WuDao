@@ -14,45 +14,57 @@ namespace WuDao.Content.Projectiles.Melee
     /// </summary>
     public class HorseItemVariantProjectile : ModProjectile
     {
-        private static readonly int[] VariantItemIds = new int[] { 4785, 4786, 4787 };
         public override string Texture => "Terraria/Images/Projectile_0"; // 隐藏占位，使用 PreDraw 绘制物品贴图
-
+        public int FrameTicksPerFrame = 5;
+        public int HorseType;
         public override void SetDefaults()
         {
-            Projectile.width = 64;   // 粗略碰撞箱，必要时可在 OnSpawn 根据贴图重新设定
+            Projectile.width = 64;
             Projectile.height = 48;
+            Projectile.aiStyle = 0;
             Projectile.friendly = true;
             Projectile.hostile = false;
-            Projectile.ignoreWater = true;
-            Projectile.tileCollide = true;
-            Projectile.penetrate = 1;
             Projectile.timeLeft = 180;
-            Projectile.aiStyle = 0;
-            Projectile.hide = true;
+            Projectile.tileCollide = false;
+            Projectile.ignoreWater = true;
+            Projectile.penetrate = -1;
         }
-
+        public override void SetStaticDefaults()
+        {
+            // 读取帧数，避免魔法数字
+            Main.projFrames[Projectile.type] = 16;
+        }
         public override void OnSpawn(IEntitySource source)
         {
+            HorseType = 161 + Main.rand.Next(0, 3);
             // 设定朝向
             Projectile.spriteDirection = Projectile.direction = Projectile.velocity.X >= 0 ? 1 : -1;
         }
 
         public override void AI()
         {
+            // 帧动画推进
+            if (++Projectile.frameCounter >= FrameTicksPerFrame)
+            {
+                Projectile.frameCounter = 0;
+                Projectile.frame++;
+                if (Projectile.frame >= Main.projFrames[Projectile.type]-1)
+                    Projectile.frame = 10;
+                if (Projectile.alpha > 0)
+                    Projectile.alpha -= 20;
+            }
+
             // 基础直线飞行 + 旋转对齐速度
             Projectile.rotation = Projectile.velocity.ToRotation() + (Projectile.spriteDirection == -1 ? MathHelper.Pi : 0f);
         }
 
-        private int GetSelectedItemId()
-        {
-            int idx = (int)MathHelper.Clamp((float)Math.Round(Projectile.ai[0]), 0f, VariantItemIds.Length - 1);
-            return VariantItemIds[idx];
-        }
-
         public override bool PreDraw(ref Color lightColor)
         {
-            int itemId = GetSelectedItemId();
-            Texture2D tex = TextureAssets.Item[itemId].Value;
+            Texture2D tex = TextureAssets.Extra[HorseType].Value;
+
+            int frames = Main.projFrames[Projectile.type];
+            int frameHeight = tex.Height / frames;
+            Rectangle src = new Rectangle(0, frameHeight * Projectile.frame, tex.Width, frameHeight);
 
             // 以贴图中心为原点绘制
             Vector2 origin = new Vector2(tex.Width / 2f, tex.Height / 2f);
@@ -60,16 +72,9 @@ namespace WuDao.Content.Projectiles.Melee
             SpriteEffects fx = Projectile.spriteDirection == -1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
 
             // 让光照影响颜色
-            Color drawColor = Lighting.GetColor((int)(Projectile.Center.X / 16f), (int)(Projectile.Center.Y / 16f));
+            // Color drawColor = Lighting.GetColor((int)(Projectile.Center.X / 16f), (int)(Projectile.Center.Y / 16f));
 
-            Main.EntitySpriteDraw(tex, drawPos, null, drawColor, Projectile.rotation, origin, 1f, fx, 0);
-            return false;
-        }
-
-        // 可选：与地形碰撞后消失
-        public override bool OnTileCollide(Vector2 oldVelocity)
-        {
-            Projectile.Kill();
+            Main.EntitySpriteDraw(tex, drawPos, src, Color.White, Projectile.rotation, origin, 1f, fx, 0);
             return false;
         }
     }

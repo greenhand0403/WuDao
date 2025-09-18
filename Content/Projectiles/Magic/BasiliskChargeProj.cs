@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using Terraria;
+using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -11,18 +12,20 @@ namespace WuDao.Content.Items.Weapons.Magic
     public class BasiliskChargeProj : ModProjectile
     {
         public override string Texture => $"Terraria/Images/NPC_{NPCID.DesertBeast}";
-        private static Asset<Texture2D> TexAsset;
-        public override void Load()
-        {
-            if (!Main.dedServ)
-            {
-                TexAsset = ModContent.Request<Texture2D>(Texture, AssetRequestMode.AsyncLoad);
-            }
-        }
-        public override void Unload()
-        {
-            TexAsset = null;
-        }
+        public int FrameTicksPerFrame = 5;
+        public float MinSpeed = 8f;
+        // private static Asset<Texture2D> TexAsset;
+        // public override void Load()
+        // {
+        //     if (!Main.dedServ)
+        //     {
+        //         TexAsset = ModContent.Request<Texture2D>(Texture, AssetRequestMode.AsyncLoad);
+        //     }
+        // }
+        // public override void Unload()
+        // {
+        //     TexAsset = null;
+        // }
         public override void SetStaticDefaults()
         {
             // 原版石化蜥有多帧
@@ -61,7 +64,7 @@ namespace WuDao.Content.Items.Weapons.Magic
                 const float homingRange = 320f;  // 大范围，便于命中目标
                 const float homingLerp = 0.16f;  // 先强一点验证（看到明显拐弯后再降到 0.06~0.10）
                 float speed = Projectile.velocity.Length();
-                if (speed < 8f) speed = 8f;       // 防止速度被耗光
+                if (speed < MinSpeed) speed = MinSpeed;       // 防止速度被耗光
 
                 NPC target = null;
                 float best = homingRange;
@@ -97,7 +100,7 @@ namespace WuDao.Content.Items.Weapons.Magic
             }
 
             // 帧动画
-            if (++Projectile.frameCounter >= 5)
+            if (++Projectile.frameCounter >= FrameTicksPerFrame)
             {
                 Projectile.frameCounter = 0;
                 Projectile.frame++;
@@ -114,7 +117,9 @@ namespace WuDao.Content.Items.Weapons.Magic
         }
         public override bool PreDraw(ref Color lightColor)
         {
-            Texture2D tex = TexAsset.Value;
+            // Texture2D tex = TexAsset.Value;
+            Texture2D tex = TextureAssets.Npc[NPCID.DesertBeast].Value;
+            
             int frames = Main.projFrames[Projectile.type];
             int frameHeight = tex.Height / frames;
             Rectangle src = new Rectangle(0, frameHeight * Projectile.frame, tex.Width, frameHeight);

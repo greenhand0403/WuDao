@@ -6,12 +6,12 @@ using Terraria.ModLoader;
 using WuDao.Content.Juexue.Base;
 using WuDao.Content.Players;
 using WuDao.Common;
-using WuDao.Content.Projectiles.Ranged;
-using WuDao.Content.Projectiles;
+using WuDao.Content.Projectiles.Melee;
+using WuDao.Content.Projectiles.Magic;
 
 namespace WuDao.Content.Juexue.Passive
 {
-    // TODO: 增加鲸射弹和鲨射弹，鲸鱼虚影
+    // TODO: 增加鲸鱼虚影、鲸鱼动画
     public class SharkWhaleFist : JuexueItem
     {
         public override bool IsActive => false; // 被动
@@ -29,12 +29,12 @@ namespace WuDao.Content.Juexue.Passive
             if (!qi.TrySpendQi(Cost)) return;
 
             int projType = Main.rand.NextBool(2)
-                ? ModContent.ProjectileType<UnicornProjectile>()  // “鲸”占位：更显眼的碎片
+                ? ModContent.ProjectileType<OrcaProjectile>()  // “鲸”占位：更显眼的碎片
                 : ModContent.ProjectileType<SharkProjectile>(); // “鲨”占位：鲨弹
 
-            // Vector2 v = vel.SafeNormalize(Vector2.UnitX) * vel.Length(); // 同向
-            Vector2 v = vel.SafeNormalize(Vector2.UnitX) * 10f; // 同向
-            int proj = Projectile.NewProjectile(src, pos, v, projType, (int)(damage * 0.9f), knockback, player.whoAmI);
+            Vector2 v = vel.SafeNormalize(Vector2.UnitX) * vel.Length(); // 同向
+            // Vector2 v = vel.SafeNormalize(Vector2.UnitX) * 14f; // 同向
+            int proj = Projectile.NewProjectile(src, pos + 5 * v, v, projType, (int)(damage * 0.9f), knockback, player.whoAmI);
             if (proj < 0) return;
             Main.projectile[proj].friendly = true;
             Main.projectile[proj].hostile = false;

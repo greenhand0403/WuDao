@@ -32,7 +32,7 @@ namespace WuDao.Content.Players
         public readonly Dictionary<int, uint> perSkillNextUseTick = new();   // key = item.type
         public uint nextGlobalActiveTick = 0;
         // 公共冷却（2秒）
-        public const int GlobalActiveCooldownTicks = 60 * 2;
+        public int GlobalActiveCooldownTicks = 60;
 
         // —— 蓄力（龟派气功） —— //
         public bool Charging = false;
@@ -76,6 +76,7 @@ namespace WuDao.Content.Players
             {
                 QiRegenStand = 180;
                 QiRegenMove = 120;
+                GlobalActiveCooldownTicks = 10;
             }
         }
         public override void Initialize()
@@ -490,7 +491,7 @@ namespace WuDao.Content.Players
 
         public void StampActiveUse(int itemType, int extraCooldownTicks)
         {
-            nextGlobalActiveTick = Main.GameUpdateCount + GlobalActiveCooldownTicks;
+            nextGlobalActiveTick = Main.GameUpdateCount + (uint)GlobalActiveCooldownTicks;
             perSkillNextUseTick[itemType] = Main.GameUpdateCount + (uint)extraCooldownTicks;
         }
 

@@ -13,8 +13,7 @@ namespace WuDao.Content.Global.Projectiles
     {
         public override bool InstancePerEntity => false;
 
-        public override bool Shoot(Item item, Player player, EntitySource_ItemUse_WithAmmo source,
-            Vector2 position, Vector2 velocity, int type, int damage, float knockback)
+        public override bool Shoot(Item item, Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
 
             var qi = player.GetModPlayer<QiPlayer>();

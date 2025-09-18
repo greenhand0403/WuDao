@@ -497,6 +497,8 @@ Projectiles: {
 	WyvernCompositeProjectile.DisplayName: 飞龙射弹
 	ScallionSwordProj.DisplayName: 葱剑射弹
 	BladeTrailProj.DisplayName: 全局刀光拖尾
+	OrcaProjectile.DisplayName: 鲸鱼射弹
+	StampedeSpawnerProj.DisplayName: 万马奔腾射弹
 }
 
 DamageClasses: {

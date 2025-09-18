@@ -21,29 +21,39 @@ namespace WuDao.Content.Juexue.Active
 
         protected override bool OnActivate(Player player, QiPlayer qi)
         {
-            if (!qi.TrySpendQi(QiCost)) { Main.NewText("气力不足！", Microsoft.Xna.Framework.Color.OrangeRed); return false; }
-
-            var rect = new Rectangle((int)Main.screenPosition.X, (int)Main.screenPosition.Y, Main.screenWidth, Main.screenHeight);
-            Vector2 mouse = Main.MouseWorld;
-
-            bool mouseOnRight = mouse.X > rect.Center.X;
-            int startX = mouseOnRight ? rect.Left - 40 : rect.Right + 40;
-            int targetX = mouseOnRight ? rect.Right + 200 : rect.Left - 200;
-            int count = Main.rand.Next(26, 34);
-
-            for (int i = 0; i < count; i++)
+            if (!qi.TrySpendQi(QiCost))
             {
-                int y = Main.rand.Next(rect.Top + 40, rect.Bottom - 40);
-                Vector2 spawn = new Vector2(startX, y);
-                Vector2 dir = (new Vector2(targetX, y + Main.rand.Next(-40, 40)) - spawn).SafeNormalize(Vector2.UnitX) * Main.rand.NextFloat(14f, 19f);
-
-                int proj = Projectile.NewProjectile(player.GetSource_ItemUse(Item), spawn, dir,
-                    ModContent.ProjectileType<HorseItemVariantProjectile>(), 85, 2f, player.whoAmI);
-                var p = Main.projectile[proj];
-                p.tileCollide = false;
-                p.penetrate = 20;
-                p.timeLeft = 150;
+                Main.NewText("气力不足！", Microsoft.Xna.Framework.Color.OrangeRed);
+                return false;
             }
+
+            // 屏幕矩形（世界坐标）
+            Rectangle rect = new Rectangle((int)Main.screenPosition.X, (int)Main.screenPosition.Y, Main.screenWidth, Main.screenHeight);
+
+            // 从“远离鼠标”的一侧生成，横穿到对侧
+            bool mouseOnRight = Main.MouseWorld.X > rect.Center.X;
+            int startX = mouseOnRight ? rect.Left - 100 : rect.Right + 100;  // 出生点在屏幕外 100px
+            int targetX = mouseOnRight ? rect.Right + 320 : rect.Left - 320;  // 终点再飞出屏 320px
+
+            // 本轮数量：10~15
+            int count = Main.rand.Next(10, 16);
+
+            // 只在本地玩家侧生成一次控制器；由它“陆续”生成马
+            if (player.whoAmI == Main.myPlayer)
+            {
+                int idx = Projectile.NewProjectile(
+                    player.GetSource_ItemUse(Item),
+                    player.Center, // 控制器自身位置无所谓
+                    Vector2.Zero,
+                    ModContent.ProjectileType<StampedeSpawnerProj>(),
+                    0, 0f, player.whoAmI
+                );
+                if (idx >= 0 && Main.projectile[idx].ModProjectile is StampedeSpawnerProj sp)
+                {
+                    sp.Setup(rect, startX, targetX, count, damage: 85, knockback: 2f);
+                }
+            }
+
             return true;
         }
     }

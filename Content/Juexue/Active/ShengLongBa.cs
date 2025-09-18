@@ -23,15 +23,21 @@ namespace WuDao.Content.Juexue.Active
             if (!qi.TrySpendQi(QiCost)) { Main.NewText("气力不足！", Microsoft.Xna.Framework.Color.OrangeRed); return false; }
 
             Vector2 at = Main.MouseWorld + new Vector2(0, 48f);
-            for (int i = 0; i < 8; i++)
+            for (int i = 0; i < 1; i++)
             {
                 Vector2 v = new Vector2(Main.rand.NextFloat(-2.2f, 2.2f), -Main.rand.NextFloat(16f, 22f));
-                int proj = Projectile.NewProjectile(player.GetSource_ItemUse(Item), at, v,
-                    ModContent.ProjectileType<WyvernCompositeProjectile>(), 95, 3f, player.whoAmI);
+                int proj = Projectile.NewProjectile(
+                    player.GetSource_ItemUse(Item),
+                    at,
+                    v,
+                    ModContent.ProjectileType<WyvernCompositeProjectile>(),
+                    95,
+                    3f,
+                    player.whoAmI);
                 var p = Main.projectile[proj];
                 p.tileCollide = false;
                 p.penetrate = -1; // 无限穿透
-                p.timeLeft = 180;
+                p.timeLeft = 300;
                 p.friendly = true;
                 p.hostile = false;
             }
