@@ -7,21 +7,16 @@ using WuDao.Content.Players;
 using WuDao.Common;
 using System;
 using Terraria.Utilities;
+using WuDao.Content.Projectiles.Melee;
 
 namespace WuDao.Content.Juexue.Active
 {
-    // TODO: 增加剑类射弹，剑之虚影
+    // TODO: 剑之虚影
     public class TenThousandSwords : JuexueItem
     {
         public override JuexueID JuexueId => JuexueID.Active_TenThousandSwords;
         public override int QiCost => 200;
-        public override int SpecialCooldownTicks => 60 * 20; // 20 秒
-
-        public override void SetStaticDefaults()
-        {
-            // DisplayName.SetDefault("绝学·万剑归宗");
-            // Tooltip.SetDefault("主动（200气）：在屏幕边缘生成多把剑形射弹，向光标突进并可穿透。");
-        }
+        public override int SpecialCooldownTicks => 60 * 2; // 2 秒
 
         protected override bool OnActivate(Player player, QiPlayer qi)
         {
@@ -29,7 +24,7 @@ namespace WuDao.Content.Juexue.Active
             Vector2 mouse = Main.MouseWorld;
 
             int count = Main.rand.Next(16, 24);
-            float vnum = 30f;
+            float vnum = 5f;
             for (int i = 0; i < count; i++)
             {
                 // 随机边缘
@@ -41,12 +36,16 @@ namespace WuDao.Content.Juexue.Active
                     2 => new Vector2(Main.rand.Next(rect.Left, rect.Right), rect.Top),      // 上
                     _ => new Vector2(Main.rand.Next(rect.Left, rect.Right), rect.Bottom)    // 下
                 };
-                Vector2 v = (mouse - spawn).SafeNormalize(Vector2.UnitX) * vnum * Main.rand.NextFloat(0.8f, 1.2f);
-                // 占位剑气：Enchanted Beam / SwordBeam
-                int projType = ProjectileID.EnchantedBeam;
+                Vector2 v = (mouse - spawn).SafeNormalize(Vector2.UnitX) * vnum * Main.rand.NextFloat(1.2f, 1.8f);
+
+                int projType = ModContent.ProjectileType<TenThousandSwordsProj>();
                 int proj = Projectile.NewProjectile(player.GetSource_ItemUse(Item), spawn, v, projType, 80, 2f, player.whoAmI);
-                Main.projectile[proj].penetrate = 20; // 高穿透
-                Main.projectile[proj].tileCollide = false;
+                if (proj>=0)
+                {
+                    Main.projectile[proj].penetrate = 20; // 高穿透
+                    Main.projectile[proj].tileCollide = false;
+                    Main.projectile[proj].netUpdate = true;
+                }
             }
             return true;
         }

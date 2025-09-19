@@ -9,7 +9,7 @@ using WuDao.Content.Juexue.Passive;
 
 namespace WuDao.Content.Global.NPCs
 {
-    // TODO: 增加流浪商人贴图
+    // TODO: 增加流浪商人贴图,跟乞丐对话时，bug 绝学栏位置会发生偏移
     public class WanderingBeggar : ModNPC
     {
         public override string Texture => "Terraria/Images/NPC_368";

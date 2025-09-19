@@ -7,41 +7,20 @@ using Terraria.ModLoader;
 using Terraria.GameContent;
 using Terraria.DataStructures; // TextureAssets
 
-namespace WuDao.Content.Projectiles
+namespace WuDao.Content.Projectiles.Melee
 {
-    /// <summary>
-    /// 进阶：多贴图组成一个射弹（飞龙）。
-    /// 飞龙（Wyvern）由多个 NPC 片段组成：头(87)、身(88/89/90)、腿(91)、尾(92)。
-    /// 注意：腿段本身就包含左右两只爪（两个爪子），绘制顺序正确即可。
-    /// 这里用一个射弹在 PreDraw 中依次绘制各段，使其沿速度方向排布，简单形成一条龙。
-    /// </summary>
-    public class WyvernCompositeProjectile : ModProjectile
+    public class PhantomDragonProjectile : ModProjectile
     {
-        // 段序列：头、身、身、腿、身、身、尾（可按需增减身段数量）
-        private static readonly int[] SegmentNpcIds = new int[]
-        {
-            NPCID.WyvernHead,
-            NPCID.WyvernBody,
-            NPCID.WyvernLegs,
-            NPCID.WyvernBody,
-            NPCID.WyvernBody,
-            NPCID.WyvernLegs,
-            NPCID.WyvernBody2,
-            NPCID.WyvernBody3,
-            NPCID.WyvernTail
-        };
         public override string Texture => "Terraria/Images/Projectile_0";
         public override void SetStaticDefaults()
         {
-            // 放宽离屏裁剪，合成“长龙”需要更宽的范围
-            ProjectileID.Sets.DrawScreenCheckFluff[Type] = 800;
             Projectile.usesLocalNPCImmunity = true;
             Projectile.localNPCHitCooldown = 10; // 10帧同一NPC只吃一次
         }
         public override void SetDefaults()
         {
-            Projectile.width = 74;
-            Projectile.height = 156;
+            Projectile.width = 40;
+            Projectile.height = 40;
             Projectile.friendly = true;
             Projectile.ignoreWater = true;
             Projectile.tileCollide = false;
@@ -68,11 +47,11 @@ namespace WuDao.Content.Projectiles
             Vector2 dir = Projectile.velocity.LengthSquared() > 0.001f
                 ? Vector2.Normalize(Projectile.velocity)
                 : new Vector2(Projectile.direction, 0f);
-            Vector2 step = -dir * 26f; // 跟 PreDraw 的 spacing 保持一致
+            Vector2 step = -dir * 6f; // 跟 PreDraw 的 spacing 保持一致
             Vector2 segPos = Projectile.Center;
 
             float hitRadius = 12f; // 每段的“判定粗细”，按你的贴图大小调
-            for (int i = 0; i < SegmentNpcIds.Length; i++)
+            for (int i = 0; i < 4; i++)
             {
                 // AABB
                 if (Collision.CheckAABBvAABBCollision(targetHitbox.Center(), targetHitbox.Size(), segPos, new Vector2(hitRadius, hitRadius)))
@@ -83,6 +62,9 @@ namespace WuDao.Content.Projectiles
         }
         public override bool PreDraw(ref Color lightColor)
         {
+            Main.instance.LoadProjectile(ProjectileID.LunaticCultistPet);
+            Texture2D tex = TextureAssets.Projectile[ProjectileID.LunaticCultistPet].Value;
+
             // 方向/旋转（速度为0时兜底）
             Vector2 dir = Projectile.velocity.LengthSquared() > 0.001f
                 ? Vector2.Normalize(Projectile.velocity)
@@ -91,30 +73,32 @@ namespace WuDao.Content.Projectiles
             SpriteEffects fx = Projectile.spriteDirection == -1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
 
             // 以“头”为起点，后续各段按 spacing 反向排布
-            float spacing = 44f;
+            float spacing = 6f;
             Vector2 step = -dir * spacing;
             Vector2 segPos = Projectile.Top;
 
-            for (int i = 0; i < SegmentNpcIds.Length; i++)
+            for (int i = 0; i < 4; i++)
             {
-                int npcId = SegmentNpcIds[i];
+                Rectangle frame = new Rectangle(0, i * 46, tex.Width, 46);
+                if (i == 3)
+                {
+                    Rectangle frame1 = new Rectangle(0, 1 * 46, tex.Width, 46);
+                    Vector2 origin1 = new Vector2(frame1.Width / 2f, 0);
 
-                // 确保贴图已加载（避免 1×1 占位贴图）
-                Main.instance.LoadNPC(npcId);
-                Texture2D tex = TextureAssets.Npc[npcId].Value;
+                    Vector2 drawPos1 = segPos - Main.screenPosition - dir * i * 20;
+                    // 注意：左向时加 PI，贴图朝向才一致
+                    float drawRot1 = rot + MathHelper.PiOver2;
+                    Main.EntitySpriteDraw(tex, drawPos1, frame1, Color.White, drawRot1, origin1, 1f, fx, 0);
+                    i = 4;
+                }
+                Vector2 origin = new Vector2(frame.Width / 2f, 0);
 
-                Rectangle frame = new Rectangle(0, 0, tex.Width, tex.Height);
-                Vector2 origin = new Vector2(frame.Width / 2f, frame.Height / 2f);
-
-                Vector2 drawPos = segPos - Main.screenPosition;
+                Vector2 drawPos = segPos - Main.screenPosition - dir * i * 20;
                 // 注意：左向时加 PI，贴图朝向才一致
                 float drawRot = rot + MathHelper.PiOver2;
                 Main.EntitySpriteDraw(tex, drawPos, frame, Color.White, drawRot, origin, 1f, fx, 0);
-
-                segPos += step; // 下一段往后排
             }
             return false; // 禁用默认绘制
         }
-
     }
 }

@@ -415,6 +415,8 @@ Projectiles: {
 	BladeTrailProj.DisplayName: Blade Trail Proj
 	OrcaProjectile.DisplayName: Orca Projectile
 	StampedeSpawnerProj.DisplayName: Stampede Spawner Proj
+	TenThousandSwordsProj.DisplayName: Ten Thousand Swords Proj
+	PhantomDragonProjectile.DisplayName: Phantom Dragon Projectile
 }
 
 DamageClasses: {

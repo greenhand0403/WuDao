@@ -30,7 +30,7 @@ Items: {
 	}
 
 	WeaponBundleItem: {
-		DisplayName: 武器礼包
+		DisplayName: 模组礼包
 		Tooltip: 包含武道模组的武器、弹药、工具、配件等
 	}
 
@@ -424,7 +424,7 @@ Items: {
 	}
 
 	XiangLong18: {
-		DisplayName: 降龙十八掌
+		DisplayName: 绝学·降龙十八掌
 		Tooltip: 攻击时发射额外射弹，并在第8次和第10次造成8倍和10倍伤害
 	}
 
@@ -499,6 +499,8 @@ Projectiles: {
 	BladeTrailProj.DisplayName: 全局刀光拖尾
 	OrcaProjectile.DisplayName: 鲸鱼射弹
 	StampedeSpawnerProj.DisplayName: 万马奔腾射弹
+	TenThousandSwordsProj.DisplayName: 万剑归宗射弹
+	// PhantomDragonProjectile.DisplayName: Phantom Dragon Projectile
 }
 
 DamageClasses: {

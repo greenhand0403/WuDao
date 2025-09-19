@@ -10,22 +10,22 @@ using WuDao.Content.Projectiles;
 
 namespace WuDao.Content.Juexue.Active
 {
-    // TODO: 庐山升龙霸，补贴图，青龙虚影
+    // TODO: 庐山升龙霸，青龙虚影
     public class ShengLongBa : JuexueItem
     {
         public override JuexueID JuexueId => JuexueID.Active_ShengLongBa;
         public override bool IsActive => true;
-        public override int QiCost => 100;
-        public override int SpecialCooldownTicks => 60 * 12; // 12s
+        public override int QiCost => 10;
+        public override int SpecialCooldownTicks => 60 * 1; // 1s
 
         protected override bool OnActivate(Player player, QiPlayer qi)
         {
-            if (!qi.TrySpendQi(QiCost)) { Main.NewText("气力不足！", Microsoft.Xna.Framework.Color.OrangeRed); return false; }
+            if (!qi.TrySpendQi(QiCost)) { Main.NewText("气力不足！", Color.OrangeRed); return false; }
 
             Vector2 at = Main.MouseWorld + new Vector2(0, 48f);
             for (int i = 0; i < 1; i++)
             {
-                Vector2 v = new Vector2(Main.rand.NextFloat(-2.2f, 2.2f), -Main.rand.NextFloat(16f, 22f));
+                Vector2 v = new Vector2(Main.rand.NextFloat(-2.2f, 2.2f), -Main.rand.NextFloat(12f, 24f));
                 int proj = Projectile.NewProjectile(
                     player.GetSource_ItemUse(Item),
                     at,
@@ -35,11 +35,6 @@ namespace WuDao.Content.Juexue.Active
                     3f,
                     player.whoAmI);
                 var p = Main.projectile[proj];
-                p.tileCollide = false;
-                p.penetrate = -1; // 无限穿透
-                p.timeLeft = 300;
-                p.friendly = true;
-                p.hostile = false;
             }
             return true;
         }

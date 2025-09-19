@@ -8,6 +8,7 @@ using WuDao.Common;
 using WuDao.Content.Players;
 using WuDao.Content.Juexue.Base;
 using WuDao.Content.Projectiles.Melee;
+using System;
 
 namespace WuDao.Content.Juexue.Active
 {
@@ -17,40 +18,57 @@ namespace WuDao.Content.Juexue.Active
         public override JuexueID JuexueId => JuexueID.Active_Stampede;
         public override bool IsActive => true;
         public override int QiCost => 100;
-        public override int SpecialCooldownTicks => 60 * 15; // 15s
+        public override int SpecialCooldownTicks => 60 * 1; // 1s
 
         protected override bool OnActivate(Player player, QiPlayer qi)
         {
             if (!qi.TrySpendQi(QiCost))
             {
-                Main.NewText("气力不足！", Microsoft.Xna.Framework.Color.OrangeRed);
+                Main.NewText("气力不足！", Color.OrangeRed);
                 return false;
             }
 
             // 屏幕矩形（世界坐标）
-            Rectangle rect = new Rectangle((int)Main.screenPosition.X, (int)Main.screenPosition.Y, Main.screenWidth, Main.screenHeight);
+            Rectangle rect = Helpers.ScreenBoundsWorldSpace();
 
             // 从“远离鼠标”的一侧生成，横穿到对侧
             bool mouseOnRight = Main.MouseWorld.X > rect.Center.X;
-            int startX = mouseOnRight ? rect.Left - 100 : rect.Right + 100;  // 出生点在屏幕外 100px
-            int targetX = mouseOnRight ? rect.Right + 320 : rect.Left - 320;  // 终点再飞出屏 320px
+            int startX = mouseOnRight ? rect.Left - 30 : rect.Right + 30;  // 出生点在屏幕外 30px
+            // 速度
+            Vector2 v = Vector2.UnitX * (mouseOnRight ? 16 : -16);
+            // 每列投射物数量
+            int rowCount = 5;
+            int count = Main.rand.Next(4, 6) * rowCount;
 
-            // 本轮数量：10~15
-            int count = Main.rand.Next(10, 16);
-
-            // 只在本地玩家侧生成一次控制器；由它“陆续”生成马
             if (player.whoAmI == Main.myPlayer)
             {
-                int idx = Projectile.NewProjectile(
-                    player.GetSource_ItemUse(Item),
-                    player.Center, // 控制器自身位置无所谓
-                    Vector2.Zero,
-                    ModContent.ProjectileType<StampedeSpawnerProj>(),
-                    0, 0f, player.whoAmI
-                );
-                if (idx >= 0 && Main.projectile[idx].ModProjectile is StampedeSpawnerProj sp)
+                float spawnY;
+                int j = 0;
+                // 定位的行高
+                float tmpHeight = rect.Height / (2 * rowCount);
+                for (int i = 0; i < count; i++)
                 {
-                    sp.Setup(rect, startX, targetX, count, damage: 85, knockback: 2f);
+                    // 列序号 1 表示第 1 列
+                    if (i % rowCount == 0)
+                    {
+                        j++;
+                    }
+                    // 列的间隔
+                    int spawnX = mouseOnRight ? startX - j * 120 : startX + j * 120;
+                    // 行间隔 额外偏移 0.5 倍行高
+                    spawnY = (int)Math.Round(
+                        (double)(tmpHeight * (2 * (i % rowCount + 1) - j % 2))
+                        ) + rect.Top - 0.5f * tmpHeight;
+                    // 额外调整位置
+                    spawnY += rect.Height / 2;
+                    Vector2 spawn = new Vector2(spawnX, spawnY);
+
+                    int idx = Projectile.NewProjectile(
+                    player.GetSource_ItemUse(Item),
+                    spawn + new Vector2(0, 82 + 60),
+                    v,
+                    ModContent.ProjectileType<HorseItemVariantProjectile>(),
+                    85, 2f, player.whoAmI, i);
                 }
             }
 

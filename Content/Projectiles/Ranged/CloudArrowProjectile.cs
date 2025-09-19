@@ -5,7 +5,6 @@ using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace WuDao.Content.Projectiles.Ranged
-
 {
     public class CloudArrowProjectile : ModProjectile
     {
