@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -12,12 +13,12 @@ namespace WuDao.Content.Projectiles.Throwing
 
         public override void SetDefaults()
         {
-            Projectile.width = 18;
-            Projectile.height = 18;
+            Projectile.width = 12;
+            Projectile.height = 12;
             Projectile.friendly = false;
             Projectile.hostile = true;           // 默认按“红弹”处理；绿弹会在 AI 里关闭
             Projectile.penetrate = 1;
-            Projectile.timeLeft = 600;
+            Projectile.timeLeft = 300;
             Projectile.ignoreWater = true;
             Projectile.tileCollide = true;
             Projectile.aiStyle = 0;
@@ -57,22 +58,63 @@ namespace WuDao.Content.Projectiles.Throwing
         {
             // 红弹打到玩家掉血，无额外效果
         }
-
+        public override void OnSpawn(IEntitySource source)
+        {
+            Main.instance.LoadItem(ItemType);
+            base.OnSpawn(source);
+        }
         public override bool PreDraw(ref Color lightColor)
         {
-            // 直接画物品贴图：Main.itemTexture[itemId]
             var tex = Terraria.GameContent.TextureAssets.Item[ItemType].Value;
+
             Vector2 pos = Projectile.Center - Main.screenPosition;
-            Vector2 origin = tex.Size() * 0.5f;
 
-            // 先画发光外圈（简化：缩放的同色圈）
-            Texture2D circle = Terraria.GameContent.TextureAssets.MagicPixel.Value;
-            float r = 20f;
-            var c = IsRed ? new Color(255, 80, 80, 90) : new Color(80, 255, 80, 90);
-            Main.spriteBatch.Draw(circle, new Rectangle((int)pos.X - (int)r, (int)pos.Y - (int)r, (int)(r * 2), (int)(r * 2)), c);
+            // ★ 仅绘制第 1 帧
+            Rectangle? src = null;
+            var anim = Main.itemAnimations[ItemType];
+            if (anim is DrawAnimationVertical v)
+            {
+                int frameHeight = tex.Height / v.FrameCount;
+                src = new Rectangle(0, 0, tex.Width, frameHeight);
+            }
 
-            Main.spriteBatch.Draw(tex, pos, null, Color.White, Projectile.rotation, origin, 0.8f, SpriteEffects.None, 0f);
-            return false;
+            var glowColor = IsRed ? Color.Red : Color.Green;
+            glowColor.A = 100;
+            Vector2 origin = new Vector2(tex.Width * 0.5f, (src?.Height ?? tex.Height) * 0.5f);
+
+            // ======================================================================
+            // 选一种方式（默认开启“柔和外发光”），二选一即可：
+            // ======================================================================
+
+            // 【方式B：描边外轮廓 / Outline】
+            // 八方向微偏移描边，再画一次本体，形成实边效果（不切换混合模式）
+            bool useOutline = true;
+            if (useOutline)
+            {
+                float scale = 0.90f;
+                // 八方向偏移像素（根据缩放取 1~2 像素）
+                int px = 2;
+                Vector2[] offs =
+                {
+                    new Vector2(-px, 0), new Vector2(px, 0),
+                    new Vector2(0, -px), new Vector2(0, px),
+                    new Vector2(-px, -px), new Vector2(px, -px),
+                    new Vector2(-px, px), new Vector2(px, px),
+                };
+                // 描边
+                for (int i = 0; i < offs.Length; i++)
+                    Main.spriteBatch.Draw(tex, pos + offs[i], src, glowColor, Projectile.rotation, origin, scale, SpriteEffects.None, 0f);
+                // 本体
+                Main.spriteBatch.Draw(tex, pos, src, Color.White, Projectile.rotation, origin, scale, SpriteEffects.None, 0f);
+            }
+            else
+            {
+                // 仅画本体（不发光不描边）
+                Main.spriteBatch.Draw(tex, pos, src, Color.White, Projectile.rotation, origin, 0.90f, SpriteEffects.None, 0f);
+            }
+
+            return false; // 我们自己完成绘制
         }
+
     }
 }

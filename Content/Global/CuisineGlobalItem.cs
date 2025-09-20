@@ -56,6 +56,8 @@ namespace WuDao.Content.Global
 
         // “最高 300%”→ 额外倍数上限为 +3.0（最终乘区为 1 + 3 = ×4）
         public const float MaxExtraMultiplier = 3f;
+        // ① 放在 CuisineGlobalItem 类里常量区（和 MaxExtraMultiplier 等并列）
+        public const int MaxGourmetDefenseBonus = 30; // “满 300%”时的最大额外防御；可按需调
 
         // 更稳妥：制作瞬间直接扫描背包，而不是仅依赖 HasCookbook 标志
         private static bool HasCookbookNow(Player player)
@@ -133,6 +135,23 @@ namespace WuDao.Content.Global
                 damage *= (1f + extra);
             }
         }
+        // ② 覆写 UpdateAccessory：仅当该物品是饰品且属于“美食”集合时，按美味值加防
+        public override void UpdateAccessory(Item item, Player player, bool hideVisual)
+        {
+            if (!item.accessory) return; // 只处理饰品
+            if (!CuisineCollections.IsGourmet(item.type)) return;
+
+            var cp = player.GetModPlayer<CuisinePlayer>();
+
+            // 复用你现有的美味值→倍率逻辑，最高 +300%（extra ∈ [0, 3]）
+            float extra = MathHelper.Clamp(cp.Deliciousness * PerDeliciousPointToBonus, 0f, MaxExtraMultiplier);
+
+            // 把“进度”线性映射成防御值（满 300% 时给 +MaxGourmetDefenseBonus）
+            int defBonus = (int)System.Math.Round(MaxGourmetDefenseBonus * (extra / MaxExtraMultiplier));
+
+            if (defBonus > 0)
+                player.statDefense += defBonus; // 给到最终防御
+        }
 
         // 仅做标记展示（可选）
         public override void ModifyTooltips(Item item, List<Terraria.ModLoader.TooltipLine> tooltips)
@@ -141,6 +160,18 @@ namespace WuDao.Content.Global
                 tooltips.Add(new TooltipLine(Mod, "CuisineTag", "厨具"));
             if (CuisineCollections.IsGourmet(item.type))
                 tooltips.Add(new TooltipLine(Mod, "CuisineTag", "美食"));
+            // 在你已有的 ModifyTooltips 里追加这一段判断后缀（放在“美食”判断后即可）
+            if (item.accessory && CuisineCollections.IsGourmet(item.type))
+            {
+                var cp = Main.LocalPlayer?.GetModPlayer<CuisinePlayer>();
+                if (cp != null)
+                {
+                    float extra = MathHelper.Clamp(cp.Deliciousness * PerDeliciousPointToBonus, 0f, MaxExtraMultiplier);
+                    int defBonus = (int)System.Math.Round(MaxGourmetDefenseBonus * (extra / MaxExtraMultiplier));
+                    tooltips.Add(new TooltipLine(Mod, "CuisineDefense",
+                        $"美味饰品加成：+{defBonus} 防御（随美味值，提高至最高 +{MaxGourmetDefenseBonus}）"));
+                }
+            }
         }
 
         // 说明：饰品一般无直接伤害，这里不做处理。

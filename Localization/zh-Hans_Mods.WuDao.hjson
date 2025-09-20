@@ -501,6 +501,8 @@ Projectiles: {
 	StampedeSpawnerProj.DisplayName: 万马奔腾射弹
 	TenThousandSwordsProj.DisplayName: 万剑归宗射弹
 	// PhantomDragonProjectile.DisplayName: Phantom Dragon Projectile
+	// BirdFlockProj.DisplayName: Bird Flock Proj
+	// GlitteringClawShot.DisplayName: Glittering Claw Shot
 }
 
 DamageClasses: {

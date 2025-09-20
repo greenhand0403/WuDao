@@ -417,6 +417,8 @@ Projectiles: {
 	StampedeSpawnerProj.DisplayName: Stampede Spawner Proj
 	TenThousandSwordsProj.DisplayName: Ten Thousand Swords Proj
 	PhantomDragonProjectile.DisplayName: Phantom Dragon Projectile
+	BirdFlockProj.DisplayName: Bird Flock Proj
+	GlitteringClawShot.DisplayName: Glittering Claw Shot
 }
 
 DamageClasses: {
