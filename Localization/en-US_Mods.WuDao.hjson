@@ -368,6 +368,16 @@ Items: {
 		Tooltip: ""
 		DisplayName: Scallion Sword
 	}
+
+	ElasticLove: {
+		DisplayName: Elastic Love
+		Tooltip: ""
+	}
+
+	GelFlask: {
+		DisplayName: Gel Flask
+		Tooltip: ""
+	}
 }
 
 Projectiles: {
@@ -419,6 +429,7 @@ Projectiles: {
 	PhantomDragonProjectile.DisplayName: Phantom Dragon Projectile
 	BirdFlockProj.DisplayName: Bird Flock Proj
 	GlitteringClawShot.DisplayName: Glittering Claw Shot
+	ElasticLoveHook.DisplayName: Elastic Love Hook
 }
 
 DamageClasses: {
@@ -560,6 +571,16 @@ Buffs: {
 	WineCooldownBuff: {
 		DisplayName: Wine Cooldown Buff
 		Description: Mods.WuDao.Buffs.WineCooldownBuff.Description
+	}
+
+	GelFlaskDebuff: {
+		Description: Mods.WuDao.Buffs.GelFlaskDebuff.Description
+		DisplayName: Gel Flask Debuff
+	}
+
+	GelFlaskBuff: {
+		Description: Mods.WuDao.Buffs.GelFlaskBuff.Description
+		DisplayName: Gel Flask Buff
 	}
 }
 

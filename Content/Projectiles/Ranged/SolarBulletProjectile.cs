@@ -6,7 +6,6 @@ using Microsoft.Xna.Framework;
 
 namespace WuDao.Content.Projectiles.Ranged
 {
-    // 日曜弹 射弹
     public class SolarBulletProjectile : ModProjectile
     {
         public override void SetDefaults()
@@ -19,7 +18,7 @@ namespace WuDao.Content.Projectiles.Ranged
             Projectile.light = 0.5f;
             Projectile.alpha = 255;
             Projectile.MaxUpdates = 3;
-            Projectile.timeLeft = 600;
+            Projectile.timeLeft = 480;
             Projectile.DamageType = DamageClass.Ranged;
 
             Projectile.ignoreWater = true;
@@ -30,7 +29,9 @@ namespace WuDao.Content.Projectiles.Ranged
         public override void OnSpawn(Terraria.DataStructures.IEntitySource source)
         {
             var owner = Main.player[Projectile.owner];
-            Projectile.position.Y -= 10f * owner.gravDir;
+            Projectile.position.Y -= 5f * owner.gravDir;
+            // 提前移动一点，对齐枪口位置
+            Projectile.position += (Projectile.velocity.SafeNormalize(Vector2.UnitX) * 10f);
         }
 
         public override bool OnTileCollide(Vector2 oldVelocity)
@@ -51,18 +52,20 @@ namespace WuDao.Content.Projectiles.Ranged
 
             if (Main.myPlayer == Projectile.owner)
             {
-                Projectile p2 = Main.projectile[Projectile.NewProjectile(
-                    Projectile.GetSource_FromThis(),
-                    Projectile.Center,
-                    Vector2.Zero,
-                    ProjectileID.DaybreakExplosion,
-                    Projectile.damage,
-                    Projectile.knockBack,
-                    Projectile.owner,
-                    0,
-                    0.85f + Main.rand.NextFloat() * 1.15f
-                )];
-                p2.CritChance = 0;
+                Projectile p2 = Main.projectile[
+                    Projectile.NewProjectile(
+                        Projectile.GetSource_FromThis(),
+                        Projectile.Center,
+                        Vector2.Zero,
+                        ProjectileID.DaybreakExplosion,
+                        Projectile.damage,
+                        Projectile.knockBack,
+                        Projectile.owner,
+                        0,
+                        0.85f + Main.rand.NextFloat() * 1.15f
+                    )
+                ];
+                // p2.CritChance = 0;
             }
         }
     }

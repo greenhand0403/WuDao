@@ -5,8 +5,8 @@ Items: {
 	}
 
 	SolarBullet: {
-		DisplayName: 日耀弹
-		Tooltip: 发射出一个爆炸子弹，有几率造成日耀减益
+		DisplayName: 日曜弹
+		Tooltip: 发射出一个爆炸子弹，造成破晓减益
 	}
 
 	SteelHeavySword: {
@@ -303,7 +303,8 @@ Items: {
 			'''
 			消耗2生命
 			有弱追踪能力
-			击中敌人恢复1生命
+			击中恢复1生命
+			击杀敌人时掉落治疗红心
 			[c/FF4040:即使是爱，也无法阻挡生命的流逝]
 			'''
 	}
@@ -452,11 +453,21 @@ Items: {
 		Tooltip: 大葱鸭好吃又能打
 		DisplayName: 葱剑
 	}
+
+	ElasticLove: {
+		// DisplayName: Elastic Love
+		// Tooltip: ""
+	}
+
+	GelFlask: {
+		// DisplayName: Gel Flask
+		// Tooltip: ""
+	}
 }
 
 Projectiles: {
 	NebulaRocketProjectile.DisplayName: 星云火箭
-	SolarBulletProjectile.DisplayName: 日耀弹
+	SolarBulletProjectile.DisplayName: 日曜弹
 	WoodenShurikenProjectile.DisplayName: 木质飞镖
 	GoldenShurikenProjectile.DisplayName: 金飞镖
 	FlyStoneProjectile.DisplayName: 飞蝗石
@@ -503,6 +514,7 @@ Projectiles: {
 	// PhantomDragonProjectile.DisplayName: Phantom Dragon Projectile
 	// BirdFlockProj.DisplayName: Bird Flock Proj
 	// GlitteringClawShot.DisplayName: Glittering Claw Shot
+	// ElasticLoveHook.DisplayName: Elastic Love Hook
 }
 
 DamageClasses: {
@@ -644,6 +656,16 @@ Buffs: {
 	WineCooldownBuff: {
 		DisplayName: 永生之酒冷却中
 		Description: 暂时无法使用永生之酒
+	}
+
+	GelFlaskDebuff: {
+		// Description: Mods.WuDao.Buffs.GelFlaskDebuff.Description
+		// DisplayName: Gel Flask Debuff
+	}
+
+	GelFlaskBuff: {
+		// Description: Mods.WuDao.Buffs.GelFlaskBuff.Description
+		// DisplayName: Gel Flask Buff
 	}
 }
 

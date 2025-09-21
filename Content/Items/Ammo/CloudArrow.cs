@@ -17,10 +17,8 @@ namespace WuDao.Content.Items.Ammo
         {
             Item.width = 14;
             Item.height = 36;
-
             Item.damage = 10;
             Item.DamageType = DamageClass.Ranged;
-
             Item.maxStack = Item.CommonMaxStack;
             Item.consumable = true;
             Item.knockBack = 2f;
@@ -28,7 +26,7 @@ namespace WuDao.Content.Items.Ammo
             Item.shoot = ModContent.ProjectileType<CloudArrowProjectile>();
             Item.shootSpeed = 1.5f;
             Item.ammo = AmmoID.Arrow;
-            Item.rare = ItemRarityID.Blue;
+            Item.rare = ItemRarityID.Green;
         }
         public override void AddRecipes()
         {

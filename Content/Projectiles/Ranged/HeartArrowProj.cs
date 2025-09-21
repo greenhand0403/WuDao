@@ -17,14 +17,13 @@ namespace WuDao.Content.Projectiles.Ranged
             Projectile.height = 10;
             Projectile.aiStyle = ProjAIStyleID.Arrow;
             AIType = ProjectileID.WoodenArrowFriendly;
-
             Projectile.friendly = true;
             Projectile.DamageType = DamageClass.Ranged;
             Projectile.penetrate = 1;
             Projectile.timeLeft = 600;
             Projectile.ignoreWater = true;
             Projectile.light = 0.2f;
-
+            Projectile.MaxUpdates = 2;
             Projectile.arrow = true;
         }
 
@@ -37,7 +36,7 @@ namespace WuDao.Content.Projectiles.Ranged
         {
             Player owner = Main.player[Projectile.owner];
             var mp = owner.GetModPlayer<HeartStuffPlayer>();
-
+            // 格子数x16 转换为像素
             float radiusPx = (mp.SoulGemEquipped ? BuffedHomingRadiusTiles : BaseHomingRadiusTiles) * 16f;
 
             int targetIndex = -1;

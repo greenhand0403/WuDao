@@ -11,7 +11,7 @@ namespace WuDao.Content.Projectiles.Ranged
     {
         public override void SetStaticDefaults()
         {
-            ProjectileID.Sets.IsARocketThatDealsDoubleDamageToPrimaryEnemy[Type] = true; // Deals double damage on direct hits.
+            ProjectileID.Sets.IsARocketThatDealsDoubleDamageToPrimaryEnemy[Type] = true;
             ProjectileID.Sets.Explosive[Type] = true;
         }
         public override void SetDefaults()
@@ -22,7 +22,11 @@ namespace WuDao.Content.Projectiles.Ranged
             Projectile.penetrate = -1;
             Projectile.DamageType = DamageClass.Ranged;
         }
-
+        public override void OnSpawn(Terraria.DataStructures.IEntitySource source)
+        {
+            // 提前移动一点，对齐枪口位置
+            Projectile.position += Projectile.velocity.SafeNormalize(Vector2.UnitX) * 20f;
+        }
         public override void AI()
         {
             if (Projectile.owner == Main.myPlayer && Projectile.timeLeft <= 3)
@@ -43,14 +47,12 @@ namespace WuDao.Content.Projectiles.Ranged
                             posOffsetY = Projectile.velocity.Y * 0.5f;
                         }
 
-                        // Spawn fire dusts at the back of the rocket.
                         Dust fireDust = Dust.NewDustDirect(new Vector2(Projectile.position.X + 6f + posOffsetX, Projectile.position.Y + 6f + posOffsetY) - Projectile.velocity * 0.5f,
                             Projectile.width - 8, Projectile.height - 8, DustID.CrystalPulse2, 0f, 0f, 100);
                         fireDust.scale *= 1.2f + Main.rand.Next(10) * 0.1f;
                         fireDust.velocity *= 0.2f;
                         fireDust.noGravity = true;
 
-                        // Spawn smoke dusts at the back of the rocket.
                         Dust smokeDust = Dust.NewDustDirect(new Vector2(Projectile.position.X + 3f + posOffsetX, Projectile.position.Y + 3f + posOffsetY) - Projectile.velocity * 0.5f, Projectile.width - 8, Projectile.height - 8, DustID.Smoke, 0f, 0f, 100, default, 0.5f);
                         smokeDust.fadeIn = 1f + Main.rand.Next(5) * 0.1f;
                         smokeDust.velocity *= 0.05f;
@@ -62,7 +64,7 @@ namespace WuDao.Content.Projectiles.Ranged
                     Projectile.velocity *= 1.1f;
                 }
             }
-            // Rotate the rocket in the direction that it is moving.
+
             if (Projectile.velocity != Vector2.Zero)
             {
                 Projectile.rotation = (float)Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X) + MathHelper.PiOver2;
@@ -70,15 +72,15 @@ namespace WuDao.Content.Projectiles.Ranged
         }
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
-            Projectile.velocity *= 0f; // Stop moving so the explosion is where the rocket was.
+            Projectile.velocity *= 0f;
             Projectile.alpha = 255;
-            Projectile.timeLeft = 3; // Set the timeLeft to 3 so it can get ready to explode.
+            Projectile.timeLeft = 3;
             return false; // Returning false is important here. Otherwise the projectile will die without being resized (no blast radius).
         }
         public override void PrepareBombToBlow()
         {
-            Projectile.tileCollide = false; // This is important or the explosion will be in the wrong place if the rocket explodes on slopes.
-            Projectile.alpha = 255; // Make the rocket invisible.
+            Projectile.tileCollide = false;
+            Projectile.alpha = 255;
 
             // Resize the hitbox of the projectile for the blast "radius".
             // Rocket I: 128, Rocket III: 200, Mini Nuke Rocket: 250
@@ -115,7 +117,6 @@ namespace WuDao.Content.Projectiles.Ranged
                 dust.noGravity = true;
             }
 
-            // Spawn a bunch of smoke gores.
             for (int k = 0; k < 3; k++)
             {
                 float speedMulti = 0.3f;

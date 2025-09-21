@@ -196,6 +196,17 @@ namespace WuDao.Common
             ItemID.Pomegranate,
             ItemID.SpicyPepper
         };
+        public static readonly HashSet<int> EggSet = new()
+        {
+            ItemID.DD2BetsyPetItem,
+            ItemID.BlueEgg,
+            ItemID.RottenEgg,
+            ItemID.DD2PetGato,
+            ItemID.LizardEgg,
+            ItemID.SpiderEgg,
+            ItemID.FriedEgg,
+            ItemID.DD2PetGhost
+        };
     }
     public static class ProjectileSets
     {

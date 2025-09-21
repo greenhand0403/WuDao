@@ -40,7 +40,7 @@ namespace WuDao.Content.Juexue.Passive
                 Vector2 spawn = player.Center + Vector2.UnitX.RotatedBy(MathHelper.TwoPi * i / count) * 40f;
                 // Vector2 dir = (mouse - spawn).SafeNormalize(Vector2.UnitX) * 12f;
                 Vector2 dir = Vector2.One.RotatedBy(MathHelper.TwoPi * i / count);
-                Projectile.NewProjectile(src, spawn, dir, projType, (int)(damage * 0.8f), knockback, player.whoAmI);
+                Projectile.NewProjectile(src, spawn, dir * 12f, projType, (int)(damage * 0.8f), knockback, player.whoAmI);
             }
         }
     }
