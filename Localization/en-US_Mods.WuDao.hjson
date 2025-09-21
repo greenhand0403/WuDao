@@ -378,6 +378,11 @@ Items: {
 		DisplayName: Gel Flask
 		Tooltip: ""
 	}
+
+	GemPouch: {
+		Tooltip: ""
+		DisplayName: Gem Pouch
+	}
 }
 
 Projectiles: {
@@ -430,6 +435,7 @@ Projectiles: {
 	BirdFlockProj.DisplayName: Bird Flock Proj
 	GlitteringClawShot.DisplayName: Glittering Claw Shot
 	ElasticLoveHook.DisplayName: Elastic Love Hook
+	GemProjectile.DisplayName: Gem Projectile
 }
 
 DamageClasses: {

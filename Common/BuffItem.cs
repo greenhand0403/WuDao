@@ -480,6 +480,11 @@ namespace WuDao.Common
     {
         private static readonly List<BuffRule> _buffRules = new();
         private static readonly List<StatRule> _statRules = new();
+        public override void HoldItem(Item item, Player player)
+        {
+            if (item.accessory) return;           // ⛔ 即便拿在手上是个饰品，也不要应用
+            TryApplyFromItem(player, item);       // ✔ 武器手持走这里
+        }
         // 应用饰品的近战尺寸加成
         public override void ModifyItemScale(Item item, Player player, ref float scale)
         {

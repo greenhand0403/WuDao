@@ -8,9 +8,12 @@ using Terraria.GameContent;
 
 namespace WuDao.Content.Projectiles.Throwing
 {
-    public class FlyStoneProjectile : ModProjectile
+    public class FlyStoneProjectile : BaseThrowingProjectile
     {
         public override string Texture => "WuDao/Content/Items/Weapons/Throwing/FlyStone";
+        // 可按需微调飞石的物理参数
+        protected override float GravityPerTick => 0.2f; // 稍重一点
+        protected override float XDragWhenFast => 0.12f;
         public override void SetDefaults()
         {
             Projectile.width = 8;
@@ -22,23 +25,11 @@ namespace WuDao.Content.Projectiles.Throwing
 
             Projectile.timeLeft = 360;
             Projectile.ignoreWater = true;
-            Projectile.extraUpdates = 1;
+            Projectile.MaxUpdates = 2;
 
             // 添加抽尾设置
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 5;
             ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
-        }
-
-        public override void AI()
-        {
-            if (Projectile.timeLeft > 100)
-            {
-                if (Projectile.velocity.X > 1.5f)
-                {
-                    Projectile.velocity.X -= 0.15f;
-                }
-                Projectile.velocity.Y += 0.15f; // 模拟重力
-            }
         }
 
         public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
@@ -53,25 +44,16 @@ namespace WuDao.Content.Projectiles.Throwing
                 modifiers.SourceDamage *= 0.5f;
             }
         }
-
-        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+        public override void ImpactEffects(Vector2 position, Vector2 velocity)
         {
-            CreateImpactDust();
-        }
-
-        public override void OnKill(int timeLeft)
-        {
-            CreateImpactDust();
-        }
-
-        private void CreateImpactDust()
-        {
+            // 石屑效果
             for (int i = 0; i < 10; i++)
             {
-                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Stone, Projectile.velocity.X * 0.1f, Projectile.velocity.Y * 0.1f, 100, default, 0.85f);
+                int d = Dust.NewDust(position, Projectile.width, Projectile.height, DustID.Stone, velocity.X * 0.2f, velocity.Y * 0.2f);
+                Main.dust[d].noGravity = true;
+                Main.dust[d].scale = 1.1f;
             }
         }
-
         public override bool PreDraw(ref Color lightColor)
         {
             Texture2D texture = TextureAssets.Projectile[Projectile.type].Value;

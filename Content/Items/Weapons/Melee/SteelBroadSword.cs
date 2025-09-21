@@ -9,7 +9,6 @@ namespace WuDao.Content.Items.Weapons.Melee
 {
     public class SteelBroadSword : ModItem
     {
-        // 允许右键
         public override bool AltFunctionUse(Player player) => true;
         // 0=铜, 1=铁, 2=银
         private int paletteIndex = 1; // 默认铁

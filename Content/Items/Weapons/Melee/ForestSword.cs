@@ -44,9 +44,9 @@ namespace WuDao.Content.Items.Weapons.Melee
             // 接受任意木头、铜锭、铁锭
             Recipe recipe = CreateRecipe();
             recipe.AddRecipeGroup(RecipeGroupID.Wood, 2);
-            recipe.AddIngredient(ItemID.CopperBar, 2);
+            recipe.AddIngredient(ItemID.SwiftnessPotion, 2);
             recipe.AddIngredient(ItemID.IronBar, 2);
-            recipe.AddIngredient(ItemID.EnchantedSword, 1);
+            recipe.AddIngredient(ItemID.CopperShortsword, 1);
             recipe.AddTile(TileID.Anvils);
             recipe.Register();
         }

@@ -11,7 +11,11 @@ Items: {
 
 	SteelHeavySword: {
 		DisplayName: 玄铁重剑
-		Tooltip: 右键向前重劈
+		Tooltip:
+			'''
+				右键向前重劈
+				[c/AAAAAA:重剑无锋]
+			'''
 	}
 
 	WoodenShuriken: {
@@ -463,6 +467,11 @@ Items: {
 		// DisplayName: Gel Flask
 		// Tooltip: ""
 	}
+
+	GemPouch: {
+		// Tooltip: ""
+		// DisplayName: Gem Pouch
+	}
 }
 
 Projectiles: {
@@ -515,6 +524,7 @@ Projectiles: {
 	// BirdFlockProj.DisplayName: Bird Flock Proj
 	// GlitteringClawShot.DisplayName: Glittering Claw Shot
 	// ElasticLoveHook.DisplayName: Elastic Love Hook
+	// GemProjectile.DisplayName: Gem Projectile
 }
 
 DamageClasses: {

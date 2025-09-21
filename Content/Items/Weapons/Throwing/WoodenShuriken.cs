@@ -5,28 +5,28 @@ using WuDao.Content.Projectiles.Throwing;
 
 namespace WuDao.Content.Items.Weapons.Throwing
 {
-    // TODO: 未继承飞镖基类的木飞镖，需要统一
-    public class WoodenShuriken : ModItem
+    public class WoodenShuriken : BaseShurikenItem
     {
-        public override void SetDefaults()
-        {
-            Item.CloneDefaults(ItemID.Shuriken); // 克隆原版行为
-            Item.shootSpeed = 8f;
-            Item.shoot = ModContent.ProjectileType<WoodenShurikenProjectile>();
-            Item.damage = 6;
-            Item.useAnimation = 14;
-            Item.useTime = 14;
-            Item.autoReuse = true;
-            Item.rare = ItemRarityID.Green;
-            Item.value = Item.buyPrice(copper: 5);
-            Item.DamageType = DamageClass.Throwing;
-        }
+        // 数值配置
+        protected override int BaseDamage => 6;
+        protected override int BaseUseTime => 14;
+        protected override int BaseUseAnimation => 14;
+        protected override int BaseCrit => 2;
 
-        public override void AddRecipes()
+        protected override float BaseShootSpeed => 8f;
+        protected override int Rarity => ItemRarityID.Green;
+        protected override int ValueInCopper => Item.buyPrice(copper: 1);
+
+        // tModLoader 1.4 建议改成 DamageClass.Ranged
+        protected override DamageClass DmgClass => DamageClass.Throwing;
+
+        // 绑定它的投射物
+        protected override int ProjectileType => ModContent.ProjectileType<WoodenShurikenProjectile>();
+
+        // 配方（30 个/组）
+        protected override void BuildRecipe(Recipe recipe)
         {
-            CreateRecipe(30)
-                .AddIngredient(ItemID.Wood, 2)
-                .Register();
+            recipe.AddIngredient(ItemID.Wood, 2);
         }
     }
 }

@@ -34,6 +34,7 @@ namespace WuDao.Content.Items.Weapons.Melee
             Item.noMelee = false;
         }
         public override bool AltFunctionUse(Player player) => true; // Allows the item to be used with an alternate function (like a special attack)
+        // 右键重劈时武器尺寸增大
         public override void ModifyItemScale(Player player, ref float scale)
         {
             int cd = player.GetModPlayer<SteelHeavySwordPlayer>().RightClickCooldown;
@@ -62,9 +63,9 @@ namespace WuDao.Content.Items.Weapons.Melee
                 }
                 else
                 {
-                    // 最后 30%：2.0 -> 1.0
+                    // 最后 30%：2.0 -> 1.5
                     float p = (t - 0.7f) / 0.3f; // ∈[0,1]
-                    factor = MathHelper.Lerp(2.0f, 1.0f, p);
+                    factor = MathHelper.Lerp(2.0f, 1.5f, p);
                 }
 
                 scale *= factor;
@@ -89,7 +90,7 @@ namespace WuDao.Content.Items.Weapons.Melee
             }
             if (player.altFunctionUse == 2) // Check if the alternate function is being used
             {
-                Item.damage = 30;
+                Item.damage = 36;
                 Item.knockBack = 10f; // Increase knockback for the alternate use
                 Item.UseSound = SoundID.Item71; // Use the same sound for the alternate use
                 player.GetModPlayer<SteelHeavySwordPlayer>().RightClickCooldown = RightClickCooldown; // 1.5秒冷却 (60 tick/s)

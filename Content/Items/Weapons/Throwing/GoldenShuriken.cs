@@ -5,7 +5,6 @@ using WuDao.Content.Projectiles.Throwing;
 
 namespace WuDao.Content.Items.Weapons.Throwing
 {
-    // 继承飞镖基类的金飞镖
     public class GoldenShuriken : BaseShurikenItem
     {
         // 数值配置
