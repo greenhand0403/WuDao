@@ -17,10 +17,7 @@ namespace WuDao.Content.Projectiles.Ranged
         private bool _spawnedFirewall;
         // 字段
         private int _deferSplitTicks = 0;
-        // public override void SetStaticDefaults()
-        // {
-        //     DisplayName.SetDefault("分裂射弹");
-        // }
+        
         public override string Texture => $"Terraria/Images/Projectile_{ProjectileID.MiniNukeGrenadeI}";
         public override void SetDefaults()
         {
@@ -284,10 +281,6 @@ namespace WuDao.Content.Projectiles.Ranged
     // 分裂产生的“爆破弹”：极短飞行后立刻爆炸，造成小范围伤害
     public class TheOutlawSplitBomblet : ModProjectile
     {
-        // public override void SetStaticDefaults()
-        // {
-        //     DisplayName.SetDefault("分裂爆破弹");
-        // }
         public override string Texture => $"Terraria/Images/Projectile_{ProjectileID.GrenadeI}";
         public override void SetDefaults()
         {
@@ -360,10 +353,6 @@ namespace WuDao.Content.Projectiles.Ranged
     // 分裂时产生的火墙（世纪之花后解锁）
     public class TheOutlawFirewall : ModProjectile
     {
-        // public override void SetStaticDefaults()
-        // {
-        //     DisplayName.SetDefault("火墙");
-        // }
         // 自己管理的本地免疫（命中间隔）
         private const int LocalHitCD = 20; // 每20tick(约0.33s)对同一NPC结算一次
                                            // 用于命中/绘制的一致几何（你可以按贴图像素改）

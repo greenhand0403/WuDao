@@ -82,7 +82,7 @@ Items: {
 
 	NormalScissors: {
 		DisplayName: 御剪
-		Tooltip: 以气御剪，随游戏进度增强
+		Tooltip: 一把会随着冒险成长的奇怪剪刀
 	}
 
 	TimeStopItem: {
@@ -458,19 +458,14 @@ Items: {
 		DisplayName: 葱剑
 	}
 
-	ElasticLove: {
-		// DisplayName: Elastic Love
-		// Tooltip: ""
-	}
-
 	GelFlask: {
-		// DisplayName: Gel Flask
-		// Tooltip: ""
+		DisplayName: 凝胶瓶
+		Tooltip: 为近战武器和鞭子提供凝胶溅射增益
 	}
 
 	GemPouch: {
-		// Tooltip: ""
-		// DisplayName: Gem Pouch
+		Tooltip: 宝石袋
+		DisplayName: 投掷随机宝石，不同类型具有不同效果
 	}
 }
 
@@ -520,11 +515,8 @@ Projectiles: {
 	OrcaProjectile.DisplayName: 鲸鱼射弹
 	StampedeSpawnerProj.DisplayName: 万马奔腾射弹
 	TenThousandSwordsProj.DisplayName: 万剑归宗射弹
-	// PhantomDragonProjectile.DisplayName: Phantom Dragon Projectile
-	// BirdFlockProj.DisplayName: Bird Flock Proj
-	// GlitteringClawShot.DisplayName: Glittering Claw Shot
-	// ElasticLoveHook.DisplayName: Elastic Love Hook
-	// GemProjectile.DisplayName: Gem Projectile
+	PhantomDragonProjectile.DisplayName: 幻影龙射弹
+	GemProjectile.DisplayName: 宝石射弹
 }
 
 DamageClasses: {
@@ -669,13 +661,13 @@ Buffs: {
 	}
 
 	GelFlaskDebuff: {
-		// Description: Mods.WuDao.Buffs.GelFlaskDebuff.Description
-		// DisplayName: Gel Flask Debuff
+		Description: 减速，怕火
+		DisplayName: 黏糊糊的凝胶
 	}
 
 	GelFlaskBuff: {
-		// Description: Mods.WuDao.Buffs.GelFlaskBuff.Description
-		// DisplayName: Gel Flask Buff
+		Description: 击中敌人时造成黏糊糊的凝胶减益
+		DisplayName: 凝胶溅射
 	}
 }
 
@@ -730,7 +722,7 @@ Configs: {
 }
 
 Tiles.PyramidStatueTile.MapEntry: 迷你金字塔物块
-"Keybinds.Cast/Charge Juexue.DisplayName": 施展绝学键
+"Keybinds.Cast/Charge Juexue.DisplayName": 释放绝学键
 
 NPCs: {
 	WanderingBeggar.DisplayName: 流浪乞丐

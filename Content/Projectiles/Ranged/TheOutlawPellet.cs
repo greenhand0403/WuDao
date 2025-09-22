@@ -10,10 +10,6 @@ namespace WuDao.Content.Projectiles.Ranged
     // 霰弹单颗弹丸：穿透 3， 每穿透1个 -10% 最终伤害
     public class TheOutlawPellet : ModProjectile
     {
-        // public override void SetStaticDefaults()
-        // {
-        //     DisplayName.SetDefault("霰弹弹丸");
-        // }
         public override string Texture => $"Terraria/Images/Projectile_{ProjectileID.MeteorShot}";
         public override void SetDefaults()
         {
@@ -24,7 +20,7 @@ namespace WuDao.Content.Projectiles.Ranged
             Projectile.DamageType = DamageClass.Ranged;
             Projectile.penetrate = 3;
             Projectile.timeLeft = 300;
-            Projectile.extraUpdates = 1;
+            Projectile.MaxUpdates = 2;
             Projectile.tileCollide = true;
             Projectile.usesLocalNPCImmunity = true;
             Projectile.localNPCHitCooldown = 6; // 减轻同帧多次命中

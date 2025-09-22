@@ -1,6 +1,7 @@
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using WuDao.Common;
 
 namespace WuDao.Content.Items.Weapons.Throwing
 {
@@ -13,7 +14,7 @@ namespace WuDao.Content.Items.Weapons.Throwing
         protected override int BaseCrit => 2;
 
         protected override float BaseShootSpeed => 9f;
-        protected override int Rarity => ItemRarityID.Green;
+        protected override int Rarity => ModContent.RarityType<LightBlueRarity>();
         protected override int ValueInCopper => Item.buyPrice(silver: 15);
 
         // tModLoader 1.4 建议改成 DamageClass.Ranged

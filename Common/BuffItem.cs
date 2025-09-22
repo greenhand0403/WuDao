@@ -98,14 +98,24 @@ namespace WuDao.Common
         public int TopUpAmount;      // 一次性顶到的时间（帧），推荐 60~300
         public int RefreshThreshold; // 当剩余时间低于该阈值（帧）时刷新
         public bool Quiet;           // 是否静默（不弹提示）
-
-        public BuffEffect(int buffId, int topUpAmount = 120, int refreshThreshold = 30, bool quiet = true)
+        // 新增：是否常驻（不显示时间，不递减）
+        public bool Permanent;
+        // 条件不满足时是否移除（常驻时默认需要移除）
+        public bool RemoveWhenConditionFalse;
+        public BuffEffect(int buffId, int topUpAmount = 120, int refreshThreshold = 30, bool quiet = true,
+                              bool permanent = false, bool removeWhenConditionFalse = true)
         {
             BuffId = buffId;
             TopUpAmount = topUpAmount;
             RefreshThreshold = refreshThreshold;
             Quiet = quiet;
+            Permanent = permanent;
+            RemoveWhenConditionFalse = removeWhenConditionFalse;
         }
+
+        // 便捷工厂：常驻（不减时、不显示时间）的 Buff（需要你在 ModBuff 里设置 noTimeDisplay + TimeLeftDoesNotDecrease）
+        public static BuffEffect PermanentBuff(int buffId, bool quiet = true)
+            => new BuffEffect(buffId, topUpAmount: 2, refreshThreshold: 0, quiet: quiet, permanent: true, removeWhenConditionFalse: true);
     }
 
     public class BuffRule
@@ -181,6 +191,7 @@ namespace WuDao.Common
         public bool FlagNoKnockback = false;
         public bool FlagLongInvince = false;
         public int LavaMax = 0;
+        internal readonly HashSet<int> RequiredPermanentBuffs = new(); // 本帧需要保持的常驻 Buff
         public override void ResetEffects()
         {
             MoveSpeedAdd = 0f;
@@ -216,6 +227,7 @@ namespace WuDao.Common
             LavaMax = 0;
             FlagNoKnockback = false;
             FlagLongInvince = false;
+            RequiredPermanentBuffs.Clear();   // 每帧开始清空“需求集”
         }
 
         public override void UpdateEquips()
@@ -258,6 +270,7 @@ namespace WuDao.Common
             if (FlagSlowFall) Player.slowFall = true;
             if (FlagFireWalk) Player.fireWalk = true;
             if (FlagLavaImmune) Player.lavaImmune = true;
+            if (FlagNoFallDmg) Player.noFallDmg = true;
             // 十字项链延长无敌帧
             if (FlagLongInvince) Player.longInvince = true;
             // 应用本帧声明的免疫
@@ -266,6 +279,43 @@ namespace WuDao.Common
                 Player.buffImmune[buffId] = true;
                 if (Player.HasBuff(buffId))
                     Player.ClearBuff(buffId);
+            }
+            // 最大生命：先百分比，再平移
+            int newMaxLife = (int)Math.Round(Player.statLifeMax2 * MaxLifeMult) + MaxLifeAdd;
+            if (newMaxLife < 1) newMaxLife = 1;
+            Player.statLifeMax2 = newMaxLife;
+            if (Player.statLife > Player.statLifeMax2)
+                Player.statLife = Player.statLifeMax2;
+            // 生命再生：先乘再加，便于和其他来源组合
+            Player.lifeRegen = (int)Math.Round(Player.lifeRegen * LifeRegenMult);
+            Player.lifeRegen += LifeRegenAdd;
+            // 最大法力：先百分比，再平移
+            Player.statManaMax2 = (int)Math.Round(Player.statManaMax2 * MaxManaMult) + MaxManaAdd;
+            if (Player.statMana > Player.statManaMax2) Player.statMana = Player.statManaMax2;
+            // 法力再生：先乘再加，便于和其他来源组合
+            Player.manaRegen = (int)Math.Round(Player.manaRegen * ManaRegenMult) + ManaRegenAdd;
+            // 一般都是先乘后加
+            Player.statDefense *= DefenseMult;
+            Player.statDefense += DefenseAdd;
+
+            // —— 常驻 Buff 清理：本帧没有声明需要的常驻，且玩家身上还在，就清掉
+            // 注意：只清理我们框架标记为“常驻”的 Buff，不影响原版/其它临时 Buff
+            if (RequiredPermanentBuffs.Count > 0)
+            {
+                for (int i = 0; i < Player.buffType.Length; i++)
+                {
+                    int t = Player.buffType[i];
+                    if (t <= 0) continue;
+
+                    // 只处理我们“常驻”规则添加的那些 Buff：特征是你在 ModBuff 里设置了“时间不递减”
+                    //（也可以另外维护一个静态 HashSet<int> ManagedPermanentIds 来更精确地区分）
+                    if (BuffID.Sets.TimeLeftDoesNotDecrease[t] && !RequiredPermanentBuffs.Contains(t))
+                    {
+                        Player.ClearBuff(t);
+                        // 清掉后本帧不再绘制（不会闪烁，因为只在真的不需要时才清）
+                        i--;
+                    }
+                }
             }
         }
         // BuffStatPlayer 内新增字段（缓存用，避免每帧分配）
@@ -323,29 +373,6 @@ namespace WuDao.Common
             // Player.GetKnockback(DamageClass.Summon)
             return true;
         }
-        public override void PostItemCheck()
-        {
-            // 最大生命：先百分比，再平移
-            int newMaxLife = (int)Math.Round(Player.statLifeMax2 * MaxLifeMult) + MaxLifeAdd;
-            if (newMaxLife < 1) newMaxLife = 1;
-            Player.statLifeMax2 = newMaxLife;
-            if (Player.statLife > Player.statLifeMax2)
-                Player.statLife = Player.statLifeMax2;
-            // 生命再生：先乘再加，便于和其他来源组合
-            Player.lifeRegen = (int)Math.Round(Player.lifeRegen * LifeRegenMult);
-            Player.lifeRegen += LifeRegenAdd;
-            // 最大法力：先百分比，再平移
-            Player.statManaMax2 = (int)Math.Round(Player.statManaMax2 * MaxManaMult) + MaxManaAdd;
-            if (Player.statMana > Player.statManaMax2) Player.statMana = Player.statManaMax2;
-            // 法力再生：先乘再加，便于和其他来源组合
-            Player.manaRegen = (int)Math.Round(Player.manaRegen * ManaRegenMult) + ManaRegenAdd;
-            // 一般都是先乘后加
-            Player.statDefense *= DefenseMult;
-            Player.statDefense += DefenseAdd;
-
-            if (FlagNoFallDmg) Player.noFallDmg = true;
-        }
-
     }
     // 一个“属性效果”的表示：
     public delegate void StatApplier(Player player, BuffStatPlayer acc);
@@ -540,10 +567,24 @@ namespace WuDao.Common
             }
         }
 
-        // 低开销顶时间（仅在需要时操作）
+        // 低开销：常驻就“确保存在”，普通就“阈值刷新”
         private static void ApplyBuffSmart(Player player, in BuffEffect eff)
         {
             int idx = player.FindBuffIndex(eff.BuffId);
+            var acc = player.GetModPlayer<BuffStatPlayer>();
+
+            if (eff.Permanent)
+            {
+                // 记录“本帧需要保持”的常驻 Buff
+                acc.RequiredPermanentBuffs.Add(eff.BuffId);
+
+                // 常驻：不存在就加一个很小的时间（因为 TimeLeftDoesNotDecrease=true，不会递减）
+                if (idx == -1)
+                    player.AddBuff(eff.BuffId, 2, eff.Quiet); // 2 tick 即可（不递减）
+                return;
+            }
+
+            // 普通：阈值刷新
             if (idx == -1)
                 player.AddBuff(eff.BuffId, eff.TopUpAmount, eff.Quiet);
             else if (player.buffTime[idx] < eff.RefreshThreshold)

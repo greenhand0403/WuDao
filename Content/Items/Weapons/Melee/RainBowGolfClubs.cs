@@ -17,8 +17,8 @@ namespace WuDao.Content.Items.Weapons.Melee
             Item.knockBack = 6f;
 
             Item.useStyle = ItemUseStyleID.GolfPlay; // 挥动
-            Item.useTime = 25;
-            Item.useAnimation = 25;
+            Item.useTime = 24;
+            Item.useAnimation = 24;
             Item.autoReuse = true;
 
             Item.width = 40;
@@ -32,7 +32,7 @@ namespace WuDao.Content.Items.Weapons.Melee
 
             Item.UseSound = SoundID.Item1;
 
-            Item.shootSpeed = 12f; // 基础朝向速度；实际会在 Shoot() 里做随机化
+            Item.shootSpeed = 14f; // 基础朝向速度；实际会在 Shoot() 里做随机化
             Item.shoot = ProjectileID.GolfBallDyedBlack;
         }
 
@@ -54,9 +54,10 @@ namespace WuDao.Content.Items.Weapons.Melee
             float speed = Main.rand.NextFloat(9f, 15f);
             Vector2 dir = velocity.SafeNormalize(player.direction == 1 ? Vector2.UnitX : -Vector2.UnitX);
             Vector2 finalVel = dir.RotatedBy(angleOffset) * speed;
-            // 固定10点伤害
-            Projectile.NewProjectile(source, position, finalVel, vanillaType, 10 + ballIndex, knockback, player.whoAmI);
-            // 暂时不在这里改近战/寿命/命中次数 —— 交给 GlobalProjectile 统一做（见下一节）
+            // 往下偏移15像素
+            position += Vector2.UnitY * 15;
+            int proj = Projectile.NewProjectile(source, position, finalVel, vanillaType, 3 * ballIndex + damage, knockback, player.whoAmI);
+            Main.projectile[proj].MaxUpdates = 2;
             return false;
         }
 

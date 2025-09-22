@@ -3,6 +3,7 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
+using WuDao.Common;
 using WuDao.Content.Projectiles.Magic;
 
 namespace WuDao.Content.Items.Weapons.Magic
@@ -24,7 +25,7 @@ namespace WuDao.Content.Items.Weapons.Magic
             Item.shoot = ModContent.ProjectileType<WindBladeProjectile>();
             Item.shootSpeed = 0f; // 速度在弹幕里控制
             Item.autoReuse = true;
-            Item.rare = ItemRarityID.Blue;
+            Item.rare = ModContent.RarityType<LightBlueRarity>();
             Item.value = Item.buyPrice(silver: 50);
         }
 

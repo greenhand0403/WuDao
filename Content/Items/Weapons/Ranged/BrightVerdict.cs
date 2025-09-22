@@ -11,9 +11,9 @@ namespace WuDao.Content.Items.Weapons.Ranged
         public override void SetDefaults()
         {
             Item.CloneDefaults(ItemID.OnyxBlaster); // 继承霰弹逻辑基础参数
-            Item.damage = 25;                        // 你原来的数值
+            Item.damage = 25;
             Item.shoot = ModContent.ProjectileType<BrightVerdictProjectile>(); // 特殊“神圣弹丸”
-            Item.rare = ItemRarityID.LightRed;      // 可按喜好
+            Item.rare = ItemRarityID.LightRed;
             Item.UseSound = SoundID.Item36;         // 霰弹风格，神圣一点也可换成SoundID.Item40等
             Item.autoReuse = true;
         }

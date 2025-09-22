@@ -10,14 +10,14 @@ using WuDao.Content.Buffs;
 // ModPlayer ModItem ModProjectile 写在一个文件了
 namespace WuDao.Content.Items.Weapons.Melee
 {
-    // —— 玩家状态：冲刺CD + 蓄力能量 —— //
+    // —— 玩家状态：冲刺CD + 剑气 —— //
     public class NormalScissorsPlayer : ModPlayer
     {
         public int dashCooldown;            // 右键冲刺冷却（帧）
         public int energy;                  // 左键能量（0~EnergyMax）
         public const int EnergyMax = 100;   // 满能量阈值
         public const int EnergyGainPerHit = 25; // 每次左键命中获得的能量
-        public bool forceChargedOnNextSwing = false; // 冲刺后置位，下一次左键挥砍必定释放蓄力斩波
+        public bool forceChargedOnNextSwing = false; // 冲刺后置位，下一次左键挥砍必定释放剑气
 
         public override void ResetEffects()
         {
@@ -36,10 +36,12 @@ namespace WuDao.Content.Items.Weapons.Melee
     }
 
     /// <summary>
-    /// NormalScissors 三段成长 + 能量蓄力
-    /// - 击败巨鹿（Deerclops）：开启“左键平A攒能量→满后自动释放蓄力斩”
+    /// NormalScissors 三段成长 + 充能剑气
+    /// - 击败蜂后：武器尺寸增加
+    /// - 击败骷髅王（Deerclops）：开启“左键平A攒能量→满后自动释放剑气”
     /// - 击败血肉墙（Wall of Flesh → Hardmode）：右键冲刺切割（CD 1s）
-    /// - 击败史莱姆皇后（Queen Slime）：近战命中时额外发射 Enchanted Beam
+    /// - 击败机械魔眼（MechBoss2）：近战命中时额外发射斩波
+    /// - 击败世纪之花：额外发射泰拉剑气
     /// - 放大后持有方式后移对齐手臂
     /// </summary>
     public class NormalScissors : ModItem
@@ -54,7 +56,7 @@ namespace WuDao.Content.Items.Weapons.Melee
         // 放大后持有时的后移像素（越大越靠后）
         private const float HoldBackOffset = 6f;
 
-        // 蓄力斩数值（巨鹿后解锁）
+        // 剑气数值（骷髅王后解锁）
         private const float WaveDamageMul = 1.45f; // 斩波伤害系数（相对近战本体）
         private const float WaveSpeed = 17f;   // 斩波飞行速度
         // 右键冲刺（WoF后）
@@ -62,8 +64,7 @@ namespace WuDao.Content.Items.Weapons.Melee
         private const float DashSpeed = 11.5f;
         private const int DashSlashProjTime = 10;
 
-        // Queen Slime 射弹
-        private const int BeamProjectileType = ProjectileID.EnchantedBeam;
+        private const int BeamProjectileType = ProjectileID.TerraBlade2Shot;
         private const float BeamSpeed = 12f;
 
         public override void SetDefaults()
@@ -77,7 +78,7 @@ namespace WuDao.Content.Items.Weapons.Melee
             Item.useTime = 22;
             Item.useAnimation = 22;
             Item.useTurn = true;
-            Item.autoReuse = true;      // 自动挥舞无冲突
+            Item.autoReuse = true;
             Item.UseSound = SoundID.Item1;
 
             Item.DamageType = DamageClass.Melee;
@@ -115,19 +116,13 @@ namespace WuDao.Content.Items.Weapons.Melee
             }
         }
 
-        // 动态伤害：这里不用做“蓄力时加成”，因为这代由“自动释放蓄力斩”单独结算
-        public override void ModifyWeaponDamage(Player player, ref StatModifier damage)
-        {
-            // 可在此做其他阶段数值（若需要）
-        }
-
-        // 左键命中：攒能量 + Queen Slime 发射射弹
+        // 左键命中：攒能量发射射弹
         public override void OnHitNPC(Player player, NPC target, NPC.HitInfo hit, int damageDone)
         {
             var mp = player.GetModPlayer<NormalScissorsPlayer>();
 
-            // —— 攒能量：打过巨鹿才开始记录 —— //
-            if (NPC.downedDeerclops)
+            // —— 攒能量：打过骷髅王才开始记录 —— //
+            if (NPC.downedBoss3)
             {
                 mp.GainEnergy(NormalScissorsPlayer.EnergyGainPerHit);
 
@@ -139,21 +134,20 @@ namespace WuDao.Content.Items.Weapons.Melee
                 }
             }
 
-            // —— Queen Slime：附加发射原版射弹 —— //
-            // if (NPC.downedQueenSlime && Main.myPlayer == player.whoAmI)
-            // {
-            //     Vector2 dir = Vector2.Normalize(Main.MouseWorld - player.Center);
-            //     if (dir == Vector2.Zero) dir = new Vector2(player.direction, 0f);
-            //     Projectile.NewProjectile(
-            //         player.GetSource_ItemUse(Item),
-            //         player.Center,
-            //         dir * BeamSpeed,
-            //         BeamProjectileType,
-            //         (int)(Item.damage * 0.75f),
-            //         Item.knockBack * 0.7f,
-            //         player.whoAmI
-            //     );
-            // }
+            if (NPC.downedPlantBoss && Main.myPlayer == player.whoAmI)
+            {
+                Vector2 dir = Vector2.Normalize(Main.MouseWorld - player.Center);
+                if (dir == Vector2.Zero) dir = new Vector2(player.direction, 0f);
+                Projectile.NewProjectile(
+                    player.GetSource_ItemUse(Item),
+                    player.Center,
+                    dir * BeamSpeed,
+                    BeamProjectileType,
+                    (int)(Item.damage * 0.75f),
+                    Item.knockBack * 0.7f,
+                    player.whoAmI
+                );
+            }
         }
 
         // 右键功能启用
@@ -185,10 +179,10 @@ namespace WuDao.Content.Items.Weapons.Melee
                 Item.noUseGraphic = false;
                 Item.noMelee = false;
                 Item.channel = false;
-                // ★ 关键改动：Queen Slime 解锁后，给物品常驻发射 EnchantedBeam（像附魔剑）
-                if (NPC.downedQueenSlime)
+                // 给物品常驻发射剑气
+                if (NPC.downedPlantBoss)
                 {
-                    Item.shoot = ProjectileID.EnchantedBeam;
+                    Item.shoot = BeamProjectileType;
                     Item.shootSpeed = BeamSpeed;          // 你之前定义的 BeamSpeed（例如 12f）
                                                           // （可选）如果想让斩波略弱于本体，可在 Shoot/ModifyShootStats 里调整 damage/knockback，见下方可选项
                 }
@@ -203,7 +197,7 @@ namespace WuDao.Content.Items.Weapons.Melee
         public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity,
                                               ref int type, ref int damage, ref float knockback)
         {
-            if (type == ProjectileID.EnchantedBeam && NPC.downedQueenSlime)
+            if (type == BeamProjectileType && NPC.downedPlantBoss)
             {
                 damage = (int)(damage * 0.75f);  // 比本体伤害低一些，按需调整
                 knockback *= 0.7f;
@@ -276,12 +270,11 @@ namespace WuDao.Content.Items.Weapons.Melee
             Vector2 dir = Vector2.Normalize(Main.MouseWorld - player.Center);
             if (dir.LengthSquared() < 0.001f) dir = new Vector2(player.direction, 0f);
 
-            // ⭐ 改成发泰拉刃的射弹（TerraBeam）
             Projectile.NewProjectile(
                 player.GetSource_ItemUse(Item),
                 player.Center,
                 dir * WaveSpeed,
-                ProjectileID.TerraBeam,                       // ← 关键：泰拉刃斩波
+                ProjectileID.DD2SquireSonicBoom,
                 (int)(Item.damage * WaveDamageMul),
                 Item.knockBack + 1.5f,
                 player.whoAmI
@@ -299,28 +292,40 @@ namespace WuDao.Content.Items.Weapons.Melee
 
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
-            int idx = tooltips.FindIndex(t => t.Mod == "Terraria" && t.Name == "Tooltip0");
-            if (idx < 0) idx = tooltips.Count;
+            Player player = Main.LocalPlayer;
 
-            bool deer = NPC.downedDeerclops;
-            bool wof = Main.hardMode;
-            bool qsl = NPC.downedQueenSlime;
+            // 添加基础说明
+            tooltips.Add(new TooltipLine(Mod, "GrowthInfo", "成长型武器：会随击败特定 Boss 解锁能力"));
 
-            tooltips.Insert(idx++, new TooltipLine(Mod, "GrowthHeader", "成长解锁："));
-            tooltips.Insert(idx++, new TooltipLine(Mod, "Step_Deer",
-                $"{(deer ? "✔" : "✖")} 巨鹿：左键平A攒能量 → 满能自动释放“蓄力斩”"));
-            tooltips.Insert(idx++, new TooltipLine(Mod, "Step_WoF",
-                $"{(wof ? "✔" : "✖")} 血肉墙：右键冲刺切割（短CD）"));
-            tooltips.Insert(idx++, new TooltipLine(Mod, "Step_QSlime",
-                $"{(qsl ? "✔" : "✖")} 史莱姆皇后：近战命中时发射 Enchanted Beam"));
+            // 击败蜂后
+            if (NPC.downedQueenBee)
+                tooltips.Add(new TooltipLine(Mod, "QueenBeeUpgrade", "✓ [蜂后已击败]：武器尺寸增大"));
+            else
+                tooltips.Add(new TooltipLine(Mod, "QueenBeeUpgrade", "✗ [击败蜂后后解锁]：武器尺寸增大"));
 
-            // 显示当前能量（仅客户端）
-            if (Main.LocalPlayer?.HeldItem == Item && deer)
-            {
-                float pct = Main.LocalPlayer.GetModPlayer<NormalScissorsPlayer>().EnergyPercent;
-                int p = (int)(pct * 100f);
-                tooltips.Insert(idx++, new TooltipLine(Mod, "EnergyNow", $"当前能量：{p}%"));
-            }
+            // 击败骷髅王/鹿角怪
+            if (NPC.downedBoss3 || NPC.downedDeerclops)
+                tooltips.Add(new TooltipLine(Mod, "SkeletronUpgrade", "✓ [骷髅王已击败]：左键平A攒能量 → 满后自动释放剑气"));
+            else
+                tooltips.Add(new TooltipLine(Mod, "SkeletronUpgrade", "✗ [击败骷髅王后解锁]：左键攒能量释放剑气"));
+
+            // 血肉墙
+            if (Main.hardMode)
+                tooltips.Add(new TooltipLine(Mod, "WallOfFleshUpgrade", "✓ [血肉墙已击败]：右键冲刺切割（CD 1s）"));
+            else
+                tooltips.Add(new TooltipLine(Mod, "WallOfFleshUpgrade", "✗ [击败血肉墙后解锁]：右键冲刺切割"));
+
+            // 机械魔眼
+            if (NPC.downedMechBoss2)
+                tooltips.Add(new TooltipLine(Mod, "MechEyeUpgrade", "✓ [双子魔眼已击败]：近战命中时额外发射斩波"));
+            else
+                tooltips.Add(new TooltipLine(Mod, "MechEyeUpgrade", "✗ [击败双子魔眼后解锁]：近战命中发射斩波"));
+
+            // 世纪之花
+            if (NPC.downedPlantBoss)
+                tooltips.Add(new TooltipLine(Mod, "PlanteraUpgrade", "✓ [世纪之花已击败]：额外发射泰拉剑气"));
+            else
+                tooltips.Add(new TooltipLine(Mod, "PlanteraUpgrade", "✗ [击败世纪之花后解锁]：额外发射泰拉剑气"));
         }
 
         public override void AddRecipes()

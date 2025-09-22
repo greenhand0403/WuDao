@@ -36,7 +36,7 @@ namespace WuDao.Content.Items.Weapons.Melee
             Item.shootSpeed = 10f;
 
             Item.value = Item.buyPrice(silver: 4);
-            Item.rare = ItemRarityID.Blue;
+            Item.rare = ModContent.RarityType<LightBlueRarity>();
         }
         protected override void BuildStatRules(Player player, Item item, IList<StatRule> rules)
         {

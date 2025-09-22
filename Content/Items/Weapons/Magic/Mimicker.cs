@@ -29,7 +29,7 @@ namespace WuDao.Content.Items.Weapons.Magic
         {
             Item.width = 28;
             Item.height = 30;
-            Item.rare = ItemRarityID.LightRed; // 困难模式早中期
+            Item.rare = ItemRarityID.Red;
             Item.value = Item.buyPrice(gold: 5);
 
             Item.DamageType = DamageClass.Magic;
@@ -53,8 +53,8 @@ namespace WuDao.Content.Items.Weapons.Magic
         {
             var mp = player.GetModPlayer<MimickerPlayer>();
             int unlocked = mp.unlockedProjectiles.Count;
-            // 每解锁1种 +2%（可自行调整）
-            damage += 0.02f * unlocked;
+            // 每解锁1种 +10%（可自行调整）
+            damage += 0.1f * unlocked;
         }
 
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)

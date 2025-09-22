@@ -4,6 +4,8 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.GameContent;
 using Microsoft.Xna.Framework.Graphics;
+using Terraria.Audio;
+using Terraria.DataStructures;
 
 namespace WuDao.Content.Projectiles.Magic
 {
@@ -11,7 +13,7 @@ namespace WuDao.Content.Projectiles.Magic
     {
         // 复用 Arkhalis 贴图（多帧）
         public override string Texture => $"Terraria/Images/Projectile_{ProjectileID.Arkhalis}";
-
+        private const int curFrame = 2;
         public override void SetStaticDefaults()
         {
             // 用 Arkhalis 的帧数作为我们的帧数
@@ -34,7 +36,7 @@ namespace WuDao.Content.Projectiles.Magic
             Projectile.alpha = 255;        // 淡入
             Projectile.light = 0.2f;
         }
-
+        
         public override void AI()
         {
             // ai[0]：滞留计时器（可能从负数开始，见 Shoot）
@@ -106,7 +108,7 @@ namespace WuDao.Content.Projectiles.Magic
                 Main.dust[d].velocity *= 1.2f;
                 Main.dust[d].noGravity = true;
             }
-            Terraria.Audio.SoundEngine.PlaySound(SoundID.Item10 with { Volume = 0.5f }, Projectile.Center);
+            SoundEngine.PlaySound(SoundID.Item10 with { Volume = 0.5f }, Projectile.Center);
         }
 
         // 手动绘制：从 Arkhalis 贴图裁切“当前帧”
@@ -118,8 +120,7 @@ namespace WuDao.Content.Projectiles.Magic
 
             int frameHeight = tex.Height / totalFrames;
             // 可以只取某一帧作为射弹贴图
-            // int frameY = frameHeight * (Projectile.frame % totalFrames);
-            int frameY = frameHeight * (2 % totalFrames);
+            int frameY = frameHeight * (curFrame % totalFrames);
             Rectangle src = new Rectangle(0, frameY, tex.Width, frameHeight);
 
             Vector2 origin = src.Size() * 0.5f;

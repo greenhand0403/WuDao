@@ -38,11 +38,11 @@ namespace WuDao.Content.Items.Weapons.Magic
         {
             Item.width = 48;
             Item.height = 48;
-            Item.rare = ItemRarityID.Orange; // 同时代中后期魔法武器稀有度
+            Item.rare = ItemRarityID.Red; // 同时代中后期魔法武器稀有度
             Item.value = Item.buyPrice(gold: 5);
 
             Item.DamageType = DamageClass.Magic;
-            Item.damage = 24; // 参考同时期魔法武器的一个中等值
+            Item.damage = 34;
             Item.knockBack = 2.5f;
             Item.mana = 6;
 

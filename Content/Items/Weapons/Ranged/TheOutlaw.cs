@@ -38,7 +38,7 @@ namespace WuDao.Content.Items.Weapons.Ranged
             Item.autoReuse = true;
             Item.shoot = ModContent.ProjectileType<TheOutlawPellet>();
             Item.shootSpeed = 6f;
-            Item.useAmmo = AmmoID.None;    // 内置子弹，不消耗弹药
+            Item.useAmmo = AmmoID.Bullet;
             Item.crit = 10;
         }
 
@@ -84,8 +84,8 @@ namespace WuDao.Content.Items.Weapons.Ranged
             }
 
             // 普通霰弹逻辑 + Deerclops 暴击增幅“下一次”
-            int pelletCount = 3; // 基础 3
-            if (NPC.downedSlimeKing) pelletCount = 4;                      // 史莱姆王后 4发
+            int pelletCount = Main.rand.Next(2, 4); // 基础
+            if (NPC.downedSlimeKing) pelletCount = Main.rand.Next(3, 5);                      // 史莱姆王后
             if (NPC.downedQueenBee) pelletCount = Main.rand.Next(4, 6);    // 蜂王后 4~5发
             float dmgScale = 1f;
             if (NPC.downedDeerclops && gp.nextShotEmpowered)
@@ -95,7 +95,7 @@ namespace WuDao.Content.Items.Weapons.Ranged
                 gp.nextShotEmpowered = false; // 消耗
             }
 
-            float spread = MathHelper.ToRadians(5f); // 扇形总展开角的大致基准（单发的左右偏移）15f 太大了
+            float spread = MathHelper.ToRadians(Main.rand.Next(5, 12)); // 扇形总展开角的大致基准（单发的左右偏移）15f 太大了
             for (int i = 0; i < pelletCount; i++)
             {
                 float interp = pelletCount == 1 ? 0f : (i - (pelletCount - 1) / 2f) / (pelletCount - 1f); // [-0.5, 0.5]
@@ -135,7 +135,7 @@ namespace WuDao.Content.Items.Weapons.Ranged
 
             // 第一行：基础说明（固定）
             tooltips.Add(new TooltipLine(Mod, "Outlaw_Base",
-                "每秒2次射击，扇形霰弹，子弹穿透3个目标且每穿透-10%伤害。"));
+                "消耗子弹的霰弹枪。每秒射击 2 次，扇形散射，弹丸可穿透 3 个目标，每次穿透后伤害 -10%。"));
 
             // 成长解锁标题
             tooltips.Add(new TooltipLine(Mod, "Outlaw_Title", "成长解锁："));
@@ -147,13 +147,13 @@ namespace WuDao.Content.Items.Weapons.Ranged
                 tooltips.Add(new TooltipLine(Mod, key, $"{mark} {text}"));
             }
 
-            AddLine("SK", slime, "击败史莱姆王：每次射击 4 发扇形子弹");
-            AddLine("QB", bee, "击败蜂王：每次射击 4~5 发扇形子弹（随机）");
-            AddLine("DEER", deer, "击败巨鹿：暴击后，下一次射击 6 发且每颗 +30% 伤害");
-            AddLine("WALL", wall, "击败血肉墙：右键后跳（2分钟CD），短暂无敌。暴击 -10秒CD");
-            AddLine("MECH", mech, "击败任一机械Boss：额外发射 1 枚分裂射弹（命中/撞墙/短时后分裂为左右爆破弹）");
-            AddLine("PLAN", plan, "击败世纪之花：分裂时必定生成火墙（2秒）");
-            AddLine("CULT", cult, "击败拜月邪教徒：触发4次暴击后，下一次发射【终极爆弹】（基础伤害×5，扇形90%溅射）");
+            AddLine("SK", slime, "击败史莱姆王：每次射击发射 4 发霰弹");
+            AddLine("QB", bee, "击败蜂王：每次射击发射 4~5 发霰弹（随机）");
+            AddLine("DEER", deer, "击败巨鹿：暴击后，下次射击发射 6 发并获得 +30% 伤害");
+            AddLine("WALL", wall, "击败血肉墙：右键触发后跳（2 分钟冷却），短暂无敌；暴击减少 10 秒冷却");
+            AddLine("MECH", mech, "击败任意机械 Boss：额外发射 1 枚分裂弹，命中后分裂成左右爆破弹");
+            AddLine("PLAN", plan, "击败世纪之花：分裂时必定生成 2 秒火墙，接触造成伤害");
+            AddLine("CULT", cult, "击败拜月邪教徒：累计 4 次暴击后，下次射击发射【终极爆弹】（基础伤害×5，扇形溅射）");
         }
 
     }

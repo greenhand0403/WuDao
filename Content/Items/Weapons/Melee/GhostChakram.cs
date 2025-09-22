@@ -12,7 +12,7 @@ namespace WuDao.Content.Items.Weapons.Melee
     {
         public override void SetDefaults()
         {
-            Item.damage = 48;
+            Item.damage = 52;
             Item.DamageType = DamageClass.MeleeNoSpeed; // 近战投掷类（不吃攻速）
             Item.knockBack = 4.5f;
 

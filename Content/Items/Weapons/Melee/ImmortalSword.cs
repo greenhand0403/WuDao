@@ -35,12 +35,13 @@ namespace WuDao.Content.Items.Weapons.Melee
         }
         public override void AddRecipes()
         {
-            // 接受任意木头、铜锭、铁锭
+            // 接受任意木头、铁锭
             Recipe recipe = CreateRecipe();
             recipe.AddRecipeGroup(RecipeGroupID.Wood, 2);
-            recipe.AddIngredient(ItemID.CopperBar, 2);
+            recipe.AddIngredient(ItemID.Daybloom, 2);
             recipe.AddIngredient(ItemID.IronBar, 2);
             recipe.AddIngredient(ItemID.EnchantedSword, 1);
+            recipe.AddIngredient(ItemID.LifeCrystal, 2);
             recipe.AddTile(TileID.Anvils);
             recipe.Register();
         }

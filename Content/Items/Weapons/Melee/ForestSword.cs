@@ -29,8 +29,8 @@ namespace WuDao.Content.Items.Weapons.Melee
         protected override void BuildBuffRules(Player player, Item item, IList<BuffRule> rules)
         {
             rules.Add(new BuffRule(BuffConditions.Always,
-                new BuffEffect(BuffID.Swiftness, topUpAmount: 180, refreshThreshold: 30),
-                new BuffEffect(BuffID.Sunflower, topUpAmount: 180, refreshThreshold: 30)
+                BuffEffect.PermanentBuff(BuffID.Swiftness), // ← 永久/不减时/无时间显示
+                BuffEffect.PermanentBuff(BuffID.Sunflower)
             ));
         }
         protected override void BuildStatRules(Player player, Item item, IList<StatRule> rules)

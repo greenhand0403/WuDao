@@ -13,7 +13,7 @@ namespace WuDao.Content.Items.Weapons.Throwing
         public abstract int BaseProjectileType { get; }
         // 子类可以覆盖要发送的 AI 模式（0 = 无重力无击退(针), 1 = 受重力有击退(石)）
         public virtual int ProjectileAIMode => 1;
-        public override string Texture => "Terraria/Images/MagicPixel";
+        // public override string Texture => "Terraria/Images/MagicPixel";
         public override bool Shoot(Player player, Terraria.DataStructures.EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
             // 直接生成射弹并把 AI 模式写入 ai[0]

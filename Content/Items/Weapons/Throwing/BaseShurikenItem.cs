@@ -62,8 +62,8 @@ namespace WuDao.Content.Items.Weapons.Throwing
         // ====== 配方 ======
         public override void AddRecipes()
         {
-            // 基类提供一个“批量 30 个”的默认模板；子类自由增删材料
-            var recipe = CreateRecipe(30);
+            // 基类提供一个“批量 33 个”的默认模板；子类自由增删材料
+            var recipe = CreateRecipe(33);
             BuildRecipe(recipe);
             recipe.Register();
         }

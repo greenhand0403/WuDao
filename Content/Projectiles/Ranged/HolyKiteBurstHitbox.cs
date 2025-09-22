@@ -16,7 +16,6 @@ namespace WuDao.Content.Projectiles.Ranged
     public class HolyKiteBurstHitbox : ModProjectile
     {
         private const int EdgeSamples = 18;
-        private const float EdgeWidthForHit = 4f; // 边线-矩形相交检测使用的线宽近似
         private const int DustA = DustID.GemDiamond;
         private const int DustB = DustID.FireworkFountain_Yellow;
         public override string Texture => "WuDao/Content/Projectiles/Ranged/BrightVerdictProjectile";

@@ -41,8 +41,7 @@ namespace WuDao.Content.Items.Weapons.Melee
         protected override void BuildBuffRules(Player player, Item item, IList<BuffRule> rules)
         {
             rules.Add(new BuffRule(BuffConditions.Always,
-                // 狱火药水的 Inferno（环火）效果，持续顶时间
-                new BuffEffect(BuffID.Inferno, topUpAmount: 180, refreshThreshold: 30)
+                BuffEffect.PermanentBuff(BuffID.Inferno)
             ));
         }
         protected override void BuildStatRules(Player player, Item item, IList<StatRule> rules)

@@ -71,6 +71,8 @@ namespace WuDao.Content.Projectiles.Melee
         {
             // 统一初速
             Projectile.velocity = Vector2.Normalize(Projectile.velocity) * OutSpeed;
+            // 提前移动一点，对齐枪口位置
+            Projectile.position += (Projectile.velocity.SafeNormalize(Vector2.UnitX) * 10f);
         }
 
         public override void AI()
@@ -236,11 +238,11 @@ namespace WuDao.Content.Projectiles.Melee
             return false;
         }
 
-        public override void OnKill(int timeLeft)
-        {
+        // public override void OnKill(int timeLeft)
+        // {
             // 结束也放一圈更大的灵气
             // SpawnAuraDust(Projectile.Center, 22, 2.6f, 12f);
-        }
+        // }
 
         private static void SpawnAuraDust(Vector2 center, int count, float startRadius, float speed)
         {

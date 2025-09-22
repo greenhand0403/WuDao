@@ -26,7 +26,7 @@ namespace WuDao.Content.Players
             {
                 hornTimer++;
 
-                if (hornTimer >= 60 * 1) // 3秒
+                if (hornTimer >= 60 * 2) // 2秒
                 {
                     hornTimer = 0;
 
@@ -39,7 +39,8 @@ namespace WuDao.Content.Players
                     // 召唤冲锋“蜥蜴”弹
                     int idx = Projectile.NewProjectile(
                         new EntitySource_Misc("MagicHornCharge"),
-                        Player.MountedCenter, vel,
+                        Player.MountedCenter,
+                        vel,
                         ModContent.ProjectileType<BasiliskChargeProj>(),
                         Player.GetWeaponDamage(Player.HeldItem),
                         Player.HeldItem.knockBack,
