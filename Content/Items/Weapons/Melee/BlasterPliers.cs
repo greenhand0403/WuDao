@@ -44,8 +44,8 @@ namespace WuDao.Content.Items.Weapons.Melee
         }
         public override Vector2? HoldoutOffset()
         {
-            // 向下偏移 6 像素，向左偏移 2 像素
-            return new Vector2(-2f, 6f);
+            // 向下偏移 2 像素，向左偏移 2 像素
+            return new Vector2(-2f, 2f);
         }
         public override float UseSpeedMultiplier(Player player)
         {

@@ -101,5 +101,75 @@ namespace WuDao.Common
                 return BossDownedSystem.DownedBossGroups.Count;
             }
         }
+
+        // 第一滴血判断已击败BOSS的辅助方法
+        // 判断是否已击败所有原版 Boss（可按你需求增减）
+        public static bool AllVanillaBossesDowned()
+        {
+            return NPC.downedSlimeKing
+                && NPC.downedBoss1      // 眼
+                && NPC.downedBoss2      // 世/脑
+                && NPC.downedBoss3      // 地牢骷髅
+                && NPC.downedQueenBee
+                && NPC.downedDeerclops
+                && Main.hardMode        // 肉山
+                && NPC.downedMechBossAny  // 机械三王至少一个，若想要求三王全清可改成：downedMechBoss1 && downedMechBoss2 && downedMechBoss3
+                && NPC.downedPlantBoss
+                && NPC.downedGolemBoss
+                && NPC.downedFishron
+                && NPC.downedQueenSlime
+                && NPC.downedAncientCultist
+                && NPC.downedMoonlord;
+        }
+        public static List<string> GetRemainingVanillaBossNames()
+        {
+            var list = new List<string>();
+
+            // 这里与你效果判定同一套“原版BOSS集合”，并用 downed 标志判断
+            // 你可以与 IsBossDefeated/AllVanillaBossesDowned 的逻辑保持一致
+            void AddIfNotDowned(int npcType, bool defeatedFlag)
+            {
+                if (!defeatedFlag)
+                    list.Add(Lang.GetNPCNameValue(npcType));
+            }
+
+            AddIfNotDowned(NPCID.KingSlime, NPC.downedSlimeKing);
+            AddIfNotDowned(NPCID.EyeofCthulhu, NPC.downedBoss1);
+            // 世/脑两选一算通过，这里仅在都没打时显示两者
+            if (!NPC.downedBoss2)
+            {
+                list.Add(Lang.GetNPCNameValue(NPCID.EaterofWorldsHead));
+                list.Add(Lang.GetNPCNameValue(NPCID.BrainofCthulhu));
+            }
+            AddIfNotDowned(NPCID.SkeletronHead, NPC.downedBoss3);
+            AddIfNotDowned(NPCID.QueenBee, NPC.downedQueenBee);
+            AddIfNotDowned(NPCID.Deerclops, NPC.downedDeerclops);
+            AddIfNotDowned(NPCID.WallofFlesh, Main.hardMode);
+
+            // 机械三王：如果 downedMechBossAny 但不是“三王全清”，显示具体未击败者
+            bool mechAny = NPC.downedMechBossAny;
+            bool mech1 = NPC.downedMechBoss1; // 双子魔眼
+            bool mech2 = NPC.downedMechBoss2; // 骷髅王Prime
+            bool mech3 = NPC.downedMechBoss3; // 毁灭者
+            if (!(mech1 && mech2 && mech3))
+            {
+                if (!mech1)
+                {
+                    list.Add(Lang.GetNPCNameValue(NPCID.Retinazer));
+                    list.Add(Lang.GetNPCNameValue(NPCID.Spazmatism));
+                }
+                if (!mech2) list.Add(Lang.GetNPCNameValue(NPCID.SkeletronPrime));
+                if (!mech3) list.Add(Lang.GetNPCNameValue(NPCID.TheDestroyer));
+            }
+
+            AddIfNotDowned(NPCID.Plantera, NPC.downedPlantBoss);
+            AddIfNotDowned(NPCID.Golem, NPC.downedGolemBoss);
+            AddIfNotDowned(NPCID.DukeFishron, NPC.downedFishron);
+            AddIfNotDowned(NPCID.QueenSlimeBoss, NPC.downedQueenSlime);
+            AddIfNotDowned(NPCID.CultistBoss, NPC.downedAncientCultist);
+            AddIfNotDowned(NPCID.MoonLordCore, NPC.downedMoonlord);
+
+            return list;
+        }
     }
 }

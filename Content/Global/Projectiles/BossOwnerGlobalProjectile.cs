@@ -5,6 +5,7 @@ using Terraria.DataStructures;
 
 namespace WuDao.Content.Global.Projectiles
 {
+    // 用于败笔记录boss
     public class BossOwnerGlobalProjectile : GlobalProjectile
     {
         public override bool InstancePerEntity => true;

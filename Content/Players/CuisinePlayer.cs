@@ -96,11 +96,11 @@ namespace WuDao.Content.Players
         {
             tag["CraftedFoodTypes"] = new List<int>(CraftedFoodTypes);
             tag["FoodsEatenAll"] = new List<int>(FoodsEatenAll);
-            tag["TodayStartIndex"] = TodayStartIndex;
-            tag["TodayStartDay"] = TodayStartDay;
             tag["CraftedEverFoods"] = new List<int>(CraftedEverFoods);
             tag["CookingSkill"] = CookingSkill;
             tag["Deliciousness"] = Deliciousness;
+            tag["TodayStartIndex"] = TodayStartIndex;
+            tag["TodayStartDay"] = TodayStartDay;
         }
         public override void LoadData(TagCompound tag)
         {

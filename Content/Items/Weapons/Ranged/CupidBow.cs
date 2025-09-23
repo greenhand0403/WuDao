@@ -78,8 +78,8 @@ namespace WuDao.Content.Items.Weapons.Ranged
                 Vector2 v2 = velocity.RotatedByRandom(MathHelper.ToRadians(4));
                 Vector2 pos2 = position; // 已经前推过的位置为基准
                 // 再做一次极短的微前推，防止双发互相重叠立即碰撞（可选，2~6像素）
-                Vector2 micro = v2.SafeNormalize(Vector2.UnitX) * 6f;
-                pos2 += Vector2.UnitY * 6f;
+                Vector2 micro = v2.SafeNormalize(Vector2.UnitX) * 12f;
+                pos2 += Vector2.UnitY * 12f;
                 if (Collision.CanHit(pos2, 0, 0, pos2 + micro, 0, 0))
                     pos2 += micro;
 

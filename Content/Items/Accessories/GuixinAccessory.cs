@@ -8,24 +8,27 @@ namespace WuDao.Content.Items.Accessories
 {
     public class GuixinAccessory : ModItem
     {
-        // public override void SetStaticDefaults()
-        // {
-        //     DisplayName.SetDefault("归心似箭");
-        //     Tooltip.SetDefault("回旋镖返回途中飞行速度是抛出时的两倍");
-        // }
-
         public override void SetDefaults()
         {
             Item.width = 24;
             Item.height = 24;
             Item.accessory = true;
-            Item.rare = ItemRarityID.Orange;
+            Item.rare = ItemRarityID.Blue;
             Item.value = Item.buyPrice(silver: 80);
         }
 
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
             player.GetModPlayer<BoomerangAccessoryPlayer>().Guixin = true;
+        }
+        public override void AddRecipes()
+        {
+            Recipe recipe = CreateRecipe()
+                .AddIngredient(ItemID.Bone, 10)
+                .AddIngredient(ItemID.ManaCrystal, 5)
+                .AddIngredient(ItemID.WoodenArrow, 99)
+                .AddTile(TileID.Anvils)
+                .Register();
         }
     }
 }

@@ -14,7 +14,6 @@ namespace WuDao.Content.Juexue.Active
     // TODO: 剑之虚影
     public class TenThousandSwords : JuexueItem
     {
-        public override JuexueID JuexueId => JuexueID.Active_TenThousandSwords;
         public override int QiCost => 200;
         public override int SpecialCooldownTicks => 60 * 2; // 2 秒
 

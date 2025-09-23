@@ -7,6 +7,7 @@ using WuDao.Content.Players;
 
 namespace WuDao.Content.Items.Accessories
 {
+    // TODO: 重置贴图
     public class NearsightedGlasses : ModItem
     {
         public override string Texture => $"Terraria/Images/Item_1742";
@@ -25,6 +26,14 @@ namespace WuDao.Content.Items.Accessories
             gp.Nearsighted = true;
             gp.ShowRangeRings = !hideVisual;
         }
-    }
 
+        public override void AddRecipes()
+        {
+            CreateRecipe()
+                .AddIngredient(ItemID.Goggles)
+                .AddIngredient(ItemID.HellstoneBar, 2)
+                .AddTile(TileID.Hellforge)
+                .Register();
+        }
+    }
 }

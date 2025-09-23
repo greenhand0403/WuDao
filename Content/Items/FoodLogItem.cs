@@ -16,7 +16,7 @@ namespace WuDao.Content.Items
         {
             Item.width = 28;
             Item.height = 30;
-            Item.rare = ItemRarityID.Orange;
+            Item.rare = ItemRarityID.Green;
             Item.value = Item.buyPrice(0, 1);
             Item.maxStack = 1;
             Item.consumable = false;         // 只是收藏品

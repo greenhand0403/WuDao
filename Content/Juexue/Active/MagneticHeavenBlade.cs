@@ -14,7 +14,6 @@ namespace WuDao.Content.Juexue.Active
     // TODO: 增加磁场天刀射弹的贴图，绘制天刀的虚影
     public class MagneticHeavenBlade : JuexueItem
     {
-        public override JuexueID JuexueId => JuexueID.Active_MagneticHeavenBlade;
         public override int QiCost => 50;
         public override int SpecialCooldownTicks => 60 * 10; // 10 秒专属冷却（示例）
 

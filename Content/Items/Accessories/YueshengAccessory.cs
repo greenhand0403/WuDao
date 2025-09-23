@@ -8,12 +8,6 @@ namespace WuDao.Content.Items.Accessories
 {
     public class YueshengAccessory : ModItem
     {
-        // public override void SetStaticDefaults()
-        // {
-        //     DisplayName.SetDefault("跃升");
-        //     Tooltip.SetDefault("回旋镖可以穿墙且对敌无限穿透");
-        // }
-
         public override void SetDefaults()
         {
             Item.width = 24;
@@ -26,6 +20,15 @@ namespace WuDao.Content.Items.Accessories
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
             player.GetModPlayer<BoomerangAccessoryPlayer>().Yuesheng = true;
+        }
+        public override void AddRecipes()
+        {
+            Recipe recipe = CreateRecipe()
+                .AddIngredient(ItemID.HallowedBar, 5)
+                .AddIngredient(ItemID.SoulofLight, 5)
+                .AddIngredient(ItemID.SoulofNight, 5)
+                .AddTile(TileID.MythrilAnvil)
+                .Register();
         }
     }
 }

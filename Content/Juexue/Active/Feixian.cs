@@ -12,7 +12,6 @@ namespace WuDao.Content.Juexue.Active
     // TODO: 飞仙虚影
     public class Feixian : JuexueItem
     {
-        public override JuexueID JuexueId => JuexueID.Active_Feixian;
         public override bool IsActive => true;
         public override int QiCost => 50;
         public override int SpecialCooldownTicks => 60 * 1; // 1s

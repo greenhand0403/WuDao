@@ -12,7 +12,6 @@ using WuDao.Common.Rendering;
 
 namespace WuDao.Content.Projectiles.Melee
 {
-    // BUG: 没有画出手臂挥舞的动画
     class ScallionSwordProj : ModProjectile
     {
         public override string Texture => "WuDao/Content/Items/Weapons/Melee/ScallionSword";
@@ -69,21 +68,13 @@ namespace WuDao.Content.Projectiles.Melee
             //     }
             //     Projectile.localAI[0] = 1f;
             // }
-            // player.itemTime = player.itemAnimation = 3;//防止弹幕没有 趋势 玩家就又可以使用武器了
             Projectile.Center = player.Center;//绑定玩家和弹幕的位置
-            Projectile.velocity = new Vector2(0, -10).RotatedBy(Projectile.rotation);//给弹幕一个速度 仅仅用于击退方向
-            Projectile.rotation += 0.314f * player.direction;//弹幕每帧旋转角度18°
             player.heldProj = Projectile.whoAmI;//使弹幕的贴图画出来后 夹 在角色的身体和手之间
 
-            //以下为升级内容
-            /*
-            if (Projectile.rotation > MathHelper.Pi)
-                Projectile.rotation = -MathHelper.Pi;
-            if (Projectile.rotation < -MathHelper.Pi)
-                Projectile.rotation = MathHelper.Pi;
-            */
-            // if (player.controlUseItem)
-            // Projectile.timeLeft = 2;//让弹幕一直转圈圈的方法之一
+            Projectile.rotation += 0.314f * player.direction;//弹幕每帧旋转角度18°
+            // 手臂也跟着挥舞
+            player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, Projectile.rotation - MathHelper.Pi * player.direction);
+            Projectile.velocity = new Vector2(0, -10).RotatedBy(Projectile.rotation);//给弹幕一个速度 仅仅用于击退方向
         }
         public override bool ShouldUpdatePosition()
         {

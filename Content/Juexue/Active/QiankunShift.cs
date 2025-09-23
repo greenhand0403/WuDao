@@ -13,7 +13,6 @@ namespace WuDao.Content.Juexue.Active
     // TODO: 增加弧线的人物运动残影，增加太极图虚影
     public class QiankunShift : JuexueItem
     {
-        public override JuexueID JuexueId => JuexueID.Active_QiankunShift;
         public override int QiCost => 100;
         public override int SpecialCooldownTicks => 60 * 60; // 60 秒
 

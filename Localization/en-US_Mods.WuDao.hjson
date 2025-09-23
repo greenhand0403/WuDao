@@ -378,6 +378,16 @@ Items: {
 		Tooltip: ""
 		DisplayName: Gem Pouch
 	}
+
+	ScallionShield: {
+		DisplayName: Scallion Shield
+		Tooltip: ""
+	}
+
+	FoodGodBossBag: {
+		DisplayName: Food God Boss Bag
+		Tooltip: ""
+	}
 }
 
 Projectiles: {
@@ -633,7 +643,11 @@ Configs: {
 }
 
 Tiles.PyramidStatueTile.MapEntry: Pyramid Statue Tile
-"Keybinds.Cast/Charge Juexue.DisplayName": Cast/ Charge  Juexue
+
+Keybinds: {
+	"Cast/Charge Juexue.DisplayName": Cast/ Charge  Juexue
+	"Active JueXue Skill.DisplayName": Active  Jue Xue  Skill
+}
 
 NPCs: {
 	WanderingBeggar.DisplayName: Wandering Beggar

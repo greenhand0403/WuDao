@@ -15,7 +15,6 @@ namespace WuDao.Content.Juexue.Active
     // TODO: 万马奔腾，补射弹，马虚影
     public class Stampede : JuexueItem
     {
-        public override JuexueID JuexueId => JuexueID.Active_Stampede;
         public override bool IsActive => true;
         public override int QiCost => 100;
         public override int SpecialCooldownTicks => 60 * 1; // 1s

@@ -10,7 +10,7 @@ namespace WuDao
 
         public override void Load()
         {
-            CastSkillKey = KeybindLoader.RegisterKeybind(Mod, "Cast/Charge Juexue", "V");
+            CastSkillKey = KeybindLoader.RegisterKeybind(Mod, "Active JueXue Skill", "V");
         }
 
         public override void Unload()

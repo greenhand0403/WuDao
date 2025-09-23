@@ -12,7 +12,7 @@ namespace WuDao.Content.Buffs
             // Description.SetDefault("静止站立在实心块上时获得强力减伤");
             Main.debuff[Type] = false;
             Main.buffNoSave[Type] = false;
-            Main.buffNoTimeDisplay[Type] = false;
+            Main.buffNoTimeDisplay[Type] = true;
         }
     }
 }

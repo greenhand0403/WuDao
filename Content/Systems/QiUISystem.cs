@@ -79,7 +79,7 @@ namespace WuDao.Content.Systems
 
             // —— 目标位置：贴在“底行最左格”的正下方（略留间距）——
             int margin = (int)(8 * scale);
-            int x = leftPadding + 2 * slotW;
+            int x = leftPadding + slotW / 2;//适当调整位置
             int y = inventoryBottom + margin;
 
             // —— 背板与标题（可选）——

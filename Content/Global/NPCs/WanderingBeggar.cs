@@ -101,27 +101,27 @@ namespace WuDao.Content.Global.NPCs
         {
             var shop = new NPCShop(Type, "绝学铺");
 
-            // 常驻（早期可买）
-            shop.Add<SharkWhaleFist>();
-            shop.Add<HeavenlyPetals>();
-            shop.Add<MagneticHeavenBlade>();
+            shop.Add<SharkWhaleFist>(new Condition("击败史莱姆王", () => NPC.downedSlimeKing));
+            shop.Add<MagneticHeavenBlade>(new Condition("击败史莱姆王", () => NPC.downedSlimeKing));
 
             // 进度解锁（用 Condition 做谓词）
-            shop.Add<DiamondSkin>(new Condition("击败克苏鲁之眼", () => NPC.downedBoss1));
-            shop.Add<QiankunShift>(new Condition("击败骷髅王", () => NPC.downedBoss3));
-            shop.Add<TenThousandSwords>(new Condition("进入困难模式", () => Main.hardMode));
-            shop.Add<Kamehameha>(new Condition("击败世纪之花", () => NPC.downedPlantBoss));
-            // 新增：
-            shop.Add<LingboWeibu>(); // 早期即可买
-
-            shop.Add<WhiteBoneClaw>(new Condition("击败克苏鲁之眼", () => NPC.downedBoss1));
+            shop.Add<QiankunShift>(new Condition("击败克苏鲁之眼", () => NPC.downedBoss1));
             shop.Add<XiangLong18>(new Condition("击败克苏鲁之眼", () => NPC.downedBoss1));
 
-            shop.Add<ShengLongBa>(new Condition("击败骷髅王", () => NPC.downedBoss3));
-            shop.Add<Feixian>(new Condition("进入困难模式", () => Main.hardMode));
+            shop.Add<DiamondSkin>(new Condition("击败骷髅王", () => NPC.downedBoss3));
+            shop.Add<Feixian>(new Condition("击败骷髅王", () => NPC.downedBoss3));
 
-            shop.Add<Stampede>(new Condition("击败任意机械Boss", () => NPC.downedMechBossAny));
-            shop.Add<BladeWaltz>(new Condition("击败世纪之花", () => NPC.downedPlantBoss));
+            shop.Add<TenThousandSwords>(new Condition("进入困难模式", () => Main.hardMode));
+            shop.Add<ShengLongBa>(new Condition("进入困难模式", () => Main.hardMode));
+
+            shop.Add<HeavenlyPetals>(new Condition("击败任意机械BOSS", () => NPC.downedMechBossAny));
+            shop.Add<Kamehameha>(new Condition("击败任意机械BOSS", () => NPC.downedMechBossAny));
+            
+            shop.Add<LingboWeibu>(new Condition("击败全部机械Boss", () => NPC.downedMechBoss1 && NPC.downedMechBoss2 && NPC.downedMechBoss3));
+            shop.Add<Stampede>(new Condition("击败全部机械Boss", () => NPC.downedMechBoss1&&NPC.downedMechBoss2&&NPC.downedMechBoss3));
+
+            shop.Add<WhiteBoneClaw>(new Condition("击败猪鲨", () => NPC.downedFishron));
+            shop.Add<BladeWaltz>(new Condition("击败光女", () => NPC.downedHalloweenKing));
             
             shop.Register();
         }

@@ -5,12 +5,18 @@ using Microsoft.Xna.Framework;
 
 namespace WuDao.Content.Systems
 {
+    // TODO: 拆分一下这些类
     public enum FreezeScope { None, Global, Feixian }
-    // 冻结时间的辅助类
+    // 静止游鱼 冻结时间的辅助类
     public static class TimeStopSystem
     {
         public static bool IsFrozen = false;
         public static int Timer = 0;
+        // ★ 新增：全局冷却
+        public static int CooldownTimer = 0;         // 冷却计时器（帧）
+        private static int _pendingCooldown = 0;     // 本次冻结结束后要应用的冷却（帧）
+        public static bool IsOnCooldown => CooldownTimer > 0;
+        public static int CooldownSeconds => (CooldownTimer + 59) / 60;
         // ★ 新增：冻结作用域 & 允许放行的玩家（飞仙施法者）
         public static FreezeScope Scope = FreezeScope.None;
         public static int AllowedPlayer = -1;
@@ -29,7 +35,20 @@ namespace WuDao.Content.Systems
             Scope = FreezeScope.Feixian;
             AllowedPlayer = playerWhoAmI;
         }
+        // ★ 新增：推荐用这个来启动冻结（含冷却），返回是否成功
+        public static bool TryStartFreeze(int duration = 300, int cooldown = 900, FreezeScope scope = FreezeScope.Global, int allowedPlayer = -1)
+        {
+            if (IsFrozen || IsOnCooldown)
+                return false;
 
+            IsFrozen = true;
+            Timer = duration;
+            Scope = scope;
+            AllowedPlayer = allowedPlayer;
+
+            _pendingCooldown = cooldown; // 冻结结束后再开始走冷却
+            return true;
+        }
         // ★ 新增：如果当前是飞仙冻结，就结束它（避免误停在全局冻结状态）
         public static void StopIfFeixian()
         {
@@ -54,6 +73,9 @@ namespace WuDao.Content.Systems
                     AllowedPlayer = -1;
                 }
             }
+            // ★ 新增：冷却递减
+            if (CooldownTimer > 0)
+                CooldownTimer--;
         }
     }
     public class TimeStopPlayer : ModPlayer

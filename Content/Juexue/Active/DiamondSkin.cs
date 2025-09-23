@@ -12,7 +12,6 @@ namespace WuDao.Content.Juexue.Active
     // TODO: 增加贴图虚影特效
     public class DiamondSkin : JuexueItem
     {
-        public override JuexueID JuexueId => JuexueID.Active_DiamondSkin;
         public override int QiCost => 100;
         public override int SpecialCooldownTicks => 60 * 60; // 60 秒
 

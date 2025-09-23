@@ -13,7 +13,7 @@ namespace WuDao.Content.Items
         {
             Item.width = 28;
             Item.height = 30;
-            Item.rare = ItemRarityID.Orange;
+            Item.rare = ItemRarityID.Green;
             Item.value = Item.buyPrice(0, 1);
             Item.maxStack = 1;
             Item.consumable = false;         // 只是收藏品
@@ -21,7 +21,8 @@ namespace WuDao.Content.Items
 
         public override void UpdateInventory(Player player)
         {
-            player.GetModPlayer<CuisinePlayer>().HasCookbook = true; // ✅ 这是“菜谱”开关
+            if (!player.GetModPlayer<CuisinePlayer>().HasCookbook)
+                player.GetModPlayer<CuisinePlayer>().HasCookbook = true; // ✅ 这是“菜谱”开关
         }
 
         public override void ModifyTooltips(List<TooltipLine> tooltips)

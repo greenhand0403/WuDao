@@ -8,12 +8,6 @@ namespace WuDao.Content.Items.Accessories
 {
     public class YanfanAccessory : ModItem
     {
-        // public override void SetStaticDefaults()
-        // {
-        //     DisplayName.SetDefault("燕返");
-        //     Tooltip.SetDefault("回旋镖在返回途中造成的伤害翻倍");
-        // }
-
         public override void SetDefaults()
         {
             Item.width = 24;
@@ -26,6 +20,14 @@ namespace WuDao.Content.Items.Accessories
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
             player.GetModPlayer<BoomerangAccessoryPlayer>().Yanfan = true;
+        }
+        public override void AddRecipes()
+        {
+            CreateRecipe()
+                .AddIngredient(ItemID.Trimarang)
+                .AddIngredient(ItemID.Feather, 3)
+                .AddTile(TileID.Anvils)
+                .Register();
         }
     }
 }

@@ -13,7 +13,6 @@ namespace WuDao.Content.Juexue.Active
     // TODO: 庐山升龙霸，青龙虚影
     public class ShengLongBa : JuexueItem
     {
-        public override JuexueID JuexueId => JuexueID.Active_ShengLongBa;
         public override bool IsActive => true;
         public override int QiCost => 10;
         public override int SpecialCooldownTicks => 60 * 1; // 1s

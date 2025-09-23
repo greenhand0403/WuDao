@@ -15,7 +15,7 @@ namespace WuDao.Content.Items.Accessories
             Item.width = 32;
             Item.height = 32;
             Item.accessory = true;
-            Item.rare = ItemRarityID.LightRed; // 星星斗篷 一王前
+            Item.rare = ItemRarityID.LightRed;
             Item.value = Item.sellPrice(gold: 5);
             Item.defense = 2;
         }
@@ -27,58 +27,16 @@ namespace WuDao.Content.Items.Accessories
                 StatEffect.LavaImmune()
             ));
         }
-    }
-
-    public class WrathLotusPlayer : ModPlayer
-    {
-        public bool hasLotus;
-        public int cooldowns = 0;
-        private const int baseDamage = 30;
-        public override void ResetEffects()
+        public override void AddRecipes()
         {
-            hasLotus = false;
-        }
-        public override void PostUpdate()
-        {
-            if (cooldowns > 0)
-            {
-                cooldowns--;
-            }
-        }
-        public override void OnHurt(Player.HurtInfo info)
-        {
-            if (hasLotus && cooldowns == 0)
-            {
-                // 增加无敌帧 (比如额外 30 tick)
-                Player.immune = true;
-                Player.immuneTime += 30;
-                cooldowns += 120;
-
-                if (Player.whoAmI == Main.myPlayer)
-                {
-                    // 在光标位置生成莲花射弹
-                    Projectile.NewProjectile(
-                        Player.GetSource_Accessory(Player.HeldItem),
-                        Main.MouseWorld,
-                        Vector2.Zero,
-                        ModContent.ProjectileType<WrathLotusProj>(),
-                        baseDamage,
-                        3f,
-                        Player.whoAmI
-                    );
-
-                    // 在玩家位置生成莲花射弹
-                    Projectile.NewProjectile(
-                        Player.GetSource_Accessory(Player.HeldItem),
-                        Player.Center,
-                        Vector2.Zero,
-                        ModContent.ProjectileType<WrathLotusProj>(),
-                        baseDamage,
-                        3f,
-                        Player.whoAmI
-                    );
-                }
-            }
+            CreateRecipe()
+                .AddIngredient(ItemID.ObsidianRose)
+                .AddIngredient(ItemID.StarVeil)
+                .AddIngredient(ItemID.SoulofLight, 5)
+                .AddIngredient(ItemID.SoulofNight, 5)
+                .AddIngredient(ItemID.HellstoneBar, 5)
+                .AddTile(TileID.MythrilAnvil)
+                .Register();
         }
     }
 }

@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework;
 using WuDao.Content.Items;
 using System.Collections.Generic;
 using WuDao.Content.Items.Weapons.Melee;
+using System;
 
 namespace WuDao.Content.Global
 {
@@ -49,11 +50,10 @@ namespace WuDao.Content.Global
 
     public class CuisineGlobalItem : GlobalItem
     {
-        // 每点数值折算为多少“额外倍数”。举例：0.01 => 100 点 = +100% = ×2
-        // 你可以按自己的数值膨胀度调这两个常量。
-        public const float PerCookingPointToBonus = 0.01f;
-        public const float PerDeliciousPointToBonus = 0.01f;
-
+        // 每点数值折算为多少“额外倍数” 原版大约有31种菜85种食物
+        public const float PerCookingPointToBonus = 0.1f;
+        public const float PerDeliciousPointToBonus = 0.05f;
+        public override bool InstancePerEntity => false;
         // “最高 300%”→ 额外倍数上限为 +3.0（最终乘区为 1 + 3 = ×4）
         public const float MaxExtraMultiplier = 3f;
         // ① 放在 CuisineGlobalItem 类里常量区（和 MaxExtraMultiplier 等并列）
@@ -78,7 +78,7 @@ namespace WuDao.Content.Global
                 if (p.FoodsEatenAll.Add(item.type))
                 {
                     // 首次‘品尝’累加美味值
-                    int bt = ContentSamples.ItemsByType[item.type].buffTime; // 帧
+                    int bt = ContentSamples.ItemsByType[item.type].rare;
                     if (bt > 0) p.Deliciousness += bt;
                     CombatText.NewText(player.Hitbox, Color.Green, "品尝新食物");
                     // 触发食物海事件
@@ -96,7 +96,7 @@ namespace WuDao.Content.Global
             // —— 首次‘制作’累加厨艺值（与是否携带菜谱无关）——
             if (ItemID.Sets.IsFood[item.type] && cp.CraftedEverFoods.Add(item.type))
             {
-                int bt = ContentSamples.ItemsByType[item.type].buffTime; // 单位：帧（60 = 1秒）
+                int bt = ContentSamples.ItemsByType[item.type].rare;
                 if (bt > 0) cp.CookingSkill += bt;
             }
             // 仅当携带菜谱时才消耗‘首次双倍资格’与发奖励
@@ -153,30 +153,43 @@ namespace WuDao.Content.Global
                 player.statDefense += defBonus; // 给到最终防御
         }
 
-        // 仅做标记展示（可选）
-        public override void ModifyTooltips(Item item, List<Terraria.ModLoader.TooltipLine> tooltips)
+        public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
         {
+            var cp = Main.LocalPlayer?.GetModPlayer<CuisinePlayer>();
+
             if (CuisineCollections.IsCookware(item.type))
-                tooltips.Add(new TooltipLine(Mod, "CuisineTag", "厨具"));
-            if (CuisineCollections.IsGourmet(item.type))
-                tooltips.Add(new TooltipLine(Mod, "CuisineTag", "美食"));
-            // 在你已有的 ModifyTooltips 里追加这一段判断后缀（放在“美食”判断后即可）
-            if (item.accessory && CuisineCollections.IsGourmet(item.type))
             {
-                var cp = Main.LocalPlayer?.GetModPlayer<CuisinePlayer>();
+                tooltips.Add(new TooltipLine(Mod, "CuisineTag", "厨具"));
+                if (cp != null)
+                {
+                    float extra = MathHelper.Clamp(cp.CookingSkill * PerCookingPointToBonus, 0f, MaxExtraMultiplier);
+                    int percent = (int)(extra * 100);
+                    tooltips.Add(new TooltipLine(Mod, "CuisineBonus",
+                        $"当前厨艺加成：+{percent}% 伤害（最高 +{MaxExtraMultiplier * 100}%）"));
+                }
+            }
+
+            if (CuisineCollections.IsGourmet(item.type))
+            {
+                tooltips.Add(new TooltipLine(Mod, "CuisineTag", "美食"));
                 if (cp != null)
                 {
                     float extra = MathHelper.Clamp(cp.Deliciousness * PerDeliciousPointToBonus, 0f, MaxExtraMultiplier);
-                    int defBonus = (int)System.Math.Round(MaxGourmetDefenseBonus * (extra / MaxExtraMultiplier));
-                    tooltips.Add(new TooltipLine(Mod, "CuisineDefense",
-                        $"美味饰品加成：+{defBonus} 防御（随美味值，提高至最高 +{MaxGourmetDefenseBonus}）"));
+                    int percent = (int)(extra * 100);
+                    tooltips.Add(new TooltipLine(Mod, "CuisineBonus",
+                        $"当前美味加成：+{percent}% 伤害（最高 +{MaxExtraMultiplier * 100}%）"));
                 }
+            }
+
+            // 保留你原本的美食饰品加防御逻辑
+            if (item.accessory && CuisineCollections.IsGourmet(item.type) && cp != null)
+            {
+                float extra = MathHelper.Clamp(cp.Deliciousness * PerDeliciousPointToBonus, 0f, MaxExtraMultiplier);
+                int defBonus = (int)Math.Round(MaxGourmetDefenseBonus * (extra / MaxExtraMultiplier));
+                tooltips.Add(new TooltipLine(Mod, "CuisineDefense",
+                    $"美食饰品加成：+{defBonus} 防御（随美味值，提高至最高 +{MaxGourmetDefenseBonus}）"));
             }
         }
 
-        // 说明：饰品一般无直接伤害，这里不做处理。
-        // 若你以后做“会发射弹幕的饰品/召唤类饰品”，其伤害会在生成时读取玩家面板，
-        // 上面 ModifyWeaponDamage 的乘区已能覆盖到。
-        public override bool InstancePerEntity => false;
     }
 }

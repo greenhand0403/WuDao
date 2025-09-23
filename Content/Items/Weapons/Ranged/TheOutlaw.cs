@@ -36,7 +36,7 @@ namespace WuDao.Content.Items.Weapons.Ranged
             Item.rare = ItemRarityID.Red;
             Item.UseSound = SoundID.Item36;
             Item.autoReuse = true;
-            Item.shoot = ModContent.ProjectileType<TheOutlawPellet>();
+            Item.shoot = ProjectileID.PurificationPowder;
             Item.shootSpeed = 6f;
             Item.useAmmo = AmmoID.Bullet;
             Item.crit = 10;
@@ -101,9 +101,10 @@ namespace WuDao.Content.Items.Weapons.Ranged
                 float interp = pelletCount == 1 ? 0f : (i - (pelletCount - 1) / 2f) / (pelletCount - 1f); // [-0.5, 0.5]
                 float angle = interp * spread * (pelletCount - 1);
                 Vector2 perturbed = velocity.RotatedBy(angle);
+                int projType = type == ProjectileID.Bullet ? type : ModContent.ProjectileType<TheOutlawPellet>();
                 int proj = Projectile.NewProjectile(
                     source, position, perturbed,
-                    ModContent.ProjectileType<TheOutlawPellet>(),
+                    projType,
                     (int)(damage * dmgScale), knockback, player.whoAmI
                 );
             }
@@ -155,6 +156,9 @@ namespace WuDao.Content.Items.Weapons.Ranged
             AddLine("PLAN", plan, "击败世纪之花：分裂时必定生成 2 秒火墙，接触造成伤害");
             AddLine("CULT", cult, "击败拜月邪教徒：累计 4 次暴击后，下次射击发射【终极爆弹】（基础伤害×5，扇形溅射）");
         }
-
+        public override Vector2? HoldoutOffset()
+        {
+            return new Vector2(-2f, -2f);
+        }
     }
 }

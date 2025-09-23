@@ -9,6 +9,8 @@ using WuDao.Content.Projectiles.Throwing;
 using Terraria.Audio;
 using ReLogic.Utilities;
 using Terraria.DataStructures;
+using Terraria.GameContent.ItemDropRules;
+using WuDao.Content.Items;
 
 namespace WuDao.Content.Global.NPCs
 {
@@ -257,6 +259,11 @@ namespace WuDao.Content.Global.NPCs
                 return false; // 阻止立即死亡
             }
             return true;
+        }
+        public override void ModifyNPCLoot(NPCLoot npcLoot)
+        {
+            // TODO: 未测试能否正常掉落宝藏袋
+            npcLoot.Add(ItemDropRule.BossBag(ModContent.ItemType<FoodGodBossBag>()));
         }
     }
 }

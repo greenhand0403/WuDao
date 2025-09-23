@@ -12,7 +12,6 @@ namespace WuDao.Content.Juexue.Active
     // TODO: 气功波贴图，绘制乌龟虚影
     public class Kamehameha : JuexueItem
     {
-        public override JuexueID JuexueId => JuexueID.Active_Kamehameha;
         public override int QiCost => 0; // 蓄力期间每帧-1气
         public override int SpecialCooldownTicks => 60 * 8; // 8 秒
 

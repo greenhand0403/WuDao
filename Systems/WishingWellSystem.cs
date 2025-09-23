@@ -136,6 +136,8 @@ namespace WuDao.Content.Systems
 
                 var p = found.Value;
                 WorldGen.PlaceObject(p.X, p.Y, ModContent.TileType<WishingWellTile>());
+                // 打印生成的位置坐标
+                Main.NewText($"许愿池生成在：X={p.X}, Y={p.Y}");
                 if (Main.netMode == NetmodeID.Server)
                     NetMessage.SendObjectPlacement(-1, p.X, p.Y, ModContent.TileType<WishingWellTile>(), 0, 0, -1, -1);
 

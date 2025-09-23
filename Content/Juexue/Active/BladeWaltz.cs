@@ -10,7 +10,6 @@ namespace WuDao.Content.Juexue.Active
     // 剑舞虚影
     public class BladeWaltz : JuexueItem
     {
-        public override JuexueID JuexueId => JuexueID.Active_BladeWaltz;
         public override bool IsActive => true;
         public override int QiCost => 120;
         public override int SpecialCooldownTicks => 60 * 10; // 10s

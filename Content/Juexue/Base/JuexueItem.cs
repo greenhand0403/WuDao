@@ -10,7 +10,6 @@ namespace WuDao.Content.Juexue.Base
     public abstract class JuexueItem : ModItem
     {
         public override string Texture => $"Terraria/Images/Item_{ItemID.Book}";
-        public virtual JuexueID JuexueId => JuexueID.None;
         public virtual bool IsActive => true;         // 主动 or 被动
         public virtual int QiCost => 0;               // 主动技能消耗
         public virtual int SpecialCooldownTicks => 0; // 各自较长冷却（单位tick）

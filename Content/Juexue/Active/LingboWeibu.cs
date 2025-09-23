@@ -11,7 +11,6 @@ namespace WuDao.Content.Juexue.Active
     // 步法虚影
     public class LingboWeibu : JuexueItem
     {
-        public override JuexueID JuexueId => JuexueID.Active_LingboWeibu;
         public override bool IsActive => true;
         public override int QiCost => 0;
         public override int SpecialCooldownTicks => 0; // 开启不需要专属冷却

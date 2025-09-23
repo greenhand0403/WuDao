@@ -15,7 +15,6 @@ namespace WuDao.Content.Juexue.Passive
     public class SharkWhaleFist : JuexueItem
     {
         public override bool IsActive => false; // 被动
-        public override JuexueID JuexueId => JuexueID.Passive_SharkWhaleFist;
 
         public const int Cost = 5;
         public const float Chance = 0.93f; // 随机触发几率（与发射射弹同步）

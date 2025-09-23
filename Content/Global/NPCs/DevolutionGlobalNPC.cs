@@ -45,13 +45,13 @@ namespace WuDao.Content.Global.NPCs
             modifiers.FinalDamage *= 1.4f;
         }
 
-        public override void UpdateLifeRegen(NPC npc, ref int damage)
-        {
-            if (npc.friendly) return;
-            if (!AnyAuraHolderAffecting(npc)) return;
-
-            npc.lifeRegen = (int)(npc.lifeRegen * 0.6f);
-        }
+        // public override void UpdateLifeRegen(NPC npc, ref int damage)
+        // {
+        //     if (npc.friendly) return;
+        //     if (!AnyAuraHolderAffecting(npc)) return;
+        //     // 生命再生减少
+        //     npc.lifeRegen = (int)(npc.lifeRegen * 0.6f);
+        // }
     }
 
 }

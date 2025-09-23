@@ -18,7 +18,7 @@ namespace WuDao.Content.Players
             if (HasDevolutionAura && Main.netMode != NetmodeID.Server)
             {
                 const float radius = 16f * 30;
-                for (int k = 0; k < 12; k++)
+                for (int k = 0; k < 6; k++)
                 {
                     float ang = MathHelper.TwoPi * k / 12f;
                     Vector2 p = Player.Center + radius * ang.ToRotationVector2();

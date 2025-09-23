@@ -13,7 +13,6 @@ namespace WuDao.Content.Juexue.Passive
     public class HeavenlyPetals : JuexueItem
     {
         public override bool IsActive => false; // 被动
-        public override JuexueID JuexueId => JuexueID.Passive_HeavenlyPetals;
 
         public const int Cost = 10;
         public const float Chance = 0.30f; // 30%

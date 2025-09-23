@@ -17,7 +17,7 @@ namespace WuDao.Content.Items
             Item.useStyle = ItemUseStyleID.EatFood;
             Item.UseSound = SoundID.Item2;
             Item.consumable = true;
-            Item.rare = ItemRarityID.Blue;
+            Item.rare = ItemRarityID.Green;
             Item.value = Item.buyPrice(0, 0, 50);
         }
 

@@ -7,6 +7,8 @@ using Terraria;
 using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
+using WuDao.Common;
+using WuDao.Content.Players;
 
 namespace WuDao.Content.Items.Accessories
 {
@@ -22,7 +24,6 @@ namespace WuDao.Content.Items.Accessories
         {
             if (!Main.dedServ)
             {
-                // TODO: TextureAssets.Item[ItemID.HolyWater]; // 使用现成的 Vanilla 贴图
                 TexAsset = ModContent.Request<Texture2D>($"{nameof(WuDao)}/Content/Items/Accessories/FirstBlood_Hero", AssetRequestMode.AsyncLoad);
             }
         }
@@ -35,14 +36,14 @@ namespace WuDao.Content.Items.Accessories
             Item.width = 32;
             Item.height = 32;
             Item.accessory = true;
-            Item.rare = ItemRarityID.Blue;
+            Item.rare = ItemRarityID.Green;
             Item.value = Item.buyPrice(gold: 3);
         }
 
         // 名称动态切换（放在物品在背包就会调用的逻辑里）
         public override void UpdateInventory(Player player)
         {
-            if (AllVanillaBossesDowned())
+            if (Helpers.AllVanillaBossesDowned())
                 Item.SetNameOverride("勇者之证");     // 切换名称
             else
                 Item.SetNameOverride(null);            // 恢复原名（使用 DisplayName）
@@ -56,7 +57,7 @@ namespace WuDao.Content.Items.Accessories
         // 提示文本动态切换
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
-            if (AllVanillaBossesDowned())
+            if (Helpers.AllVanillaBossesDowned())
             {
                 // 已完成 → 展示勇者之证说明
                 tooltips.Add(new TooltipLine(Mod, "HeroNameInfo", "（已觉醒为：勇者之证）"));
@@ -65,7 +66,7 @@ namespace WuDao.Content.Items.Accessories
             }
 
             // 尚未全部击败 → 展示“未击败 BOSS 列表”
-            var remaining = GetRemainingVanillaBossNames();
+            var remaining = Helpers.GetRemainingVanillaBossNames();
             if (remaining.Count > 0)
             {
                 tooltips.Add(new TooltipLine(Mod, "FB_Header", "尚未击败的原版BOSS："));
@@ -89,7 +90,7 @@ namespace WuDao.Content.Items.Accessories
         {
             if (Main.dedServ) return true;
 
-            if (AllVanillaBossesDowned() && TexAsset?.IsLoaded == true)
+            if (Helpers.AllVanillaBossesDowned() && TexAsset?.IsLoaded == true)
             {
                 // 用勇者之证贴图替代默认绘制
                 spriteBatch.Draw(TexAsset.Value, position, TexAsset.Value.Bounds, drawColor, 0f, origin, scale, SpriteEffects.None, 0f);
@@ -104,7 +105,7 @@ namespace WuDao.Content.Items.Accessories
         {
             if (Main.dedServ) return true; // 服务器不绘制
 
-            if (AllVanillaBossesDowned() && TexAsset?.IsLoaded == true)
+            if (Helpers.AllVanillaBossesDowned() && TexAsset?.IsLoaded == true)
             {
                 Vector2 pos = Item.position - Main.screenPosition + new Vector2(Item.width / 2f, Item.height - TexAsset.Height() * 0.5f);
                 spriteBatch.Draw(TexAsset.Value, pos, null, alphaColor, rotation, TexAsset.Size() * 0.5f, scale, SpriteEffects.None, 0f);
@@ -112,156 +113,14 @@ namespace WuDao.Content.Items.Accessories
             }
             return true;
         }
-
-        // 判断是否已击败所有原版 Boss（可按你需求增减）
-        public static bool AllVanillaBossesDowned()
+        public override void AddRecipes()
         {
-            return NPC.downedSlimeKing
-                && NPC.downedBoss1      // 眼
-                && NPC.downedBoss2      // 世/脑
-                && NPC.downedBoss3      // 地牢骷髅
-                && NPC.downedQueenBee
-                && NPC.downedDeerclops
-                && Main.hardMode        // 肉山
-                && NPC.downedMechBossAny  // 机械三王至少一个，若想要求三王全清可改成：downedMechBoss1 && downedMechBoss2 && downedMechBoss3
-                && NPC.downedPlantBoss
-                && NPC.downedGolemBoss
-                && NPC.downedFishron
-                && NPC.downedQueenSlime
-                && NPC.downedAncientCultist
-                && NPC.downedMoonlord;
-        }
-        private static List<string> GetRemainingVanillaBossNames()
-        {
-            var list = new List<string>();
-
-            // 这里与你效果判定同一套“原版BOSS集合”，并用 downed 标志判断
-            // 你可以与 IsBossDefeated/AllVanillaBossesDowned 的逻辑保持一致
-            void AddIfNotDowned(int npcType, bool defeatedFlag)
-            {
-                if (!defeatedFlag)
-                    list.Add(Lang.GetNPCNameValue(npcType));
-            }
-
-            AddIfNotDowned(NPCID.KingSlime, NPC.downedSlimeKing);
-            AddIfNotDowned(NPCID.EyeofCthulhu, NPC.downedBoss1);
-            // 世/脑两选一算通过，这里仅在都没打时显示两者
-            if (!NPC.downedBoss2)
-            {
-                list.Add(Lang.GetNPCNameValue(NPCID.EaterofWorldsHead));
-                list.Add(Lang.GetNPCNameValue(NPCID.BrainofCthulhu));
-            }
-            AddIfNotDowned(NPCID.SkeletronHead, NPC.downedBoss3);
-            AddIfNotDowned(NPCID.QueenBee, NPC.downedQueenBee);
-            AddIfNotDowned(NPCID.Deerclops, NPC.downedDeerclops);
-            AddIfNotDowned(NPCID.WallofFlesh, Main.hardMode);
-
-            // 机械三王：如果 downedMechBossAny 但不是“三王全清”，显示具体未击败者
-            bool mechAny = NPC.downedMechBossAny;
-            bool mech1 = NPC.downedMechBoss1; // 双子魔眼
-            bool mech2 = NPC.downedMechBoss2; // 骷髅王Prime
-            bool mech3 = NPC.downedMechBoss3; // 毁灭者
-            if (!(mech1 && mech2 && mech3))
-            {
-                if (!mech1)
-                {
-                    list.Add(Lang.GetNPCNameValue(NPCID.Retinazer));
-                    list.Add(Lang.GetNPCNameValue(NPCID.Spazmatism));
-                }
-                if (!mech2) list.Add(Lang.GetNPCNameValue(NPCID.SkeletronPrime));
-                if (!mech3) list.Add(Lang.GetNPCNameValue(NPCID.TheDestroyer));
-            }
-
-            AddIfNotDowned(NPCID.Plantera, NPC.downedPlantBoss);
-            AddIfNotDowned(NPCID.Golem, NPC.downedGolemBoss);
-            AddIfNotDowned(NPCID.DukeFishron, NPC.downedFishron);
-            AddIfNotDowned(NPCID.QueenSlimeBoss, NPC.downedQueenSlime);
-            AddIfNotDowned(NPCID.CultistBoss, NPC.downedAncientCultist);
-            AddIfNotDowned(NPCID.MoonLordCore, NPC.downedMoonlord);
-
-            return list;
-        }
-    }
-
-    public class FirstBloodPlayer : ModPlayer
-    {
-        public bool hasFirstBlood;
-
-        public override void ResetEffects()
-        {
-            hasFirstBlood = false;
-        }
-        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
-        {
-            ApplyBonus(target, ref modifiers);
-        }
-
-        public override void ModifyHitNPCWithProj(Projectile proj, NPC target, ref NPC.HitModifiers modifiers)
-        {
-            ApplyBonus(target, ref modifiers);
-        }
-
-        private void ApplyBonus(NPC target, ref NPC.HitModifiers modifiers)
-        {
-            if (!hasFirstBlood) return;
-
-            if (FirstBlood.AllVanillaBossesDowned())
-            {
-                // 勇者之证：对 >90% 生命值的敌怪“首次攻击”+300%
-                // “首次攻击”可用本地标记实现，这里示例为：目标满血时触发
-                if (target.life >= (int)(target.lifeMax * 0.9f) && target.life == target.lifeMax)
-                    modifiers.FinalDamage *= 4f; // +300%
-            }
-            else
-            {
-                // 第一滴血：对尚未击败的原版 Boss +10%
-                if (IsTrackedVanillaBoss(target.type) && !IsBossDefeated(target.type))
-                    modifiers.FinalDamage *= 1.1f;
-            }
-        }
-
-        private static bool IsTrackedVanillaBoss(int type)
-        {
-            return type == NPCID.KingSlime
-                || type == NPCID.EyeofCthulhu
-                || type == NPCID.EaterofWorldsHead || type == NPCID.BrainofCthulhu
-                || type == NPCID.QueenBee
-                || type == NPCID.SkeletronHead
-                || type == NPCID.Deerclops
-                || type == NPCID.WallofFlesh
-                || type == NPCID.TheDestroyer || type == NPCID.SkeletronPrime || type == NPCID.Retinazer || type == NPCID.Spazmatism
-                || type == NPCID.Plantera
-                || type == NPCID.Golem
-                || type == NPCID.DukeFishron
-                || type == NPCID.QueenSlimeBoss
-                || type == NPCID.CultistBoss
-                || type == NPCID.MoonLordCore;
-        }
-
-        private static bool IsBossDefeated(int type)
-        {
-            return type switch
-            {
-                NPCID.KingSlime => NPC.downedSlimeKing,
-                NPCID.EyeofCthulhu => NPC.downedBoss1,
-                NPCID.EaterofWorldsHead => NPC.downedBoss2,
-                NPCID.BrainofCthulhu => NPC.downedBoss2,
-                NPCID.QueenBee => NPC.downedQueenBee,
-                NPCID.SkeletronHead => NPC.downedBoss3,
-                NPCID.Deerclops => NPC.downedDeerclops,
-                NPCID.WallofFlesh => Main.hardMode,
-                NPCID.TheDestroyer => NPC.downedMechBoss3 || NPC.downedMechBossAny,
-                NPCID.SkeletronPrime => NPC.downedMechBoss2 || NPC.downedMechBossAny,
-                NPCID.Retinazer => NPC.downedMechBoss1 || NPC.downedMechBossAny,
-                NPCID.Spazmatism => NPC.downedMechBoss1 || NPC.downedMechBossAny,
-                NPCID.Plantera => NPC.downedPlantBoss,
-                NPCID.Golem => NPC.downedGolemBoss,
-                NPCID.DukeFishron => NPC.downedFishron,
-                NPCID.QueenSlimeBoss => NPC.downedQueenSlime,
-                NPCID.CultistBoss => NPC.downedAncientCultist,
-                NPCID.MoonLordCore => NPC.downedMoonlord,
-                _ => false
-            };
+            CreateRecipe()
+                .AddIngredient(ItemID.LifeCrystal, 5)
+                .AddIngredient(ItemID.BloodMoonStarter, 1)
+                .AddCondition(Condition.BloodMoon)
+                .AddTile(TileID.Anvils)
+                .Register();
         }
     }
 }

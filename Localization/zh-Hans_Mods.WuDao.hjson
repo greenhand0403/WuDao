@@ -467,6 +467,16 @@ Items: {
 		Tooltip: 宝石袋
 		DisplayName: 投掷随机宝石，不同类型具有不同效果
 	}
+
+	ScallionShield: {
+		// DisplayName: Scallion Shield
+		// Tooltip: ""
+	}
+
+	FoodGodBossBag: {
+		// DisplayName: Food God Boss Bag
+		// Tooltip: ""
+	}
 }
 
 Projectiles: {
@@ -722,7 +732,11 @@ Configs: {
 }
 
 Tiles.PyramidStatueTile.MapEntry: 迷你金字塔物块
-"Keybinds.Cast/Charge Juexue.DisplayName": 释放绝学键
+
+Keybinds: {
+	"Cast/Charge Juexue.DisplayName": 释放绝学键
+	// "Active JueXue Skill.DisplayName": Active  Jue Xue  Skill
+}
 
 NPCs: {
 	WanderingBeggar.DisplayName: 流浪乞丐

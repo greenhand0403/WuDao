@@ -11,9 +11,10 @@ namespace WuDao.Content.Items.Accessories
         public const float MULT = 0.8f;
         public override void SetDefaults()
         {
-            Item.width = 32; Item.height = 32;
+            Item.width = 32;
+            Item.height = 32;
             Item.accessory = true;
-            Item.rare = ItemRarityID.Yellow;
+            Item.rare = ItemRarityID.Pink;
             Item.value = Item.buyPrice(0, 5, 0, 0);
         }
 
@@ -34,6 +35,15 @@ namespace WuDao.Content.Items.Accessories
                 StatEffect.DefenseMultiplier(MULT)
             ));
         }
-
+        public override void AddRecipes()
+        {
+            CreateRecipe()
+                .AddIngredient(ItemID.SoulofMight, 3)
+                .AddIngredient(ItemID.SoulofSight, 3)
+                .AddIngredient(ItemID.SoulofFright, 3)
+                .AddIngredient(ItemID.HallowedBar, 5)
+                .AddTile(TileID.MythrilAnvil)
+                .Register();
+        }
     }
 }

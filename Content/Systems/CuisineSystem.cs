@@ -49,7 +49,7 @@ namespace WuDao.Content.Systems
             ItemID.GrubSoup,
             ItemID.TropicalSmoothie,
             ItemID.SmoothieofDarkness,
-            ItemID.PinaColada,              // 注意：没有波浪符，枚举写 PinaColada
+            ItemID.PinaColada,
             ItemID.BloodyMoscato,
             ItemID.RoastedDuck,
             ItemID.LobsterTail,
@@ -79,7 +79,7 @@ namespace WuDao.Content.Systems
         // 最终可用的“菜谱池”（仅包含：被标为食物 + 有配方 的物品）
         public static readonly List<int> FoodPool = new();
         public static int DayCounter; // 世界范围的“天数”计数
-                                      // 先放在类里（静态字典）
+        // 先放在类里（静态字典）
         public static readonly Dictionary<int, string> ManualFoodHints = new();
         public static int TotalFoodCount { get; private set; }
         public override void PostUpdateWorld()
@@ -236,51 +236,6 @@ namespace WuDao.Content.Systems
             }
             // 做掉第一个：保持索引不变（原 second 顶到 first，新的 third 成为 second
         }
-        // public static string DescribeAcquisition(int itemType)
-        // {
-        //     // ★ 1) 手动覆盖优先
-        //     if (ManualFoodHints.TryGetValue(itemType, out string hint))
-        //         return $"· {Lang.GetItemNameValue(itemType)}：{hint}";
-
-        //     // 2) 有配方 → 列第一条配方（材料 + 合成站）
-        //     for (int i = 0; i < Recipe.numRecipes; i++)
-        //     {
-        //         var r = Main.recipe[i];
-        //         if (r?.createItem?.type == itemType)
-        //         {
-        //             var mats = new System.Text.StringBuilder();
-        //             for (int k = 0; k < r.requiredItem.Count; k++)
-        //             {
-        //                 var it = r.requiredItem[k];
-        //                 if (it?.type > 0 && it.stack > 0)
-        //                 {
-        //                     if (mats.Length > 0) mats.Append(" + ");
-        //                     mats.Append($"{Lang.GetItemNameValue(it.type)}×{it.stack}");
-        //                 }
-        //             }
-
-        //             // 合成站（取第一项），兼容 tML 1.4：用 tile id 直接取名
-        //             string station = "";
-        //             for (int t = 0; t < r.requiredTile.Count; t++)
-        //             {
-        //                 int tile = r.requiredTile[t];
-        //                 if (tile >= 0 && tile < TileLoader.TileCount)
-        //                 {
-        //                     station = Lang.GetMapObjectName(tile);
-        //                     if (!string.IsNullOrEmpty(station)) break;
-        //                 }
-        //             }
-        //             if (string.IsNullOrEmpty(station)) station = "任意";
-        //             return $"· {Lang.GetItemNameValue(itemType)}：{mats} @ {station}";
-        //         }
-        //     }
-        //     // 3) 无配方 → 试图从原版掉落数据库推断 NPC 掉落；失败再给通用提示
-        //     string drop = DescribeFromVanillaDropDB(itemType);
-        //     if (!string.IsNullOrEmpty(drop))
-        //         return $"· [i:{itemType}] {Lang.GetItemNameValue(itemType)}：{drop}";
-
-        //     return $"未查询到配方";
-        // }
         // CuisineSystem.cs 里（与 ManualFoodHints 同级）
         public static void RegisterHint(int itemType, string hint)
             => ManualFoodHints[itemType] = hint;
@@ -339,12 +294,12 @@ namespace WuDao.Content.Systems
             if (hits.Count > maxNpc) hits = hits.GetRange(0, maxNpc);
 
             // 5) 组装提示
-            var sb = new System.Text.StringBuilder();
+            var sb = new StringBuilder();
             for (int i = 0; i < hits.Count; i++)
             {
                 if (i > 0) sb.Append("、");
                 // 格式示例：僵尸(2.0%)
-                sb.Append($"{hits[i].npcName}({System.Math.Round(hits[i].chance * 100, 1)}%)");
+                sb.Append($"{hits[i].npcName}({Math.Round(hits[i].chance * 100, 1)}%)");
             }
             return sb.ToString();
         }
