@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using WuDao.Common;
 using WuDao.Content.Players;
 
 namespace WuDao.Content.Items.Weapons.Melee
@@ -11,8 +12,8 @@ namespace WuDao.Content.Items.Weapons.Melee
         public override void SetDefaults()
         {
             Item.CloneDefaults(ItemID.CombatWrench);
-            Item.useTime = 60;
-            Item.useAnimation = 60;
+            Item.useTime = 30;
+            Item.useAnimation = 30;
             Item.damage = 30;
             Item.noMelee = false;
             Item.useStyle = ItemUseStyleID.Swing;
@@ -21,6 +22,7 @@ namespace WuDao.Content.Items.Weapons.Melee
             Item.autoReuse = true;
             Item.width = 48;
             Item.height = 48;
+            Item.rare = ModContent.RarityType<LightBlueRarity>();
         }
         public override void ModifyWeaponDamage(Player player, ref StatModifier damage)
         {
@@ -51,6 +53,7 @@ namespace WuDao.Content.Items.Weapons.Melee
             // 根据美味值加成攻速
             return 1f + cp.Deliciousness * 0.01f;
         }
+        // TODO: 写一个全局物品获取美食/厨具来应用加成效果
         // public override void UpdateAccessory(Player player, bool hideVisual)
         // {
         //     var cp = player.GetModPlayer<CuisinePlayer>();
@@ -81,8 +84,9 @@ namespace WuDao.Content.Items.Weapons.Melee
         public override void AddRecipes()
         {
             CreateRecipe()
-                .AddIngredient(ItemID.OldShoe)
+                .AddIngredient(ItemID.OldShoe, 5)
                 .AddTile(TileID.TinkerersWorkbench)
+                .AddCondition(Condition.InJungle)
                 .Register();
         }
     }

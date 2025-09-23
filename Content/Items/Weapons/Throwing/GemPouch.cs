@@ -50,10 +50,17 @@ namespace WuDao.Content.Items.Weapons.Throwing
 
         public override void AddRecipes()
         {
+            // 7种宝石和皮革各5个
             CreateRecipe(20)
-            .AddIngredient(ItemID.Diamond, 1)
-            .AddIngredient(ItemID.Topaz, 1)
-            .AddTile(TileID.WorkBenches)
+            .AddIngredient(ItemID.Diamond, 5)
+            .AddIngredient(ItemID.Amber, 5)
+            .AddIngredient(ItemID.Emerald, 5)
+            .AddIngredient(ItemID.Ruby, 5)
+            .AddIngredient(ItemID.Sapphire, 5)
+            .AddIngredient(ItemID.Topaz, 5)
+            .AddIngredient(ItemID.Amethyst, 5)
+            .AddIngredient(ItemID.Leather, 5)
+            .AddTile(TileID.Hellforge)
             .Register();
         }
     }

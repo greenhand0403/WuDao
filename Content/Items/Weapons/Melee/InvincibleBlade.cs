@@ -20,8 +20,8 @@ namespace WuDao.Content.Items.Weapons.Melee
             Item.width = 50;
             Item.height = 50;
             Item.useStyle = ItemUseStyleID.Swing;
-            Item.useTime = 10;         // 形参而已，实际由冷却控制
-            Item.useAnimation = 10;
+            Item.useTime = CooldownFrames;         // 形参而已，实际由冷却控制
+            Item.useAnimation = CooldownFrames;
             Item.autoReuse = true;
             Item.UseSound = SoundID.Item60;
             // Item.noMelee = true;
@@ -30,7 +30,7 @@ namespace WuDao.Content.Items.Weapons.Melee
             Item.rare = ItemRarityID.Red;
             Item.value = Item.buyPrice(0, 50, 0, 0);
             Item.DamageType = DamageClass.Melee; // 外观剑型
-            Item.damage = 0;           // 无效占位，实际伤害在射弹里计算
+            Item.damage = 12;
             Item.knockBack = 0f;
             Item.channel = false;
         }

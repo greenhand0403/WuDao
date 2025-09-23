@@ -11,16 +11,6 @@ namespace WuDao.Content.Items.Weapons.Ranged
 {
     public class CupidBow : ModItem
     {
-        // public override void SetStaticDefaults()
-        // {
-        //     DisplayName.SetDefault("丘比特弓");
-        //     Tooltip.SetDefault(
-        //         "将木箭转化为心箭\n" +
-        //         "你使用的心箭只消耗1点生命\n" +
-        //         "有一定几率同时射出2支箭（只消耗1枚箭）"
-        //     );
-        // }
-
         public override void SetDefaults()
         {
             Item.width = 26;
@@ -83,12 +73,13 @@ namespace WuDao.Content.Items.Weapons.Ranged
             Projectile.NewProjectile(source, position, velocity, type, damage, knockback, player.whoAmI);
 
             // 5) 双发：同样需要对第2支应用“出膛前推”
-            if (Main.rand.NextFloat() < 0.25f)
+            if (Main.rand.NextFloat() < DoubleShotChance)
             {
                 Vector2 v2 = velocity.RotatedByRandom(MathHelper.ToRadians(4));
                 Vector2 pos2 = position; // 已经前推过的位置为基准
-                                         // 再做一次极短的微前推，防止双发互相重叠立即碰撞（可选，2~6像素）
+                // 再做一次极短的微前推，防止双发互相重叠立即碰撞（可选，2~6像素）
                 Vector2 micro = v2.SafeNormalize(Vector2.UnitX) * 6f;
+                pos2 += Vector2.UnitY * 6f;
                 if (Collision.CanHit(pos2, 0, 0, pos2 + micro, 0, 0))
                     pos2 += micro;
 
@@ -103,7 +94,7 @@ namespace WuDao.Content.Items.Weapons.Ranged
             Recipe.Create(ModContent.ItemType<CupidBow>())
                 .AddIngredient(ItemID.GoldBow)
                 .AddIngredient(ModContent.ItemType<HeartArrow>(), 50)
-                .AddIngredient(ItemID.Heart, 3)
+                .AddIngredient(ItemID.LifeCrystal, 3)
                 .AddTile(TileID.Anvils)
                 .Register();
         }

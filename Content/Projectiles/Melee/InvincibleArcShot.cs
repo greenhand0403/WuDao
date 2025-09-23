@@ -41,8 +41,8 @@ namespace WuDao.Content.Projectiles.Melee
         private const int LifeTime = 34;       // 总寿命（帧）
         private const int FadeInFrames = 6;    // 淡入
         private const int FadeOutFrames = 6;   // 淡出
-        private const float Speed = 6f;       // 初速度（像素/帧）
-        private const int LocalHitCooldown = 4;
+        private const float Speed = 8f;       // 初速度（像素/帧）
+        private const int LocalHitCooldown = 3;
 
         // AI 用途：
         // ai[0] = age（已存活帧数）
