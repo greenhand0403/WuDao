@@ -388,6 +388,16 @@ Items: {
 		DisplayName: Food God Boss Bag
 		Tooltip: ""
 	}
+
+	HeroBrokenSwordStaff: {
+		Tooltip: ""
+		DisplayName: Hero Broken Sword Staff
+	}
+
+	FlyingToiletMountItem: {
+		DisplayName: Flying Toilet Mount Item
+		Tooltip: ""
+	}
 }
 
 Projectiles: {
@@ -438,6 +448,10 @@ Projectiles: {
 	TenThousandSwordsProj.DisplayName: Ten Thousand Swords Proj
 	PhantomDragonProjectile.DisplayName: Phantom Dragon Projectile
 	GemProjectile.DisplayName: Gem Projectile
+	HeroBrokenSwordMinion.DisplayName: Hero Broken Sword Minion
+	MagneticHeavenBladeProj.DisplayName: Magnetic Heaven Blade Proj
+	MagneticHeavenBladeField.DisplayName: Magnetic Heaven Blade Field
+	KamehamehaProj.DisplayName: Kamehameha Proj
 }
 
 DamageClasses: {
@@ -589,6 +603,16 @@ Buffs: {
 	GelFlaskBuff: {
 		Description: Mods.WuDao.Buffs.GelFlaskBuff.Description
 		DisplayName: Gel Flask Buff
+	}
+
+	HeroBrokenSwordBuff: {
+		Description: Mods.WuDao.Buffs.HeroBrokenSwordBuff.Description
+		DisplayName: Hero Broken Sword Buff
+	}
+
+	FlyingToiletBuff: {
+		DisplayName: Flying Toilet Buff
+		Description: Mods.WuDao.Buffs.FlyingToiletBuff.Description
 	}
 }
 

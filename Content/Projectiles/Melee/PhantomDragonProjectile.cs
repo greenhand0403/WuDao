@@ -19,8 +19,8 @@ namespace WuDao.Content.Projectiles.Melee
         }
         public override void SetDefaults()
         {
-            Projectile.width = 40;
-            Projectile.height = 40;
+            Projectile.width = 50;
+            Projectile.height = 50;
             Projectile.friendly = true;
             Projectile.ignoreWater = true;
             Projectile.tileCollide = false;
@@ -29,6 +29,12 @@ namespace WuDao.Content.Projectiles.Melee
             Projectile.aiStyle = 0;
             Projectile.hostile = false;
             Projectile.light = 0.5f;
+        }
+        // 修正碰撞体位置
+        public override void ModifyDamageHitbox(ref Rectangle hitbox)
+        {
+            Rectangle rectangle = new Rectangle(hitbox.X + hitbox.Width / 2, hitbox.Y - hitbox.Height / 2, hitbox.Width, hitbox.Height);
+            hitbox = rectangle;
         }
         public override void AI()
         {

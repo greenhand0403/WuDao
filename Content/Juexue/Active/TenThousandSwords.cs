@@ -11,19 +11,19 @@ using WuDao.Content.Projectiles.Melee;
 
 namespace WuDao.Content.Juexue.Active
 {
-    // TODO: 剑之虚影
     public class TenThousandSwords : JuexueItem
     {
         public override int QiCost => 200;
-        public override int SpecialCooldownTicks => 60 * 2; // 2 秒
-
+        public override int SpecialCooldownTicks => 60 * 120; // 2 分钟
+        public const int TenThousandSwordsFrameIndex = 5;
         protected override bool OnActivate(Player player, QiPlayer qi)
         {
             var rect = Helpers.ScreenBoundsWorldSpace();
             Vector2 mouse = Main.MouseWorld;
 
-            int count = Main.rand.Next(16, 24);
+            int count = Main.rand.Next(12, 20);
             float vnum = 5f;
+            int damage = Helpers.BossProgressPower.GetUniqueBossCount() * 50;
             for (int i = 0; i < count; i++)
             {
                 // 随机边缘
@@ -38,13 +38,18 @@ namespace WuDao.Content.Juexue.Active
                 Vector2 v = (mouse - spawn).SafeNormalize(Vector2.UnitX) * vnum * Main.rand.NextFloat(1.2f, 1.8f);
 
                 int projType = ModContent.ProjectileType<TenThousandSwordsProj>();
-                int proj = Projectile.NewProjectile(player.GetSource_ItemUse(Item), spawn, v, projType, 80, 2f, player.whoAmI);
-                if (proj>=0)
+                int proj = Projectile.NewProjectile(player.GetSource_ItemUse(Item), spawn, v, projType, damage, 2f, player.whoAmI);
+                if (proj >= 0)
                 {
                     Main.projectile[proj].penetrate = 20; // 高穿透
                     Main.projectile[proj].tileCollide = false;
                     Main.projectile[proj].netUpdate = true;
                 }
+            }
+            if (!Main.dedServ)
+            {
+                // 触发 2 秒虚影，稍微放大 1.1 倍，向上偏移 16 像素（站位更好看）
+                qi.TriggerJuexueGhost(TenThousandSwordsFrameIndex, durationTick: 60, scale: 1.1f, offset: new Vector2(0, -16));
             }
             return true;
         }

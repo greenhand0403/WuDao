@@ -469,13 +469,27 @@ Items: {
 	}
 
 	ScallionShield: {
-		// DisplayName: Scallion Shield
-		// Tooltip: ""
+		DisplayName: 葱盾
+		Tooltip:
+			'''
+				双击冲刺
+				美味值延长冲刺距离
+			'''
 	}
 
 	FoodGodBossBag: {
-		// DisplayName: Food God Boss Bag
-		// Tooltip: ""
+		DisplayName: 食神宝藏袋
+		Tooltip: 右键开启
+	}
+
+	HeroBrokenSwordStaff: {
+		Tooltip: 召唤断裂英雄剑
+		DisplayName: 英雄断剑
+	}
+
+	FlyingToiletMountItem: {
+		DisplayName: 飞天马桶
+		Tooltip: 起飞
 	}
 }
 
@@ -527,6 +541,10 @@ Projectiles: {
 	TenThousandSwordsProj.DisplayName: 万剑归宗射弹
 	PhantomDragonProjectile.DisplayName: 幻影龙射弹
 	GemProjectile.DisplayName: 宝石射弹
+	HeroBrokenSwordMinion.DisplayName: 断裂英雄剑
+	// MagneticHeavenBladeProj.DisplayName: Magnetic Heaven Blade Proj
+	// MagneticHeavenBladeField.DisplayName: Magnetic Heaven Blade Field
+	// KamehamehaProj.DisplayName: Kamehameha Proj
 }
 
 DamageClasses: {
@@ -679,6 +697,16 @@ Buffs: {
 		Description: 击中敌人时造成黏糊糊的凝胶减益
 		DisplayName: 凝胶溅射
 	}
+
+	HeroBrokenSwordBuff: {
+		Description: 断裂英雄剑
+		DisplayName: 断裂英雄剑
+	}
+
+	FlyingToiletBuff: {
+		DisplayName: 飞天马桶
+		Description: 起飞
+	}
 }
 
 Configs: {
@@ -735,7 +763,7 @@ Tiles.PyramidStatueTile.MapEntry: 迷你金字塔物块
 
 Keybinds: {
 	"Cast/Charge Juexue.DisplayName": 释放绝学键
-	// "Active JueXue Skill.DisplayName": Active  Jue Xue  Skill
+	"Active JueXue Skill.DisplayName": 释放绝学
 }
 
 NPCs: {

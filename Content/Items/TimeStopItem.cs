@@ -31,7 +31,7 @@ namespace WuDao.Content.Items
         public override bool? UseItem(Player player)
         {
             const int duration = 300;   // 冻结 5s（60fps）
-            const int cooldown = 900;   // 冷却 15s
+            const int cooldown = 2400;   // 冷却 2 分钟
 
             // Global 冻结；如果你要用“飞仙定向冻结”，把 scope/allowed 换成对应参数
             bool ok = TimeStopSystem.TryStartFreeze(duration, cooldown, FreezeScope.Global, -1);

@@ -46,7 +46,7 @@ namespace WuDao.Content.Projectiles
             Projectile.ignoreWater = true;
             Projectile.tileCollide = false;
             Projectile.penetrate = -1; // 贯穿
-            Projectile.timeLeft = 210;
+            Projectile.timeLeft = 300;
             Projectile.aiStyle = 0;
             Projectile.hostile = false;
             Projectile.light = 0.5f;

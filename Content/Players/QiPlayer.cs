@@ -8,6 +8,10 @@ using WuDao.Content.Juexue.Active;
 using Terraria.ID;
 using WuDao.Content.Systems;
 using System;
+using ReLogic.Content;
+using Microsoft.Xna.Framework.Graphics;
+using Terraria.Audio;
+using WuDao.Content.Buffs;
 
 namespace WuDao.Content.Players
 {
@@ -55,6 +59,36 @@ namespace WuDao.Content.Players
 
         // === 降龙十八掌 计数 ===
         public int XiangLongCount = 0;
+        // —— 绝学虚影播放状态 —— //
+        public Asset<Texture2D> JueXueTex;
+        public struct JuexueGhostState
+        {
+            public Rectangle Src;       // 从竖直条里裁切的单帧
+            public int TimeLeft;        // 剩余tick
+            public int Duration;        // 总时长tick
+            public float Scale;
+            public Vector2 Offset;      // 相对玩家中心的偏移
+            public SpriteEffects Fx;
+        }
+        public const int Juexue1TotalFrames = 14; // 14个绝学虚影
+        public JuexueGhostState Ghost; // 当前仅允许一个虚影，够用了
+        // 乾坤大挪移残影
+        // —— 弧线冲刺状态 —— //
+        private bool shiftActive;
+        private int shiftTimer;       // 已经过的tick
+        private int shiftDuration;    // 总时长tick
+        private Vector2 bezP0, bezC, bezP1;
+        private Vector2 lastPos;      // 上一帧位置（算速度/残影用）
+        private int invulnOnEnd = 15; // 短暂无敌（你已有ShortInvulnBuff也可用）
+
+        // 轻量“残影轨迹”缓存（只用来撒尘，不做真正玩家贴图复制）
+        private const int TrailCap = 8;
+        private readonly Vector2[] trail = new Vector2[TrailCap];
+        private int trailCount = 0;
+        // —— 可选：暴露轨迹给绘制层（如果你要做真正的“玩家贴图残像”）——
+        public bool ShiftActive => shiftActive;
+        public int ShiftTrailCount => trailCount;
+        public Vector2 GetShiftTrailPos(int i) => trail[i];
 
         // —— UI 显示条件 —— //
         public bool ShouldShowQiBar()
@@ -111,6 +145,9 @@ namespace WuDao.Content.Players
                 JuexueSlot = new Item();
                 JuexueSlot.TurnToAir();
             }
+
+            // 加载绝学贴图
+            JueXueTex = ModContent.Request<Texture2D>("WuDao/Assets/JueXue1", AssetRequestMode.ImmediateLoad);
         }
 
         public override void ResetEffects()
@@ -168,8 +205,8 @@ namespace WuDao.Content.Players
                     // 每消耗 20 点真气，播放短促提示音
                     if (ChargeQiSpent % 20 == 0)
                     {
-                        Terraria.Audio.SoundEngine.PlaySound(
-                        Terraria.ID.SoundID.MaxMana with { Volume = 0.6f, Pitch = 0.15f },
+                        SoundEngine.PlaySound(
+                        SoundID.MaxMana with { Volume = 0.6f, Pitch = 0.15f },
                         Player.Center
                         );
                     }
@@ -377,18 +414,18 @@ namespace WuDao.Content.Players
                         projEnt.hostile = false;
                         projEnt.netUpdate = true;
                     }
-                    
+
                     // 残影/特效（可选）
-                for (int i = 0; i < 16; i++)
-                {
-                    var d = Dust.NewDustPerfect(
-                        spawn + Main.rand.NextVector2Circular(18, 18),
-                        DustID.SilverFlame,
-                        Main.rand.NextVector2Circular(2, 2),
-                        150, default, 1.1f
-                    );
-                    d.noGravity = true;
-                }
+                    // for (int i = 0; i < 16; i++)
+                    // {
+                    //     var d = Dust.NewDustPerfect(
+                    //         spawn + Main.rand.NextVector2Circular(18, 18),
+                    //         DustID.SilverFlame,
+                    //         Main.rand.NextVector2Circular(2, 2),
+                    //         150, default, 1.1f
+                    //     );
+                    //     d.noGravity = true;
+                    // }
                 }
 
                 if (BladeWaltzTicks <= 0)
@@ -528,6 +565,144 @@ namespace WuDao.Content.Players
                     ChargeQiSpent = 0;
                 }
             }
+        }
+
+        /// <summary>
+        /// 触发：在 durationTick 内淡入淡出绘制。
+        /// </summary>
+        public void TriggerJuexueGhost(int frameIndex, int durationTick = 120, float scale = 1f, Vector2? offset = null, SpriteEffects fx = SpriteEffects.None)
+        {
+            if (Main.dedServ) return;
+
+            Ghost.Src = VerticalFrame(frameIndex);
+            Ghost.Duration = durationTick;
+            Ghost.TimeLeft = durationTick;
+            Ghost.Scale = scale;
+            Ghost.Offset = offset ?? Vector2.Zero;
+            Ghost.Fx = fx;
+        }
+
+        public override void PostUpdate()
+        {
+            if (Ghost.TimeLeft > 0)
+                Ghost.TimeLeft--;
+        }
+        /// <summary>启动乾坤大挪移的“二次贝塞尔弧线冲刺”。</summary>
+        public void StartQiankunCurveDash(Vector2 p0, Vector2 c, Vector2 p1, int duration)
+        {
+            shiftActive = true;
+            shiftTimer = 0;
+            shiftDuration = duration;
+            bezP0 = p0; bezC = c; bezP1 = p1;
+            lastPos = Player.Center;
+
+            // 起手：短无敌，防止被打断；禁用一些动作
+            Player.immune = true;
+            Player.immuneTime = Math.Max(Player.immuneTime, duration + 8);
+            Player.noFallDmg = true;
+            Player.controlUseItem = false;
+            Player.controlJump = false;
+            Player.controlLeft = Player.controlRight = Player.controlDown = Player.controlUp = false;
+
+            trailCount = 0;
+        }
+        public override void PreUpdateMovement()
+        {
+            if (!shiftActive) return;
+
+            // 归一化时间（缓动）：前半加速，后半减速
+            float t = (shiftTimer + 1) / (float)shiftDuration;
+            t = Utils.SmoothStep(0f, 1f, t); // t^2*(3-2t)
+
+            // === 椭圆弧线 ===
+            // 端点/中点/方向
+            Vector2 p0 = bezP0;
+            Vector2 p1 = bezP1;
+            Vector2 mid = (p0 + p1) * 0.5f;
+            Vector2 dir = p1 - p0;
+            float L = dir.Length();
+            Vector2 unit = dir.SafeNormalize(Vector2.UnitX);
+            Vector2 normal = new Vector2(-unit.Y, unit.X);
+
+            // 用 OnActivate 里传进来的 c（bezC）来决定弧高与左右侧：
+            // 取 c 相对中点在法线方向上的投影作为弧高（可再做安全夹取）
+            float H = Vector2.Dot(bezC - mid, normal);
+            H = MathHelper.Clamp(H, -300f, 300f); // 防炸值，按需微调
+
+            // 椭圆参数（半椭圆）：x 从 -L/2 到 L/2，y 从 0 到 H*sin(pi*t)
+            float x = 0.5f * L * (2f * t - 1f);
+            float y = H * (float)System.Math.Sin(System.Math.PI * t);
+
+            // 局部 -> 世界
+            Vector2 local = new Vector2(x, y);
+            Vector2 pos = mid + local.X * unit + local.Y * normal;
+
+            // 位移与朝向（保持你原先的两段式“速度+位移”）
+            Vector2 vel = pos - Player.Center;
+            Player.velocity = vel;
+            Player.position += vel;
+
+            if (vel.LengthSquared() > 0.001f)
+                Player.direction = vel.X >= 0 ? 1 : -1;
+
+            // 记录轨迹点（你的残影需求）
+            PushTrail(Player.Center);
+
+            lastPos = Player.Center;
+            shiftTimer++;
+
+            // 结束判定（保持原样）
+            if (shiftTimer >= shiftDuration)
+            {
+                shiftActive = false;
+                Player.velocity = Vector2.Zero;
+                Player.noFallDmg = false;
+
+                SoundEngine.PlaySound(SoundID.Item6, Player.Center);
+                for (int i = 0; i < 24; i++)
+                {
+                    var v = Main.rand.NextVector2Circular(3f, 3f);
+                    int d = Dust.NewDust(Player.position, Player.width, Player.height, DustID.Teleporter, v.X, v.Y, 150, default, Main.rand.NextFloat(1.2f, 1.6f));
+                    Main.dust[d].noGravity = true;
+                }
+                Player.AddBuff(ModContent.BuffType<ShortInvulnBuff>(), invulnOnEnd);
+            }
+        }
+        private void SpawnShiftDust(Vector2 at, Vector2 vel)
+        {
+            if (Main.netMode == NetmodeID.Server) return;
+
+            // 主体尾迹电光
+            for (int i = 0; i < 2; i++)
+            {
+                var d = Dust.NewDustPerfect(at + Main.rand.NextVector2Circular(12, 12), DustID.MagicMirror,
+                    -vel * Main.rand.NextFloat(0.05f, 0.2f), 160, default, Main.rand.NextFloat(1.0f, 1.35f));
+                d.noGravity = true;
+            }
+            // 侧向微粒
+            if (Main.rand.NextBool(3))
+            {
+                var d2 = Dust.NewDustPerfect(at, DustID.GemDiamond, Main.rand.NextVector2Circular(1.5f, 1.5f), 100, default, 1.05f);
+                d2.noGravity = true;
+            }
+        }
+
+        private void PushTrail(Vector2 p)
+        {
+            if (trailCount < TrailCap) trail[trailCount++] = p;
+            else
+            {
+                for (int i = 1; i < TrailCap; i++)
+                    trail[i - 1] = trail[i];
+                trail[TrailCap - 1] = p;
+            }
+        }
+        public Rectangle VerticalFrame(int frameIndex)
+        {
+            var tex = JueXueTex.Value;
+            int w = tex.Width;
+            int h = tex.Height / Juexue1TotalFrames;
+            return new Rectangle(0, h * frameIndex, w, h);
         }
     }
 }

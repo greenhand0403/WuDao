@@ -10,18 +10,18 @@ using WuDao.Content.Projectiles;
 
 namespace WuDao.Content.Juexue.Active
 {
-    // TODO: 庐山升龙霸，青龙虚影
     public class ShengLongBa : JuexueItem
     {
         public override bool IsActive => true;
         public override int QiCost => 10;
-        public override int SpecialCooldownTicks => 60 * 1; // 1s
-
+        public override int SpecialCooldownTicks => 60 * 30; // 30s
+        public const int ShengLongBaFrameIndex = 0;
         protected override bool OnActivate(Player player, QiPlayer qi)
         {
             if (!qi.TrySpendQi(QiCost)) { Main.NewText("气力不足！", Color.OrangeRed); return false; }
 
-            Vector2 at = Main.MouseWorld + new Vector2(0, 48f);
+            Vector2 at = Main.MouseWorld + new Vector2(0, 64f);
+            int damage = Helpers.BossProgressPower.GetUniqueBossCount() * 50;
             for (int i = 0; i < 1; i++)
             {
                 Vector2 v = new Vector2(Main.rand.NextFloat(-2.2f, 2.2f), -Main.rand.NextFloat(12f, 24f));
@@ -30,10 +30,15 @@ namespace WuDao.Content.Juexue.Active
                     at,
                     v,
                     ModContent.ProjectileType<WyvernCompositeProjectile>(),
-                    95,
+                    damage,
                     3f,
                     player.whoAmI);
                 var p = Main.projectile[proj];
+            }
+            if (!Main.dedServ)
+            {
+                // 触发 2 秒虚影，稍微放大 1.1 倍，向上偏移 16 像素（站位更好看）
+                qi.TriggerJuexueGhost(ShengLongBaFrameIndex, durationTick: 60, scale: 1.1f, offset: new Vector2(0, -16));
             }
             return true;
         }

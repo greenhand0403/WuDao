@@ -3,9 +3,9 @@ using Terraria.ModLoader;
 
 namespace WuDao.Content.Buffs
 {
-    // TODO: 乾坤大挪移的“无敌帧”Buff：给予更高的 i-frames（并不完全覆盖所有来源，但足够演示）
     public class ShortInvulnBuff : ModBuff
     {
+        // TODO: 部分buff贴图未更换
         public override string Texture => "Terraria/Images/Buff_2";
         public override void SetStaticDefaults()
         {
@@ -17,7 +17,7 @@ namespace WuDao.Content.Buffs
         public override void Update(Player player, ref int buffIndex)
         {
             player.immune = true;
-            player.immuneTime = 60; // 每帧刷新
+            // player.immuneTime = 5; // 每帧刷新
         }
     }
 }

@@ -18,8 +18,8 @@ namespace WuDao.Content.Juexue.Base
         {
             Item.width = 28;
             Item.height = 28;
-            Item.rare = Terraria.ID.ItemRarityID.Green;
-            Item.value = Terraria.Item.buyPrice(0, 5);
+            Item.rare = ItemRarityID.Red;
+            Item.value = Item.buyPrice(0, 5);
             Item.maxStack = 1;
         }
 
