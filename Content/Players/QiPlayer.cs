@@ -55,7 +55,7 @@ namespace WuDao.Content.Players
         private int LingboQiCost = 15;// 每秒消耗气力
         // === 天外飞仙（短时突进） ===
         public int FeixianTicks = 0; // >0 表示进行中
-        public const int FeixianTotalTicks = 150; // ~2.5s
+        public const int FeixianTotalTicks = 30; // 0.5s
         public Vector2 FeixianTarget; // ★ 新增：飞仙的目标点
 
         // === 利刃华尔兹（简化 R） ===
@@ -274,27 +274,38 @@ namespace WuDao.Content.Players
             if (FeixianTicks > 0)
             {
                 // 基础无敌 & 隐身
-                Player.immune = true;
-                Player.immuneTime = 2;
-                Player.invis = true;
-                Player.noKnockback = true;
+                // Player.immune = true;
+                // Player.immuneTime = 2;
+                // Player.invis = true;
+                // Player.noKnockback = true;
 
                 // 朝向锁定
-                Vector2 toTarget = (FeixianTarget - Player.Center);
+                Vector2 toTarget = FeixianTarget - Player.Center;
                 Vector2 dir = toTarget.SafeNormalize(Vector2.UnitX);
                 Player.direction = (dir.X >= 0f) ? 1 : -1;
 
                 // 推进速度（像素/帧）；到达目标或超时即结束
-                float speed = 26f;
+                float speed = 20f;
                 if (toTarget.Length() <= speed || FeixianTicks == 1)
                 {
                     Player.velocity = Vector2.Zero;
                     FeixianTicks = 0;
                     // 解冻全场（仅当当前冻结来自飞仙）
                     TimeStopSystem.StopIfFeixian();
+                    // ★ 结束帧：立刻清理免疫/隐身
+                    Player.immune = false;
+                    Player.immuneTime = 0;
+                    Player.invis = false;
+                    Player.noKnockback = false;
                 }
                 else
                 {
+                    // ★ 仅在未结束时维持免疫
+                    Player.immune = true;
+                    Player.immuneTime = 2;
+                    Player.invis = true;
+                    Player.noKnockback = true;
+
                     Player.velocity = dir * speed;
                     int damage = 40 * Helpers.BossProgressPower.GetUniqueBossCount();
 
@@ -305,12 +316,12 @@ namespace WuDao.Content.Players
                         int proj = Projectile.NewProjectile(
                             Player.GetSource_Misc("FeixianTrail"),
                             Player.Center,
-                            dir * 26f,
+                            Player.velocity,
                             ProjectileID.FirstFractal,
                             damage,
                             4f,
                             Player.whoAmI);
-                        Main.projectile[proj].timeLeft = 30;
+                        Main.projectile[proj].timeLeft = 20;
                         Main.projectile[proj].tileCollide = false;
                     }
                     // ★ 在飞行路径四周生成“花瓣环”：每 6 帧一圈，6~8 片
@@ -351,7 +362,7 @@ namespace WuDao.Content.Players
                                 p.friendly = true;
                                 p.hostile = false;
                                 p.tileCollide = false;           // 防止被地形卡住（看喜好可改为 true）
-                                p.timeLeft = 45;                 // 花瓣寿命
+                                p.timeLeft = 30;                 // 花瓣寿命
                                 p.penetrate = 1;                 // 每片最多命中 1 次（按需调整）
                                 p.usesLocalNPCImmunity = true;   // 本地免疫，避免一群花瓣同帧狂打
                                 p.localNPCHitCooldown = 12;
@@ -391,7 +402,7 @@ namespace WuDao.Content.Players
 
                 if (BladeWaltzStepTimer <= 0 && BladeWaltzHitsLeft > 0)
                 {
-                    BladeWaltzStepTimer = 48;   // 每段 ~0.8s
+                    BladeWaltzStepTimer = 30;   // 每段 ~0.5s
                     BladeWaltzHitsLeft--;
 
                     // 目标：半屏范围随机一个可追踪敌人
@@ -418,7 +429,7 @@ namespace WuDao.Content.Players
                     int damage = 80 * (1 + Helpers.BossProgressPower.GetUniqueBossCount());
                     float knockback = 3f;
 
-                    if (Player.whoAmI == Main.myPlayer)
+                    if (Main.netMode != NetmodeID.MultiplayerClient) // 只在服务端
                     {
                         int projType = ModContent.ProjectileType<FirstFractalCloneProj>();
 
@@ -434,38 +445,24 @@ namespace WuDao.Content.Players
                         if (pid >= 0 && pid < Main.maxProjectiles)
                         {
                             Projectile p = Main.projectile[pid];
-                            // 立刻配置关键标志，防止被其他系统误处理
-                            // p.friendly = true;
-                            // p.hostile = false;
                             p.tileCollide = false;
                             p.timeLeft = 30;
-                            // 可选：避免多怪短时间同一弹判定 CD 冲突
                             p.usesLocalNPCImmunity = true;
                             p.localNPCHitCooldown = 10;
-                            // p.DamageType = DamageClass.Melee;  // 你是近战绝学的话加上更稳
                             p.netUpdate = true;
-                            p.width = 56;
-                            p.height = 56;
-                            // p.Hitbox = new Rectangle(0, 0, p.width, p.height);
+                            // p.width = 56;
+                            // p.height = 56;
                         }
                     }
-
-                    // 残影/特效（可选）
-                    // for (int i = 0; i < 16; i++)
-                    // {
-                    //     var d = Dust.NewDustPerfect(
-                    //         spawn + Main.rand.NextVector2Circular(18, 18),
-                    //         DustID.SilverFlame,
-                    //         Main.rand.NextVector2Circular(2, 2),
-                    //         150, default, 1.1f
-                    //     );
-                    //     d.noGravity = true;
-                    // }
                 }
 
                 if (BladeWaltzTicks <= 0)
                 {
-                    Player.invis = false; // 结束显示
+                    // ★ 结束帧：立刻清理免疫/隐身
+                    Player.immune = false;
+                    Player.immuneTime = 0;
+                    Player.invis = false;
+                    Player.noKnockback = false;
                 }
             }
         }
@@ -489,15 +486,15 @@ namespace WuDao.Content.Players
         // 改成“随机选取”半屏半径内的敌人（原先是 nearest）
         private int FindRandomWaltzTarget()
         {
-            float radius = System.Math.Min(Main.screenWidth, Main.screenHeight) * 0.5f;
+            float radius = Math.Min(Main.screenWidth, Main.screenHeight) * 0.5f;
             // 收集候选
-            System.Span<int> buf = stackalloc int[200];
+            Span<int> buf = stackalloc int[200];
             int count = 0;
             for (int i = 0; i < Main.maxNPCs; i++)
             {
                 var n = Main.npc[i];
                 if (!n.active || n.friendly || !n.CanBeChasedBy()) continue;
-                if (Microsoft.Xna.Framework.Vector2.Distance(n.Center, Player.Center) <= radius)
+                if (Vector2.Distance(n.Center, Player.Center) <= radius)
                 {
                     buf[count++] = i;
                     if (count >= buf.Length) break;
@@ -510,7 +507,7 @@ namespace WuDao.Content.Players
         }
         private int FindWaltzTarget()
         {
-            float radius = System.Math.Min(Main.screenWidth, Main.screenHeight) * 0.5f;
+            float radius = Math.Min(Main.screenWidth, Main.screenHeight) * 0.5f;
             int chosen = -1; float best = float.MaxValue;
             for (int i = 0; i < Main.maxNPCs; i++)
             {
@@ -697,7 +694,7 @@ namespace WuDao.Content.Players
 
             // 椭圆参数（半椭圆）：x 从 -L/2 到 L/2，y 从 0 到 H*sin(pi*t)
             float x = 0.5f * L * (2f * t - 1f);
-            float y = H * (float)System.Math.Sin(System.Math.PI * t);
+            float y = H * (float)Math.Sin(Math.PI * t);
 
             // 局部 -> 世界
             Vector2 local = new Vector2(x, y);

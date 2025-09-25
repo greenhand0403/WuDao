@@ -37,7 +37,7 @@ namespace WuDao.Content.Juexue.Active
             // 8 段流程（每段 ~0.9s）
             qi.BladeWaltzHitsLeft = 8;
             qi.BladeWaltzStepTimer = 0;      // 立刻进入第一段
-            qi.BladeWaltzTicks = 8 * 48;     // 8x0.8s
+            qi.BladeWaltzTicks = 8 * 30;     // 8x0.5s
             qi.BladeWaltzTarget = -1;
 
             player.RemoveAllGrapplingHooks();

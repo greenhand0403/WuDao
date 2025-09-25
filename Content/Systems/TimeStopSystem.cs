@@ -132,7 +132,7 @@ namespace WuDao.Content.Systems
             npc.frame = cachedFrame;
 
             // 禁掉贴身伤害（避免靠近时掉血）
-            npc.damage = 0; // 可选，如果不想影响数值就改用 CanHitPlayer 钩子（你已经加过）
+            // npc.damage = 0; // 可选，如果不想影响数值就改用 CanHitPlayer 钩子（你已经加过）
         }
 
         private void ClearCache()

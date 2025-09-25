@@ -14,6 +14,7 @@ using WuDao.Content.Items;
 
 namespace WuDao.Content.Global.NPCs
 {
+    [AutoloadBossHead]
     public class FoodGodBoss : ModNPC
     {
         enum Phase { Dash, Cook, Shoot }

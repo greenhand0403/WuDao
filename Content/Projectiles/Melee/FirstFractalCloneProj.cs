@@ -3,7 +3,8 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.GameContent; // TextureAssets
+using Terraria.GameContent;
+using Terraria.DataStructures; // TextureAssets
 
 namespace WuDao.Content.Projectiles.Melee
 {
@@ -15,9 +16,9 @@ namespace WuDao.Content.Projectiles.Melee
         public override void SetStaticDefaults()
         {
             // 拷贝原版帧数/拖尾设置（可选）
-            Main.projFrames[Type] = Main.projFrames[ProjectileID.FirstFractal];
-            ProjectileID.Sets.TrailCacheLength[Type] = ProjectileID.Sets.TrailCacheLength[ProjectileID.FirstFractal];
-            ProjectileID.Sets.TrailingMode[Type] = ProjectileID.Sets.TrailingMode[ProjectileID.FirstFractal];
+            Main.projFrames[Type] = 15;
+            // ProjectileID.Sets.TrailCacheLength[Type] = ProjectileID.Sets.TrailCacheLength[ProjectileID.FirstFractal];
+            // ProjectileID.Sets.TrailingMode[Type] = ProjectileID.Sets.TrailingMode[ProjectileID.FirstFractal];
         }
 
         public override void SetDefaults()
@@ -40,6 +41,11 @@ namespace WuDao.Content.Projectiles.Melee
             // Projectile.CloneDefaults(ProjectileID.FirstFractal);
             // Projectile.aiStyle = 0; // 仍建议把 aiStyle 置 0，AI 自己控
         }
+        public override void OnSpawn(IEntitySource source)
+        {
+            // 固定一个好看的中间帧（0..14）
+            Projectile.frame = (Projectile.ai[0] >= 0 && Projectile.ai[0] < 15) ? (int)Projectile.ai[0] : 7;
+        }
 
         public override void AI()
         {
@@ -55,14 +61,13 @@ namespace WuDao.Content.Projectiles.Melee
                 Main.dust[d].scale = 1.0f + Main.rand.NextFloat() * 0.4f;
             }
         }
-
-        // 以“中心”为原点绘制，避免锚点偏移导致的旋转问题
         public override bool PreDraw(ref Color lightColor)
         {
-            Texture2D tex = TextureAssets.Projectile[ProjectileID.FirstFractal].Value; // 直接用原版贴图
-            // 如果你有多帧动画，可以从 tex.Frame(...) 取子矩形，此处单帧即可：
-            Rectangle? src = null;
-            Vector2 origin = new Vector2(tex.Width * 0.5f, tex.Height * 0.5f);
+            Main.instance.LoadProjectile(ProjectileID.FirstFractal);
+            Texture2D tex = TextureAssets.Projectile[ProjectileID.FirstFractal].Value; // 原版贴图
+                                                                                       // 水平 15 帧，取第 frame 帧
+            Rectangle src = tex.Frame(15, 1, frameX: Projectile.frame, frameY: 0);
+            Vector2 origin = src.Size() * 0.5f;
             Main.EntitySpriteDraw(
                 tex,
                 Projectile.Center - Main.screenPosition,

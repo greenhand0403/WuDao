@@ -17,8 +17,6 @@ namespace WuDao.Content.Juexue.Active
         public const int FeixianFrameIndex = 9;
         protected override bool OnActivate(Player player, QiPlayer qi)
         {
-            // if (!qi.TrySpendQi(QiCost)) { Main.NewText("气力不足！", Color.OrangeRed); return false; }
-
             // 1) 清多数减益
             for (int i = 0; i < player.buffType.Length; i++)
             {
@@ -40,6 +38,10 @@ namespace WuDao.Content.Juexue.Active
             }
             // 3) 启动“飞仙定向冻结”：只冻结 NPC 与敌对弹幕，放行本玩家友方弹幕
             TimeStopSystem.StartFeixianFreeze(player.whoAmI, qi.FeixianTicks);
+
+            // Vector2 p0 = player.Center, p1 = Main.MouseWorld;
+            // qi.StartQiankunCurveDash(p0, (p0 + p1) * 0.5f /*c点在中点*/, p1, duration: QiPlayer.FeixianTotalTicks);
+            // // 因为 c 在 p0-p1 直线上，弧高 H=0，自然就走直线
 
             // 4) 视觉：发射一枚“天顶剑”占位投射物（无需 tile 碰撞）
             // Vector2 dir = (player.Center - qi.FeixianTarget).SafeNormalize(Vector2.UnitX);
