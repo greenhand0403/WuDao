@@ -34,9 +34,10 @@ namespace WuDao.Content.Items
         public override void AddRecipes()
         {
             CreateRecipe()
-                .AddIngredient(ItemID.GoldBar, 5)     // “金怡口”和“碗”简化用金锭+碗
+                .AddIngredient(ItemID.GoldBar, 5)
+                .AddIngredient(ItemID.GoldenDelight, 1)
                 .AddIngredient(ItemID.Bowl, 1)
-                .AddTile(TileID.Anvils)
+                .AddTile(TileID.DemonAltar)
                 .Register();
         }
     }

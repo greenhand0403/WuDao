@@ -6,7 +6,7 @@ using Terraria.ModLoader;
 
 namespace WuDao.Content.DrawLayers
 {
-    // 在人物之上再画一层
+    // 在人物之上再画一层绝学技能虚影
     public class JuexueGhostLayer : PlayerDrawLayer
     {
         public override Position GetDefaultPosition() => new AfterParent(PlayerDrawLayers.ArmOverItem);
@@ -37,9 +37,11 @@ namespace WuDao.Content.DrawLayers
             // 可加一点轻微的漂浮/抖动效果（可选）
             float wobble = (float)System.Math.Sin(Main.GlobalTimeWrappedHourly * 6f) * 2f;
             screenPos.Y += wobble;
-
+            // 玩家面对左边时将虚影沿水平方向翻转
+            SpriteEffects spriteEffects = player.direction == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
+            
             var color = Color.White * opacity;
-            Main.EntitySpriteDraw(tex, screenPos, src, color, 0f, origin, qi.Ghost.Scale, qi.Ghost.Fx, 0);
+            Main.EntitySpriteDraw(tex, screenPos, src, color, 0f, origin, qi.Ghost.Scale, spriteEffects, 0);
         }
     }
 }

@@ -4,16 +4,16 @@ using Terraria.ModLoader;
 using WuDao.Common;
 using WuDao.Content.Players;
 using WuDao.Content.Juexue.Base;
+using Microsoft.Xna.Framework;
 
 namespace WuDao.Content.Juexue.Active
 {
-    // 剑舞虚影
     public class BladeWaltz : JuexueItem
     {
         public override bool IsActive => true;
-        public override int QiCost => 120;
-        public override int SpecialCooldownTicks => 60 * 10; // 10s
-
+        public override int QiCost => 99;
+        public override int SpecialCooldownTicks => 60 * 1; // 120s
+        public const int BladeWaltzFrameIndex = 10;
         public override bool TryActivate(Player player, QiPlayer qi)
         {
             // 进行中：静默忽略
@@ -23,21 +23,21 @@ namespace WuDao.Content.Juexue.Active
             // 冷却检查
             if (!qi.CanUseActiveNow(Item.type, SpecialCooldownTicks))
             {
-                Main.NewText("绝学尚未冷却。", Microsoft.Xna.Framework.Color.OrangeRed);
+                Main.NewText("绝学尚未冷却。",Color.OrangeRed);
                 return false;
             }
 
             // 启动时仅扣一次
             if (!qi.TrySpendQi(QiCost))
             {
-                Main.NewText("气力不足！", Microsoft.Xna.Framework.Color.OrangeRed);
+                Main.NewText("气力不足！",Color.OrangeRed);
                 return false;
             }
 
             // 8 段流程（每段 ~0.9s）
             qi.BladeWaltzHitsLeft = 8;
-            qi.BladeWaltzStepTimer = 1;      // 立刻进入第一段
-            qi.BladeWaltzTicks = 8 * 54;     // 8x0.9s
+            qi.BladeWaltzStepTimer = 0;      // 立刻进入第一段
+            qi.BladeWaltzTicks = 8 * 48;     // 8x0.8s
             qi.BladeWaltzTarget = -1;
 
             player.RemoveAllGrapplingHooks();
@@ -45,7 +45,12 @@ namespace WuDao.Content.Juexue.Active
             // 盖章冷却（含 2s 公共冷却）
             qi.StampActiveUse(Item.type, SpecialCooldownTicks);
 
-            Main.NewText("利刃华尔兹！", Microsoft.Xna.Framework.Color.MediumPurple);
+            Main.NewText("利刃华尔兹！", Color.MediumPurple);
+            // if (!Main.dedServ)
+            // {
+            //     // 触发 1 秒虚影，稍微放大 1.1 倍，向上偏移 16 像素（站位更好看）
+            //     qi.TriggerJuexueGhost(BladeWaltzFrameIndex, durationTick: 180, scale: 1.1f, offset: new Vector2(0, -20));
+            // }
             return true;
         }
     }

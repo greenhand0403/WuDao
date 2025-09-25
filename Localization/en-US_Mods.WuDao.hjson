@@ -452,6 +452,8 @@ Projectiles: {
 	MagneticHeavenBladeProj.DisplayName: Magnetic Heaven Blade Proj
 	MagneticHeavenBladeField.DisplayName: Magnetic Heaven Blade Field
 	KamehamehaProj.DisplayName: Kamehameha Proj
+	CloneFirstFractalProj.DisplayName: Clone First Fractal Proj
+	FirstFractalCloneProj.DisplayName: First Fractal Clone Proj
 }
 
 DamageClasses: {

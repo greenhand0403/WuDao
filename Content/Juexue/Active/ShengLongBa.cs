@@ -13,12 +13,12 @@ namespace WuDao.Content.Juexue.Active
     public class ShengLongBa : JuexueItem
     {
         public override bool IsActive => true;
-        public override int QiCost => 10;
+        public override int QiCost => 50;
         public override int SpecialCooldownTicks => 60 * 30; // 30s
         public const int ShengLongBaFrameIndex = 0;
         protected override bool OnActivate(Player player, QiPlayer qi)
         {
-            if (!qi.TrySpendQi(QiCost)) { Main.NewText("气力不足！", Color.OrangeRed); return false; }
+            // if (!qi.TrySpendQi(QiCost)) { Main.NewText("气力不足！", Color.OrangeRed); return false; }
 
             Vector2 at = Main.MouseWorld + new Vector2(0, 64f);
             int damage = Helpers.BossProgressPower.GetUniqueBossCount() * 50;
@@ -38,7 +38,7 @@ namespace WuDao.Content.Juexue.Active
             if (!Main.dedServ)
             {
                 // 触发 2 秒虚影，稍微放大 1.1 倍，向上偏移 16 像素（站位更好看）
-                qi.TriggerJuexueGhost(ShengLongBaFrameIndex, durationTick: 60, scale: 1.1f, offset: new Vector2(0, -16));
+                qi.TriggerJuexueGhost(ShengLongBaFrameIndex, durationTick: 60, scale: 1.1f, offset: new Vector2(0, -20));
             }
             return true;
         }

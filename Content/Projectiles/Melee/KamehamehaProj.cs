@@ -1,9 +1,12 @@
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
+using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
+using WuDao.Content.Players;
 
 namespace WuDao.Content.Projectiles.Melee
 {
@@ -20,7 +23,7 @@ namespace WuDao.Content.Projectiles.Melee
             Projectile.penetrate = -1;
             Projectile.timeLeft = 300;
             Projectile.DamageType = DamageClass.Melee;
-            Projectile.tileCollide = false;    // 穿墙（龟派常见）
+            Projectile.tileCollide = false;
             Projectile.ignoreWater = true;
             Projectile.usesLocalNPCImmunity = true;
             Projectile.localNPCHitCooldown = 10;
@@ -50,8 +53,44 @@ namespace WuDao.Content.Projectiles.Melee
 
         public override void AI()
         {
+            // ★ 虚影模式：ai[1] == 1f
+            if (Projectile.ai[1] == 1f)
+            {
+                Player owner = Main.player[Projectile.owner];
+                if (!owner.active)
+                {
+                    Projectile.Kill();
+                    return;
+                }
+
+                // 贴着玩家中心
+                Projectile.Center = owner.MountedCenter;// + Vector2.UnitX * 8;
+
+                // 永远朝鼠标
+                Vector2 toMouse = Main.MouseWorld - owner.Center;
+                if (toMouse != Vector2.Zero)
+                    Projectile.rotation = toMouse.ToRotation() - MathHelper.PiOver2;
+
+                // 规模随蓄力增长（读当前玩家正在累计的 ChargeQiSpent，实时变化）
+                var qi = owner.GetModPlayer<QiPlayer>();
+                float extraScale = 0.01f * qi.ChargeQiSpent; // 每20点≈+20%
+                Projectile.scale = 1f + extraScale;
+
+                // 作为“虚影”：不可伤害、无碰撞、短命续帧
+                Projectile.friendly = true;
+                Projectile.hostile = false;
+                Projectile.timeLeft = 2;
+                Projectile.tileCollide = false;
+                Projectile.ignoreWater = true;
+
+                // 可选：淡一点
+                Projectile.alpha = 30;
+
+                return; // 不跑下面真正飞行的 AI
+            }
+
             // 稳定方向（微小修正），并产生粒子与光
-            Projectile.ai[1] += 1f;
+            // Projectile.ai[1] += 1f;
 
             // 让光线稍微闪动
             float flicker = 0.08f * (float)System.Math.Sin(Main.time * 0.1f);
@@ -72,21 +111,21 @@ namespace WuDao.Content.Projectiles.Melee
                 Main.dust[d].scale = 0.8f + 0.25f * (float)Main.rand.NextDouble();
             }
             // 大一圈光环，间隔产生（表现用）
-            if (Projectile.ai[1] % 8f == 0f)
-            {
-                for (int i = 0; i < 2; i++)
-                {
-                    Vector2 vel = Projectile.velocity.RotatedByRandom(0.6f) * (0.2f + Main.rand.NextFloat() * 0.6f);
-                    int d2 = Dust.NewDust(Projectile.Center - new Vector2(8, 8), 16, 16, DustID.GoldFlame, vel.X, vel.Y, 100, default, 1.2f);
-                    Main.dust[d2].noGravity = true;
-                }
-            }
+            // if (Projectile.ai[1] % 8f == 0f)
+            // {
+            //     for (int i = 0; i < 2; i++)
+            //     {
+            //         Vector2 vel = Projectile.velocity.RotatedByRandom(0.6f) * (0.2f + Main.rand.NextFloat() * 0.6f);
+            //         int d2 = Dust.NewDust(Projectile.Center - new Vector2(8, 8), 16, 16, DustID.GoldFlame, vel.X, vel.Y, 100, default, 1.2f);
+            //         Main.dust[d2].noGravity = true;
+            //     }
+            // }
 
             // 逐渐微增速度（表现“气”推进感）
-            if (Projectile.ai[1] % 30f == 0f)
-            {
-                Projectile.velocity *= 1.01f;
-            }
+            // if (Projectile.ai[1] % 30f == 0f)
+            // {
+            //     Projectile.velocity *= 1.01f;
+            // }
 
             // 避免无限远：如果距原点非常远则提前销毁（防止被卡住）
             // if (Projectile.Distance(Main.player[Projectile.owner].Center) > 4000f)
@@ -122,6 +161,11 @@ namespace WuDao.Content.Projectiles.Melee
         }
         public override void OnKill(int timeLeft)
         {
+            // 跳过虚影射弹
+            if (Projectile.ai[1] == 1f)
+            {
+                return;
+            }
             // 爆炸性的结尾表现（不额外造成伤害，纯视觉，若要伤害可改为 true 且 spawn 新 proj）
             SoundEngine.PlaySound(SoundID.Item14, Projectile.position);
             for (int i = 0; i < 18; i++)
@@ -133,6 +177,8 @@ namespace WuDao.Content.Projectiles.Melee
         }
         public override bool? CanDamage()
         {
+            // 虚影模式不造成伤害
+            if (Projectile.ai[1] == 1f) return false;
             return true;
         }
 
@@ -140,5 +186,22 @@ namespace WuDao.Content.Projectiles.Melee
         {
             return false;
         }
+        public override bool PreDraw(ref Color lightColor)
+        {
+            var tex = TextureAssets.Projectile[ProjectileID.StarWrath].Value;
+            Vector2 origin = new Vector2(tex.Width * 0.5f, tex.Height * 0.5f);
+            Main.EntitySpriteDraw(
+                tex,
+                Projectile.Center - Main.screenPosition,
+                null,
+                Projectile.GetAlpha(lightColor),
+                Projectile.rotation,
+                origin,
+                Projectile.scale,
+                SpriteEffects.None
+            );
+            return false; // 跳过默认的左上角原点绘制
+        }
+
     }
 }

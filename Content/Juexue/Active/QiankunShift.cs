@@ -34,7 +34,7 @@ namespace WuDao.Content.Juexue.Active
 
             // —— 弧线总时长（tick）：越远越久，但上限控制 //
             int duration = (int)MathHelper.Clamp(dist / 13f, 20f, 34f); // 10~17 tick
-                                                                        // 开始弧线冲刺
+            // 开始弧线冲刺
             qi.StartQiankunCurveDash(p0, c, p1, duration);
 
             // 起手音效
@@ -42,7 +42,7 @@ namespace WuDao.Content.Juexue.Active
             if (!Main.dedServ)
             {
                 // 触发 2 秒虚影，稍微放大 1.1 倍，向上偏移 16 像素（站位更好看）
-                qi.TriggerJuexueGhost(QiankunShiftFrameIndex, durationTick: 30, scale: 1.1f, offset: new Vector2(0, -16));
+                qi.TriggerJuexueGhost(QiankunShiftFrameIndex, durationTick: 30, scale: 1.1f, offset: new Vector2(0, -20));
             }
             return true;
         }

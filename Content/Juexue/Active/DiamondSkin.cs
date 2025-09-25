@@ -24,7 +24,7 @@ namespace WuDao.Content.Juexue.Active
             if (!Main.dedServ)
             {
                 // 触发 2 秒虚影，稍微放大 1.1 倍，向上偏移 16 像素（站位更好看）
-                qi.TriggerJuexueGhost(DiamondSkinFrameIndex, durationTick: time, scale: 1.1f, offset: new Vector2(0, -16));
+                qi.TriggerJuexueGhost(DiamondSkinFrameIndex, durationTick: time, scale: 1.1f, offset: new Vector2(0, -20));
             }
             return true;
         }

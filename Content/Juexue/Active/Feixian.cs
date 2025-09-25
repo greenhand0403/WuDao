@@ -9,16 +9,15 @@ using WuDao.Content.Systems;
 
 namespace WuDao.Content.Juexue.Active
 {
-    // TODO: 飞仙虚影
     public class Feixian : JuexueItem
     {
         public override bool IsActive => true;
-        public override int QiCost => 50;
-        public override int SpecialCooldownTicks => 60 * 1; // 1s
-
+        public override int QiCost => 80;
+        public override int SpecialCooldownTicks => 60 * 60; // 60s
+        public const int FeixianFrameIndex = 9;
         protected override bool OnActivate(Player player, QiPlayer qi)
         {
-            if (!qi.TrySpendQi(QiCost)) { Main.NewText("气力不足！", Microsoft.Xna.Framework.Color.OrangeRed); return false; }
+            // if (!qi.TrySpendQi(QiCost)) { Main.NewText("气力不足！", Color.OrangeRed); return false; }
 
             // 1) 清多数减益
             for (int i = 0; i < player.buffType.Length; i++)
@@ -33,9 +32,12 @@ namespace WuDao.Content.Juexue.Active
             }
 
             // 2) 记录目标点 & 启动直刺计时（在 QiPlayer.PreUpdate 里推进+无敌）
-            qi.FeixianTarget = Main.MouseWorld;                 // ★ 记录目标
-            qi.FeixianTicks = QiPlayer.FeixianTotalTicks;      // ★ 启动计时
-
+            qi.FeixianTarget = Main.MouseWorld;// ★ 记录目标
+            qi.FeixianTicks = QiPlayer.FeixianTotalTicks;// ★ 启动计时
+            if (!Main.dedServ)
+            {
+                qi.TriggerJuexueGhost(FeixianFrameIndex, durationTick: 60, scale: 1.1f, offset: new Vector2(0, -20));
+            }
             // 3) 启动“飞仙定向冻结”：只冻结 NPC 与敌对弹幕，放行本玩家友方弹幕
             TimeStopSystem.StartFeixianFreeze(player.whoAmI, qi.FeixianTicks);
 
@@ -47,6 +49,7 @@ namespace WuDao.Content.Juexue.Active
             // Main.projectile[p].tileCollide = false;
             // Main.projectile[p].extraUpdates = 0;
             // Main.projectile[p].alpha = 100;
+
             return true;
         }
     }

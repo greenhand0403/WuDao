@@ -5,30 +5,30 @@ using Terraria.ModLoader;
 using WuDao.Common;
 using WuDao.Content.Players;
 using WuDao.Content.Juexue.Base;
+using Microsoft.Xna.Framework;
 
 namespace WuDao.Content.Juexue.Active
 {
-    // 步法虚影
     public class LingboWeibu : JuexueItem
     {
         public override bool IsActive => true;
-        public override int QiCost => 0;
+        public override int QiCost => 1;
         public override int SpecialCooldownTicks => 0; // 开启不需要专属冷却
-
+        public const int LingboWeibuFrameIndex = 3;
         public override bool TryActivate(Player player, QiPlayer qi)
         {
             // 已开启 -> 直接关闭，不进 CD，不扣气
             if (qi.LingboActive)
             {
                 qi.LingboActive = false;
-                Main.NewText("凌波微步：关闭", Microsoft.Xna.Framework.Color.LightGray);
+                Main.NewText("凌波微步：关闭", Color.LightGray);
                 return true;
             }
 
             // 未开启 -> 正常走公共 2 秒冷却检查
             if (!qi.CanUseActiveNow(Item.type, SpecialCooldownTicks))
             {
-                Main.NewText("绝学尚未冷却。", Microsoft.Xna.Framework.Color.OrangeRed);
+                Main.NewText("绝学尚未冷却。", Color.OrangeRed);
                 return false;
             }
 
@@ -41,7 +41,13 @@ namespace WuDao.Content.Juexue.Active
         {
             if (qi.QiMax <= 0) return false;
             qi.LingboActive = true;
-            Main.NewText("凌波微步：开启（每秒消耗 15 气，10% 闪避）", Microsoft.Xna.Framework.Color.SkyBlue);
+            Main.NewText("凌波微步：开启（每秒消耗 15 气，10% 闪避）", Color.SkyBlue);
+            // —— 启动“凌波微步虚影” —— //
+            if (!Main.dedServ)
+            {
+                // 触发 1 秒虚影，稍微放大 1.1 倍，向上偏移 16 像素（站位更好看）
+                qi.TriggerJuexueGhost(LingboWeibuFrameIndex, durationTick: 60, scale: 1.1f, offset: new Vector2(0, -20));
+            }
             return true;
         }
     }

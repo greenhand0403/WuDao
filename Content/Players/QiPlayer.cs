@@ -12,6 +12,9 @@ using ReLogic.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.Audio;
 using WuDao.Content.Buffs;
+using WuDao.Content.Projectiles.Melee;
+using WuDao.Common;
+using Terraria.GameContent;
 
 namespace WuDao.Content.Players
 {
@@ -41,11 +44,15 @@ namespace WuDao.Content.Players
         // —— 蓄力（龟派气功） —— //
         public bool Charging = false;
         public int ChargeQiSpent = 0;           // 本次按住期间消耗的气力点数
+        // 虚影射弹实例
+        public int KamehamehaGhostProj = -1;
+        // 绝学实例
+        private Kamehameha kamehameha_juexueItem;
         // === 凌波微步（开关技） ===
         public bool LingboActive = false;
         private Vector2 _lingboLastWavePos;
         private float _lingboDistanceAcc = 0f;
-
+        private int LingboQiCost = 15;// 每秒消耗气力
         // === 天外飞仙（短时突进） ===
         public int FeixianTicks = 0; // >0 表示进行中
         public const int FeixianTotalTicks = 150; // ~2.5s
@@ -148,6 +155,8 @@ namespace WuDao.Content.Players
 
             // 加载绝学贴图
             JueXueTex = ModContent.Request<Texture2D>("WuDao/Assets/JueXue1", AssetRequestMode.ImmediateLoad);
+            // 获取龟派气功绝学实例
+            kamehameha_juexueItem = ModContent.GetInstance<Kamehameha>();
         }
 
         public override void ResetEffects()
@@ -195,13 +204,15 @@ namespace WuDao.Content.Players
                 QiCurrent = MathHelper.Clamp(QiCurrent + perTick, 0, QiMax);
             }
 
-            // 蓄力期间（龟派气功）：每帧 -1 气
+            // 蓄力期间（龟派气功）：每帧扣气
             if (Charging)
             {
-                if (QiCurrent >= 2f)
+                if (QiCurrent >= 5f)
                 {
-                    QiCurrent -= 1f;
+                    QiCurrent -= kamehameha_juexueItem.QiCost;
                     ChargeQiSpent++;
+                    // ★ 确保龟派气功射弹虚影存在
+                    EnsureKamehamehaGhost();
                     // 每消耗 20 点真气，播放短促提示音
                     if (ChargeQiSpent % 20 == 0)
                     {
@@ -217,6 +228,12 @@ namespace WuDao.Content.Players
                     Charging = false;
                     if (JuexueSlot.ModItem is Kamehameha k)
                     {
+                        // 若存在虚影射弹实例，也一并删除
+                        if (KamehamehaGhostProj >= 0 && Main.projectile[KamehamehaGhostProj].active)
+                        {
+                            Main.projectile[KamehamehaGhostProj].Kill();
+                            KamehamehaGhostProj = -1;
+                        }
                         k.ReleaseFire(Player, this, ChargeQiSpent);
                         ChargeQiSpent = 0;
                     }
@@ -226,14 +243,14 @@ namespace WuDao.Content.Players
             // —— 凌波微步：每秒 15 气；无气自动关闭；移动出水波 —— 
             if (LingboActive)
             {
-                if (QiCurrent <= 15f)
+                if (QiCurrent <= LingboQiCost)
                 {
                     LingboActive = false;
                 }
                 else
                 {
                     // 扣气
-                    QiCurrent -= 15f / 60f;
+                    QiCurrent -= LingboQiCost / 60f;
                     // 距离累计 & 水波（Dust 水波占位）
                     float moved = Vector2.Distance(Player.Bottom, _lingboLastWavePos);
                     _lingboDistanceAcc += moved;
@@ -279,17 +296,20 @@ namespace WuDao.Content.Players
                 else
                 {
                     Player.velocity = dir * speed;
-                    int damage = 120;                     // 伤害自行调
+                    int damage = 40 * Helpers.BossProgressPower.GetUniqueBossCount();
 
                     // 每 2 帧在当前位置生成极短命友方投射物（路径伤害；放行已在 TimeStopSystem 里处理）
                     if ((FeixianTicks % 2) == 0)
                     {
-                        int projType = ProjectileID.FirstFractal;  // 天顶剑视觉；也可换成 EnchantedBeam
+                        int projType = ModContent.ProjectileType<FirstFractalCloneProj>();
                         int proj = Projectile.NewProjectile(
                             Player.GetSource_Misc("FeixianTrail"),
                             Player.Center,
                             dir * 26f,
-                            projType, damage, 4f, Player.whoAmI);
+                            ProjectileID.FirstFractal,
+                            damage,
+                            4f,
+                            Player.whoAmI);
                         Main.projectile[proj].timeLeft = 30;
                         Main.projectile[proj].tileCollide = false;
                     }
@@ -297,10 +317,10 @@ namespace WuDao.Content.Players
                     if ((FeixianTicks % 6) == 0)
                     {
                         int petals = 6;                 // 每圈花瓣数量
-                        float radius = 32f;             // 出生半径（围绕玩家）
-                        float forwardSpeed = 18f;       // 沿路径前进分量
-                        float outwardMin = 3f;          // 向外发散速度范围
-                        float outwardMax = 7f;
+                        float radius = 18f;             // 出生半径（围绕玩家）
+                        float forwardSpeed = 8f;       // 沿路径前进分量
+                        float outwardMin = 1f;          // 向外发散速度范围
+                        float outwardMax = 5f;
 
                         // 法线（与 dir 垂直），用于做环
                         Vector2 normal = new Vector2(-dir.Y, dir.X);
@@ -315,14 +335,16 @@ namespace WuDao.Content.Players
 
                             // 速度 = 沿路线前进 + 径向微外扩
                             Vector2 outward = (spawnPos - Player.Center).SafeNormalize(Vector2.UnitX);
-                            Vector2 vel = dir * forwardSpeed + outward * Main.rand.NextFloat(outwardMin, outwardMax);
+                            Vector2 vel = dir.RotatedBy(MathHelper.TwoPi / petals * i) * forwardSpeed + outward * Main.rand.NextFloat(outwardMin, outwardMax);
 
                             var p = Projectile.NewProjectileDirect(
                                 Player.GetSource_Misc("FeixianPetals"),
                                 spawnPos,
                                 vel,
                                 ProjectileID.FlowerPetal,        // 原版花瓣
-                                damage, 3f, Player.whoAmI
+                                damage,
+                                3f,
+                                Player.whoAmI
                             );
                             if (p != null)
                             {
@@ -369,12 +391,12 @@ namespace WuDao.Content.Players
 
                 if (BladeWaltzStepTimer <= 0 && BladeWaltzHitsLeft > 0)
                 {
-                    BladeWaltzStepTimer = 54;   // 每段 ~0.9s
+                    BladeWaltzStepTimer = 48;   // 每段 ~0.8s
                     BladeWaltzHitsLeft--;
 
                     // 目标：半屏范围随机一个可追踪敌人
                     int targetIndex = FindRandomWaltzTarget();
-                    Microsoft.Xna.Framework.Vector2 targetPos;
+                    Vector2 targetPos;
 
                     if (targetIndex >= 0)
                     {
@@ -391,28 +413,41 @@ namespace WuDao.Content.Players
                     var spawn = Player.Center + Main.rand.NextVector2Unit() * Main.rand.NextFloat(60f, 120f);
 
                     // 方向与速度
-                    var dir = (targetPos - spawn).SafeNormalize(Microsoft.Xna.Framework.Vector2.UnitX);
-                    float speed = 26f; // 速度越高，视觉越“快斩”
-                    int damage = 120;  // 调整这里来平衡
+                    var dir = (targetPos - spawn).SafeNormalize(Vector2.UnitX);
+                    float speed = 14f; // 速度越高，视觉越“快斩”
+                    int damage = 80 * (1 + Helpers.BossProgressPower.GetUniqueBossCount());
                     float knockback = 3f;
 
-                    var projEnt = Projectile.NewProjectileDirect(
-                        Player.GetSource_Misc("BladeWaltz"),
-                        spawn,
-                        dir * speed,
-                        ProjectileID.FirstFractal, // ★ 第一分形视觉 / 伤害体
-                        damage,
-                        knockback,
-                        Player.whoAmI
-                    );
-
-                    if (projEnt != null)
+                    if (Player.whoAmI == Main.myPlayer)
                     {
-                        projEnt.timeLeft = 30;
-                        projEnt.tileCollide = false;
-                        projEnt.friendly = true;    // ★ 强制友方，确保命中
-                        projEnt.hostile = false;
-                        projEnt.netUpdate = true;
+                        int projType = ModContent.ProjectileType<FirstFractalCloneProj>();
+
+                        int pid = Projectile.NewProjectile(
+                            Player.GetSource_Misc("BladeWaltz"),
+                            spawn,
+                            dir * speed,
+                            ProjectileID.FirstFractal,
+                            damage,
+                            knockback,
+                            Player.whoAmI
+                        );
+                        if (pid >= 0 && pid < Main.maxProjectiles)
+                        {
+                            Projectile p = Main.projectile[pid];
+                            // 立刻配置关键标志，防止被其他系统误处理
+                            // p.friendly = true;
+                            // p.hostile = false;
+                            p.tileCollide = false;
+                            p.timeLeft = 30;
+                            // 可选：避免多怪短时间同一弹判定 CD 冲突
+                            p.usesLocalNPCImmunity = true;
+                            p.localNPCHitCooldown = 10;
+                            // p.DamageType = DamageClass.Melee;  // 你是近战绝学的话加上更稳
+                            p.netUpdate = true;
+                            p.width = 56;
+                            p.height = 56;
+                            // p.Hitbox = new Rectangle(0, 0, p.width, p.height);
+                        }
                     }
 
                     // 残影/特效（可选）
@@ -494,7 +529,19 @@ namespace WuDao.Content.Players
             {
                 modifiers.FinalDamage *= 0f;
                 modifiers.Knockback *= 0f;
+                // 给无敌帧
+                Player.immune = true;        // 开启无敌标记
+                Player.immuneTime = 15;      // 0.25 秒
                 // 可加一小段水波/闪避提示
+                Main.NewText("凌波微步：闪避碰撞", Color.SkyBlue);
+                // 闪避成功消耗2倍气力
+                QiCurrent -= LingboQiCost * 2;
+                // 气力不足退出状态
+                if (QiCurrent <= 0)
+                {
+                    QiCurrent = 0;
+                    LingboActive = false;
+                }
             }
         }
         public override void ModifyHitByProjectile(Projectile proj, ref Player.HurtModifiers modifiers)
@@ -503,11 +550,24 @@ namespace WuDao.Content.Players
             {
                 modifiers.FinalDamage *= 0f;
                 modifiers.Knockback *= 0f;
+                // 给无敌帧
+                Player.immune = true;        // 开启无敌标记
+                Player.immuneTime = 15;      // 0.25 秒
+                // 可加一小段水波/闪避提示
+                Main.NewText("凌波微步：闪避射弹", Color.SkyBlue);
+                // 闪避成功消耗2倍气力
+                QiCurrent -= LingboQiCost * 2;
+                // 气力不足退出状态
+                if (QiCurrent <= 0)
+                {
+                    QiCurrent = 0;
+                    LingboActive = false;
+                }
             }
         }
         public bool TrySpendQi(int cost)
         {
-            if (QiCurrent + 1e-3f >= cost)
+            if (QiCurrent >= cost)
             {
                 QiCurrent -= cost;
                 return true;
@@ -561,6 +621,12 @@ namespace WuDao.Content.Players
                 if (JuexueSlot.ModItem is Kamehameha k && Charging)
                 {
                     Charging = false;
+                    // 若存在虚影射弹实例，也一并删除
+                    if (KamehamehaGhostProj >= 0 && Main.projectile[KamehamehaGhostProj].active)
+                    {
+                        Main.projectile[KamehamehaGhostProj].Kill();
+                        KamehamehaGhostProj = -1;
+                    }
                     k.ReleaseFire(Player, this, ChargeQiSpent);
                     ChargeQiSpent = 0;
                 }
@@ -703,6 +769,47 @@ namespace WuDao.Content.Players
             int w = tex.Width;
             int h = tex.Height / Juexue1TotalFrames;
             return new Rectangle(0, h * frameIndex, w, h);
+        }
+        private void EnsureKamehamehaGhost()
+        {
+            if (Main.dedServ) return;
+
+            int projType = ModContent.ProjectileType<KamehamehaProj>();
+            int owner = Player.whoAmI;
+
+            // 是否已有虚影（owner 自己的、ai[1]==1）
+            bool exists = false;
+            for (int i = 0; i < Main.maxProjectiles; i++)
+            {
+                Projectile p = Main.projectile[i];
+                if (p.active && p.owner == owner && p.type == projType && p.ai[1] == 1f)
+                {
+                    // 保鲜（最重要，不然会过期）
+                    p.timeLeft = 2;
+                    exists = true;
+                    break;
+                }
+            }
+
+            if (!exists)
+            {
+                // 生成一个“虚影”实例：伤害 0、速度 0、ai1=1
+                KamehamehaGhostProj = Projectile.NewProjectile(
+                    Player.GetSource_Misc("Kamehameha_Ghost"),
+                    Player.Center,
+                    Vector2.Zero,
+                    projType,
+                    0, 0f, owner,
+                    0f, // ai[0] 不用，实时读 ChargeQiSpent 更丝滑
+                    1f  // ai[1] = 1f => 虚影模式
+                );
+                if (!Main.dedServ)
+                {
+
+                    // 触发 2 秒虚影，稍微放大 1.1 倍，向上偏移 16 像素（站位更好看）
+                    TriggerJuexueGhost(Kamehameha.KamehamehaFrameIndex, durationTick: 120, scale: 1.1f, offset: new Vector2(0, -20));
+                }
+            }
         }
     }
 }

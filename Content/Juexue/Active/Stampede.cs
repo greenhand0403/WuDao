@@ -12,21 +12,14 @@ using System;
 
 namespace WuDao.Content.Juexue.Active
 {
-    // TODO: 万马奔腾，补射弹，马虚影
     public class Stampede : JuexueItem
     {
         public override bool IsActive => true;
-        public override int QiCost => 100;
-        public override int SpecialCooldownTicks => 60 * 1; // 1s
-
+        public override int QiCost => 99;
+        public override int SpecialCooldownTicks => 60 * 120; // 2min
+        public const int StampedeFrameIndex = 7;
         protected override bool OnActivate(Player player, QiPlayer qi)
         {
-            if (!qi.TrySpendQi(QiCost))
-            {
-                Main.NewText("气力不足！", Color.OrangeRed);
-                return false;
-            }
-
             // 屏幕矩形（世界坐标）
             Rectangle rect = Helpers.ScreenBoundsWorldSpace();
 
@@ -38,7 +31,7 @@ namespace WuDao.Content.Juexue.Active
             // 每列投射物数量
             int rowCount = 5;
             int count = Main.rand.Next(4, 6) * rowCount;
-
+            int projDamage = 70 * Helpers.BossProgressPower.GetUniqueBossCount();
             if (player.whoAmI == Main.myPlayer)
             {
                 float spawnY;
@@ -64,13 +57,21 @@ namespace WuDao.Content.Juexue.Active
 
                     int idx = Projectile.NewProjectile(
                     player.GetSource_ItemUse(Item),
-                    spawn + new Vector2(0, 82 + 60),
-                    v,
-                    ModContent.ProjectileType<HorseItemVariantProjectile>(),
-                    85, 2f, player.whoAmI, i);
+                        spawn + new Vector2(0, 82 + 60),
+                        v,
+                        ModContent.ProjectileType<HorseItemVariantProjectile>(),
+                        projDamage,
+                        3f,
+                        player.whoAmI,
+                        i
+                    );
                 }
             }
-
+            if (!Main.dedServ)
+            {
+                // 触发 1 秒虚影，稍微放大 1.1 倍，向上偏移 16 像素（站位更好看）
+                qi.TriggerJuexueGhost(StampedeFrameIndex, durationTick: 120, scale: 1.1f, offset: new Vector2(0, -20));
+            }
             return true;
         }
     }

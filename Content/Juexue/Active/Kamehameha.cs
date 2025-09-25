@@ -12,11 +12,14 @@ namespace WuDao.Content.Juexue.Active
 {
     public class Kamehameha : JuexueItem
     {
-        public override int QiCost => 1; // 蓄力期间每帧-1气
-        public override int SpecialCooldownTicks => 60 * 2; // 2 分钟
+        public override int QiCost => 2; // 蓄力期间每帧-1气
+        public override int SpecialCooldownTicks => 60 * 120; // 2 分钟
         public const int KamehamehaFrameIndex = 4;
         // 龟派气功不在 TryActivate 中直接释放，由 QiPlayer.ProcessTriggers 处理按住/松开
-        protected override bool OnActivate(Player player, QiPlayer qi) => false;
+        protected override bool OnActivate(Player player, QiPlayer qi)
+        {
+            return false;
+        }
 
         public void ReleaseFire(Player player, QiPlayer qi, int spentQi)
         {
@@ -28,10 +31,20 @@ namespace WuDao.Content.Juexue.Active
 
             int projType = ModContent.ProjectileType<KamehamehaProj>();
             int baseDmg = 60;
-            float mult = 1f + 0.10f * spentQi;
-            int damage = (int)(baseDmg * mult) + 60 * Helpers.BossProgressPower.GetUniqueBossCount();
+            float mult = 0.10f * spentQi + Helpers.BossProgressPower.GetUniqueBossCount();
+            int damage = (int)(baseDmg * mult);
 
-            int pid = Projectile.NewProjectile(player.GetSource_ItemUse(Item), player.Center, dir * speed, projType, damage, 3f, player.whoAmI, spentQi, 0f);
+            int pid = Projectile.NewProjectile(
+                player.GetSource_ItemUse(Item),
+                player.Center,
+                dir * speed,
+                projType,
+                damage,
+                3f,
+                player.whoAmI,
+                spentQi,
+                0f
+            );
             Main.projectile[pid].friendly = true;
             Main.projectile[pid].hostile = false;
 
@@ -39,12 +52,11 @@ namespace WuDao.Content.Juexue.Active
 
             // 结算专属冷却 + 公共 2s
             qi.StampActiveUse(Item.type, SpecialCooldownTicks);
-
-            if (!Main.dedServ)
-            {
-                // 触发 2 秒虚影，稍微放大 1.1 倍，向上偏移 16 像素（站位更好看）
-                qi.TriggerJuexueGhost(KamehamehaFrameIndex, durationTick: 60, scale: 1.1f, offset: new Vector2(0, -16));
-            }
+            // if (!Main.dedServ)
+            // {
+            //     // 触发 2 秒虚影，稍微放大 1.1 倍，向上偏移 16 像素（站位更好看）
+            //     qi.TriggerJuexueGhost(KamehamehaFrameIndex, durationTick: 120, scale: 1.1f, offset: new Vector2(0, -20));
+            // }
         }
     }
 }
