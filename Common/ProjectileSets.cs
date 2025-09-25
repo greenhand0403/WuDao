@@ -51,6 +51,61 @@ namespace WuDao.Common
     }
     public static class ItemSets
     {
+        /// <summary>
+        /// 覆盖范围：铜/锡/铁/铅/银/钨/金/铂金/陨石/钴/钯/秘银/山铜(Orichalcum)/精金/泰坦/叶绿（含多种头盔分支）
+        /// </summary>
+        public static readonly HashSet<int> OreArmorSet = new()
+        {
+            // —— 预困难 ores —— //
+            // 铜 Copper
+            ItemID.CopperHelmet, ItemID.CopperChainmail, ItemID.CopperGreaves,
+            // 锡 Tin
+            ItemID.TinHelmet, ItemID.TinChainmail, ItemID.TinGreaves,
+            // 铁 Iron
+            ItemID.IronHelmet, ItemID.IronChainmail, ItemID.IronGreaves,
+            // 铅 Lead
+            ItemID.LeadHelmet, ItemID.LeadChainmail, ItemID.LeadGreaves,
+            // 银 Silver
+            ItemID.SilverHelmet, ItemID.SilverChainmail, ItemID.SilverGreaves,
+            // 钨 Tungsten
+            ItemID.TungstenHelmet, ItemID.TungstenChainmail, ItemID.TungstenGreaves,
+            // 金 Gold
+            ItemID.GoldHelmet, ItemID.GoldChainmail, ItemID.GoldGreaves,
+            // 铂金 Platinum
+            ItemID.PlatinumHelmet, ItemID.PlatinumChainmail, ItemID.PlatinumGreaves,
+
+            // 陨石 Meteorite（原版常视作“矿物系”进度）
+            ItemID.MeteorHelmet, ItemID.MeteorSuit, ItemID.MeteorLeggings,
+
+            // —— 困难 ores —— //
+            // Cobalt（头：Helmet/Mask/Headgear）
+            ItemID.CobaltHelmet, ItemID.CobaltMask, ItemID.CobaltHat,
+            ItemID.CobaltBreastplate, ItemID.CobaltLeggings,
+
+            // Palladium（头：Helmet/Mask/Headgear）
+            ItemID.PalladiumHelmet, ItemID.PalladiumMask, ItemID.PalladiumHeadgear,
+            ItemID.PalladiumBreastplate, ItemID.PalladiumLeggings,
+
+            // Mythril（头：Helmet/Mask/Hood）
+            ItemID.MythrilHelmet, ItemID.MythrilHat, ItemID.MythrilHood,
+            ItemID.MythrilChainmail, ItemID.MythrilGreaves,
+
+            // Orichalcum（头：Helmet/Mask/Headgear）
+            ItemID.OrichalcumHelmet, ItemID.OrichalcumMask, ItemID.OrichalcumHeadgear,
+            ItemID.OrichalcumBreastplate, ItemID.OrichalcumLeggings,
+
+            // Adamantite（头：Helmet/Mask/Headgear）
+            ItemID.AdamantiteHelmet, ItemID.AdamantiteMask, ItemID.AdamantiteHeadgear,
+            ItemID.AdamantiteBreastplate, ItemID.AdamantiteLeggings,
+
+            // Titanium（头：Helmet/Mask/Headgear）
+            ItemID.TitaniumHelmet, ItemID.TitaniumMask, ItemID.TitaniumHeadgear,
+            ItemID.TitaniumBreastplate, ItemID.TitaniumLeggings,
+
+            // —— 丛林后期矿：叶绿 Chlorophyte（头：Helmet/Mask/Headgear） —— //
+            ItemID.ChlorophyteHelmet, ItemID.ChlorophyteMask, ItemID.ChlorophyteHeadgear,
+            ItemID.ChlorophytePlateMail, ItemID.ChlorophyteGreaves,
+        };
         public static readonly HashSet<int> BladeTrailSet = new()
         {
             ItemID.CopperBroadsword,

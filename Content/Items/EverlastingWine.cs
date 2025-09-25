@@ -7,17 +7,6 @@ namespace WuDao.Content.Items
 {
     public class EverlastingWine : ModItem
     {
-        // TODO: 补贴图
-        // public override void SetStaticDefaults()
-        // {
-        //     DisplayName.SetDefault("永生之酒");
-        //     Tooltip.SetDefault("饮用：永久减少20点生命上限（可用生命水晶弥补）\n" +
-        //                         "50% 几率获得2秒无敌\n" +
-        //                         "饮用冷却：5分钟\n" +
-        //                         "背包中有此物且冷却就绪时，在遭受致命伤害前会自动饮用并躲过该次伤害");
-        // }
-        public override string Texture => $"Terraria/Images/Item_{ItemID.CreamSoda}";
-
         public override void SetDefaults()
         {
             Item.width = 20;

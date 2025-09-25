@@ -74,8 +74,9 @@ namespace WuDao.Content.Mounts
             // 初始化玩家专属轮播数据
             player.mount._mountSpecificData = new ToiletCycleData
             {
-                currentItemId = FirstToiletId,
-                nextSwapTick = Main.GameUpdateCount + SwapIntervalTicks
+                // currentItemId = FirstToiletId,
+                currentItemId = FirstToiletId + Main.rand.Next(CycleCount),
+                // nextSwapTick = Main.GameUpdateCount + SwapIntervalTicks
             };
 
             // 进入时的尘埃/特效可以自定义；此处略
@@ -83,16 +84,16 @@ namespace WuDao.Content.Mounts
 
         public override void UpdateEffects(Player player)
         {
-            // ====== 1) 轮播逻辑保持不变 ======
-            if (player.mount?._mountSpecificData is ToiletCycleData data)
-            {
-                if (Main.GameUpdateCount >= data.nextSwapTick)
-                {
-                    int idx = (data.currentItemId - FirstToiletId + 1) % CycleCount;
-                    data.currentItemId = FirstToiletId + idx;
-                    data.nextSwapTick += (uint)SwapIntervalTicks;
-                }
-            }
+            // ====== 1) 轮播切换不同马桶 ======
+            // if (player.mount?._mountSpecificData is ToiletCycleData data)
+            // {
+            //     if (Main.GameUpdateCount >= data.nextSwapTick)
+            //     {
+            //         int idx = (data.currentItemId - FirstToiletId + 1) % CycleCount;
+            //         data.currentItemId = FirstToiletId + idx;
+            //         data.nextSwapTick += (uint)SwapIntervalTicks;
+            //     }
+            // }
 
             // ====== 2) 水平手感（原样保留） ======
             if (!player.controlLeft && !player.controlRight)

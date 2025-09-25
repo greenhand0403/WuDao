@@ -398,6 +398,11 @@ Items: {
 		DisplayName: Flying Toilet Mount Item
 		Tooltip: ""
 	}
+
+	EnchantedRoyalScepter: {
+		Tooltip: ""
+		DisplayName: Enchanted Royal Scepter
+	}
 }
 
 Projectiles: {
@@ -454,6 +459,8 @@ Projectiles: {
 	KamehamehaProj.DisplayName: Kamehameha Proj
 	CloneFirstFractalProj.DisplayName: Clone First Fractal Proj
 	FirstFractalCloneProj.DisplayName: First Fractal Clone Proj
+	RoyalShadowBeam.DisplayName: Royal Shadow Beam
+	RoyalScepterMinion.DisplayName: Royal Scepter Minion
 }
 
 DamageClasses: {
@@ -616,6 +623,11 @@ Buffs: {
 		DisplayName: Flying Toilet Buff
 		Description: Mods.WuDao.Buffs.FlyingToiletBuff.Description
 	}
+
+	EnchantedRoyalScepterBuff: {
+		Description: Mods.WuDao.Buffs.EnchantedRoyalScepterBuff.Description
+		DisplayName: Enchanted Royal Scepter Buff
+	}
 }
 
 Configs: {
@@ -666,6 +678,45 @@ Configs: {
 			Tooltip: 勾选后：世界之毒在削减生命再生时，最多把正向生命再生削到 0，不会由本效果导致负数。默认启用。
 		}
 	}
+
+	BladeTrailConfig: {
+		DisplayName: Blade Trail Config
+
+		Headers: {
+			全局刀光: 全局刀光 Header
+			默认集合: 默认集合 Header
+			自定义白名单: 自定义白名单 Header
+		}
+
+		EnableVertexBladeTrail: {
+			Label: Enable Vertex Blade Trail
+			Tooltip: ""
+		}
+
+		IncludeDefaultBladeTrailSet: {
+			Label: Include Default Blade Trail Set
+			Tooltip: ""
+		}
+
+		IncludePhaseblades: {
+			Label: Include Phaseblades
+			Tooltip: ""
+		}
+
+		Whitelist: {
+			Label: Whitelist
+			Tooltip: ""
+		}
+	}
+
+	ArmorPrefixConfig: {
+		PrefixMode: {
+			Tooltip: ""
+			Label: Prefix Mode
+		}
+
+		DisplayName: Armor Prefix Config
+	}
 }
 
 Tiles.PyramidStatueTile.MapEntry: Pyramid Statue Tile
@@ -678,4 +729,12 @@ Keybinds: {
 NPCs: {
 	WanderingBeggar.DisplayName: Wandering Beggar
 	FoodGodBoss.DisplayName: Food God Boss
+}
+
+Prefixes: {
+	WoodPrefix.DisplayName: Wood Prefix
+	WaterPrefix.DisplayName: Water Prefix
+	GoldPrefix.DisplayName: Gold Prefix
+	FirePrefix.DisplayName: Fire Prefix
+	EarthPrefix.DisplayName: Earth Prefix
 }
