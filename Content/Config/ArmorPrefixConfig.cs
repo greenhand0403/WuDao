@@ -8,6 +8,6 @@ namespace WuDao.Content.Config
 
         // [Label("盔甲前缀适用范围")]
         [OptionStrings(new string[] { "禁用", "仅矿物盔甲", "所有盔甲" })]
-        public string PrefixMode = "所有盔甲";
+        public string PrefixMode = "仅矿物盔甲";
     }
 }

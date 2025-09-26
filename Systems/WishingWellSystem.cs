@@ -6,17 +6,38 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.ModLoader.IO;
 using WuDao.Content.Tiles;
 
-namespace WuDao.Content.Systems
+namespace WuDao.Systems
 {
     public class WishingWellSystem : ModSystem
     {
+        // private List<Point> wishingWellPositions = new();
         // 对外字典（跨模组也会用到）
         internal static readonly Dictionary<int, int> BagToBoss = new();   // 宝藏袋 → Boss
         internal static readonly Dictionary<int, int> ItemToBoss = new();  // 召唤物/掉落物 → Boss
         internal static readonly Dictionary<int, Func<Player, bool>> BossEnvOk = new(); // 环境判定
+        // private bool printedOnce = false;
+        // public IReadOnlyList<Point> GetWishingWellPositions() => wishingWellPositions;
+        // public bool GetPrintedOnce() => printedOnce;
+        // public void SetPrintedOnce() => printedOnce = true;
+        // public override void SaveWorldData(TagCompound tag)
+        // {
+        //     tag["WishingWellPts"] = wishingWellPositions.ConvertAll(p => new int[] { p.X, p.Y });
+        //     tag["WudaoPrintedOnce"] = printedOnce;
+        // }
 
+        // public override void LoadWorldData(TagCompound tag)
+        // {
+        //     wishingWellPositions.Clear();
+        //     if (tag.ContainsKey("WishingWellPts"))
+        //     {
+        //         foreach (var arr in tag.GetList<int[]>("WishingWellPts"))
+        //             wishingWellPositions.Add(new Point(arr[0], arr[1]));
+        //     }
+        //     printedOnce = tag.GetBool("WudaoPrintedOnce");
+        // }
         public override void OnWorldLoad()
         {
             BagToBoss.Clear();
@@ -111,67 +132,9 @@ namespace WuDao.Content.Systems
             BossEnvOk[NPCID.HallowBoss] = p => p.ZoneHallow && !Main.dayTime;// 光之女皇：夜间圣地
             BossEnvOk[NPCID.CultistBoss] = p => NPC.downedGolemBoss;          // 放宽：不强制地牢坐标
             BossEnvOk[NPCID.MoonLordCore] = p => NPC.downedAncientCultist;     // 击败教徒后
-        }
 
-        // ===== 世界生成：出生点下方“洞穴层”随机生成许愿池，并在左右各放生命水晶 =====
-        public override void PostWorldGen()
-        {
-            try
-            {
-                int spawnX = Main.spawnTileX;
-                int x = spawnX + WorldGen.genRand.Next(-80, 81);
-                int yStart = (int)(Main.rockLayer) + WorldGen.genRand.Next(30, 120);
-                yStart = Math.Clamp(yStart, 0, Main.maxTilesY - 50);
-
-                Point? found = null;
-                for (int y = yStart; y < Math.Min(yStart + 300, Main.maxTilesY - 40); y++)
-                {
-                    if (IsRoomFor3x3(x, y) && SolidBelow(x, y + 2))
-                    {
-                        found = new Point(x, y);
-                        break;
-                    }
-                }
-                if (!found.HasValue) return;
-
-                var p = found.Value;
-                WorldGen.PlaceObject(p.X, p.Y, ModContent.TileType<WishingWellTile>());
-                // 打印生成的位置坐标
-                Main.NewText($"许愿池生成在：X={p.X}, Y={p.Y}");
-                if (Main.netMode == NetmodeID.Server)
-                    NetMessage.SendObjectPlacement(-1, p.X, p.Y, ModContent.TileType<WishingWellTile>(), 0, 0, -1, -1);
-
-                TryPlaceLifeCrystalNear(new Point(p.X - 5, p.Y));
-                TryPlaceLifeCrystalNear(new Point(p.X + 5, p.Y));
-            }
-            catch { }
-        }
-
-        private static bool IsRoomFor3x3(int i, int j)
-        {
-            for (int x = i; x < i + 3; x++)
-                for (int y = j; y < j + 3; y++)
-                    if (!WorldGen.InWorld(x, y) || Main.tile[x, y].HasTile) return false;
-            return true;
-        }
-        private static bool SolidBelow(int i, int j)
-            => WorldGen.InWorld(i, j + 1) && Main.tile[i, j + 1].HasTile && Main.tileSolid[Main.tile[i, j + 1].TileType];
-
-        private static void TryPlaceLifeCrystalNear(Point approx)
-        {
-            for (int dy = 0; dy < 30; dy++)
-            {
-                int x = approx.X;
-                int y = approx.Y + dy;
-                if (!WorldGen.InWorld(x, y + 1)) break;
-                if (!Main.tile[x, y].HasTile && Main.tile[x, y + 1].HasTile && Main.tileSolid[Main.tile[x, y + 1].TileType])
-                {
-                    WorldGen.PlaceObject(x, y, TileID.Heart);
-                    if (Main.netMode == NetmodeID.Server)
-                        NetMessage.SendObjectPlacement(-1, x, y, TileID.Heart, 0, 0, -1, -1);
-                    break;
-                }
-            }
+            // wishingWellPositions.Clear();
+            // printedOnce = false;
         }
 
         // ===== 公共工具 =====
