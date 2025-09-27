@@ -8,8 +8,6 @@ namespace WuDao.Content.Items.Accessories
 {
     public class ApeTouch : ModItem
     {
-        public override string Texture => $"Terraria/Images/Item_1";
-
         public override void SetDefaults()
         {
             Item.width = 28;

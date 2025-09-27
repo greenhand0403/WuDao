@@ -73,7 +73,11 @@ namespace WuDao.Content.Items.Weapons.Magic
 
             return false; // 手动生成
         }
-
+        // 手持时向内偏移
+        public override Vector2? HoldoutOffset()
+        {
+            return new Vector2(-1, 3); // 向内偏移3像素
+        }
         public override void AddRecipes()
         {
             CreateRecipe()

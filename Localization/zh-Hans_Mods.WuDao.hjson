@@ -440,13 +440,13 @@ Items: {
 
 	EverlastingWine: {
 		DisplayName: 永生之酒
-		Tooltip: 
-		'''
-			有几率获得无敌帧
-			濒死自动饮用
-			使用后生命上限减少20点
-			冷却5分钟
-		'''
+		Tooltip:
+			'''
+				有几率获得无敌帧
+				濒死自动饮用
+				使用后生命上限减少20点
+				冷却5分钟
+			'''
 	}
 
 	FoodGodSummonItem: {
@@ -470,8 +470,8 @@ Items: {
 	}
 
 	GemPouch: {
-		Tooltip: 宝石袋
-		DisplayName: 投掷随机宝石，不同类型具有不同效果
+		Tooltip: 投掷随机宝石，不同类型具有不同效果
+		DisplayName: 宝石袋
 	}
 
 	ScallionShield: {

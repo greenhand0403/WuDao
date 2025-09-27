@@ -1,6 +1,7 @@
 ﻿using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria;
+using WuDao.Content.Projectiles.Ranged;
 
 namespace WuDao.Content.Items.Ammo
 {
@@ -9,7 +10,7 @@ namespace WuDao.Content.Items.Ammo
         public override void SetStaticDefaults()
         {
             AmmoID.Sets.IsSpecialist[Type] = true;
-            AmmoID.Sets.SpecificLauncherAmmoProjectileMatches[ItemID.RocketLauncher].Add(Type, ModContent.ProjectileType<Projectiles.Ranged.NebulaRocketProjectile>());
+            AmmoID.Sets.SpecificLauncherAmmoProjectileMatches[ItemID.RocketLauncher].Add(Type, ModContent.ProjectileType<NebulaRocketProjectile>());
         }
         public override void SetDefaults()
         {

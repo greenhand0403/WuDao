@@ -64,7 +64,11 @@ namespace WuDao.Content.Items.Weapons.Ranged
             // 返回 false 以阻止默认再发一次（我们已手动生成所有弹）
             return false;
         }
-
+        // 手持时向内偏移
+        public override Vector2? HoldoutOffset()
+        {
+            return new Vector2(-4, -2); // 向内偏移4像素
+        }
         public override void AddRecipes()
         {
             CreateRecipe()

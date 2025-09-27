@@ -7,6 +7,8 @@
 - 美味值与厨艺值：首次品尝或制作食物可提升相应属性，对部分武器和饰品有加成。
 - 成长型武器、飞镖等投掷类武器，随使用逐步成长。
 - 近战剑类武器自带刀光（收藏武器可以使用武器贴图刀光），还可以收藏背包中的首个染料进行染色，两两组合有四种刀光。
-- 丰富的内容与隐藏彩蛋，探索与成长兼备。
+- 五行盔甲：盔甲部件具有五行属性，同属性获得额外效果
+
+详情参考：docs.google.com/spreadsheets/d/e/2PACX-1vSNLFvdxSPaI9X9J_gbIMaN42z2TKeINIYdKISJyRcCD1zr71McKra1bxVNFPK-PvhAUQqNMwqcF92Q/pubhtml
 
 模组正在开发中，后续会有更多武侠相关内容和独特机制加入！

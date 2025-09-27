@@ -104,7 +104,7 @@ namespace WuDao.Content.Items.Weapons.Ranged
                 int projType = type == ProjectileID.Bullet ? type : ModContent.ProjectileType<TheOutlawPellet>();
                 int proj = Projectile.NewProjectile(
                     source, position, perturbed,
-                    projType,
+                    type,
                     (int)(damage * dmgScale), knockback, player.whoAmI
                 );
             }

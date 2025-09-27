@@ -1,6 +1,7 @@
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using WuDao.Content.Buffs;
 using WuDao.Content.Players;
 
 namespace WuDao.Content.Items
@@ -25,7 +26,7 @@ namespace WuDao.Content.Items
         public override bool CanUseItem(Player player)
         {
             // 冷却中不可用
-            return !player.HasBuff(ModContent.BuffType<Content.Buffs.WineCooldownBuff>());
+            return !player.HasBuff(ModContent.BuffType<WineCooldownBuff>());
         }
 
         public override bool? UseItem(Player player)

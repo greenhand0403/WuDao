@@ -59,7 +59,7 @@ namespace WuDao.Content.Projectiles.Summon
             bool isBladeStaffMinion = true;
 
             // ——Idle 参考点（玩家头顶略上方），并做“多把分环”分布——
-            Vector2 idle = player.Center + new Vector2(0f, -45f) - Vector2.UnitX * 17f;
+            Vector2 idle = player.Center + new Vector2(0f, -48f) - Vector2.UnitX * 17f;
             if (isBladeStaffMinion && Projectile.ai[0] == 0f)
             {
                 // 统计本玩家、同 type 的索引与总数，用于环形分布

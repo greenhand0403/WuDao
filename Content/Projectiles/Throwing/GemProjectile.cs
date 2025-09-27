@@ -22,7 +22,7 @@ namespace WuDao.Content.Projectiles.Throwing
             Projectile.height = 10;
             Projectile.penetrate = 2;
             Projectile.timeLeft = 420;
-            Projectile.extraUpdates = 1;
+            Projectile.MaxUpdates = 2;
             Projectile.light = 0.5f;
         }
         public override void OnSpawn(IEntitySource source)

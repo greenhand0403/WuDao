@@ -36,8 +36,8 @@ namespace WuDao.Content.Items.Weapons.Magic
 
         public override void SetDefaults()
         {
-            Item.width = 48;
-            Item.height = 48;
+            Item.width = 28;
+            Item.height = 28;
             Item.rare = ItemRarityID.Red; // 同时代中后期魔法武器稀有度
             Item.value = Item.buyPrice(gold: 5);
 
@@ -56,7 +56,11 @@ namespace WuDao.Content.Items.Weapons.Magic
             Item.shootSpeed = 10f;
             Item.autoReuse = true;
         }
-
+        // 手持时向下偏移
+        public override Vector2? HoldoutOffset()
+        {
+            return new Vector2(6, 8); // 向下偏移8像素
+        }
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
             var pool = Main.hardMode ? HMProjectilePool : PreHMProjectilePool;
@@ -65,8 +69,8 @@ namespace WuDao.Content.Items.Weapons.Magic
             // 适度随机散射/速度微扰，增强手感
             Vector2 perturbed = velocity.RotatedByRandom(MathHelper.ToRadians(6));
             float speedScale = 0.9f + Main.rand.NextFloat(0.2f);
-
-            int p = Projectile.NewProjectile(source, position, perturbed * speedScale, choice, damage, knockback, player.whoAmI);
+            // 发射口下移对齐武器
+            int p = Projectile.NewProjectile(source, position + Vector2.UnitY * 6 + player.direction * 8 * Vector2.UnitX, perturbed * speedScale, choice, damage, knockback, player.whoAmI);
 
             // 若弹体有独特AI可进一步处理（例如：修改本体ai或者本mod的GlobalProjectile）
             return false; // 返回false避免tML再次发射默认的shoot

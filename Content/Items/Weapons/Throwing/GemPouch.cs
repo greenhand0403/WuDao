@@ -31,7 +31,7 @@ namespace WuDao.Content.Items.Weapons.Throwing
             Item.rare = ItemRarityID.Blue;
 
             Item.shoot = BaseProjectileType;
-            Item.shootSpeed = 10f;
+            Item.shootSpeed = 13f;
             Item.maxStack = Item.CommonMaxStack;
             Item.consumable = true; // 你可以改成 false 做无限射击
         }

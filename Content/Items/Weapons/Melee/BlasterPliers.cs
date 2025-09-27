@@ -11,7 +11,7 @@ namespace WuDao.Content.Items.Weapons.Melee
     {
         public override void SetDefaults()
         {
-            Item.CloneDefaults(ItemID.CombatWrench);
+            // Item.CloneDefaults(ItemID.CombatWrench);
             Item.useTime = 30;
             Item.useAnimation = 30;
             Item.damage = 30;
@@ -20,8 +20,8 @@ namespace WuDao.Content.Items.Weapons.Melee
             Item.shoot = ProjectileID.None;
             Item.noUseGraphic = false;
             Item.autoReuse = true;
-            Item.width = 48;
-            Item.height = 48;
+            Item.width = 42;
+            Item.height = 42;
             Item.rare = ModContent.RarityType<LightBlueRarity>();
         }
         public override void ModifyWeaponDamage(Player player, ref StatModifier damage)
@@ -42,17 +42,18 @@ namespace WuDao.Content.Items.Weapons.Melee
             }
             damage.Flat += hotdogs * 0.1f;
         }
+        // 手持时向内偏移
         public override Vector2? HoldoutOffset()
         {
-            // 向下偏移 2 像素，向左偏移 2 像素
-            return new Vector2(-2f, 2f);
+            return new Vector2(-4, 2); // 向内偏移4像素
         }
-        public override float UseSpeedMultiplier(Player player)
-        {
-            var cp = player.GetModPlayer<CuisinePlayer>();
-            // 根据美味值加成攻速
-            return 1f + cp.Deliciousness * 0.01f;
-        }
+        // 有 bug
+        // public override float UseSpeedMultiplier(Player player)
+        // {
+        //     var cp = player.GetModPlayer<CuisinePlayer>();
+        //     // 根据美味值加成攻速
+        //     return 1f + cp.Deliciousness * 0.01f;
+        // }
         // TODO: 写一个全局物品获取美食/厨具来应用加成效果
         // public override void UpdateAccessory(Player player, bool hideVisual)
         // {

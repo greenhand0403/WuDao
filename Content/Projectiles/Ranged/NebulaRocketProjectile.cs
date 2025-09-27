@@ -50,12 +50,12 @@ namespace WuDao.Content.Projectiles.Ranged
                         Dust fireDust = Dust.NewDustDirect(new Vector2(Projectile.position.X + 6f + posOffsetX, Projectile.position.Y + 6f + posOffsetY) - Projectile.velocity * 0.5f,
                             Projectile.width - 8, Projectile.height - 8, DustID.CrystalPulse2, 0f, 0f, 100);
                         fireDust.scale *= 1.2f + Main.rand.Next(10) * 0.1f;
-                        fireDust.velocity *= 0.2f;
+                        fireDust.velocity *= 0.4f;
                         fireDust.noGravity = true;
 
                         Dust smokeDust = Dust.NewDustDirect(new Vector2(Projectile.position.X + 3f + posOffsetX, Projectile.position.Y + 3f + posOffsetY) - Projectile.velocity * 0.5f, Projectile.width - 8, Projectile.height - 8, DustID.Smoke, 0f, 0f, 100, default, 0.5f);
                         smokeDust.fadeIn = 1f + Main.rand.Next(5) * 0.1f;
-                        smokeDust.velocity *= 0.05f;
+                        smokeDust.velocity *= 0.08f;
                     }
                 }
 
@@ -100,7 +100,7 @@ namespace WuDao.Content.Projectiles.Ranged
             for (var i = 0; i < 40; i++)
             {
                 Dust smokeDust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Smoke, 0f, 0f, 100, default, 1.2f);
-                smokeDust.velocity *= 2f;
+                smokeDust.velocity *= 2.2f;
                 if (Main.rand.NextBool(2))
                 {
                     smokeDust.scale = 0.5f;
@@ -111,9 +111,9 @@ namespace WuDao.Content.Projectiles.Ranged
             {
                 Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.UndergroundHallowedEnemies, 0f, 0f, 100, default, 2.5f);
                 dust.noGravity = true;
-                dust.velocity *= 3f;
+                dust.velocity *= 3.2f;
                 dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.CrystalPulse2, 0f, 0f, 100, default(Color), 1.5f);
-                dust.velocity *= 1.2f;
+                dust.velocity *= 1.6f;
                 dust.noGravity = true;
             }
 
