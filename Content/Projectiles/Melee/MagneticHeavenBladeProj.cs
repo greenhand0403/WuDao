@@ -15,7 +15,8 @@ namespace WuDao.Content.Projectiles.Melee
     public class MagneticHeavenBladeProj : ModProjectile
     {
         public override string Texture => $"Terraria/Images/Item_{ItemID.BreakerBlade}";
-
+        public override bool? CanDamage() => true;
+        public override bool? CanCutTiles() => false; // 纯演出，不砍草
         public override void SetStaticDefaults()
         {
             // 轻微拖影：可选
@@ -115,9 +116,6 @@ namespace WuDao.Content.Projectiles.Melee
                 }
             }
         }
-
-        public override bool? CanDamage() => true;
-        public override bool? CanCutTiles() => false; // 纯演出，不砍草
     }
 
     /// <summary>
@@ -130,11 +128,11 @@ namespace WuDao.Content.Projectiles.Melee
 
         public override void SetDefaults()
         {
-            Projectile.width = 16;
-            Projectile.height = 16;
+            Projectile.width = 10;
+            Projectile.height = 10;
             Projectile.friendly = false;
             Projectile.hostile = false;
-            Projectile.timeLeft = 10;         // 短暂吸附
+            Projectile.timeLeft = 15;         // 短暂吸附
             Projectile.tileCollide = false;
             Projectile.ignoreWater = true;
         }

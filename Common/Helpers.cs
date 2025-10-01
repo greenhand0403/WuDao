@@ -75,10 +75,10 @@ namespace WuDao.Common
         public static class BossProgressPower
         {
             // —— 可调参数（给你默认一套克制的成长线；想改请调这里）——
-            private const int MaxCountForLinear = 15;     // 线性增长封顶的计数
-            private const float DamagePerBoss = 0.01f;    // 每个BOSS +1% 伤害，上限 ~15%
-            private const float ProjSpeedPerBoss = 0.01f; // 每个BOSS +1% 射弹速度
-            private const float MeleeScalePerBoss = 0.005f; // 每个BOSS +0.5% 近战尺寸
+            private const int MaxCountForLinear = 17;     // 线性增长封顶的计数，目前统计BOSS数量最大17
+            private const float DamagePerBoss = 0.04f;    // 每个BOSS +4% 伤害
+            private const float ProjSpeedPerBoss = 0.03f; // 每个BOSS +3% 射弹速度
+            private const float MeleeScalePerBoss = 0.02f; // 每个BOSS +2% 近战尺寸
             private const int MeleeRangePerBoss = 3;      // 每个BOSS +3px 近战额外判定范围
 
             /// <summary>获取当前玩家的“按BOSS进度成长”的一组加成。</summary>

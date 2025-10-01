@@ -1,5 +1,4 @@
-// 万马奔腾：100 气，从远离鼠标的一侧屏幕边生成多枚投射物横穿屏幕。
-// 贴图占位：EnchantedBeam（后续可换成自绘的独角兽/骏马投射物）。
+// 万马奔腾：100 气，从远离鼠标的一侧屏幕边生成多枚投射物横穿屏幕
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
@@ -15,23 +14,27 @@ namespace WuDao.Content.Juexue.Active
     public class Stampede : JuexueItem
     {
         public override bool IsActive => true;
-        public override int QiCost => 99;
-        public override int SpecialCooldownTicks => 60 * 120; // 2min
+        public override int QiCost => 90;
+        public override int SpecialCooldownTicks => 60 * 60;
         public const int StampedeFrameIndex = 7;
+        public const int baseDamge = 460;// 基础伤害
+        public const int baseVelocity = 20;// 基础速度
         protected override bool OnActivate(Player player, QiPlayer qi)
         {
             // 屏幕矩形（世界坐标）
             Rectangle rect = Helpers.ScreenBoundsWorldSpace();
-
+            // 计算境界伤害和射弹速度加成
+            Helpers.BossProgressBonus progressBonus = Helpers.BossProgressPower.Get(player);
             // 从“远离鼠标”的一侧生成，横穿到对侧
             bool mouseOnRight = Main.MouseWorld.X > rect.Center.X;
             int startX = mouseOnRight ? rect.Left - 30 : rect.Right + 30;  // 出生点在屏幕外 30px
             // 速度
-            Vector2 v = Vector2.UnitX * (mouseOnRight ? 16 : -16);
-            // 每列投射物数量
-            int rowCount = 5;
+            Vector2 v = Vector2.UnitX * (mouseOnRight ? 1 : -1) * baseVelocity * progressBonus.ProjSpeedMult;
+            // 每列投射物数量4~5匹马
+            int rowCount = Main.rand.Next(4, 6);
+            // 生成骏马射弹的总数
             int count = Main.rand.Next(4, 6) * rowCount;
-            int projDamage = 70 * Helpers.BossProgressPower.GetUniqueBossCount();
+            int projDamage = (int)(baseDamge * progressBonus.DamageMult);
             if (player.whoAmI == Main.myPlayer)
             {
                 float spawnY;

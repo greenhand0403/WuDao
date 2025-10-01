@@ -14,7 +14,6 @@ namespace WuDao.Content.Projectiles.Melee
     {
         public override string Texture => $"Terraria/Images/NPC_{NPCID.Shark}";
         public int FrameTicksPerFrame = 5;
-        public float MinSpeed = 8f;
         public override void SetStaticDefaults()
         {
             // 读取帧数，避免魔法数字

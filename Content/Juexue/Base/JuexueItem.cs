@@ -12,7 +12,7 @@ namespace WuDao.Content.Juexue.Base
         public override string Texture => $"Terraria/Images/Item_{ItemID.Book}";
         public virtual bool IsActive => true;         // 主动 or 被动
         public virtual int QiCost => 0;               // 主动技能消耗
-        public virtual int SpecialCooldownTicks => 0; // 各自较长冷却（单位tick）
+        public virtual int SpecialCooldownTicks => 0; // 各自绝学的释放冷却时间（单位tick）
         public override bool CanRightClick() => true;
         public override void SetDefaults()
         {
@@ -41,6 +41,7 @@ namespace WuDao.Content.Juexue.Base
             }
 
             bool ok = OnActivate(player, qi);
+            // 主动型绝学释放完，盖章进入技能冷却中
             if (ok) qi.StampActiveUse(Item.type, SpecialCooldownTicks);
             return ok;
         }

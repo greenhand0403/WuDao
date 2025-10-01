@@ -32,7 +32,7 @@ namespace WuDao.Content.Projectiles.Melee
             Projectile.aiStyle = 0;
             Projectile.friendly = true;
             Projectile.hostile = false;
-            Projectile.timeLeft = 300;
+            Projectile.timeLeft = 360;
             Projectile.tileCollide = false;
             Projectile.ignoreWater = true;
             Projectile.penetrate = -1;

@@ -13,12 +13,13 @@ namespace WuDao.Content.Juexue.Active
 {
     public class DiamondSkin : JuexueItem
     {
-        public override int QiCost => 100;
+        public override int QiCost => 90;
         public override int SpecialCooldownTicks => 60 * 60; // 60 秒
         public const int DiamondSkinFrameIndex = 2;
         protected override bool OnActivate(Player player, QiPlayer qi)
         {
-            int time = 60 * Math.Max(Helpers.BossProgressPower.GetUniqueBossCount(), 5);
+            Helpers.BossProgressBonus progressBonus = Helpers.BossProgressPower.Get(player);
+            int time = (int)(60 * 5 * progressBonus.DamageMult);
             player.AddBuff(ModContent.BuffType<DiamondSkinBuff>(), time);
             SoundEngine.PlaySound(SoundID.Item29, player.Center);
             if (!Main.dedServ)

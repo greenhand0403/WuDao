@@ -13,24 +13,26 @@ namespace WuDao.Content.Juexue.Active
     public class ShengLongBa : JuexueItem
     {
         public override bool IsActive => true;
-        public override int QiCost => 50;
-        public override int SpecialCooldownTicks => 60 * 30; // 30s
+        public override int QiCost => 60;
+        public override int SpecialCooldownTicks => 60 * 45; // 45s
         public const int ShengLongBaFrameIndex = 0;
+        public const int baseDamge = 255;// 基础伤害
+        public const int baseVelocity = 14;// 基础速度
         protected override bool OnActivate(Player player, QiPlayer qi)
         {
-            // if (!qi.TrySpendQi(QiCost)) { Main.NewText("气力不足！", Color.OrangeRed); return false; }
-
-            Vector2 at = Main.MouseWorld + new Vector2(0, 64f);
-            int damage = Helpers.BossProgressPower.GetUniqueBossCount() * 50;
+            Vector2 at = Main.MouseWorld + new Vector2(0, 200f);
+            // 计算境界伤害和射弹速度加成
+            Helpers.BossProgressBonus progressBonus = Helpers.BossProgressPower.Get(player);
+            int projDamage = (int)(baseDamge * progressBonus.DamageMult);
+            Vector2 v = Vector2.UnitY * -baseVelocity;
             for (int i = 0; i < 1; i++)
             {
-                Vector2 v = new Vector2(Main.rand.NextFloat(-2.2f, 2.2f), -Main.rand.NextFloat(12f, 24f));
                 int proj = Projectile.NewProjectile(
                     player.GetSource_ItemUse(Item),
                     at,
                     v,
                     ModContent.ProjectileType<WyvernCompositeProjectile>(),
-                    damage,
+                    projDamage,
                     3f,
                     player.whoAmI);
                 var p = Main.projectile[proj];

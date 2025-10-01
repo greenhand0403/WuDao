@@ -25,17 +25,14 @@ namespace WuDao.Content.Juexue.Active
 
             // —— 生成弧线控制点：以中点为基准，沿法线偏移 —— //
             Vector2 mid = (p0 + p1) * 0.5f;
-            Vector2 dir = (p1 - p0);
+            Vector2 dir = p1 - p0;
             Vector2 nrm = dir.SafeNormalize(Vector2.UnitX).RotatedBy(MathHelper.PiOver2); // 右法线
             // 左/右随机选择一侧弧线（按住上/下也可以固定方向：按住上 = 左弧，按住下 = 右弧）
             int side = player.controlUp ? -1 : (player.controlDown ? 1 : (Main.rand.NextBool() ? 1 : -1));
             float offset = MathHelper.Clamp(dist * 0.45f, 120f, 360f); // 弧高
             Vector2 c = mid + nrm * offset * side;
 
-            // —— 弧线总时长（tick）：越远越久，但上限控制 //
-            int duration = (int)MathHelper.Clamp(dist / 13f, 20f, 34f); // 10~17 tick
-            // 开始弧线冲刺
-            qi.StartQiankunCurveDash(p0, c, p1, duration);
+            qi.StartQiankunCurveDash(p0, c, p1, 60);
 
             // 起手音效
             SoundEngine.PlaySound(SoundID.Item8, p0);

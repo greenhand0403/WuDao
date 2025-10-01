@@ -15,34 +15,46 @@ namespace WuDao.Content.Juexue.Passive
     public class XiangLong18 : JuexueItem
     {
         public override bool IsActive => false;
-        public const int Cost = 10;
-        public const float Chance = 0.4f; // 可按需调整
+        public override int QiCost => 30;
+        public const float Chance = 0.25f; // 可按需调整
         public const int XiangLong18FrameIndex = 8;
+        public const int baseDamge = 127;// 基础伤害
+        // 新增：被动触发冷却（单位tick）复用主动技能冷却
+        public override int SpecialCooldownTicks => 60;
         public void TryPassiveTriggerOnShoot(Player player, QiPlayer qi, EntitySource_ItemUse_WithAmmo src,
             Vector2 pos, Vector2 vel, int type, int dmg, float kb)
         {
-            if (qi.QiMax <= 0) return;
             if (Main.rand.NextFloat() > Chance) return;
-            if (!qi.TrySpendQi(Cost)) return;
+            // ★ 冷却检查（在消耗气力之前）
+            if (!qi.CanProcPassiveNow(Item.type, SpecialCooldownTicks)) return;
+            if (!qi.TrySpendQi(QiCost)) return;
+            // ★ 通过后立刻盖章，避免同一帧多枚弹丸连触发
+            qi.StampPassiveProc(Item.type, SpecialCooldownTicks);
 
             qi.XiangLongCount++;
             float mult = 1f;
             if (qi.XiangLongCount == 8) mult = 8f;  // 800%
             if (qi.XiangLongCount == 10) { mult = 10f; qi.XiangLongCount = 0; } // 1000% then reset
 
-            Vector2 dir = (Main.MouseWorld - player.Center).SafeNormalize(Vector2.UnitX) * 12f;
-            int damage = (int)(dmg * mult) + 30 * Helpers.BossProgressPower.GetUniqueBossCount();
+            // 计算境界伤害和射弹速度加成
+            Helpers.BossProgressBonus progressBonus = Helpers.BossProgressPower.Get(player);
+            Vector2 dir = (Main.MouseWorld - player.Center).SafeNormalize(Vector2.UnitX) * vel.Length() * progressBonus.ProjSpeedMult;
+            int projDamage = (int)(baseDamge * mult * progressBonus.DamageMult);
             // 略微下移一点对齐发射口
-            int proj = Projectile.NewProjectile(src, player.Center + Vector2.UnitY * 8, dir, ModContent.ProjectileType<PhantomDragonProjectile>(), damage, kb + 2f, player.whoAmI);
-            Main.projectile[proj].DamageType = DamageClass.Melee;
-            Main.projectile[proj].tileCollide = false;
-            Main.projectile[proj].penetrate = -1;
-            Main.projectile[proj].timeLeft = 180;
+            int proj = Projectile.NewProjectile(
+                src,
+                player.Center + Vector2.UnitY * 8,
+                dir,
+                ModContent.ProjectileType<PhantomDragonProjectile>(),
+                projDamage,
+                kb + 2f,
+                player.whoAmI
+            );
 
             if (!Main.dedServ)
             {
                 // 触发 2 秒虚影，稍微放大 1.1 倍，向上偏移 16 像素（站位更好看）
-                qi.TriggerJuexueGhost(XiangLong18FrameIndex, durationTick: 120, scale: 1.1f, offset: new Vector2(0, -20));
+                qi.TriggerJuexueGhost(XiangLong18FrameIndex, durationTick: 45, scale: 1.1f, offset: new Vector2(0, -20));
             }
         }
     }

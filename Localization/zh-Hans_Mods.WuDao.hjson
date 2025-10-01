@@ -429,7 +429,7 @@ Items: {
 	}
 
 	XiangLong18: {
-		DisplayName: 绝学·降龙十八掌
+		DisplayName: 绝学·飞龙在天
 		Tooltip: 攻击时发射额外射弹，并在第8次和第10次造成8倍和10倍伤害
 	}
 
@@ -499,8 +499,8 @@ Items: {
 	}
 
 	EnchantedRoyalScepter: {
-		// Tooltip: ""
-		// DisplayName: Enchanted Royal Scepter
+		Tooltip: 召唤唯一的皇家权杖
+		DisplayName: 附魔皇家权杖
 	}
 }
 
@@ -553,13 +553,11 @@ Projectiles: {
 	PhantomDragonProjectile.DisplayName: 幻影龙射弹
 	GemProjectile.DisplayName: 宝石射弹
 	HeroBrokenSwordMinion.DisplayName: 断裂英雄剑
-	// MagneticHeavenBladeProj.DisplayName: Magnetic Heaven Blade Proj
-	// MagneticHeavenBladeField.DisplayName: Magnetic Heaven Blade Field
-	// KamehamehaProj.DisplayName: Kamehameha Proj
-	// CloneFirstFractalProj.DisplayName: Clone First Fractal Proj
-	// FirstFractalCloneProj.DisplayName: First Fractal Clone Proj
-	// RoyalShadowBeam.DisplayName: Royal Shadow Beam
-	// RoyalScepterMinion.DisplayName: Royal Scepter Minion
+	MagneticHeavenBladeProj.DisplayName: 磁场天刀
+	MagneticHeavenBladeField.DisplayName: 磁场天刀引力场
+	KamehamehaProj.DisplayName: 龟派气功冲击波
+	RoyalShadowBeam.DisplayName: 皇家暗影光束
+	RoyalScepterMinion.DisplayName: 皇家权杖
 }
 
 DamageClasses: {
@@ -724,8 +722,8 @@ Buffs: {
 	}
 
 	EnchantedRoyalScepterBuff: {
-		// Description: Mods.WuDao.Buffs.EnchantedRoyalScepterBuff.Description
-		// DisplayName: Enchanted Royal Scepter Buff
+		Description: 皇家权杖保护你
+		DisplayName: 附魔皇家权杖
 	}
 }
 
@@ -779,42 +777,42 @@ Configs: {
 	}
 
 	BladeTrailConfig: {
-		// DisplayName: Blade Trail Config
+		DisplayName: 近战刀光配置
 
 		Headers: {
-			// 全局刀光: 全局刀光 Header
-			// 默认集合: 默认集合 Header
-			// 自定义白名单: 自定义白名单 Header
+			全局刀光: 全局近战刀光
+			默认集合: 默认刀光集合
+			自定义白名单: 自定义刀光白名单
 		}
 
 		EnableVertexBladeTrail: {
-			// Label: Enable Vertex Blade Trail
-			// Tooltip: ""
+			Label: 全局刀光
+			Tooltip: 启用全局刀光
 		}
 
 		IncludeDefaultBladeTrailSet: {
-			// Label: Include Default Blade Trail Set
-			// Tooltip: ""
+			Label: 默认近战刀光集合
+			Tooltip: 启用默认近战刀光集合
 		}
 
 		IncludePhaseblades: {
-			// Label: Include Phaseblades
-			// Tooltip: ""
+			Label: 自定义刀光集合
+			Tooltip: 启用自定义刀光集合
 		}
 
 		Whitelist: {
-			// Label: Whitelist
-			// Tooltip: ""
+			Label: 白名单
+			Tooltip: 启用近战刀光
 		}
 	}
 
 	ArmorPrefixConfig: {
 		PrefixMode: {
-			// Tooltip: ""
-			// Label: Prefix Mode
+			Tooltip: 盔甲具有五行属性
+			Label: 盔甲五行
 		}
 
-		// DisplayName: Armor Prefix Config
+		DisplayName: 护甲前缀配置
 	}
 }
 
@@ -831,9 +829,9 @@ NPCs: {
 }
 
 Prefixes: {
-	// WoodPrefix.DisplayName: Wood Prefix
-	// WaterPrefix.DisplayName: Water Prefix
-	// GoldPrefix.DisplayName: Gold Prefix
-	// FirePrefix.DisplayName: Fire Prefix
-	// EarthPrefix.DisplayName: Earth Prefix
+	WoodPrefix.DisplayName: 木
+	WaterPrefix.DisplayName: 水
+	GoldPrefix.DisplayName: 金
+	FirePrefix.DisplayName: 火
+	EarthPrefix.DisplayName: 土
 }

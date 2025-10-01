@@ -4,6 +4,7 @@ using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using Terraria.GameContent;
 using Microsoft.Xna.Framework.Graphics;
+using Terraria.DataStructures;
 
 namespace WuDao.Content.Projectiles.Melee
 {
@@ -13,7 +14,6 @@ namespace WuDao.Content.Projectiles.Melee
     public class OrcaProjectile : ModProjectile
     {
         public int FrameTicksPerFrame = 5;
-        public float MinSpeed = 10f;
         public override void SetStaticDefaults()
         {
             // 读取帧数，避免魔法数字

@@ -15,15 +15,17 @@ namespace WuDao.Content.Juexue.Active
 {
     public class MagneticHeavenBlade : JuexueItem
     {
-        public override int QiCost => 50;
+        public override int QiCost => 90;
         public override int SpecialCooldownTicks => 60 * 60; // 1 分钟冷却
         public const int MagneticHeavenBladeFrameIndex = 13;
+        public const int baseDamge = 410;// 基础伤害
+        public const int baseVelocity = 20;// 基础速度
         protected override bool OnActivate(Player player, QiPlayer qi)
         {
             Vector2 mouse = Main.MouseWorld;
             SoundEngine.PlaySound(SoundID.Item8, mouse);
 
-            // —— 1) 生成“场域”持续吸引（0.5秒）—— //
+            // —— 1) 生成磁场，持续吸引（0.5秒）—— //
             float radius = 600f;
             var src = player.GetSource_ItemUse(Item);
             int field = Projectile.NewProjectile(src, mouse, Vector2.Zero, ModContent.ProjectileType<MagneticHeavenBladeField>(), 0, 0f, player.whoAmI, radius);
@@ -37,14 +39,15 @@ namespace WuDao.Content.Juexue.Active
                     d.noGravity = true;
                 }
             }
-            // 生成磁场天刀专属射弹
-            // 在中心上方 [-320, 320] 的随机水平偏移，垂直出生在中心上方 600~720 像素
-            Vector2 spawn = mouse + new Vector2(Main.rand.NextFloat(-320f, 320f), -Main.rand.NextFloat(600f, 720f));
-
+            // 生成天刀射弹
+            // 在中心上方 [-320, 320] 的随机水平偏移，垂直出生在中心上方 1200~1600 像素
+            Vector2 spawn = mouse + new Vector2(Main.rand.NextFloat(-320f, 320f), -Main.rand.NextFloat(1200f, 1600f));
+            // 计算境界伤害和射弹速度加成
+            Helpers.BossProgressBonus progressBonus = Helpers.BossProgressPower.Get(player);
             // 初速度朝向中心
-            Vector2 v = (mouse - spawn).SafeNormalize(Vector2.UnitY) * 22f;
-            int damage = (int)(player.GetWeaponDamage(Item) * 2.2f) + 20 * Helpers.BossProgressPower.GetUniqueBossCount();
-            int p = Projectile.NewProjectile(src, spawn, v, ModContent.ProjectileType<MagneticHeavenBladeProj>(), Math.Max(damage, 100), 3f, player.whoAmI, mouse.X, mouse.Y);
+            Vector2 v = (mouse - spawn).SafeNormalize(Vector2.UnitY) * baseVelocity * progressBonus.ProjSpeedMult;
+            int projDamage = (int)(baseDamge * progressBonus.DamageMult);
+            int p = Projectile.NewProjectile(src, spawn, v, ModContent.ProjectileType<MagneticHeavenBladeProj>(), projDamage, 3f, player.whoAmI, mouse.X, mouse.Y);
 
             if (p >= 0)
             {

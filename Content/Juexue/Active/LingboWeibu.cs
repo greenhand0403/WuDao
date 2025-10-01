@@ -12,7 +12,7 @@ namespace WuDao.Content.Juexue.Active
     public class LingboWeibu : JuexueItem
     {
         public override bool IsActive => true;
-        public override int QiCost => 1;
+        public override int QiCost => 5;
         public override int SpecialCooldownTicks => 0; // 开启不需要专属冷却
         public const int LingboWeibuFrameIndex = 3;
         public override bool TryActivate(Player player, QiPlayer qi)
@@ -24,8 +24,8 @@ namespace WuDao.Content.Juexue.Active
                 Main.NewText("凌波微步：关闭", Color.LightGray);
                 return true;
             }
-
-            // 未开启 -> 正常走公共 2 秒冷却检查
+            if (!qi.TrySpendQi(QiCost)) return false;
+            // 未开启 -> 正常走公共冷却时间检查
             if (!qi.CanUseActiveNow(Item.type, SpecialCooldownTicks))
             {
                 Main.NewText("绝学尚未冷却。", Color.OrangeRed);
@@ -41,7 +41,8 @@ namespace WuDao.Content.Juexue.Active
         {
             if (qi.QiMax <= 0) return false;
             qi.LingboActive = true;
-            Main.NewText("凌波微步：开启（每秒消耗 15 气，10% 闪避）", Color.SkyBlue);
+            qi.LingboQiCost = QiCost;
+            Main.NewText("凌波微步-开启闪避", Color.SkyBlue);
             // —— 启动“凌波微步虚影” —— //
             if (!Main.dedServ)
             {

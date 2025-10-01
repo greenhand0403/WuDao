@@ -41,7 +41,7 @@ namespace WuDao.Content.Projectiles
         public override void SetDefaults()
         {
             Projectile.width = 74;
-            Projectile.height = 156;
+            Projectile.height = 74;
             Projectile.friendly = true;
             Projectile.ignoreWater = true;
             Projectile.tileCollide = false;
@@ -68,10 +68,10 @@ namespace WuDao.Content.Projectiles
             Vector2 dir = Projectile.velocity.LengthSquared() > 0.001f
                 ? Vector2.Normalize(Projectile.velocity)
                 : new Vector2(Projectile.direction, 0f);
-            Vector2 step = -dir * 26f; // 跟 PreDraw 的 spacing 保持一致
+            Vector2 step = -dir * 44f; // 跟 PreDraw 的 spacing 保持一致
             Vector2 segPos = Projectile.Center;
 
-            float hitRadius = 12f; // 每段的“判定粗细”，按你的贴图大小调
+            float hitRadius = Projectile.width / 2; // 每段的“判定粗细”，按你的贴图大小调
             for (int i = 0; i < SegmentNpcIds.Length; i++)
             {
                 // AABB
@@ -88,7 +88,7 @@ namespace WuDao.Content.Projectiles
                 ? Vector2.Normalize(Projectile.velocity)
                 : new Vector2(Projectile.direction, 0f);
             float rot = dir.ToRotation();
-            SpriteEffects fx = Projectile.spriteDirection == -1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+            SpriteEffects fx = Main.LocalPlayer.direction == 1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
 
             // 以“头”为起点，后续各段按 spacing 反向排布
             float spacing = 44f;

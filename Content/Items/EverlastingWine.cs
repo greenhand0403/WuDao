@@ -8,6 +8,7 @@ namespace WuDao.Content.Items
 {
     public class EverlastingWine : ModItem
     {
+        // TODO: 喝酒扣除生命上限后无法再通过吃生命水晶加去
         public override void SetDefaults()
         {
             Item.width = 20;

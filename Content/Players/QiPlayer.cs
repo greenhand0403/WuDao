@@ -24,8 +24,8 @@ namespace WuDao.Content.Players
         public int QiMaxBase = 0;               // 装备绝学后基础上限 100
         public int QiMaxFromItems = 0;          // 灵芝/仙草永久上限
         public float QiCurrent = 0f;            // 当前气力（float 便于逐帧蓄力/消耗）
-        public float QiRegenStand = 2;
-        public float QiRegenMove = 1;
+        public float QiRegenStand = 5;//临时修改气力再生速度
+        public float QiRegenMove = 2;
         public int QiMax => QiMaxBase + QiMaxFromItems;
 
         // —— 绝学槽中的物品 —— //
@@ -38,9 +38,10 @@ namespace WuDao.Content.Players
         // —— 主动技能冷却 —— //
         public readonly Dictionary<int, uint> perSkillNextUseTick = new();   // key = item.type
         public uint nextGlobalActiveTick = 0;
-        // 公共冷却（2秒）
+        // 公共冷却（1秒）
         public int GlobalActiveCooldownTicks = 60;
-
+        // 被动触发绝学的冷却
+        public readonly Dictionary<int, uint> perPassiveNextProcTick = new();
         // —— 蓄力（龟派气功） —— //
         public bool Charging = false;
         public int ChargeQiSpent = 0;           // 本次按住期间消耗的气力点数
@@ -52,7 +53,8 @@ namespace WuDao.Content.Players
         public bool LingboActive = false;
         private Vector2 _lingboLastWavePos;
         private float _lingboDistanceAcc = 0f;
-        private int LingboQiCost = 15;// 每秒消耗气力
+        private float lingboRate = 0.5f;
+        public int LingboQiCost = 0;// 每秒消耗气力
         // === 天外飞仙（短时突进） ===
         public int FeixianTicks = 0; // >0 表示进行中
         public const int FeixianTotalTicks = 30; // 0.5s
@@ -96,7 +98,18 @@ namespace WuDao.Content.Players
         public bool ShiftActive => shiftActive;
         public int ShiftTrailCount => trailCount;
         public Vector2 GetShiftTrailPos(int i) => trail[i];
+        // —— 被动触发冷却（按物品type区分） —— //
 
+        public bool CanProcPassiveNow(int key, int cooldownTicks)
+        {
+            uint now = Main.GameUpdateCount;
+            return !perPassiveNextProcTick.TryGetValue(key, out uint next) || now >= next;
+        }
+
+        public void StampPassiveProc(int key, int cooldownTicks)
+        {
+            perPassiveNextProcTick[key] = Main.GameUpdateCount + (uint)cooldownTicks;
+        }
         // —— UI 显示条件 —— //
         public bool ShouldShowQiBar()
         {
@@ -312,7 +325,7 @@ namespace WuDao.Content.Players
                     // 每 2 帧在当前位置生成极短命友方投射物（路径伤害；放行已在 TimeStopSystem 里处理）
                     if ((FeixianTicks % 2) == 0)
                     {
-                        int projType = ModContent.ProjectileType<FirstFractalCloneProj>();
+                        // int projType = ModContent.ProjectileType<FirstFractalCloneProj>();
                         int proj = Projectile.NewProjectile(
                             Player.GetSource_Misc("FeixianTrail"),
                             Player.Center,
@@ -431,7 +444,7 @@ namespace WuDao.Content.Players
 
                     if (Main.netMode != NetmodeID.MultiplayerClient) // 只在服务端
                     {
-                        int projType = ModContent.ProjectileType<FirstFractalCloneProj>();
+                        // int projType = ModContent.ProjectileType<FirstFractalCloneProj>();
 
                         int pid = Projectile.NewProjectile(
                             Player.GetSource_Misc("BladeWaltz"),
@@ -522,15 +535,16 @@ namespace WuDao.Content.Players
         // —— 凌波 10% 躲避（对怪近战 & 投射物） —— 
         public override void ModifyHitByNPC(NPC npc, ref Player.HurtModifiers modifiers)
         {
-            if (LingboActive && Main.rand.NextFloat() < 0.10f)
+            if (LingboActive && Main.rand.NextFloat() < lingboRate)
             {
-                modifiers.FinalDamage *= 0f;
-                modifiers.Knockback *= 0f;
+                modifiers.Cancel();
+                // modifiers.FinalDamage *= 0f;
+                // modifiers.Knockback *= 0f;
                 // 给无敌帧
                 Player.immune = true;        // 开启无敌标记
                 Player.immuneTime = 15;      // 0.25 秒
                 // 可加一小段水波/闪避提示
-                Main.NewText("凌波微步：闪避碰撞", Color.SkyBlue);
+                Main.NewText("凌波微步-闪避近战", Color.SkyBlue);
                 // 闪避成功消耗2倍气力
                 QiCurrent -= LingboQiCost * 2;
                 // 气力不足退出状态
@@ -543,15 +557,16 @@ namespace WuDao.Content.Players
         }
         public override void ModifyHitByProjectile(Projectile proj, ref Player.HurtModifiers modifiers)
         {
-            if (LingboActive && Main.rand.NextFloat() < 0.10f && proj.hostile)
+            if (LingboActive && Main.rand.NextFloat() < lingboRate && proj.hostile)
             {
-                modifiers.FinalDamage *= 0f;
-                modifiers.Knockback *= 0f;
+                modifiers.Cancel();
+                // modifiers.FinalDamage *= 0f;
+                // modifiers.Knockback *= 0f;
                 // 给无敌帧
                 Player.immune = true;        // 开启无敌标记
                 Player.immuneTime = 15;      // 0.25 秒
                 // 可加一小段水波/闪避提示
-                Main.NewText("凌波微步：闪避射弹", Color.SkyBlue);
+                Main.NewText("凌波微步-闪避射弹", Color.SkyBlue);
                 // 闪避成功消耗2倍气力
                 QiCurrent -= LingboQiCost * 2;
                 // 气力不足退出状态
@@ -574,7 +589,7 @@ namespace WuDao.Content.Players
 
         public bool CanUseActiveNow(int itemType, int extraCooldownTicks)
         {
-            // 公共 2s 冷却
+            // 公共冷却时间
             if (Main.GameUpdateCount < nextGlobalActiveTick) return false;
 
             // 专属冷却
@@ -608,7 +623,7 @@ namespace WuDao.Content.Players
                     // ★ 华尔兹进行中时，忽略再次按键
                     if (BladeWaltzTicks > 0) return;
 
-                    ji.TryActivate(Player, this); // 主动释放
+                    ji.TryActivate(Player, this); // 尝试主动释放
                 }
 
             }

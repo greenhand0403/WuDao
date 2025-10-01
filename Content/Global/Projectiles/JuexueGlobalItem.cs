@@ -25,11 +25,8 @@ namespace WuDao.Content.Global.Projectiles
             {
                 hp.TryPassiveTriggerOnShoot(player, qi, source, position, velocity, type, damage, knockback);
             }
-            // —— 新被动：九阴白骨爪 —— 
             if (qi.JuexueSlot.ModItem is WhiteBoneClaw wbc)
                 wbc.TryPassiveTriggerOnShoot(player, qi, source, position, velocity, type, damage, knockback);
-
-            // —— 新被动：降龙十八掌 —— 
             if (qi.JuexueSlot.ModItem is XiangLong18 xl)
                 xl.TryPassiveTriggerOnShoot(player, qi, source, position, velocity, type, damage, knockback);
             return base.Shoot(item, player, source, position, velocity, type, damage, knockback);

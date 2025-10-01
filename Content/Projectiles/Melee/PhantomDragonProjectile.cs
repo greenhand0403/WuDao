@@ -29,6 +29,7 @@ namespace WuDao.Content.Projectiles.Melee
             Projectile.aiStyle = 0;
             Projectile.hostile = false;
             Projectile.light = 0.5f;
+            Projectile.DamageType = DamageClass.Melee;
         }
         // 修正碰撞体位置
         public override void ModifyDamageHitbox(ref Rectangle hitbox)
@@ -77,15 +78,14 @@ namespace WuDao.Content.Projectiles.Melee
                 : new Vector2(Projectile.direction, 0f);
             float rot = dir.ToRotation();
             SpriteEffects fx = Projectile.spriteDirection == -1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
-
+            // 幻影龙帧尺寸40x46，中间躯干部分高度只有20
             // 以“头”为起点，后续各段按 spacing 反向排布
-            float spacing = 6f;
-            Vector2 step = -dir * spacing;
             Vector2 segPos = Projectile.Top;
 
             for (int i = 0; i < 4; i++)
             {
                 Rectangle frame = new Rectangle(0, i * 46, tex.Width, 46);
+                // 特殊处理最后一段尾巴，提前补上后腿
                 if (i == 3)
                 {
                     Rectangle frame1 = new Rectangle(0, 1 * 46, tex.Width, 46);
