@@ -1,4 +1,4 @@
-// 天外飞仙：50 气，移除大部分减益 + 短时突进（无敌），并发出飞剑占位弹幕。
+// 天外飞仙：60 气，移除大部分减益 + 短时突进（无敌），并发出飞剑弹幕。
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
@@ -12,7 +12,7 @@ namespace WuDao.Content.Juexue.Active
     public class Feixian : JuexueItem
     {
         public override bool IsActive => true;
-        public override int QiCost => 80;
+        public override int QiCost => 60;
         public override int SpecialCooldownTicks => 60 * 60; // 60s
         public const int FeixianFrameIndex = 9;
         protected override bool OnActivate(Player player, QiPlayer qi)
@@ -34,6 +34,7 @@ namespace WuDao.Content.Juexue.Active
             qi.FeixianTicks = QiPlayer.FeixianTotalTicks;// ★ 启动计时
             if (!Main.dedServ)
             {
+                // 显示技能图标虚影
                 qi.TriggerJuexueGhost(FeixianFrameIndex, durationTick: 60, scale: 1.1f, offset: new Vector2(0, -20));
             }
             // 3) 启动“飞仙定向冻结”：只冻结 NPC 与敌对弹幕，放行本玩家友方弹幕

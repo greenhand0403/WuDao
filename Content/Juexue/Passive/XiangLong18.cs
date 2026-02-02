@@ -34,7 +34,7 @@ namespace WuDao.Content.Juexue.Passive
             qi.XiangLongCount++;
             float mult = 1f;
             if (qi.XiangLongCount == 8) mult = 8f;  // 800%
-            if (qi.XiangLongCount == 10) { mult = 10f; qi.XiangLongCount = 0; } // 1000% then reset
+            if (qi.XiangLongCount == 18) { mult = 18f; qi.XiangLongCount = 0; } // 1000% then reset
 
             // 计算境界伤害和射弹速度加成
             Helpers.BossProgressBonus progressBonus = Helpers.BossProgressPower.Get(player);

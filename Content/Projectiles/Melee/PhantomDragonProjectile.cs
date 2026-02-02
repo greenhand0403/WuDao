@@ -9,6 +9,7 @@ using Terraria.DataStructures; // TextureAssets
 
 namespace WuDao.Content.Projectiles.Melee
 {
+    // TODO: 幻影龙缺少动画
     public class PhantomDragonProjectile : ModProjectile
     {
         public override string Texture => "Terraria/Images/Projectile_0";
