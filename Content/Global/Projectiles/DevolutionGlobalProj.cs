@@ -7,7 +7,7 @@ using WuDao.Content.Players;
 
 namespace WuDao.Content.Global.Projectiles
 {
-    // 压制力场削弱敌方射弹
+    // 压制力场：削弱敌方射弹
     public class DevolutionGlobalProj : GlobalProjectile
     {
         public override void ModifyHitPlayer(Projectile proj, Player target, ref Player.HurtModifiers modifiers)

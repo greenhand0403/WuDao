@@ -5,6 +5,9 @@ using WuDao.Content.Systems;
 
 namespace WuDao.Content.Items
 {
+    /// <summary>
+    /// 馒头：召唤流浪乞丐 NPC
+    /// </summary>
     public class SteamedBun : ModItem
     {
         public override void SetDefaults()
@@ -29,7 +32,7 @@ namespace WuDao.Content.Items
                 return false;
             }
             BeggarSystem.SpawnBeggarNear(player);
-            Main.NewText("你招来了流浪乞丐。", Microsoft.Xna.Framework.Color.LightGreen);
+            Main.NewText("流浪乞丐正在附近", Microsoft.Xna.Framework.Color.LightGreen);
             return true;
         }
     }

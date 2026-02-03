@@ -5,6 +5,7 @@ using Terraria.ModLoader;
 namespace WuDao.Content.Global
 {
     /// <summary>
+    /// 春秋蝉的获取方式
     /// 处理“拾取萤火虫→20% 转化为春秋蝉、且春秋蝉限一只”的逻辑
     /// </summary>
     public class RewinderCicadasPickupGlobal : GlobalItem

@@ -8,7 +8,7 @@ using WuDao.Content.Players;
 namespace WuDao.Content.Items
 {
     /// <summary>
-    /// 需要记录食物种类 ItemID.Sets.IsFood[Type] = true
+    /// 食谱：需要记录食物种类 ItemID.Sets.IsFood[Type] = true
     /// </summary>
     class FoodLogItem : ModItem
     {

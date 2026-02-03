@@ -6,6 +6,9 @@ using Microsoft.Xna.Framework;
 
 namespace WuDao.Content.Items
 {
+    /// <summary>
+    /// 静止游鱼：冻结时间，只有玩家能移动，但是不能攻击
+    /// </summary>
     public class TimeStopItem : ModItem
     {
         public override void SetDefaults()

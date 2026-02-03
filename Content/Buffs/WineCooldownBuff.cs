@@ -6,7 +6,7 @@ namespace WuDao.Content.Buffs
 {
     public class WineCooldownBuff : ModBuff
     {
-        public override string Texture => $"Terraria/Images/Buff_{BuffID.Burning}";
+        public override string Texture => $"Terraria/Images/Buff_{BuffID.Tipsy}";
         public override void SetStaticDefaults()
         {
             // DisplayName.SetDefault("永生之酒冷却");

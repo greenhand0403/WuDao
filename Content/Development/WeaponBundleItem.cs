@@ -8,6 +8,7 @@ using Terraria.Audio;
 
 namespace WuDao.Content.Development
 {
+    // 开局礼包物品
     public enum BundleCategory
     {
         Weapons,

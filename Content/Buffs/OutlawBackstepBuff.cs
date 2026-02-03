@@ -4,7 +4,7 @@ using Terraria.ID;
 
 namespace WuDao.Content.Buffs
 {
-    // 霰弹枪后跳冷却
+    // 法外狂徒霰弹枪 后跳冷却
     public class OutlawBackstepBuff : ModBuff
     {
         public override string Texture => $"WuDao/Content/Items/Weapons/Ranged/TheOutlaw";

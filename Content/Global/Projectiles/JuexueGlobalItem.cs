@@ -8,7 +8,7 @@ using WuDao.Content.Juexue.Passive;
 
 namespace WuDao.Content.Global.Projectiles
 {
-    // 拦截所有武器发射射弹：用于被动绝学“在发射射弹的同时随机触发”
+    // 拦截所有武器发射射弹：用于被动绝学 “在发射射弹的同时随机触发绝学对应的额外射弹”
     public class JuexueGlobalItem : GlobalItem
     {
         public override bool InstancePerEntity => false;

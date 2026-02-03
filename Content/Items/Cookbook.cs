@@ -7,6 +7,9 @@ using System.Collections.Generic;
 
 namespace WuDao.Content.Items
 {
+    /// <summary>
+    /// 菜谱
+    /// </summary>
     public class Cookbook : ModItem
     {
         public override void SetDefaults()

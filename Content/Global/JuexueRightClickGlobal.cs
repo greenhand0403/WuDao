@@ -7,6 +7,7 @@ using WuDao.Content.Juexue.Base;
 
 namespace WuDao.Content.Juexue
 {
+    // 右键自动装备绝学到绝学栏的物品
     public class JuexueRightClickGlobal : GlobalItem
     {
         public override bool AppliesToEntity(Item entity, bool lateInstantiation)

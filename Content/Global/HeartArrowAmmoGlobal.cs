@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework;
 
 namespace WuDao.Content.Global
 {
+    // 丘比特弓：将木箭转化为心箭
     public class HeartArrowAmmoGlobal : GlobalItem
     {
         public override bool InstancePerEntity => false;
@@ -73,7 +74,7 @@ namespace WuDao.Content.Global
             }
         }
     }
-
+    // 拾取“心”时，若“心灵宝石”已装备，则额外回复 2 点生命
     public class HeartPickupGlobal : GlobalItem
     {
         public override bool OnPickup(Item item, Player player)

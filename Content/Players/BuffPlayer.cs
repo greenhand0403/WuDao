@@ -242,14 +242,14 @@ namespace WuDao.Content.Players
             // 「笨拙」的暴击已经在 PostUpdateBuffs 里用 Generic 处理，这里可不做额外处理
             // 这里保留钩子，方便未来扩展。
         }
-        public override void ModifyItemScale(Item item, ref float scale)
-        {
-            if (Player.HasBuff<SacrificialBranding>()
-                && item.DamageType == DamageClass.Melee)
-            {
-                scale *= 1.20f;
-            }
-        }
+        // public override void ModifyItemScale(Item item, ref float scale)
+        // {
+        //     if (Player.HasBuff<SacrificialBranding>()
+        //         && item.DamageType == DamageClass.Melee)
+        //     {
+        //         scale *= 1.20f;
+        //     }
+        // }
         public override void ModifyHitByNPC(NPC npc, ref Player.HurtModifiers modifiers)
         {
             if (Player.HasBuff<SacrificialBranding>()

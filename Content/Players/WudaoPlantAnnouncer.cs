@@ -3,10 +3,10 @@ using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using WuDao.Content.Systems;
 using System;
-using WuDao.Systems;
 
 namespace WuDao.Content.Players
 {
+    // TODO: 在出生点下方生成许愿井
     public class WudaoPlantAnnouncer : ModPlayer
     {
         public override void OnEnterWorld()

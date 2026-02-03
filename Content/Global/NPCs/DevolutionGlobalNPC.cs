@@ -6,6 +6,7 @@ using WuDao.Content.Players;
 
 namespace WuDao.Content.Global.NPCs
 {
+    // 压制力场：削弱敌怪和射弹伤害的效果
     public class DevolutionGlobalNPC : GlobalNPC
     {
         static bool AnyAuraHolderAffecting(NPC npc)

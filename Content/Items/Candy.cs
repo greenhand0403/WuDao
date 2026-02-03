@@ -7,6 +7,9 @@ using WuDao.Content.Buffs;
 
 namespace WuDao.Content.Items
 {
+    /// <summary>
+    /// 喜糖：获得小量的再生/敏捷/幸运（自定义 Buff，避免跨版本 ID 差异）
+    /// </summary>
     public class Candy : ModItem
     {
         public override void SetDefaults()

@@ -5,6 +5,9 @@ using WuDao.Content.Players;
 
 namespace WuDao.Content.Items
 {
+    /// <summary>
+    /// 异果：增加气力上限10，只能使用5次
+    /// </summary>
     public class PassionFruit : ModItem
     {
         public override void SetDefaults()

@@ -8,6 +8,8 @@ using WuDao.Content.Players;
 
 namespace WuDao.Content.DrawLayers
 {
+    //
+    // 乾坤大挪移：玩家残影绘制
     public class QiankunShiftAfterimageLayer : PlayerDrawLayer
     {
         // 放在玩家主体之后，这样残影在后、玩家在前（更自然）
@@ -66,4 +68,5 @@ namespace WuDao.Content.DrawLayers
             );
         }
     }
+    //
 }

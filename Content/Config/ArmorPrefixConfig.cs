@@ -2,6 +2,7 @@ using Terraria.ModLoader.Config;
 
 namespace WuDao.Content.Config
 {
+    // 盔甲五行系统
     public class ArmorPrefixConfig : ModConfig
     {
         public override ConfigScope Mode => ConfigScope.ServerSide;

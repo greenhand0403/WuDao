@@ -6,6 +6,7 @@ using WuDao.Content.Items.Weapons.Melee;
 
 namespace WuDao.Content.Global.Projectiles
 {
+    // 彩虹球杆：用于标记“是否来自彩虹球杆”的弹体
     public class GolfBallMeleeGlobal : GlobalProjectile
     {
         public override bool InstancePerEntity => true;

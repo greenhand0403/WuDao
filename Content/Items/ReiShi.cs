@@ -5,7 +5,10 @@ using WuDao.Content.Players;
 
 namespace WuDao.Content.Items
 {
-    public class ReiShi: ModItem
+    /// <summary>
+    /// 灵芝：增加气力上限50，只能使用一次
+    /// </summary>
+    public class ReiShi : ModItem
     {
         public override void SetDefaults()
         {

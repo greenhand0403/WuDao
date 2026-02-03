@@ -9,6 +9,7 @@ using Terraria.UI;
 
 namespace WuDao.Content.Development
 {
+    // 开局礼包选择UI菜单
     public class BundleSelectUI : UIState
     {
         public Action<BundleCategory> OnSelect;

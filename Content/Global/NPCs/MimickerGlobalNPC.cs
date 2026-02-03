@@ -8,6 +8,7 @@ using WuDao.Content.Systems;
 
 namespace WuDao.Content.Global.NPCs
 {
+    // 模仿者：击杀敌怪获取它的射弹
     // 记录“最后一次受到来自模仿者弹体的伤害”的NPC
     public class MimickerGlobalNPC : GlobalNPC
     {

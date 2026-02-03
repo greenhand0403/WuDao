@@ -5,6 +5,9 @@ using WuDao.Content.Buffs;
 
 namespace WuDao.Content.Items
 {
+    /// <summary>
+    /// 凝胶瓶：灌注近战武器鞭子等，对敌怪造成凝胶溅射
+    /// </summary>
     class GelFlask : ModItem
     {
         public override string Texture => $"Terraria/Images/Item_{ItemID.FlaskofIchor}";

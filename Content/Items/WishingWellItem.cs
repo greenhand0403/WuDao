@@ -7,7 +7,7 @@ using WuDao.Content.Tiles;
 namespace WuDao.Content.Items
 {
     /// <summary>
-    /// 复制宝藏袋或装备 或者 生成BOSS
+    /// 家具，可以复制宝藏袋或装备 或者 生成BOSS
     /// </summary>
     public class WishingWellItem : ModItem
     {

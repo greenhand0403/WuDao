@@ -5,6 +5,7 @@ using WuDao.Content.Buffs;
 
 namespace WuDao.Content.Global.NPCs
 {
+    // 凝胶溅射：减速效果、放大燃烧伤害
     class GelGlobalNPC : GlobalNPC
     {
         public override bool InstancePerEntity => true;

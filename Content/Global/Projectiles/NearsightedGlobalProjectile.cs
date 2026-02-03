@@ -5,7 +5,7 @@ using Terraria.DataStructures;
 
 namespace WuDao.Content.Global.Projectiles
 {
-    // 用于给所有射弹记录“发射源NPC”的全局组件
+    // 近视眼镜：用于给所有射弹记录“发射源NPC”的全局组件
     public class NearsightedGlobalProjectile : GlobalProjectile
     {
         public int SourceNPC = -1;   // 记录发射者NPC的 whoAmI

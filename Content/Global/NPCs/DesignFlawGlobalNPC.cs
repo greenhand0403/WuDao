@@ -7,7 +7,7 @@ using WuDao.Content.Players;
 
 namespace WuDao.Content.Global.NPCs
 {
-
+    // 败笔：击败 BOSS 后获得额外的战利品
     // 全局 NPC：在 NPC 死亡时追加一次或多次“原版掉落表”的执行
     public class DesignFlawGlobalNPC : GlobalNPC
     {

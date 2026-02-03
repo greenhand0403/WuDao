@@ -8,7 +8,6 @@ namespace WuDao.Content.Items
 {
     public class EverlastingWine : ModItem
     {
-        // TODO: 喝酒扣除生命上限后无法再通过吃生命水晶加去。触发复活后，生命再生好像变为0了，不会自然再生恢复生命
         public override void SetDefaults()
         {
             Item.width = 20;

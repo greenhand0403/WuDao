@@ -6,7 +6,8 @@ using Terraria.ModLoader;
 
 namespace WuDao.Content.DrawLayers
 {
-    // 在人物之上再画一层绝学技能虚影
+    // TODO: 图标应当承担技能冷却指示器的功能，提示玩家绝学技能正在冷却中
+    // 绝学系统：在人物之上再画一层绝学技能图标的虚影
     public class JuexueGhostLayer : PlayerDrawLayer
     {
         public override Position GetDefaultPosition() => new AfterParent(PlayerDrawLayers.ArmOverItem);

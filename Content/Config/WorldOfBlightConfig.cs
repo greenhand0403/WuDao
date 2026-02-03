@@ -7,7 +7,7 @@ using Terraria.ModLoader.Config;
 
 namespace WuDao.Content.Config
 {
-    // TODO: 翻译世界之毒配置
+    // 世界之毒系统
     // ================================
     // 1) 配置：在模组配置菜单可调 人间之毒 人生病了产生白细胞，地球生病了产生生物，活着的都是勇者，每时每刻都在承受世界之毒。随游戏进度增强。
     // ================================
@@ -15,44 +15,27 @@ namespace WuDao.Content.Config
     {
         public override ConfigScope Mode => ConfigScope.ServerSide; // 影响玩法，放到服务端配置
 
-
-        [Label("启用世界之毒全局效果")]
         [DefaultValue(true)]
         public bool Enabled { get; set; }
 
-
-        [Label("每个进度的伤害减少(%)")]
-        [Tooltip("每达成一个进度，玩家造成的所有伤害按百分比减少。范围 0%~10%。默认 4%。")]
         [Range(0f, 0.10f)]
         [Increment(0.01f)]
         [DefaultValue(0.04f)]
         public float DamagePenaltyPerStep { get; set; }
 
-
-        [Label("每个进度的生命再生减少(每秒)")]
-        [Tooltip("每达成一个进度，玩家生命再生每秒减少的数值。范围 0~20。默认 4。提示：Terraria内部以每秒*2结算，代码中会自动换算。")]
         [Range(0, 20)]
         [DefaultValue(4)]
         public int LifeRegenPenaltyPerStep { get; set; }
 
-
-        [Label("每个进度的防御减少")]
-        [Tooltip("每达成一个进度，玩家防御减少的数值。范围 0~30。默认 4。")]
         [Range(0, 30)]
         [DefaultValue(4)]
         public int DefensePenaltyPerStep { get; set; }
 
-
-        [Label("伤害最小倍率下限")]
-        [Tooltip("为避免伤害被削成0，这里设置一个下限。例如 0.1 表示最低保留10%伤害。设置为0则不设下限。")]
         [Range(0f, 1f)]
         [Increment(0.05f)]
         [DefaultValue(0f)]
         public float DamageFloorMultiplier { get; set; }
 
-
-        [Label("防止本DEBUFF把生命再生降为负数")]
-        [Tooltip("勾选后：世界之毒在削减生命再生时，最多把正向生命再生削到 0，不会由本效果导致负数。默认启用。")]
         [DefaultValue(true)]
         public bool ClampLifeRegenNonNegative { get; set; }
     }

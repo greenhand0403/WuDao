@@ -8,6 +8,7 @@ using WuDao.Content.Players;
 
 namespace WuDao.Content.Global.Projectiles
 {
+    // 三个回旋镖饰品：穿墙和返程效果
     public class BoomerangGlobalProjectile : GlobalProjectile
     {
         public override bool InstancePerEntity => true;
