@@ -9,6 +9,7 @@ using Terraria.ID;
 // int arrowOrdered = ProjectileSets.ArrowSet.Get(SelectionMode.Ordered, 3);
 // 循环取第 15 个箭（超出长度会循环回去）
 // int arrowLoop = ProjectileSets.ArrowSet.Get(SelectionMode.Loop, 15);
+// 原版物品、射弹的重新归类集合
 namespace WuDao.Common
 {
     public enum SelectionMode

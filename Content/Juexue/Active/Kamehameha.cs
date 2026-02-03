@@ -12,7 +12,7 @@ namespace WuDao.Content.Juexue.Active
 {
     public class Kamehameha : JuexueItem
     {
-        public override int QiCost => 2; // 蓄力期间每帧-1气
+        public override int QiCost => 1; // 蓄力期间每帧-1气
         public override int SpecialCooldownTicks => 60 * 120; // 2 分钟
         public const int KamehamehaFrameIndex = 4;
         // 龟派气功不在 TryActivate 中直接释放，由 QiPlayer.ProcessTriggers 处理按住/松开

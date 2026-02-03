@@ -12,7 +12,6 @@ using WuDao.Content.Buffs;
 
 namespace WuDao.Content.Mounts
 {
-    // TODO: 坐骑持续时间问题：静止不对的话，坐骑会在一段时间后自动取消乘坐，怎么回事？
     public class FlyingToiletMount : ModMount
     {
         // 我们把玩家专属的“轮播状态”放到 _mountSpecificData 里（tML 官方建议做法）

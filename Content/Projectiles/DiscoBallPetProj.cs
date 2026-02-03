@@ -13,7 +13,8 @@ namespace WuDao.Content.Projectiles
     // 3) 宠物弹幕本体：参考猩红之心移动逻辑，加入“圆锥方向光 + 颜色循环 + 缓慢旋转”
     public class DiscoBallPetProj : ModProjectile
     {
-        public override string Texture => $"WuDao/Content/Projectiles/DiscoBallPetProj";
+        // public override string Texture => $"WuDao/Content/Projectiles/DiscoBallPetProj";
+        public override string Texture => "Terraria/Images/Item_" + ItemID.DiscoBall;
         // 配置参数（可根据需要调节/做成 ModConfig）
         private const int BeamLengthTiles = 30;      // 期望照亮 45 格（~720 像素）
         private const int BeamStepTiles = 2;         // 取样步长（每 4 格一个采样点）
@@ -52,7 +53,6 @@ namespace WuDao.Content.Projectiles
             Projectile.tileCollide = false;
             Projectile.ignoreWater = true;
             Projectile.netImportant = true;
-            AIType = 0;
         }
 
         public override void AI()
@@ -67,6 +67,8 @@ namespace WuDao.Content.Projectiles
             {
                 Projectile.timeLeft = 2;
             }
+
+            Projectile.ai[0] += RotationSpeed;
 
             // ---- (A) 上方&左右轻微移动 ----
             // 头顶基准高度：略高于玩家 64px，可按需求调
@@ -98,9 +100,10 @@ namespace WuDao.Content.Projectiles
                     (Projectile.velocity.X >= 0f) ? 1 : -1;
 
             // 自转决定主光束方向（保留）
-            Projectile.rotation += RotationSpeed;
-            Vector2 beamDir = Projectile.rotation.ToRotationVector2();
-
+            // Projectile.rotation += RotationSpeed;
+            // Vector2 beamDir = Projectile.rotation.ToRotationVector2();
+            Vector2 beamDir = Projectile.ai[0].ToRotationVector2();
+            
             // —— 颜色直接跳色 —— //
             int total = DiscoColors.Length;
             int seg = (int)(Main.GameUpdateCount / ColorHoldTicks) % total;

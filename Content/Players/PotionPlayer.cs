@@ -145,21 +145,21 @@ namespace WuDao.Content.Players
             }
         }
 
-        private bool CanAutoDrinkEverlastingWine()
-        {
-            // 需要背包中存在酒，且没有酒的冷却 Buff
-            if (Player.HasBuff(ModContent.BuffType<WineCooldownBuff>()))
-                return false;
+        // private bool CanAutoDrinkEverlastingWine()
+        // {
+        //     // 需要背包中存在酒，且没有酒的冷却 Buff
+        //     if (Player.HasBuff(ModContent.BuffType<WineCooldownBuff>()))
+        //         return false;
 
-            // 查找是否有酒
-            int wineType = ModContent.ItemType<EverlastingWine>();
-            for (int i = 0; i < 58; i++)
-            {
-                if (Player.inventory[i].type == wineType && Player.inventory[i].stack > 0)
-                    return true;
-            }
-            return false;
-        }
+        //     // 查找是否有酒
+        //     int wineType = ModContent.ItemType<EverlastingWine>();
+        //     for (int i = 0; i < 58; i++)
+        //     {
+        //         if (Player.inventory[i].type == wineType && Player.inventory[i].stack > 0)
+        //             return true;
+        //     }
+        //     return false;
+        // }
 
         /// <summary>
         /// 消耗一瓶永生之酒，并根据需要应用效果。

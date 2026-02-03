@@ -13,8 +13,8 @@ namespace WuDao.Content.Juexue.Active
 {
     public class TenThousandSwords : JuexueItem
     {
-        public override int QiCost => 200;
-        public override int SpecialCooldownTicks => 60 * 120; // 2 分钟
+        public override int QiCost => 90;
+        public override int SpecialCooldownTicks => 60 * 60; // 1 分钟
         public const int TenThousandSwordsFrameIndex = 5;
         protected override bool OnActivate(Player player, QiPlayer qi)
         {
@@ -23,7 +23,7 @@ namespace WuDao.Content.Juexue.Active
 
             int count = Main.rand.Next(12, 20);
             float vnum = 5f;
-            int damage = Helpers.BossProgressPower.GetUniqueBossCount() * 50;
+            int damage = 560;//Helpers.BossProgressPower.GetUniqueBossCount() * 50;
             for (int i = 0; i < count; i++)
             {
                 // 随机边缘
@@ -35,7 +35,7 @@ namespace WuDao.Content.Juexue.Active
                     2 => new Vector2(Main.rand.Next(rect.Left, rect.Right), rect.Top),      // 上
                     _ => new Vector2(Main.rand.Next(rect.Left, rect.Right), rect.Bottom)    // 下
                 };
-                Vector2 v = (mouse - spawn).SafeNormalize(Vector2.UnitX) * vnum * Main.rand.NextFloat(1.2f, 1.8f);
+                Vector2 v = (mouse - spawn).SafeNormalize(Vector2.UnitX) * vnum * Main.rand.NextFloat(1.4f, 2.2f);
 
                 int projType = ModContent.ProjectileType<TenThousandSwordsProj>();
                 int proj = Projectile.NewProjectile(player.GetSource_ItemUse(Item), spawn, v, projType, damage, 2f, player.whoAmI);

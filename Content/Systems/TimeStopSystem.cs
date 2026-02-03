@@ -7,7 +7,7 @@ namespace WuDao.Content.Systems
 {
     // TODO: 拆分一下这些类
     public enum FreezeScope { None, Global, Feixian }
-    // 静止游鱼 冻结时间的辅助类
+    // 静止游鱼和天外飞行 冻结时间的辅助类
     public static class TimeStopSystem
     {
         public static bool IsFrozen = false;

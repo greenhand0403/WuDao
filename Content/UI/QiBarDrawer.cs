@@ -5,6 +5,7 @@ using Terraria.GameContent;
 
 namespace WuDao.Content.UI
 {
+    // 气力系统 气力条好绘制
     public static class QiBarDrawer
     {
         public static void DrawSimpleBar(Rectangle rect, float value, int max, string label)

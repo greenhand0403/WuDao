@@ -175,7 +175,7 @@ namespace WuDao.Content.Players
                 float dmgBonus = 1f + 0.02f * r; // 每稀有度 +2% 伤害
                 Player.GetDamage(DamageClass.Generic) *= dmgBonus;
 
-                // 饰品稀有度总和 * 0.5 防御
+                // 饰品稀有度总和 * 1 防御
                 int sum = 0;
                 for (int i = 3; i < 10 + Player.extraAccessorySlots; i++)
                 {
@@ -183,7 +183,7 @@ namespace WuDao.Content.Players
                     if (acc != null && !acc.IsAir && acc.accessory)
                         sum += Math.Max(0, acc.rare);
                 }
-                Player.statDefense += (int)Math.Floor(sum * 0.5f);
+                Player.statDefense += (int)Math.Floor(sum * 1f);
             }
 
             // —— 资本主义：计算总金币（背包 + 4 个存钱容器）

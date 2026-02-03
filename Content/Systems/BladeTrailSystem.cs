@@ -3,6 +3,7 @@ using WuDao.Common;
 
 namespace WuDao.Content.Systems
 {
+    // 染色刀光配置
     public class BladeTrailSystem : ModSystem
     {
         public override void OnWorldLoad()

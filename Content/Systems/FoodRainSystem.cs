@@ -34,7 +34,7 @@ namespace WuDao.Content.Systems
                 PostWinDelay = 0;
                 Owner = p.whoAmI;
                 if (Main.netMode != NetmodeID.Server)
-                    Main.NewText("食物海涌来啦！躲开红光，吃下绿光！", 255, 180, 80);
+                    Main.NewText("食物从天而降！躲开红光，吃下绿光！", 255, 180, 80);
             }
         }
 

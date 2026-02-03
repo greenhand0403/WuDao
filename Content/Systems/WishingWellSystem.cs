@@ -9,7 +9,7 @@ using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using WuDao.Content.Tiles;
 
-namespace WuDao.Systems
+namespace WuDao.Content.Systems
 {
     public class WishingWellSystem : ModSystem
     {

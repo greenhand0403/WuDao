@@ -9,17 +9,17 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using WuDao.Content.Players;
 using WuDao.Content.Systems;
-using WuDao.Systems;
 using WuDao.Common.Rendering;
 
 namespace WuDao
 {
+	// 染色刀光
 	// 共享顶点缓冲，避免每个 proj 都 new List
 	public static class BladeTrailScratchBuffer
 	{
 		public static readonly List<BladeTrailRenderer.V> Verts = new();
 	}
-	// 把消息枚举放到一个公共位置，避免到处重复定义
+	// 自动喝药 把消息枚举放到一个公共位置，避免到处重复定义
 	public enum MessageType : byte
 	{
 		SyncLifePenalty
@@ -27,6 +27,7 @@ namespace WuDao
 	// Please read https://github.com/tModLoader/tModLoader/wiki/Basic-tModLoader-Modding-Guide#mod-skeleton-contents for more information about the various files in a mod.
 	public class WuDao : Mod
 	{
+		// 自动喝药
 		public override void HandlePacket(BinaryReader reader, int whoAmI)
 		{
 			MessageType msg = (MessageType)reader.ReadByte();
@@ -61,6 +62,7 @@ namespace WuDao
 					}
 			}
 		}
+		// 厨艺和美味系统
 		/// <summary>
 		/// var wudao = ModLoader.GetMod("WuDao");
 		/// <br>int made = (int)(wudao?.Call("GetCookbookMadeCount", Main.LocalPlayer) ?? 0);</br>
@@ -124,6 +126,7 @@ namespace WuDao
 					CuisineSystem.RegisterHintMany(arr, hint);
 				return null;
 			}
+			// 许愿井
 			static object RegisterWellBossBag(object[] args)
 			{
 				if (args.Length >= 3 && args[0] is string key && args[1] is int bossID && args[2] is int itemType)

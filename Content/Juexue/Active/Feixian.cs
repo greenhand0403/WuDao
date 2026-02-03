@@ -12,8 +12,8 @@ namespace WuDao.Content.Juexue.Active
     public class Feixian : JuexueItem
     {
         public override bool IsActive => true;
-        public override int QiCost => 60;
-        public override int SpecialCooldownTicks => 60 * 60; // 60s
+        public override int QiCost => 45;
+        public override int SpecialCooldownTicks => 30 * 60; // 60s
         public const int FeixianFrameIndex = 9;
         protected override bool OnActivate(Player player, QiPlayer qi)
         {
@@ -31,6 +31,7 @@ namespace WuDao.Content.Juexue.Active
 
             // 2) 记录目标点 & 启动直刺计时（在 QiPlayer.PreUpdate 里推进+无敌）
             qi.FeixianTarget = Main.MouseWorld;// ★ 记录目标
+            // 在QiPlayer.PreUpdate 里推进+无敌
             qi.FeixianTicks = QiPlayer.FeixianTotalTicks;// ★ 启动计时
             if (!Main.dedServ)
             {

@@ -15,8 +15,8 @@ namespace WuDao.Content.Juexue.Passive
     public class WhiteBoneClaw : JuexueItem
     {
         public override bool IsActive => false;
-        public const int Cost = 10;
-        public const float Chance = 0.35f; // 可按需调整：被动触发率
+        public const int Cost = 15;
+        public const float Chance = 0.30f; // 被动触发率
         public const int WhiteBoneClawFrameIndex = 12;
         // 九阴白骨爪（被动）：复刻原版“暗影爪(964)”生成逻辑
         public void TryPassiveTriggerOnShoot(Player player, QiPlayer qi, EntitySource_ItemUse_WithAmmo src,
@@ -54,7 +54,7 @@ namespace WuDao.Content.Juexue.Passive
 
             // —— 生成原版 964 号弹幕（友方暗影爪） —— //
             int projType = ProjectileID.InsanityShadowFriendly;
-            int projDamage = (int)(dmg * 0.9f) + 70 * Helpers.BossProgressPower.GetUniqueBossCount();
+            int projDamage = 201;//(int)(dmg * 0.9f) + 70 * Helpers.BossProgressPower.GetUniqueBossCount();
             float knockBack = 0f;   // 原版就是 0
             Projectile.NewProjectile(
                 src,

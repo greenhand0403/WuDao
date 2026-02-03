@@ -24,7 +24,7 @@ namespace WuDao.Content.Juexue.Passive
             if (Main.rand.NextFloat() > Chance) return;
             if (!qi.TrySpendQi(Cost)) return;
 
-            int projDamage = (int)(damage * 0.9f) + 6 * Helpers.BossProgressPower.GetUniqueBossCount();
+            int projDamage = 176;//(int)(damage * 0.9f) + 6 * Helpers.BossProgressPower.GetUniqueBossCount();
             int projType = ProjectileID.FlowerPowPetal;
             Vector2 mouse = Main.MouseWorld;
             int count = Main.rand.Next(6, 13);

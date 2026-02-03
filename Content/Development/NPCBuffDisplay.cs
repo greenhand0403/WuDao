@@ -4,9 +4,9 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent;
 
-namespace WuDao.Common.GlobalNPCs
+namespace WuDao.Content.Development
 {
-    // 在敌怪头顶绘制 buff 图标
+    // 开发工具类：在敌怪头顶绘制 buff 图标
     public class NPCBuffDisplay : GlobalNPC
     {
         public override bool InstancePerEntity => true;

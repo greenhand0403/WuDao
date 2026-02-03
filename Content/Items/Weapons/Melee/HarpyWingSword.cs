@@ -90,7 +90,7 @@ namespace WuDao.Content.Items.Weapons.Melee
         public override void ModifyItemScale(Player player, ref float scale)
         {
             if (IsAirborne(player))
-                scale *= 1.10f; // 空中挥砍体积 +10%
+                scale *= 1.3f; // 空中挥砍体积 +30%
         }
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
@@ -100,9 +100,9 @@ namespace WuDao.Content.Items.Weapons.Melee
 
             if (IsAirborne(player))
             {
-                speedMult = 1.1f; // 飞行速度 +10%
-                scaleMult = 1.1f; // 尺寸     +10%（需要自行在弹幕上读 scale）
-                dmgMult = 1.10f; // 伤害     +10%
+                speedMult = 1.3f; // 飞行速度 +30%
+                scaleMult = 1.3f; // 尺寸     +30%（需要自行在弹幕上读 scale）
+                dmgMult = 1.3f; // 伤害     +30%
             }
 
             // 生成射弹（你也可以直接 return false 并手动 NewProjectile 完全自定义）
@@ -129,10 +129,10 @@ namespace WuDao.Content.Items.Weapons.Melee
         public override void AddRecipes()
         {
             CreateRecipe()
-                .AddIngredient(ItemID.HarpyWings, 5)
-                .AddIngredient(ItemID.CopperShortsword, 1)
-                .AddIngredient(ItemID.Umbrella, 1)
-                .AddTile(TileID.Anvils);
+                .AddIngredient(ItemID.HarpyWings, 2)
+                .AddIngredient(ItemID.Cloud, 10)
+                .AddIngredient(ItemID.EnchantedSword, 1)
+                .AddTile(TileID.SkyMill);
         }
     }
 }

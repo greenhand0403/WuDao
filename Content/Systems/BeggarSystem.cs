@@ -5,6 +5,7 @@ using WuDao.Content.Global.NPCs;
 
 namespace WuDao.Content.Systems
 {
+    // 绝学NPC：流浪乞丐
     public class BeggarSystem : ModSystem
     {
         private bool lastDay = true;

@@ -320,7 +320,7 @@ namespace WuDao.Content.Players
                     Player.noKnockback = true;
 
                     Player.velocity = dir * speed;
-                    int damage = 40 * Helpers.BossProgressPower.GetUniqueBossCount();
+                    int damage = 240;// * Helpers.BossProgressPower.GetUniqueBossCount();
 
                     // 每 2 帧在当前位置生成极短命友方投射物（路径伤害；放行已在 TimeStopSystem 里处理）
                     if ((FeixianTicks % 2) == 0)
@@ -439,7 +439,7 @@ namespace WuDao.Content.Players
                     // 方向与速度
                     var dir = (targetPos - spawn).SafeNormalize(Vector2.UnitX);
                     float speed = 14f; // 速度越高，视觉越“快斩”
-                    int damage = 80 * (1 + Helpers.BossProgressPower.GetUniqueBossCount());
+                    int damage = 115;//80 * (1 + Helpers.BossProgressPower.GetUniqueBossCount());
                     float knockback = 3f;
 
                     if (Main.netMode != NetmodeID.MultiplayerClient) // 只在服务端

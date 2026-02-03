@@ -147,8 +147,8 @@ Items: {
 	}
 
 	HarpyWingSword: {
-		DisplayName: 翼剑
-		Tooltip: 发射鸟妖之羽，在空中作战能力更强
+		DisplayName: 飞羽剑
+		Tooltip: 发射鸟妖之羽，空中作战能力更强
 	}
 
 	SmokeGrenade: {

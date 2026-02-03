@@ -11,7 +11,7 @@ namespace WuDao.Content.Juexue.Active
     public class BladeWaltz : JuexueItem
     {
         public override bool IsActive => true;
-        public override int QiCost => 99;
+        public override int QiCost => 90;
         public override int SpecialCooldownTicks => 60 * 120; // 120s
         public const int BladeWaltzFrameIndex = 10;
         public override bool TryActivate(Player player, QiPlayer qi)

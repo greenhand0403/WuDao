@@ -5,7 +5,7 @@ using ReLogic.Content;
 using Terraria;
 using Terraria.ModLoader;
 using WuDao.Common; // 这里放你已有的 SpriteSheet / SpriteAnimator
-
+// 加载长精灵图
 namespace WuDao.Common
 {
     public enum SpriteAtlasId

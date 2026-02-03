@@ -8,6 +8,7 @@ using WuDao.Content.Systems;
 
 namespace WuDao.Common
 {
+    // 一些武器和饰品需要的通用方法、随境界系统的伤害加成等
     public static class Helpers
     {
         // 绘制有关的辅助方法

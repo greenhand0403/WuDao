@@ -85,7 +85,7 @@ namespace WuDao.Content.Items.Weapons.Melee
         public override void AddRecipes()
         {
             CreateRecipe()
-                .AddIngredient(ItemID.OldShoe, 5)
+                .AddIngredient(ItemID.OldShoe, 4)
                 .AddTile(TileID.TinkerersWorkbench)
                 .AddCondition(Condition.InJungle)
                 .Register();

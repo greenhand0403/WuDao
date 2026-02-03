@@ -6,7 +6,7 @@ using ReLogic.Content;
 using Terraria;
 using Terraria.ModLoader;
 using Terraria.GameContent; // for TextureAssets if你想混用原版贴图
-
+// 从长精灵图中切出指定的精灵
 namespace WuDao.Common
 {
     /// <summary>
