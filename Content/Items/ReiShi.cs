@@ -35,5 +35,12 @@ namespace WuDao.Content.Items
             Main.NewText("你感到丹田充盈（气力上限 +50）。", Microsoft.Xna.Framework.Color.SkyBlue);
             return true;
         }
+        public override void AddRecipes()
+        {
+            CreateRecipe()
+                .AddIngredient(ModContent.ItemType<PassionFruit>(), 5)
+                .AddTile(TileID.LivingLoom)
+                .Register();
+        }
     }
 }

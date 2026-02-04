@@ -36,5 +36,12 @@ namespace WuDao.Content.Items
             Main.NewText("你感到内息更稳（气力上限 +10）。", Microsoft.Xna.Framework.Color.LightSeaGreen);
             return true;
         }
+        public override void AddRecipes()
+        {
+            CreateRecipe()
+                .AddIngredient(ItemID.LifeFruit, 2)
+                .AddTile(TileID.LivingLoom)
+                .Register();
+        }
     }
 }

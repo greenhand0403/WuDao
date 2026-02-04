@@ -32,7 +32,7 @@ namespace WuDao.Content.Tiles
             // 交给引擎处理掉落，避免多掉
             RegisterItemDrop(ModContent.ItemType<Items.WishingWellItem>());
 
-            AddMapEntry(new Color(100, 149, 237));
+            AddMapEntry(new Color(100, 149, 237), Language.GetText("Mods.WuDao.Items.WishingWellItem.DisplayName"));
         }
         // ✅ 每块独立决定使用哪一帧
         public override void AnimateIndividualTile(int type, int i, int j, ref int frameX, ref int frameY)
