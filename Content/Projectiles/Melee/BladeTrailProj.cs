@@ -13,6 +13,9 @@ using Terraria.DataStructures;   // 你的 ItemSets.BladeTrailSet
 
 namespace WuDao.Content.Projectiles.Melee
 {
+    /// <summary>
+    /// 近战染色刀光
+    /// </summary>
     public class BladeTrailProj : ModProjectile
     {
         public override string Texture => "Terraria/Images/Star_4";
@@ -215,7 +218,8 @@ namespace WuDao.Content.Projectiles.Melee
                     return wf;
                 },
 
-                ColorAt = (i) => {
+                ColorAt = (i) =>
+                {
                     var c = colorAt(i);
                     c.A = (byte)(200 * (len - i) / (float)len);
                     return c;

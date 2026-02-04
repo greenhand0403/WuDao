@@ -8,6 +8,7 @@ using Terraria.GameContent;
 
 namespace WuDao.Content.Projectiles.Throwing
 {
+    // 飞石射弹
     public class FlyStoneProjectile : BaseThrowingProjectile
     {
         public override string Texture => "WuDao/Content/Items/Weapons/Throwing/FlyStone";

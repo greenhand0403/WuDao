@@ -1,4 +1,3 @@
-// Mounts/FlyingToiletMount.cs
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
@@ -12,6 +11,7 @@ using WuDao.Content.Buffs;
 
 namespace WuDao.Content.Mounts
 {
+    // 飞天马桶 坐骑
     public class FlyingToiletMount : ModMount
     {
         // 我们把玩家专属的“轮播状态”放到 _mountSpecificData 里（tML 官方建议做法）

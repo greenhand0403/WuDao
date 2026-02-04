@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 
 namespace WuDao.Content.Projectiles.Ranged
 {
+    // 星云火箭
     public class NebulaRocketProjectile : ModProjectile
     {
         public override void SetStaticDefaults()

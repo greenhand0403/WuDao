@@ -8,6 +8,7 @@ using WuDao.Content.Projectiles.Melee;
 
 namespace WuDao.Content.Items.Weapons.Melee
 {
+    // 葱剑
     class ScallionSword : ModItem
     {
         public override void SetDefaults()

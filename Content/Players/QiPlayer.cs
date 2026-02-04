@@ -18,16 +18,21 @@ using Terraria.GameContent;
 
 namespace WuDao.Content.Players
 {
+    // 绝学与气力系统
     public class QiPlayer : ModPlayer
     {
         // —— 数值 —— //
         public int QiMaxBase = 0;               // 装备绝学后基础上限 100
         public int QiMaxFromItems = 0;          // 灵芝/仙草永久上限
         public float QiCurrent = 0f;            // 当前气力（float 便于逐帧蓄力/消耗）
-        public float QiRegenStand = 5;//临时修改气力再生速度
+        public float QiRegenStand = 4;// 静止时气力再生速度
         public float QiRegenMove = 2;
         public int QiMax => QiMaxBase + QiMaxFromItems;
+        public int JinggongUsed = 0;          // 静功秘籍已使用次数（可选限制）
+        public int DonggongUsed = 0;          // 动功秘籍已使用次数
 
+        public float QiRegenStandBonus = 0f;  // 静止额外回气（永久）
+        public float QiRegenMoveBonus = 0f;   // 移动/攻击额外回气（永久）
         // —— 绝学槽中的物品 —— //
         public Item JuexueSlot = new Item();
 
@@ -145,6 +150,11 @@ namespace WuDao.Content.Players
             tag["Used_ReiShi"] = Used_ReiShi;
             tag["Used_PassionFruit"] = Used_PassionFruit;
 
+            tag["JinggongUsed"] = JinggongUsed;
+            tag["DonggongUsed"] = DonggongUsed;
+            tag["QiRegenStandBonus"] = QiRegenStandBonus;
+            tag["QiRegenMoveBonus"] = QiRegenMoveBonus;
+
             // 保存绝学槽
             if (!JuexueSlot.IsAir)
                 tag["JuexueSlot"] = ItemIO.Save(JuexueSlot);
@@ -155,6 +165,11 @@ namespace WuDao.Content.Players
             QiMaxFromItems = tag.GetInt("QiMaxFromItems");
             Used_ReiShi = tag.GetInt("Used_ReiShi");
             Used_PassionFruit = tag.GetInt("Used_PassionFruit");
+
+            JinggongUsed = tag.GetInt("JinggongUsed");
+            DonggongUsed = tag.GetInt("DonggongUsed");
+            QiRegenStandBonus = tag.GetFloat("QiRegenStandBonus");
+            QiRegenMoveBonus = tag.GetFloat("QiRegenMoveBonus");
 
             if (tag.ContainsKey("JuexueSlot"))
             {
@@ -213,8 +228,9 @@ namespace WuDao.Content.Players
             // 气力回复：站立/不动 +4/s，移动或攻击 +2/s
             if (QiMax > 0)
             {
-                float perTick = Common.Helpers.IsPlayerAttackingOrMoving(Player) ? (QiRegenMove / 60f) : (QiRegenStand / 60f);
-                QiCurrent = MathHelper.Clamp(QiCurrent + perTick, 0, QiMax);
+                float perTick = Helpers.IsPlayerAttackingOrMoving(Player) ? (QiRegenMove + QiRegenMoveBonus) : (QiRegenStand + QiRegenStandBonus);
+
+                QiCurrent = MathHelper.Clamp(QiCurrent + perTick / 60f, 0, QiMax);
             }
 
             // 蓄力期间（龟派气功）：每帧扣气

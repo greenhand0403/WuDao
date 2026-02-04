@@ -10,6 +10,9 @@ using static WuDao.Content.Global.CuisineGlobalItem;
 
 namespace WuDao.Content.Items.Accessories
 {
+    /// <summary>
+    /// 葱盾
+    /// </summary>
     // [AutoloadEquip(EquipType.Shield)]
     public class ScallionShield : ModItem
     {
@@ -31,7 +34,6 @@ namespace WuDao.Content.Items.Accessories
         public override void SetStaticDefaults()
         {
             // 注册为“美食”，这样能自动享受你在 GlobalItem 里写的“美味值→饰品防御”加成
-            // （无需本地再写防御逻辑）  :contentReference[oaicite:3]{index=3}
             CuisineCollections.AddGourmet(ModContent.ItemType<ScallionShield>());
         }
 
@@ -43,7 +45,7 @@ namespace WuDao.Content.Items.Accessories
             Item.rare = ModContent.RarityType<LightBlueRarity>();
             Item.value = Item.sellPrice(gold: 5);
 
-            Item.defense = BaseDefense; // 额外防御由 CuisineGlobalItem.UpdateAccessory 注入  :contentReference[oaicite:4]{index=4}
+            Item.defense = BaseDefense; // 额外防御由 CuisineGlobalItem.UpdateAccessory
         }
 
         public override void UpdateAccessory(Player player, bool hideVisual)

@@ -5,7 +5,9 @@ using WuDao.Content.Projectiles.Ranged;
 
 namespace WuDao.Content.Items.Ammo
 {
-    /// <summary>心箭：射出时消耗2点生命；命中恢复1点生命；击杀必掉治疗红心；带自动追踪</summary>
+    /// <summary>
+    /// 心箭：射出时消耗2点生命；命中恢复1点生命；击杀必掉治疗红心；带自动追踪
+    /// </summary>
     public class HeartArrow : ModItem
     {
         public override void SetDefaults()

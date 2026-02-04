@@ -13,6 +13,7 @@ using System;
 
 namespace WuDao.Content.Juexue.Active
 {
+    // 磁场天刀
     public class MagneticHeavenBlade : JuexueItem
     {
         public override int QiCost => 90;

@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 
 namespace WuDao.Content.Items.Weapons.Ranged
 {
+    // 神圣裁决 霰弹枪
     public class BrightVerdict : ModItem
     {
         public override void SetDefaults()

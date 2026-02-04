@@ -5,6 +5,7 @@ using WuDao.Content.Players;
 
 namespace WuDao.Content.Items.Accessories
 {
+    // 心灵宝石，增强心箭的能力
     public class SoulGem : ModItem
     {
         public override void SetDefaults()

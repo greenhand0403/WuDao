@@ -9,7 +9,7 @@ using WuDao.Content.Systems;
 
 namespace WuDao.Content.Players
 {
-
+    // 模仿者 射弹收集系统
     public class MimickerPlayer : ModPlayer
     {
         // 进度：针对每个定义，记录击杀计数

@@ -5,6 +5,7 @@ using WuDao.Content.Projectiles.Ranged;
 
 namespace WuDao.Content.Items.Weapons.Ranged
 {
+    // 烟雾手榴弹
     public class SmokeGrenade : ModItem
     {
         public override string Texture => $"Terraria/Images/Item_{ItemID.Grenade}";

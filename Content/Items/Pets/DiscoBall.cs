@@ -8,6 +8,7 @@ using WuDao.Content.Projectiles;
 
 namespace WuDao.Content.Items.Pets
 {
+    //  disco 灯球，照明宠物
     public class DiscoBallRemote : ModItem
     {
         public override void SetDefaults()

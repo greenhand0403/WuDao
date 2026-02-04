@@ -12,6 +12,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace WuDao.Content.Juexue.Passive
 {
+    // 杀鲸霸拳
     public class SharkWhaleFist : JuexueItem
     {
         public override bool IsActive => false; // 被动

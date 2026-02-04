@@ -10,7 +10,7 @@ using Terraria.DataStructures; // TextureAssets
 namespace WuDao.Content.Projectiles
 {
     /// <summary>
-    /// 进阶：多贴图组成一个射弹（飞龙）。
+    /// 飞龙射弹
     /// 飞龙（Wyvern）由多个 NPC 片段组成：头(87)、身(88/89/90)、腿(91)、尾(92)。
     /// 注意：腿段本身就包含左右两只爪（两个爪子），绘制顺序正确即可。
     /// 这里用一个射弹在 PreDraw 中依次绘制各段，使其沿速度方向排布，简单形成一条龙。

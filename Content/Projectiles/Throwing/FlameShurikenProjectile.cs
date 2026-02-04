@@ -6,6 +6,7 @@ using WuDao.Content.Projectiles.Throwing.Base; // 引入我们做的基础射弹
 
 namespace WuDao.Content.Projectiles.Throwing
 {
+    // 火焰飞镖
     public class FlameShurikenProjectile : BaseShurikenProjectile
     {
         // 使用物品贴图（原文件就是这么做的）

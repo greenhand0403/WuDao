@@ -8,6 +8,7 @@ using WuDao.Content.Items.Accessories;
 
 namespace WuDao.Content.Players
 {
+    // 败笔
     public class DesignFlawPlayer : ModPlayer
     {
         public bool hasFlaw;

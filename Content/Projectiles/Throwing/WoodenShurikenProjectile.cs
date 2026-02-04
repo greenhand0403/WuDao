@@ -6,6 +6,7 @@ using Terraria.Audio;
 
 namespace WuDao.Content.Projectiles.Throwing
 {
+    // 木飞镖
     public class WoodenShurikenProjectile : ModProjectile
     {
         public override string Texture => "WuDao/Content/Items/Weapons/Throwing/WoodenShuriken";

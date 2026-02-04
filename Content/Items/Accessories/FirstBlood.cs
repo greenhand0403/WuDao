@@ -17,6 +17,9 @@ namespace WuDao.Content.Items.Accessories
         一旦击败 Boss，就移除对应加成。
         如果所有 Boss 都被击败 → 饰品名称变为【勇者之证】，效果改为 对生命值 >90% 的 NPC 首次攻击 +300% 伤害。
     */
+    /// <summary>
+    /// 第一滴血 饰品
+    /// </summary>
     public class FirstBlood : ModItem
     {
         private static Asset<Texture2D> TexAsset;

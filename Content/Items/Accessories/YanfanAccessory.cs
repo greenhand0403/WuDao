@@ -6,6 +6,9 @@ using WuDao.Content.Players;
 
 namespace WuDao.Content.Items.Accessories
 {
+    /// <summary>
+    /// 燕返，回旋镖饰品，赋予回旋镖返程伤害翻倍能力
+    /// </summary>
     public class YanfanAccessory : ModItem
     {
         public override void SetDefaults()

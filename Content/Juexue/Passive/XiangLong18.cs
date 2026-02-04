@@ -1,5 +1,3 @@
-// 降龙十八掌：被动触发消耗10气，向光标发出“飞龙”投射物；第8/10次大幅增伤，之后归零。
-// 贴图占位：Betsy Fireball
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.DataStructures;
@@ -12,6 +10,8 @@ using WuDao.Common;
 
 namespace WuDao.Content.Juexue.Passive
 {
+    // 降龙十八掌：被动触发消耗10气，向光标发出“飞龙”投射物；第8/10次大幅增伤，之后归零。
+    // 贴图占位：Betsy Fireball
     public class XiangLong18 : JuexueItem
     {
         public override bool IsActive => false;

@@ -7,6 +7,7 @@ using Terraria.ID;
 
 namespace WuDao.Content.Players
 {
+    // 厨艺和美食系统
     public class CuisinePlayer : ModPlayer
     {
         // 背包是否携带“菜谱/食谱”类物品（你已有就保留）

@@ -10,6 +10,7 @@ using WuDao.Content.Players;
 
 namespace WuDao.Content.Projectiles.Melee
 {
+    // 龟派气功 射弹
     public class KamehamehaProj : ModProjectile
     {
         public override string Texture => $"Terraria/Images/Projectile_{ProjectileID.StarWrath}";

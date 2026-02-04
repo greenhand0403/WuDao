@@ -7,6 +7,7 @@ using WuDao.Content.Players;
 
 namespace WuDao.Content.Items.Weapons.Melee
 {
+    // 玄铁重剑
     public class SteelHeavySword : ModItem
     {
         private const int RightClickCooldown = 90;

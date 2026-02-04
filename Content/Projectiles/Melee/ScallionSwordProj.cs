@@ -12,6 +12,7 @@ using WuDao.Common.Rendering;
 
 namespace WuDao.Content.Projectiles.Melee
 {
+    // 葱剑，射弹
     class ScallionSwordProj : ModProjectile
     {
         public override string Texture => "WuDao/Content/Items/Weapons/Melee/ScallionSword";

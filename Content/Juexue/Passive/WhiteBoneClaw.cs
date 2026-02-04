@@ -1,5 +1,3 @@
-// 九阴白骨爪（被动）：发射射弹时，消耗10气在鼠标处生成“暗影爪”投射物。
-// 贴图占位：ShadowBeamFriendly（后续可换成暗影之爪自绘弹幕）。
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.DataStructures;
@@ -12,6 +10,8 @@ using WuDao.Common;
 
 namespace WuDao.Content.Juexue.Passive
 {
+    // 九阴白骨爪（被动）：发射射弹时，消耗10气在鼠标处生成“暗影爪”投射物。
+    // 贴图占位：ShadowBeamFriendly（后续可换成暗影之爪自绘弹幕）。
     public class WhiteBoneClaw : JuexueItem
     {
         public override bool IsActive => false;

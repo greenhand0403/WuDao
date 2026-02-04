@@ -10,6 +10,7 @@ using WuDao.Common; // 要用 ProjectileID.Sets
 
 namespace WuDao.Content.Projectiles.Melee
 {
+    // 万剑归宗 射弹
     public class TenThousandSwordsProj : ModProjectile
     {
         public override string Texture => "Terraria/Images/Projectile_0"; // 不用本体贴图，PreDraw手画

@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 
 namespace WuDao.Content.Projectiles.Throwing
 {
+    // 仙人掌飞针
     public class CactusNeedleProjectile : BaseThrowingProjectile
     {
         public override string Texture => "WuDao/Content/Items/Weapons/Throwing/CactusNeedle";

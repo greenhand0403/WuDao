@@ -8,7 +8,7 @@ using WuDao.Content.Projectiles;
 
 namespace WuDao.Content.Items.Pets
 {
-    // 2) 召唤物品：使用后给自己添加 Buff，并让 Buff 负责生成宠物
+    // 丘比召唤物，召唤丘比作为宠物跟随玩家
     public class Kyubey : ModItem
     {
         public override string Texture => "WuDao/Content/Items/Pets/KyubeySoulStone";

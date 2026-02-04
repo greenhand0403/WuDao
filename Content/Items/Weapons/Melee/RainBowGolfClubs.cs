@@ -6,6 +6,7 @@ using Terraria.ModLoader;
 
 namespace WuDao.Content.Items.Weapons.Melee
 {
+    // 彩虹球杆
     public class RainBowGolfClubs : ModItem
     {
         private int ballIndex = 0;

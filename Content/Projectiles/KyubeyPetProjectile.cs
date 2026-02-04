@@ -7,7 +7,7 @@ using WuDao.Content.Buffs;
 
 namespace WuDao.Content.Projectiles
 {
-    // 3) 宠物射弹主体
+    // 丘比宠物射弹主体
     public class KyubeyPetProjectile : ModProjectile
     {
         // 状态：近走远飞（像宠物兔子那套）

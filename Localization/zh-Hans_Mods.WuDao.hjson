@@ -502,6 +502,16 @@ Items: {
 		Tooltip: 召唤唯一的皇家权杖
 		DisplayName: 附魔皇家权杖
 	}
+
+	QiSecretsB: {
+		// Tooltip: ""
+		// DisplayName: Qi Secrets B
+	}
+
+	QiSecretsA: {
+		// Tooltip: ""
+		// DisplayName: Qi Secrets A
+	}
 }
 
 Projectiles: {
@@ -539,7 +549,7 @@ Projectiles: {
 	DiscoBallPetProj.DisplayName: 迪斯科灯球
 	HeartArrowProj.DisplayName: 心箭
 	KyubeyPetProjectile.DisplayName: 丘比
-	FoodRainProjectile.DisplayName: 食物海射弹
+	FoodRainProjectile.DisplayName: 食物雨射弹
 	SharkProjectile.DisplayName: 鲨射弹
 	GlitteringClawHoldout.DisplayName: 闪亮爪套射弹
 	HorseItemVariantProjectile.DisplayName: 骏马射弹

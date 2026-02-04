@@ -6,6 +6,7 @@ using WuDao.Content.Players;
 
 namespace WuDao.Content.Items.Accessories
 {
+    // 归心，回旋镖饰品，赋予回旋镖返程时速度翻倍的能力
     public class GuixinAccessory : ModItem
     {
         public override void SetDefaults()

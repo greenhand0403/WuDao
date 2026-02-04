@@ -6,13 +6,14 @@ using Microsoft.Xna.Framework;
 
 namespace WuDao.Content.Projectiles.Ranged
 {
+    // 日耀弹 射弹
     public class SolarBulletProjectile : ModProjectile
     {
         public override void SetDefaults()
         {
             Projectile.width = 8;
             Projectile.height = 8;
-            Projectile.aiStyle = 1;
+            Projectile.aiStyle = ProjAIStyleID.Arrow;
             Projectile.friendly = true;
             Projectile.penetrate = 1;
             Projectile.light = 0.5f;

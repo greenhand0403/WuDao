@@ -8,6 +8,7 @@ using WuDao.Content.Projectiles.Magic;
 
 namespace WuDao.Content.Items.Weapons.Magic
 {
+    // 风刃
     public class WindBlade : ModItem
     {
         public override void SetDefaults()

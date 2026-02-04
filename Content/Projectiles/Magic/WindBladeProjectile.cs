@@ -9,6 +9,7 @@ using Terraria.DataStructures;
 
 namespace WuDao.Content.Projectiles.Magic
 {
+    // 风刃射弹
     public class WindBladeProjectile : ModProjectile
     {
         // 复用 Arkhalis 贴图（多帧）
@@ -36,7 +37,7 @@ namespace WuDao.Content.Projectiles.Magic
             Projectile.alpha = 255;        // 淡入
             Projectile.light = 0.2f;
         }
-        
+
         public override void AI()
         {
             // ai[0]：滞留计时器（可能从负数开始，见 Shoot）

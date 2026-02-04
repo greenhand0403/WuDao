@@ -8,6 +8,9 @@ using System.Collections.Generic;
 
 namespace WuDao.Content.Items.Accessories
 {
+    /// <summary>
+    /// 佛怒火莲，受伤时放出火莲烙印造成伤害
+    /// </summary>
     public class WrathLotus : BuffItem
     {
         public override void SetDefaults()

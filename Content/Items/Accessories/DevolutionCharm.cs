@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using WuDao.Content.Global.NPCs;
 namespace WuDao.Content.Items.Accessories
 {
+    // 压制力场 饰品
     public class DevolutionCharm : BuffItem
     {
         public const float MULT = 0.8f;

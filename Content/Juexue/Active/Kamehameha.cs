@@ -10,6 +10,7 @@ using WuDao.Content.Projectiles.Melee;
 
 namespace WuDao.Content.Juexue.Active
 {
+    // 龟派气功
     public class Kamehameha : JuexueItem
     {
         public override int QiCost => 1; // 蓄力期间每帧-1气

@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 
 namespace WuDao.Content.Players
 {
+    // 佛怒火莲的烙印伤害
     public class WrathLotusPlayer : ModPlayer
     {
         public bool hasLotus;

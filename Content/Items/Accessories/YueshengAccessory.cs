@@ -6,6 +6,7 @@ using WuDao.Content.Players;
 
 namespace WuDao.Content.Items.Accessories
 {
+    // 跃升，回旋镖饰品，赋予回旋镖穿墙能力
     public class YueshengAccessory : ModItem
     {
         public override void SetDefaults()

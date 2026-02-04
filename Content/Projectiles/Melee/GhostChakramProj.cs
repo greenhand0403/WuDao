@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace WuDao.Content.Projectiles.Melee
 {
+    // 幽灵飞盘
     public class GhostChakramProj : ModProjectile
     {
         public override string Texture => "WuDao/Content/Items/Weapons/Melee/GhostChakram";
@@ -240,8 +241,8 @@ namespace WuDao.Content.Projectiles.Melee
 
         // public override void OnKill(int timeLeft)
         // {
-            // 结束也放一圈更大的灵气
-            // SpawnAuraDust(Projectile.Center, 22, 2.6f, 12f);
+        // 结束也放一圈更大的灵气
+        // SpawnAuraDust(Projectile.Center, 22, 2.6f, 12f);
         // }
 
         private static void SpawnAuraDust(Vector2 center, int count, float startRadius, float speed)

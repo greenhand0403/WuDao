@@ -10,6 +10,7 @@ using WuDao.Content.Projectiles.Melee;
 
 namespace WuDao.Content.Items.Weapons.Melee
 {
+    // 无敌
     public class InvincibleBlade : ModItem
     {
         // 固定冷却（帧），不受攻速影响

@@ -7,6 +7,7 @@ using WuDao.Content.Projectiles.Melee;
 
 namespace WuDao.Content.Items.Weapons.Melee
 {
+    // 崇阳铁剑
     public class SteelBroadSword : ModItem
     {
         public override bool AltFunctionUse(Player player) => true;

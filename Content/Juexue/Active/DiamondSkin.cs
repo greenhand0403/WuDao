@@ -11,6 +11,7 @@ using System;
 
 namespace WuDao.Content.Juexue.Active
 {
+    // 金刚不坏 绝学
     public class DiamondSkin : JuexueItem
     {
         public override int QiCost => 90;

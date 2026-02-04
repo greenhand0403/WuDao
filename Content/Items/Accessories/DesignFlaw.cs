@@ -18,6 +18,9 @@ namespace WuDao.Content.Items.Accessories
         装备后，对该 NPC 造成 10% × 被击败次数 的额外伤害。
         击杀该 NPC 时，额外掉落 1 + 被击败次数 个物品，并清空记录。
     */
+    /// <summary>
+    /// 败笔 饰品
+    /// </summary>
     public class DesignFlaw : ModItem
     {
         public override void SetDefaults()

@@ -10,6 +10,7 @@ using WuDao.Content.Buffs;
 
 namespace WuDao.Content.Projectiles.Summon
 {
+    // 附魔皇家权杖射弹
     public class RoyalScepterMinion : ModProjectile
     {
         // ===== 可调参数 =====
@@ -76,7 +77,7 @@ namespace WuDao.Content.Projectiles.Summon
                 {
                     fireTimer = 0;
                     Vector2 dir = (Main.npc[target].Center - Projectile.Center).SafeNormalize(Vector2.UnitY);
-                    
+
                     var src = Projectile.GetSource_FromThis();
                     float speedShoot = 1f; // 只要不是0，OnSpawn就不会强制改成竖直
 

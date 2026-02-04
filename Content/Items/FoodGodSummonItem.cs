@@ -5,6 +5,7 @@ using WuDao.Content.Global.NPCs;
 
 namespace WuDao.Content.Items
 {
+    // 食神BOSS召唤物
     public class FoodGodSummonItem : ModItem
     {
         public override void SetDefaults()

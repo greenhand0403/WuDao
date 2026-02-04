@@ -4,7 +4,7 @@ using Terraria.ModLoader;
 namespace WuDao.Content.Players
 {
     /// <summary>
-    /// 心箭使玩家扣血，心弓和心灵宝石可以减轻这个效果
+    /// 心箭，使玩家扣血，心弓和心灵宝石可以减轻这个效果
     /// </summary>
     public class HeartStuffPlayer : ModPlayer
     {

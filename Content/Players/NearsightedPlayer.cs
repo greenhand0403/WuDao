@@ -7,6 +7,7 @@ using WuDao.Content.Global.Projectiles;
 
 namespace WuDao.Content.Players
 {
+    // 近视眼镜 根据距离给玩家增加伤害
     public class NearsightedPlayer : ModPlayer
     {
         public bool Nearsighted;

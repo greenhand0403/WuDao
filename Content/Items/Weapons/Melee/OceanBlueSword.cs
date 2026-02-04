@@ -9,6 +9,7 @@ using System.Collections.Generic;
 
 namespace WuDao.Content.Items.Weapons.Melee
 {
+    // 海蓝军刀
     public class OceanBlueSword : BuffItem
     {
         public override void SetDefaults()

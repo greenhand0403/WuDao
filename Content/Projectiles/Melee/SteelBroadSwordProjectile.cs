@@ -10,7 +10,7 @@ using Terraria.ModLoader;
 namespace WuDao.Content.Projectiles.Melee
 {
     /// <summary>
-    /// 170x170 x4（竖排）刀光的“持有型近战”弹幕
+    /// 崇阳铁剑，170x170 x4（竖排）刀光的“持有型近战”弹幕
     /// 贴图：SteelSlash.png（尺寸 170x680，默认朝右）
     /// </summary>
     public class SteelBroadSwordProjectile : ModProjectile

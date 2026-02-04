@@ -6,6 +6,7 @@ using WuDao.Content.Global; // ArmorElementTag
 
 namespace WuDao.Content.Players
 {
+    // 五行盔甲系统
     public class ArmorElementPlayer : ModPlayer
     {
         private bool goldFullSet; // 金三件：护甲穿透

@@ -7,7 +7,7 @@ using System;
 
 namespace WuDao.Content.Projectiles.Ranged
 {
-    // 十字星射弹 改了碰撞箱
+    // S圣光裁决，十字星射弹 改了碰撞箱
     public class BrightVerdictProjectile : ModProjectile
     {
         private bool _burstFired;

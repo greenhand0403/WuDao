@@ -6,6 +6,7 @@ using Terraria.ModLoader;
 
 namespace WuDao.Content.Projectiles.Ranged
 {
+    // 穿云箭
     public class CloudArrowProjectile : ModProjectile
     {
         // —— 可调参数（椭圆版） ——
@@ -25,7 +26,7 @@ namespace WuDao.Content.Projectiles.Ranged
         {
             Projectile.width = 10;
             Projectile.height = 10;
-            Projectile.aiStyle = 1;// 让它像箭一样受重力/碰撞（也可以自写 AI）
+            Projectile.aiStyle = ProjAIStyleID.Arrow;// 让它像箭一样受重力/碰撞（也可以自写 AI）
             AIType = ProjectileID.WoodenArrowFriendly;
             Projectile.friendly = true;
             Projectile.DamageType = DamageClass.Ranged;

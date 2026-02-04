@@ -8,6 +8,7 @@ using WuDao.Content.Items;
 
 namespace WuDao.Content.Players
 {
+    // 永生之酒与药水之灵
     public class PotionPlayer : ModPlayer
     {
         /// <summary>饮用永生之酒造成的总生命上限惩罚（每次 -20）。</summary>
@@ -29,16 +30,16 @@ namespace WuDao.Content.Players
         public override void PostUpdateMiscEffects()
         {
             // 将上限惩罚应用到 statLifeMax2（不低于 20，避免 0/负数）
-            if (maxLifePenalty > 0)
-            {
-                Player.statLifeMax2 -= maxLifePenalty;
-                if (Player.statLifeMax2 < 20)
-                    Player.statLifeMax2 = 20;
+            // if (maxLifePenalty > 0)
+            // {
+            //     Player.statLifeMax2 -= maxLifePenalty;
+            //     if (Player.statLifeMax2 < 20)
+            //         Player.statLifeMax2 = 20;
 
-                // 若当前生命超过新的上限，收敛到上限（避免显示溢出）
-                if (Player.statLife > Player.statLifeMax2)
-                    Player.statLife = Player.statLifeMax2;
-            }
+            //     // 若当前生命超过新的上限，收敛到上限（避免显示溢出）
+            //     if (Player.statLife > Player.statLifeMax2)
+            //         Player.statLife = Player.statLifeMax2;
+            // }
         }
 
         public override void SaveData(TagCompound tag)
@@ -179,7 +180,22 @@ namespace WuDao.Content.Players
                     if (applyEffects)
                     {
                         // 生命上限惩罚 +20
-                        maxLifePenalty += 20;
+                        // maxLifePenalty += 20;
+                        // 永久减少 20 点生命上限：通过减少“已吃生命水晶数量”实现
+                        // 这样生命水晶的可用性判定也会跟着变，后续可以再吃水晶恢复
+                        // 如果生命果食用大于4个，则扣除生命果可食用次数，否则扣除生命水晶食用次数
+                        if (Player.ConsumedLifeFruit >= 4)
+                        {
+                            Player.ConsumedLifeFruit = Utils.Clamp(Player.ConsumedLifeFruit - 4, 0, Player.LifeFruitMax);
+                        }
+                        else
+                        {
+                            Player.ConsumedLifeCrystals = Utils.Clamp(Player.ConsumedLifeCrystals - 1, 0, Player.LifeCrystalMax);
+                        }
+
+                        // 保险：如果当前血量超过新上限，收敛一下
+                        if (Player.statLife > Player.statLifeMax2)
+                            Player.statLife = Player.statLifeMax2;
 
                         // 冷却 Buff：5 分钟
                         Player.AddBuff(ModContent.BuffType<WineCooldownBuff>(), 60 * 300);

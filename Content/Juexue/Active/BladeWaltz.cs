@@ -1,4 +1,3 @@
-// 利刃华尔兹：120 气，30s 冷却。启动后由 QiPlayer 的 BladeWaltz* 流程驱动 8 段攻击。
 using Terraria;
 using Terraria.ModLoader;
 using WuDao.Common;
@@ -8,6 +7,7 @@ using Microsoft.Xna.Framework;
 
 namespace WuDao.Content.Juexue.Active
 {
+    // 利刃华尔兹：120 气，30s 冷却。启动后由 QiPlayer 的 BladeWaltz* 流程驱动 8 段攻击。
     public class BladeWaltz : JuexueItem
     {
         public override bool IsActive => true;
@@ -23,14 +23,14 @@ namespace WuDao.Content.Juexue.Active
             // 冷却检查
             if (!qi.CanUseActiveNow(Item.type, SpecialCooldownTicks))
             {
-                Main.NewText("绝学尚未冷却。",Color.OrangeRed);
+                Main.NewText("绝学尚未冷却。", Color.OrangeRed);
                 return false;
             }
 
             // 启动时仅扣一次
             if (!qi.TrySpendQi(QiCost))
             {
-                Main.NewText("气力不足！",Color.OrangeRed);
+                Main.NewText("气力不足！", Color.OrangeRed);
                 return false;
             }
 

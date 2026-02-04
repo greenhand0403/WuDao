@@ -403,6 +403,16 @@ Items: {
 		Tooltip: ""
 		DisplayName: Enchanted Royal Scepter
 	}
+
+	QiSecretsB: {
+		Tooltip: ""
+		DisplayName: Qi Secrets B
+	}
+
+	QiSecretsA: {
+		Tooltip: ""
+		DisplayName: Qi Secrets A
+	}
 }
 
 Projectiles: {

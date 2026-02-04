@@ -12,11 +12,6 @@ namespace WuDao.Content.Items
     /// </summary>
     public class PyramidStatue : ModItem
     {
-        public override void SetStaticDefaults()
-        {
-            // DisplayName.SetDefault("金字塔雕像");
-            // Tooltip.SetDefault("散发古老守护之力\n静止站立在实心块上时获得强力减伤");
-        }
 
         public override void SetDefaults()
         {
@@ -39,7 +34,7 @@ namespace WuDao.Content.Items
             CreateRecipe()
                 .AddIngredient(ItemID.Sandstone, 20)
                 .AddIngredient(ItemID.GoldBar, 5)
-                .AddTile(TileID.WorkBenches)
+                .AddTile(TileID.HeavyWorkBench)
                 .Register();
         }
     }

@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 
 namespace WuDao.Content.Players
 {
+    // 凝胶瓶的武器灌注效果，凝胶溅射
     class WeaponEnchantmentPlayer : ModPlayer
     {
         public bool GelFlaskImbue;

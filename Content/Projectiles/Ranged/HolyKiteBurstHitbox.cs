@@ -8,7 +8,7 @@ using System;
 namespace WuDao.Content.Projectiles.Ranged
 {
     /// <summary>
-    /// 瞬发四边形（顶角30°、底角90°）命中 + 白金尘视觉
+    /// 圣光裁决射弹效果，瞬发四边形（顶角30°、底角90°）命中 + 白金尘视觉
     /// 轴心 = 底部顶点（命中点）
     /// ai[0] = 朝向角（弧度）
     /// localAI[0] = b（横向半宽） —— a 将按 a = b*(1+cot15°)/2 自动计算

@@ -6,6 +6,7 @@ using WuDao.Content.Projectiles.Ranged;
 
 namespace WuDao.Content.Items.Ammo
 {
+    // 穿云箭
     public class CloudArrow : ModItem
     {
         public override void SetStaticDefaults()

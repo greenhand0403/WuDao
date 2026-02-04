@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 
 namespace WuDao.Content.Players
 {
+    // 压制力场
     public class DevolutionPlayer : ModPlayer
     {
         public bool HasDevolutionAura;

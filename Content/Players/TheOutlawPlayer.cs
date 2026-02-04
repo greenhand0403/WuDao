@@ -4,7 +4,7 @@ using WuDao.Content.Buffs;
 
 namespace WuDao.Common.Players
 {
-    // 负责：暴击计数、下一次强力射击标记、后跳冷却
+    // 法外狂徒技能冷却，负责：暴击计数、下一次强力射击标记、后跳冷却
     public class TheOutlawPlayer : ModPlayer
     {
         // 巨鹿后：暴击后让“下一次射击”变为 6 发并 +30% 伤害

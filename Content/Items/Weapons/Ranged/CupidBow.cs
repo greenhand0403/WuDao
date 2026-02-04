@@ -9,6 +9,7 @@ using WuDao.Content.Items.Ammo;
 
 namespace WuDao.Content.Items.Weapons.Ranged
 {
+    // 丘比特弓
     public class CupidBow : ModItem
     {
         public override void SetDefaults()

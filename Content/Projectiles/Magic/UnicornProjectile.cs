@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 namespace WuDao.Content.Projectiles.Magic
 {
     /// <summary>
-    /// 万马奔腾 独角兽射弹
+    /// 独角兽射弹，暂未使用
     /// </summary>
     public class UnicornProjectile : ModProjectile
     {

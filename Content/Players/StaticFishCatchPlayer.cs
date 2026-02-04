@@ -7,6 +7,7 @@ using WuDao.Content.Items;
 
 namespace WuDao.Content.Players
 {
+    // 静止游鱼，获取方式，钓鱼
     public class StaticFishCatchPlayer : ModPlayer
     {
         public override void CatchFish(FishingAttempt attempt, ref int itemDrop, ref int npcSpawn, ref AdvancedPopupRequest sonar, ref Vector2 sonarPosition)

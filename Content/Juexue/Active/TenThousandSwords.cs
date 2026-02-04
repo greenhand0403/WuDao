@@ -11,6 +11,7 @@ using WuDao.Content.Projectiles.Melee;
 
 namespace WuDao.Content.Juexue.Active
 {
+    // 万剑归宗
     public class TenThousandSwords : JuexueItem
     {
         public override int QiCost => 90;

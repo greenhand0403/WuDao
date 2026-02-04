@@ -8,7 +8,7 @@ using WuDao.Content.Items.Accessories;
 namespace WuDao.Content.Players
 {
     /// <summary>
-    /// 参考 ExampleShield 的 ExampleDashPlayer 写法，做“葱盾冲刺+无敌帧”，并用美味值放大冲刺时长。  :contentReference[oaicite:5]{index=5}
+    /// 葱盾冲刺：参考 ExampleShield 的 ExampleDashPlayer 写法，做“葱盾冲刺+无敌帧”，并用美味值放大冲刺时长。  :contentReference[oaicite:5]{index=5}
     /// </summary>
     public class ScallionDashPlayer : ModPlayer
     {

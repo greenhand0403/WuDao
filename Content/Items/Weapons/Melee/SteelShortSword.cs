@@ -7,6 +7,7 @@ using WuDao.Content.Projectiles.Melee;
 
 namespace WuDao.Content.Items.Weapons.Melee
 {
+    // 玄铁短剑
     public class SteelShortSword : BuffItem
     {
         public override void SetDefaults()

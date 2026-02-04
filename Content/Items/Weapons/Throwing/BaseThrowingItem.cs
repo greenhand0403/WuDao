@@ -6,6 +6,7 @@ using Terraria.ModLoader;
 
 namespace WuDao.Content.Items.Weapons.Throwing
 {
+    // 飞针、飞石、宝石袋等
     // 通用投掷物品基类 —— 方便以后复用
     public abstract class BaseThrowingItem : ModItem
     {

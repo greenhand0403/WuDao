@@ -7,6 +7,7 @@ using WuDao.Content.Projectiles.Melee;
 
 namespace WuDao.Content.Items.Weapons.Melee
 {
+    // 地狱之锋
     public class HellfireSword : BuffItem
     {
         public override void SetDefaults()

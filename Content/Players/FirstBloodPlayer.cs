@@ -6,7 +6,7 @@ using WuDao.Common;
 
 namespace WuDao.Content.Players
 {
-
+    // 第一滴血
     public class FirstBloodPlayer : ModPlayer
     {
         public bool hasFirstBlood;

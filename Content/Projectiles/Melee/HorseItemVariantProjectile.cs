@@ -10,7 +10,7 @@ using Terraria.ID;
 namespace WuDao.Content.Projectiles.Melee
 {
     /// <summary>
-    /// 复用三张物品贴图（ItemID=4785, 4786, 4787）来绘制一个“骏马形”的射弹。
+    /// 马射弹，复用三张物品贴图（ItemID=4785, 4786, 4787）来绘制一个“骏马形”的射弹。
     /// 通过生成时传入 ai0 选择贴图：0->4785，1->4786，2->4787。
     /// </summary>
     public class HorseItemVariantProjectile : ModProjectile

@@ -7,6 +7,7 @@ using Terraria.ModLoader;
 
 namespace WuDao.Content.Projectiles.Throwing
 {
+    // 食物雨射弹
     public class FoodRainProjectile : ModProjectile
     {
         public override string Texture => "Terraria/Images/Item_" + ItemID.CookedFish; // 占位，不会用这张

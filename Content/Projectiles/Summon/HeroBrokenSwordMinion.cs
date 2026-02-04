@@ -7,6 +7,7 @@ using WuDao.Content.Buffs;
 
 namespace WuDao.Content.Projectiles.Summon
 {
+    // 断裂英雄剑射弹
     public class HeroBrokenSwordMinion : ModProjectile
     {
         // 复用断裂英雄剑贴图

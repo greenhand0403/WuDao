@@ -6,6 +6,7 @@ using Terraria.ID;
 
 namespace WuDao.Content.Projectiles.Melee
 {
+    // 海蓝军刀 射弹
     public class OceanBlueSwordProjectile : ModProjectile
     {
         public override string Texture => "WuDao/Content/Items/Weapons/Melee/OceanBlueSword";

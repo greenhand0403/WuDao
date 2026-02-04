@@ -4,6 +4,7 @@ using WuDao.Content.Items.Accessories;
 
 namespace WuDao.Content.Players
 {
+    // 回旋镖配件系统
     public class BoomerangAccessoryPlayer : ModPlayer
     {
         public bool Yanfan;   // 燕返：回程伤害翻倍

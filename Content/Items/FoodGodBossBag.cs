@@ -33,6 +33,9 @@ namespace WuDao.Content.Items
             itemLoot.Add(ItemDropRule.NotScalingWithLuck(ModContent.ItemType<ScallionSword>(), 7));
             itemLoot.Add(ItemDropRule.NotScalingWithLuck(ModContent.ItemType<ScallionShield>(), 7));
             itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<SteamedBun>(), 1, 2, 16));
+            itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<Candy>(), 1, 1, 5));
+            itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<GlowingMeal>(), 1, 1, 2));
+            itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<FoodGodSummonItem>(), 1, 1));
         }
     }
 }

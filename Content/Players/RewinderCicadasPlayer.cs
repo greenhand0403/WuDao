@@ -9,6 +9,7 @@ using WuDao.Content.Items.Accessories;
 
 namespace WuDao.Content.Players
 {
+    // 春秋蝉：血量回溯系统
     public class RewinderCicadasPlayer : ModPlayer
     {
         // 配置
@@ -144,8 +145,8 @@ namespace WuDao.Content.Players
         // {
         //     if (equipped && Main.LocalPlayer == Player && Main.mouseItem?.ModItem is RewinderCicadas)
         //     {
-                // 当玩家正把饰品拿在鼠标上时，你也可以动态修改 Tooltip（需要 GlobalItem/ModifyTooltips 实现）
-                // 这里不做演示，见下方 GlobalItem 可选实现。
+        // 当玩家正把饰品拿在鼠标上时，你也可以动态修改 Tooltip（需要 GlobalItem/ModifyTooltips 实现）
+        // 这里不做演示，见下方 GlobalItem 可选实现。
         //     }
         // }
 

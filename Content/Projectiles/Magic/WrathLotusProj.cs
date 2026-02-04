@@ -10,6 +10,7 @@ using ReLogic.Content;
 
 namespace WuDao.Content.Projectiles.Magic
 {
+    // 佛怒火莲 射弹
     public class WrathLotusProj : ModProjectile
     {
         // public override string Texture => $"Terraria/Images/Projectile_{ProjectileID.LavaBomb}";

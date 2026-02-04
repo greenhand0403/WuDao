@@ -8,7 +8,9 @@ using WuDao.Content.Players;
 
 namespace WuDao.Content.Projectiles.Ranged
 {
-    /// <summary>心箭弹幕：自动追踪；命中回血；击杀掉红心</summary>
+    /// <summary>
+    /// 心箭弹幕：自动追踪；命中回血；击杀掉红心
+    /// </summary>
     public class HeartArrowProj : ModProjectile
     {
         public override void SetDefaults()

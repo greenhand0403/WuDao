@@ -10,6 +10,7 @@ using WuDao.Common;
 
 namespace WuDao.Content.Juexue.Active
 {
+    // 乾坤大挪移
     public class QiankunShift : JuexueItem
     {
         public override int QiCost => 100;

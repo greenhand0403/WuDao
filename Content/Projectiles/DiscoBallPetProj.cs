@@ -10,7 +10,7 @@ namespace WuDao.Content.Projectiles
 {
 
 
-    // 3) 宠物弹幕本体：参考猩红之心移动逻辑，加入“圆锥方向光 + 颜色循环 + 缓慢旋转”
+    // 迪斯科灯球 宠物弹幕本体：参考猩红之心移动逻辑，加入“圆锥方向光 + 颜色循环 + 缓慢旋转”
     public class DiscoBallPetProj : ModProjectile
     {
         // public override string Texture => $"WuDao/Content/Projectiles/DiscoBallPetProj";

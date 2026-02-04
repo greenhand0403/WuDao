@@ -8,6 +8,7 @@ using WuDao.Content.Players;
 
 namespace WuDao.Content.Items.Weapons.Melee
 {
+    // 幽灵飞盘
     public class GhostChakram : ModItem
     {
         public override void SetDefaults()

@@ -7,6 +7,7 @@ using WuDao.Content.Items;
 
 namespace WuDao.Content.Players
 {
+    // 开局给玩家模组礼包（仅一次）
     public class StarterPackPlayer : ModPlayer
     {
         private static bool StarterPackEnabled = false;

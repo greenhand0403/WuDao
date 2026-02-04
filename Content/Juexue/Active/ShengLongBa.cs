@@ -1,4 +1,3 @@
-// 庐山升龙霸：100 气，从光标位置向上飞出 8 条“飞龙”投射物（占位 Betsy 火球），高穿透。
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
@@ -10,6 +9,7 @@ using WuDao.Content.Projectiles;
 
 namespace WuDao.Content.Juexue.Active
 {
+    // 庐山升龙霸：100 气，从光标位置向上飞出 8 条“飞龙”投射物（占位 Betsy 火球），高穿透。
     public class ShengLongBa : JuexueItem
     {
         public override bool IsActive => true;

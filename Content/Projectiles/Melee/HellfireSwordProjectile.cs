@@ -6,8 +6,11 @@ using Terraria.ID;
 
 namespace WuDao.Content.Projectiles.Melee
 {
-    public class HellfireSwordProjectile : ModProjectile
-    {
+        /// <summary>
+        /// 地狱之锋 剑气
+        /// </summary>
+        public class HellfireSwordProjectile : ModProjectile
+        {
         // 仅占位用，此处贴图路径不起作用，后续自己绘制贴图
         public override string Texture => "WuDao/Content/Items/Weapons/Melee/HellfireSword";
         private SpriteSheet _sheet;

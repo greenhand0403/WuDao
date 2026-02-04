@@ -7,7 +7,7 @@ using WuDao.Common.Players;
 
 namespace WuDao.Content.Projectiles.Ranged
 {
-    // 霰弹单颗弹丸：穿透 3， 每穿透1个 -10% 最终伤害
+    // 法外狂徒 霰弹单颗弹丸：穿透 3， 每穿透1个 -10% 最终伤害
     public class TheOutlawPellet : ModProjectile
     {
         public override string Texture => $"Terraria/Images/Projectile_{ProjectileID.MeteorShot}";

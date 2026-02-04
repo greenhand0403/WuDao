@@ -6,6 +6,9 @@ using WuDao.Content.Players;
 
 namespace WuDao.Content.Items.Accessories
 {
+    /// <summary>
+    /// 猩之触 饰品
+    /// </summary>
     public class ApeTouch : ModItem
     {
         public override void SetDefaults()
@@ -27,7 +30,7 @@ namespace WuDao.Content.Items.Accessories
                 .AddIngredient(ItemID.Bone, 10)
                 .AddIngredient(ItemID.LifeCrystal, 5)
                 .AddIngredient(ItemID.ManaCrystal, 5)
-                .AddIngredient(ItemID.Leather,5)
+                .AddIngredient(ItemID.Leather, 5)
                 .AddTile(TileID.Anvils)
                 .Register();
         }

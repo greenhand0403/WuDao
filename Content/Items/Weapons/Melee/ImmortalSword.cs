@@ -6,6 +6,7 @@ using System.Collections.Generic;
 
 namespace WuDao.Content.Items.Weapons.Melee
 {
+    // 长生剑
     public class ImmortalSword : BuffItem
     {
         public override void SetDefaults()

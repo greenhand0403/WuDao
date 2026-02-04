@@ -48,11 +48,11 @@ namespace WuDao.Content.Tiles
                     {
                         // 只有在剩余时间偏低时才回填，避免每帧重置导致的闪烁
                         if (p.buffTime[ib] < 60)
-                            p.buffTime[ib] = 180;
+                            p.buffTime[ib] = 60;
                     }
                     else
                     {
-                        p.AddBuff(ModContent.BuffType<PyramidWard>(), 180); // 持续刷新
+                        p.AddBuff(ModContent.BuffType<PyramidWard>(), 60); // 持续刷新
                     }
                 }
             }

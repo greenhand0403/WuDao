@@ -10,7 +10,7 @@ namespace WuDao.Content.Items.Weapons.Melee
 {
     public class HarpyWingSword : BuffItem
     {
-        // tML 1.4.4：这两个乘子越大，出手越快（冷却越短）
+        // 翼剑
         public override float UseTimeMultiplier(Player player) => IsAirborne(player) ? 1.10f : 1f;           // 空中 +10% 使用速度
 
         public override float UseAnimationMultiplier(Player player) => IsAirborne(player) ? 1.10f : 1f;

@@ -4,6 +4,7 @@ using Terraria;
 
 namespace WuDao.Content.Items.Ammo
 {
+    // 日耀弹
     public class SolarBullet : ModItem
     {
         public override void SetStaticDefaults()

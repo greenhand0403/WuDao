@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework;
 namespace WuDao.Content.Players
 {
     /// <summary>
-    /// 仅在绘制阶段，把穿着的腿部帧切到“坐姿腿（向前伸）”，不改玩家状态，避免 ESC 等导致坠落。
+    /// 飞天马桶：仅在绘制阶段，把穿着的腿部帧切到“坐姿腿（向前伸）”，不改玩家状态，避免 ESC 等导致坠落。
     /// </summary>
     public sealed class FlyingToiletPosePlayer : ModPlayer
     {

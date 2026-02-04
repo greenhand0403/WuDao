@@ -7,6 +7,7 @@ using WuDao.Content.Players;
 
 namespace WuDao.Content.Juexue.Base
 {
+    // 绝学物品类
     public abstract class JuexueItem : ModItem
     {
         public override string Texture => $"Terraria/Images/Item_{ItemID.Book}";

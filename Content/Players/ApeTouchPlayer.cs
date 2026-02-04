@@ -8,6 +8,7 @@ using Terraria.Localization;
 
 namespace WuDao.Content.Players
 {
+    // 猩之触 触摸友军回血效果
     public class ApeTouchPlayer : ModPlayer
     {
         public bool ApeTouch;

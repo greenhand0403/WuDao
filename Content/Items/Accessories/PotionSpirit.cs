@@ -5,6 +5,9 @@ using WuDao.Content.Players;
 
 namespace WuDao.Content.Items.Accessories
 {
+    /// <summary>
+    /// 药水之灵饰品
+    /// </summary>
     public class PotionSpirit : ModItem
     {
         public override void SetDefaults()

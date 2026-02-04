@@ -7,6 +7,7 @@ using WuDao.Content.Players;
 
 namespace WuDao.Content.Items.Weapons.Melee
 {
+    // 爆破钳
     class BlasterPliers : ModItem
     {
         public override void SetDefaults()
