@@ -263,7 +263,6 @@ namespace WuDao.Content.Global.NPCs
         }
         public override void ModifyNPCLoot(NPCLoot npcLoot)
         {
-            // TODO: 未测试能否正常掉落宝藏袋
             npcLoot.Add(ItemDropRule.BossBag(ModContent.ItemType<FoodGodBossBag>()));
         }
     }

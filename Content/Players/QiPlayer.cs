@@ -83,6 +83,9 @@ namespace WuDao.Content.Players
             public float Scale;
             public Vector2 Offset;      // 相对玩家中心的偏移
             public SpriteEffects Fx;
+
+            public bool IsCooldownIcon;
+            public uint CooldownEndTick;
         }
         public const int Juexue1TotalFrames = 14; // 14个绝学虚影
         public JuexueGhostState Ghost; // 当前仅允许一个虚影，够用了
@@ -619,6 +622,24 @@ namespace WuDao.Content.Players
             nextGlobalActiveTick = Main.GameUpdateCount + (uint)GlobalActiveCooldownTicks;
             perSkillNextUseTick[itemType] = Main.GameUpdateCount + (uint)extraCooldownTicks;
         }
+        // 绝学冷却时，禁止更换装备新的绝学
+        public bool IsJuexueSlotLockedByActiveCooldown()
+        {
+            // 只锁主动绝学（被动不需要锁）
+            if (JuexueSlot?.ModItem is not JuexueItem ji || !ji.IsActive)
+                return false;
+
+            uint now = Main.GameUpdateCount;
+
+            // 公共冷却
+            if (now < nextGlobalActiveTick) return true;
+
+            // 专属冷却（按当前槽位里的 item.type 判断）
+            if (perSkillNextUseTick.TryGetValue(JuexueSlot.type, out uint t) && now < t)
+                return true;
+
+            return false;
+        }
 
         public override void ProcessTriggers(Terraria.GameInput.TriggersSet triggersSet)
         {
@@ -632,6 +653,10 @@ namespace WuDao.Content.Players
                     {
                         Charging = true;
                         ChargeQiSpent = 0;
+                    }
+                    else
+                    {
+                        Main.NewText("绝学尚未冷却。", Color.OrangeRed);
                     }
                 }
                 else if (JuexueSlot.ModItem is JuexueItem ji && ji.IsActive)
@@ -675,12 +700,45 @@ namespace WuDao.Content.Players
             Ghost.Offset = offset ?? Vector2.Zero;
             Ghost.Fx = fx;
         }
+        public void TriggerJuexueCooldownIcon(int frameIndex, int itemType, int cooldownTicks, float scale = 1f, Vector2? offset = null, SpriteEffects fx = SpriteEffects.None)
+        {
+            if (Main.dedServ) return;
+
+            Ghost.Src = VerticalFrame(frameIndex);
+            Ghost.Duration = cooldownTicks;
+            Ghost.Scale = scale;
+            Ghost.Offset = offset ?? Vector2.Zero;
+            Ghost.Fx = fx;
+
+            Ghost.IsCooldownIcon = true;
+
+            Ghost.CooldownEndTick = Main.GameUpdateCount + (uint)cooldownTicks;
+            Ghost.Duration = cooldownTicks;
+            Ghost.TimeLeft = cooldownTicks;
+            Ghost.IsCooldownIcon = true;
+
+            Ghost.TimeLeft = cooldownTicks; // 会在 PostUpdate 里刷新成真实剩余
+        }
 
         public override void PostUpdate()
         {
-            if (Ghost.TimeLeft > 0)
-                Ghost.TimeLeft--;
+            if (Ghost.IsCooldownIcon)
+            {
+                uint now = Main.GameUpdateCount;
+                int left = (Ghost.CooldownEndTick > now) ? (int)(Ghost.CooldownEndTick - now) : 0;
+                Ghost.TimeLeft = left;
+
+                // 冷却完自动关闭显示
+                if (left <= 0)
+                    Ghost.IsCooldownIcon = false;
+            }
+            else
+            {
+                if (Ghost.TimeLeft > 0)
+                    Ghost.TimeLeft--;
+            }
         }
+
         /// <summary>启动乾坤大挪移的“二次贝塞尔弧线冲刺”。</summary>
         public void StartQiankunCurveDash(Vector2 p0, Vector2 c, Vector2 p1, int duration)
         {

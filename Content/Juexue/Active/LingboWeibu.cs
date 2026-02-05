@@ -46,8 +46,14 @@ namespace WuDao.Content.Juexue.Active
             // —— 启动“凌波微步虚影” —— //
             if (!Main.dedServ)
             {
-                // 触发 1 秒虚影，稍微放大 1.1 倍，向上偏移 16 像素（站位更好看）
-                qi.TriggerJuexueGhost(LingboWeibuFrameIndex, durationTick: 60, scale: 1.1f, offset: new Vector2(0, -20));
+                // 冷却图标
+                qi.TriggerJuexueCooldownIcon(
+                    frameIndex: LingboWeibuFrameIndex,
+                    itemType: Type,                    // ModItem 的 Type
+                    cooldownTicks: SpecialCooldownTicks,
+                    scale: 1.1f,
+                    offset: new Vector2(0, -20)
+                );
             }
             return true;
         }

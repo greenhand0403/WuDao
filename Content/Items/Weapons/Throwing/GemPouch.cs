@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 
 namespace WuDao.Content.Items.Weapons.Throwing
 {
+    // 宝石袋
     public class GemPouch : BaseThrowingItem
     {
         // 指定默认射弹为 GemProjectile

@@ -35,8 +35,14 @@ namespace WuDao.Content.Juexue.Active
             qi.FeixianTicks = QiPlayer.FeixianTotalTicks;// ★ 启动计时
             if (!Main.dedServ)
             {
-                // 显示技能图标虚影
-                qi.TriggerJuexueGhost(FeixianFrameIndex, durationTick: 60, scale: 1.1f, offset: new Vector2(0, -20));
+                // 冷却图标
+                qi.TriggerJuexueCooldownIcon(
+                    frameIndex: FeixianFrameIndex,
+                    itemType: Type,                    // ModItem 的 Type
+                    cooldownTicks: SpecialCooldownTicks,
+                    scale: 1.1f,
+                    offset: new Vector2(0, -20)
+                );
             }
             // 3) 启动“飞仙定向冻结”：只冻结 NPC 与敌对弹幕，放行本玩家友方弹幕
             TimeStopSystem.StartFeixianFreeze(player.whoAmI, qi.FeixianTicks);

@@ -25,8 +25,14 @@ namespace WuDao.Content.Juexue.Active
             SoundEngine.PlaySound(SoundID.Item29, player.Center);
             if (!Main.dedServ)
             {
-                // 触发 2 秒虚影，稍微放大 1.1 倍，向上偏移 16 像素（站位更好看）
-                qi.TriggerJuexueGhost(DiamondSkinFrameIndex, durationTick: time, scale: 1.1f, offset: new Vector2(0, -20));
+                // 冷却图标
+                qi.TriggerJuexueCooldownIcon(
+                    frameIndex: DiamondSkinFrameIndex,
+                    itemType: Type,                    // ModItem 的 Type
+                    cooldownTicks: SpecialCooldownTicks,
+                    scale: 1.1f,
+                    offset: new Vector2(0, -20)
+                );
             }
             return true;
         }

@@ -1,9 +1,11 @@
+
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 using WuDao.Content.Players;
 using WuDao.Content.Juexue.Base;
+using Microsoft.Xna.Framework;
 
 namespace WuDao.Content.Juexue
 {
@@ -24,6 +26,24 @@ namespace WuDao.Content.Juexue
             int idx = -1;
             for (int i = 0; i < player.inventory.Length; i++)
                 if (object.ReferenceEquals(player.inventory[i], item)) { idx = i; break; }
+
+            // 仅当“当前槽位是主动绝学且仍在冷却”时，禁止更换
+            if (!qi.JuexueSlot.IsAir
+                && qi.JuexueSlot.ModItem is JuexueItem cur
+                && cur.IsActive
+                && !qi.CanUseActiveNow(qi.JuexueSlot.type, cur.SpecialCooldownTicks))
+            {
+                // 注意：这里千万别动 item / Main.mouseItem / 背包数据
+                SoundEngine.PlaySound(SoundID.MenuClose, player.Center);
+                if (player.whoAmI == Main.myPlayer)
+                    Main.NewText("绝学冷却中，无法更换绝学。", Color.OrangeRed);
+                // 默认当作“被消费了一次”，无法替换新绝学时，需要把当前物品克隆一份放回原位
+                player.inventory[idx] = item.Clone();
+                // 可选：防止这次右键继续被处理
+                player.mouseInterface = true;
+                Main.mouseRightRelease = false;
+                return;
+            }
 
             bool fav = item.favorited; // 记住收藏星标（可选，让星标留在原格）
 

@@ -12,7 +12,7 @@ using WuDao.Content.Players;
 namespace WuDao.Content.Items.Accessories
 {
     /*
-        核心机制：
+        败笔，核心机制：
         记录击败玩家的 NPC 类型。
         玩家死亡时，如果是被 NPC 杀死 → 记录该 NPC 类型和次数。
         装备后，对该 NPC 造成 10% × 被击败次数 的额外伤害。

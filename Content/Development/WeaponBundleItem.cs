@@ -95,7 +95,7 @@ namespace WuDao.Content.Development
             // 领取完毕后自动关闭 UI
             BundleSelectSystem.Hide();
 
-            // TODO（多人联机同步）：
+            // （多人联机同步）：
             // 若此礼包可在客户端使用，需要用 ModPacket 广播所选类别并在服务器执行 GiveItemsForCategory，
             // 或者仅允许在服务器端/单机端调用（检查 Main.netMode）。
         }

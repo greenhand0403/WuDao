@@ -5,6 +5,7 @@ using WuDao.Common;
 
 namespace WuDao.Content.Items.Weapons.Throwing
 {
+    // 毒飞镖
     public class PoisonedShuriken : BaseShurikenItem
     {
         // 数值配置

@@ -5,6 +5,7 @@ using WuDao.Content.Projectiles.Throwing;
 
 namespace WuDao.Content.Items.Weapons.Throwing
 {
+    // 木飞镖
     public class WoodenShuriken : BaseShurikenItem
     {
         // 数值配置

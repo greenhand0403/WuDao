@@ -55,7 +55,7 @@ namespace WuDao.Content.Items.Weapons.Melee
         //     // 根据美味值加成攻速
         //     return 1f + cp.Deliciousness * 0.01f;
         // }
-        // TODO: 写一个全局物品获取美食/厨具来应用加成效果
+        // TODO: 正确的做法应该是写一个全局物品，然后根据之前定义的厨具/美食系列武器/饰品附加类别，从而给武器/饰品提供额外的加成效果。而不是每个武器/饰品都单独写一次厨具/美食系统加成效果。例如我在静态类CuisineCollections里面就有定义，且在CuisinePlayer中有记录玩家的厨艺值和美味值
         // public override void UpdateAccessory(Player player, bool hideVisual)
         // {
         //     var cp = player.GetModPlayer<CuisinePlayer>();
