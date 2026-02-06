@@ -504,13 +504,13 @@ Items: {
 	}
 
 	QiSecretsB: {
-		// Tooltip: ""
-		// DisplayName: Qi Secrets B
+		Tooltip: 增加攻击和移动时气力恢复速度
+		DisplayName: 动功秘籍
 	}
 
 	QiSecretsA: {
-		// Tooltip: ""
-		// DisplayName: Qi Secrets A
+		Tooltip: 增加静止时气力恢复速度
+		DisplayName: 静功秘籍
 	}
 }
 
@@ -734,6 +734,21 @@ Buffs: {
 	EnchantedRoyalScepterBuff: {
 		Description: 皇家权杖保护你
 		DisplayName: 附魔皇家权杖
+	}
+
+	Encumbered: {
+		Description: 根据背包里的已占用的格子数，每个格子-1生命/s
+		DisplayName: 不堪重负
+	}
+
+	BarrenLand: {
+		Description: 根据已拥有的buff数量减少生命1/秒
+		DisplayName: 贫瘠之地
+	}
+
+	AllIn: {
+		Description: 根据背包里的空余格子数和玩家当前空余的饰品栏，+1%伤害移速暴击，-1%伤害减免
+		DisplayName: 孤注一掷
 	}
 }
 

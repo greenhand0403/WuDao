@@ -9,6 +9,7 @@ using WuDao.Content.Items;
 using System.Collections.Generic;
 using WuDao.Content.Items.Weapons.Melee;
 using System;
+using WuDao.Content.Items.Accessories;
 
 namespace WuDao.Content.Global
 {
@@ -23,7 +24,10 @@ namespace WuDao.Content.Global
         {
             // 华夫饼烘烤模
             ItemID.WaffleIron,
+            // 海虎爆破钳
             ModContent.ItemType<BlasterPliers>(),
+            // 葱剑
+            ModContent.ItemType<ScallionSword>(),
         };
 
         /// <summary>美食集合：会吃“美味值”乘区加成</summary>
@@ -38,14 +42,24 @@ namespace WuDao.Content.Global
             ItemID.CandyCornRifle,      // 玉米糖步枪
             ItemID.StarAnise,           // 星形茴香（投掷）
             ItemID.HoneyComb,           // 饰品蜂巢（本身无伤害，仅做分类展示/拓展用）
+            ModContent.ItemType<ScallionShield>(),//葱盾
         };
-
+        /// <summary>
+        /// 查询是否为厨具武器
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
         public static bool IsCookware(int type) => Cookware.Contains(type);
+        /// <summary>
+        /// 查询是否为美食武器或饰品
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
         public static bool IsGourmet(int type) => Gourmet.Contains(type);
 
         /// <summary>便捷注册（可在 Mod.Load 里调用动态扩充）</summary>
-        public static void AddCookware(params int[] types) { foreach (var t in types) Cookware.Add(t); }
-        public static void AddGourmet(params int[] types) { foreach (var t in types) Gourmet.Add(t); }
+        // public static void AddCookware(params int[] types) { foreach (var t in types) Cookware.Add(t); }
+        // public static void AddGourmet(params int[] types) { foreach (var t in types) Gourmet.Add(t); }
     }
 
     public class CuisineGlobalItem : GlobalItem
@@ -156,7 +170,7 @@ namespace WuDao.Content.Global
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
         {
             var cp = Main.LocalPlayer?.GetModPlayer<CuisinePlayer>();
-
+            // 厨具武器加成
             if (CuisineCollections.IsCookware(item.type))
             {
                 tooltips.Add(new TooltipLine(Mod, "CuisineTag", "厨具"));
@@ -168,7 +182,7 @@ namespace WuDao.Content.Global
                         $"当前厨艺加成：+{percent}% 伤害（最高 +{MaxExtraMultiplier * 100}%）"));
                 }
             }
-
+            // 美食武器加成
             if (CuisineCollections.IsGourmet(item.type))
             {
                 tooltips.Add(new TooltipLine(Mod, "CuisineTag", "美食"));

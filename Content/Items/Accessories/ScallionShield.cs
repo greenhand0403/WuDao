@@ -31,11 +31,11 @@ namespace WuDao.Content.Items.Accessories
             return (int)(BaseDashDuration * (1f + extra));
         }
 
-        public override void SetStaticDefaults()
-        {
-            // 注册为“美食”，这样能自动享受你在 GlobalItem 里写的“美味值→饰品防御”加成
-            CuisineCollections.AddGourmet(ModContent.ItemType<ScallionShield>());
-        }
+        // public override void SetStaticDefaults()
+        // {
+        //     // 注册为“美食”，这样能自动享受你在 GlobalItem 里写的“美味值→饰品防御”加成
+        //     CuisineCollections.AddGourmet(ModContent.ItemType<ScallionShield>());
+        // }
 
         public override void SetDefaults()
         {

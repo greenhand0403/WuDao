@@ -1,4 +1,3 @@
-
 using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
@@ -22,6 +21,8 @@ namespace WuDao.Content.Players
         // —— 天人五衰计时 ——
         private int fiveDecayTimer;
         private int? _baldOriginalHair = null;
+        private static int CountBackpackEmpty(Player p) => 50 - CountBackpackUsed(p);
+
         public override void ResetEffects()
         {
             if (!Player.HasBuff(ModContent.BuffType<BaldHead>()) && _baldOriginalHair.HasValue)
@@ -48,7 +49,20 @@ namespace WuDao.Content.Players
                 Player.GetCritChance(DamageClass.Generic) += 4f; // 暴击 +4
             }
 
-            // ……保留你文件里其它需要放在 PostUpdateMiscEffects 的效果（若有）……
+            if (Player.HasBuff(ModContent.BuffType<AllIn>()))
+            {
+                int emptyBag = CountBackpackEmpty(Player);
+                int emptyAcc = CountAccessoryEmpty(Player);
+                int stacks = emptyBag + emptyAcc;
+
+                // 每层：+1% 伤害、+1% 移速、+1 暴击；-1% 减伤（endurance）
+                Player.GetDamage(DamageClass.Generic) *= 1f + 0.01f * stacks;
+                Player.moveSpeed += 0.01f * stacks;
+                Player.GetCritChance(DamageClass.Generic) += stacks;
+
+                Player.endurance -= 0.01f * stacks;
+                Player.endurance = MathHelper.Clamp(Player.endurance, -0.80f, 0.95f); // 下限保护
+            }
         }
         public override void PreUpdate()
         {
@@ -289,6 +303,55 @@ namespace WuDao.Content.Players
             if (Player.HasBuff<BaldHead>())
             {
                 modifiers.FinalDamage *= 1.04f;
+            }
+        }
+
+        // ---------- 小工具：数背包格子（只算“背包”0~49，不算钱/弹药栏） ----------
+        private static int CountBackpackUsed(Player p)
+        {
+            int used = 0;
+            for (int i = 0; i < 50; i++)
+            {
+                if (!p.inventory[i].IsAir) used++;
+            }
+            return used;
+        }
+        // ---------- 小工具：数“可用饰品栏空位”（不算时装栏） ----------
+        // 简化：只看前 5 + extraAccessorySlots 个饰品位（索引 3..）
+        private static int CountAccessoryEmpty(Player p)
+        {
+            int maxAcc = 5 + p.extraAccessorySlots; // 原版/专家/大师的额外饰品位会体现在 extraAccessorySlots
+            if (maxAcc < 0) maxAcc = 0;
+            if (maxAcc > 7) maxAcc = 7; // 保守上限（避免某些MOD扩展导致越界）
+
+            int empty = 0;
+            for (int i = 0; i < maxAcc; i++)
+            {
+                int idx = 3 + i; // Player.armor[0..2]是盔甲，3..是饰品
+                if (idx >= 0 && idx < p.armor.Length && p.armor[idx].IsAir)
+                    empty++;
+            }
+            return empty;
+        }
+        public override void UpdateBadLifeRegen()
+        {
+            if (Player.HasBuff(ModContent.BuffType<Encumbered>()))
+            {
+                int used = CountBackpackUsed(Player);
+                Player.lifeRegenTime = 0;
+                Player.lifeRegen -= used * 2; // 每格 -1 HP/s => lifeRegen -2
+            }
+
+            if (Player.HasBuff(ModContent.BuffType<BarrenLand>()))
+            {
+                int buffCount = 0;
+                for (int i = 0; i < Player.buffType.Length; i++)
+                {
+                    if (Player.buffType[i] > 0 && Player.buffTime[i] > 0) buffCount++;
+                }
+
+                Player.lifeRegenTime = 0;
+                Player.lifeRegen -= buffCount * 2; // 每个buff -1 HP/s
             }
         }
     }

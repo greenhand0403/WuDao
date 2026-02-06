@@ -636,6 +636,21 @@ Buffs: {
 		Description: Mods.WuDao.Buffs.EnchantedRoyalScepterBuff.Description
 		DisplayName: Enchanted Royal Scepter Buff
 	}
+
+	Encumbered: {
+		Description: Mods.WuDao.Buffs.Encumbered.Description
+		DisplayName: Encumbered
+	}
+
+	BarrenLand: {
+		Description: Mods.WuDao.Buffs.BarrenLand.Description
+		DisplayName: Barren Land
+	}
+
+	AllIn: {
+		Description: Mods.WuDao.Buffs.AllIn.Description
+		DisplayName: All In
+	}
 }
 
 Configs: {

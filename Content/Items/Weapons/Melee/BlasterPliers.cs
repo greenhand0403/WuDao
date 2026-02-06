@@ -27,13 +27,6 @@ namespace WuDao.Content.Items.Weapons.Melee
         }
         public override void ModifyWeaponDamage(Player player, ref StatModifier damage)
         {
-            // 按“已制作 X 种可合成食物”每种 +50 伤害做平铺加成；按“已品尝 Y 种”每种 +10% 乘法
-            // cmd Main.NewText($"已制作={madeCount}, 已品尝={eatenCount}");
-            var cp = player.GetModPlayer<CuisinePlayer>();
-            // 根据厨艺值加成伤害
-            int madeCount = (int)(cp.CookingSkill * 0.01f);
-            damage.Flat += madeCount;
-
             // 直接统计本次结算时玩家背包里的热狗数量（联机安全）
             int hotdogs = 0;
             for (int i = 0; i < player.inventory.Length; i++)
@@ -48,41 +41,22 @@ namespace WuDao.Content.Items.Weapons.Melee
         {
             return new Vector2(-4, 2); // 向内偏移4像素
         }
-        // 有 bug
-        // public override float UseSpeedMultiplier(Player player)
+        // 根据敌怪稀有度增加伤害
+        // public override void ModifyHitNPC(Player player, NPC target, ref NPC.HitModifiers modifiers)
         // {
-        //     var cp = player.GetModPlayer<CuisinePlayer>();
-        //     // 根据美味值加成攻速
-        //     return 1f + cp.Deliciousness * 0.01f;
+        //     int g = target.rarity;
+        //     if (g > 0)
+        //     {
+        //         float multiplier = 1f + g * 0.5f;
+        //         modifiers.FinalDamage *= multiplier;
+
+        //         CombatText.NewText(
+        //             target.Hitbox,
+        //             new Color(180, 220, 255),
+        //             $"敌怪稀有度 {g}"
+        //         );
+        //     }
         // }
-        // TODO: 正确的做法应该是写一个全局物品，然后根据之前定义的厨具/美食系列武器/饰品附加类别，从而给武器/饰品提供额外的加成效果。而不是每个武器/饰品都单独写一次厨具/美食系统加成效果。例如我在静态类CuisineCollections里面就有定义，且在CuisinePlayer中有记录玩家的厨艺值和美味值
-        // public override void UpdateAccessory(Player player, bool hideVisual)
-        // {
-        //     var cp = player.GetModPlayer<CuisinePlayer>();
-        //     int madeCount = cp.CraftedFoodTypes.Count;  // 已制作过“可合成食物”的种数（走菜谱池）
-        //     int eatenCount = cp.FoodsEatenAll.Count;     // 全局“已吃过”的种数（含不可合成与模组）
-
-        //     // 举例：根据“厨艺/制作数”给少量加成
-        //     if (madeCount >= 5) player.GetDamage(DamageClass.Generic) += 0.05f;
-
-        //     // 控制台/聊天栏直接打印
-        //     Main.NewText($"Cookbook已制作：{madeCount}，FoodLog已品尝：{eatenCount}");
-        // }
-        public override void ModifyHitNPC(Player player, NPC target, ref NPC.HitModifiers modifiers)
-        {
-            int g = target.rarity;
-            if (g > 0)
-            {
-                float multiplier = 1f + g * 0.5f;
-                modifiers.FinalDamage *= multiplier;
-
-                CombatText.NewText(
-                    target.Hitbox,
-                    new Color(180, 220, 255),
-                    $"敌怪稀有度 {g}"
-                );
-            }
-        }
         public override void AddRecipes()
         {
             CreateRecipe()
