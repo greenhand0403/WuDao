@@ -127,7 +127,8 @@ namespace WuDao.Content.Systems
                         // lava/honey/shimmer 都算不适合（你也可以只排除 lava）
                         if (t.LiquidType == LiquidID.Lava ||
                             t.LiquidType == LiquidID.Honey ||
-                            t.LiquidType == LiquidID.Shimmer)
+                            t.LiquidType == LiquidID.Shimmer ||
+                            t.LiquidAmount > 0)
                             return true;
                     }
                 }

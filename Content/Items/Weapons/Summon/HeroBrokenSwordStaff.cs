@@ -19,7 +19,7 @@ namespace WuDao.Content.Items.Weapons.Summon
             ItemID.Sets.GamepadWholeScreenUseRange[Item.type] = true;
             ItemID.Sets.LockOnIgnoresCollision[Item.type] = true;
             // 占 1 个召唤栏（保持与刃杖一致）
-            ItemID.Sets.StaffMinionSlotsRequired[Type] = 1f; // 参考示例写法 :contentReference[oaicite:3]{index=3}
+            ItemID.Sets.StaffMinionSlotsRequired[Type] = 1f;
         }
 
         public override void SetDefaults()
@@ -41,7 +41,7 @@ namespace WuDao.Content.Items.Weapons.Summon
         // 让召唤物出生在鼠标位置（与多数原版召唤一致）
         public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)
         {
-            position = Main.MouseWorld; // 参考示例 :contentReference[oaicite:4]{index=4}
+            position = Main.MouseWorld;
         }
 
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
@@ -49,8 +49,8 @@ namespace WuDao.Content.Items.Weapons.Summon
             // Buff 持续 & 手动生成投射物并回填 originalDamage（示例中的标准做法）
             player.AddBuff(Item.buffType, 2);
             var proj = Projectile.NewProjectileDirect(source, position, velocity, type, damage, knockback, player.whoAmI);
-            proj.originalDamage = Item.damage;   // 确保随重新铸造/加成正确缩放  :contentReference[oaicite:5]{index=5}
-            return false; // 已手动生成，阻止默认生成  :contentReference[oaicite:6]{index=6}
+            proj.originalDamage = Item.damage;   // 确保随重新铸造/加成正确缩放
+            return false; // 已手动生成，阻止默认生成
         }
 
         public override void AddRecipes()

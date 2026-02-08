@@ -61,7 +61,7 @@ namespace WuDao.Content.Players
                 Player.GetCritChance(DamageClass.Generic) += stacks;
 
                 Player.endurance -= 0.01f * stacks;
-                Player.endurance = MathHelper.Clamp(Player.endurance, -0.80f, 0.95f); // 下限保护
+                Player.endurance = MathHelper.Clamp(Player.endurance, 0f, 0.95f); // 下限保护
             }
         }
         public override void PreUpdate()

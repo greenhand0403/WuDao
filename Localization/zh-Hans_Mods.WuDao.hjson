@@ -512,6 +512,11 @@ Items: {
 		Tooltip: 增加静止时气力恢复速度
 		DisplayName: 静功秘籍
 	}
+
+	BugStuff: {
+		Tooltip: 召唤蚱蜢
+		DisplayName: 虫杖
+	}
 }
 
 Projectiles: {
@@ -568,6 +573,7 @@ Projectiles: {
 	KamehamehaProj.DisplayName: 龟派气功冲击波
 	RoyalShadowBeam.DisplayName: 皇家暗影光束
 	RoyalScepterMinion.DisplayName: 皇家权杖
+	GrasshopperMinion.DisplayName: 蚱蜢
 }
 
 DamageClasses: {
@@ -749,6 +755,11 @@ Buffs: {
 	AllIn: {
 		Description: 根据背包里的空余格子数和玩家当前空余的饰品栏，+1%伤害移速暴击，-1%伤害减免
 		DisplayName: 孤注一掷
+	}
+
+	GrasshopperBuff: {
+		Description: 蚱蜢为你而战
+		DisplayName: 蚱蜢守护
 	}
 }
 

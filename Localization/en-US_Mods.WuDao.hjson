@@ -413,6 +413,11 @@ Items: {
 		Tooltip: ""
 		DisplayName: Qi Secrets A
 	}
+
+	BugStuff: {
+		Tooltip: ""
+		DisplayName: Bug Stuff
+	}
 }
 
 Projectiles: {
@@ -469,6 +474,7 @@ Projectiles: {
 	KamehamehaProj.DisplayName: Kamehameha Proj
 	RoyalShadowBeam.DisplayName: Royal Shadow Beam
 	RoyalScepterMinion.DisplayName: Royal Scepter Minion
+	GrasshopperMinion.DisplayName: Grasshopper Minion
 }
 
 DamageClasses: {
@@ -650,6 +656,11 @@ Buffs: {
 	AllIn: {
 		Description: Mods.WuDao.Buffs.AllIn.Description
 		DisplayName: All In
+	}
+
+	GrasshopperBuff: {
+		Description: Mods.WuDao.Buffs.GrasshopperBuff.Description
+		DisplayName: Grasshopper Buff
 	}
 }
 
