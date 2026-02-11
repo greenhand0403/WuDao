@@ -40,7 +40,7 @@ namespace WuDao.Content.Projectiles.Summon
             Projectile.penetrate = -1;
             Projectile.timeLeft = 18000;
 
-            Projectile.tileCollide = true;
+            Projectile.tileCollide = false;
             Projectile.ignoreWater = true;
 
             Projectile.DamageType = DamageClass.Summon;

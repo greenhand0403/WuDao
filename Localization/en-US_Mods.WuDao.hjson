@@ -418,6 +418,11 @@ Items: {
 		Tooltip: ""
 		DisplayName: Bug Stuff
 	}
+
+	ButterflyCane: {
+		Tooltip: ""
+		DisplayName: Butterfly Cane
+	}
 }
 
 Projectiles: {
@@ -475,6 +480,7 @@ Projectiles: {
 	RoyalShadowBeam.DisplayName: Royal Shadow Beam
 	RoyalScepterMinion.DisplayName: Royal Scepter Minion
 	GrasshopperMinion.DisplayName: Grasshopper Minion
+	ButterflyMinion.DisplayName: Butterfly Minion
 }
 
 DamageClasses: {
@@ -661,6 +667,11 @@ Buffs: {
 	GrasshopperBuff: {
 		Description: Mods.WuDao.Buffs.GrasshopperBuff.Description
 		DisplayName: Grasshopper Buff
+	}
+
+	ButterflyCaneBuff: {
+		Description: Mods.WuDao.Buffs.ButterflyCaneBuff.Description
+		DisplayName: Butterfly Cane Buff
 	}
 }
 

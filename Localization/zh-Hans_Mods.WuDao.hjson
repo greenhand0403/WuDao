@@ -517,6 +517,11 @@ Items: {
 		Tooltip: 召唤蚱蜢
 		DisplayName: 虫杖
 	}
+
+	ButterflyCane: {
+		Tooltip: 召唤蝴蝶
+		DisplayName: 蝴蝶杖
+	}
 }
 
 Projectiles: {
@@ -574,6 +579,7 @@ Projectiles: {
 	RoyalShadowBeam.DisplayName: 皇家暗影光束
 	RoyalScepterMinion.DisplayName: 皇家权杖
 	GrasshopperMinion.DisplayName: 蚱蜢
+	ButterflyMinion.DisplayName: 蝴蝶
 }
 
 DamageClasses: {
@@ -760,6 +766,11 @@ Buffs: {
 	GrasshopperBuff: {
 		Description: 蚱蜢为你而战
 		DisplayName: 蚱蜢守护
+	}
+
+	ButterflyCaneBuff: {
+		Description: 蝴蝶为你而战
+		DisplayName: 蝴蝶守护
 	}
 }
 
