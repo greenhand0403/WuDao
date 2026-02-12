@@ -423,6 +423,16 @@ Items: {
 		Tooltip: ""
 		DisplayName: Butterfly Cane
 	}
+
+	FlyingSnakeStaff: {
+		Tooltip: ""
+		DisplayName: Flying Snake Staff
+	}
+
+	ThousandGhostBanner: {
+		DisplayName: Thousand Ghost Banner
+		Tooltip: ""
+	}
 }
 
 Projectiles: {
@@ -481,6 +491,8 @@ Projectiles: {
 	RoyalScepterMinion.DisplayName: Royal Scepter Minion
 	GrasshopperMinion.DisplayName: Grasshopper Minion
 	ButterflyMinion.DisplayName: Butterfly Minion
+	FlyingSnakeMinion.DisplayName: Flying Snake Minion
+	ThousandGhostMinion.DisplayName: Thousand Ghost Minion
 }
 
 DamageClasses: {
@@ -672,6 +684,16 @@ Buffs: {
 	ButterflyCaneBuff: {
 		Description: Mods.WuDao.Buffs.ButterflyCaneBuff.Description
 		DisplayName: Butterfly Cane Buff
+	}
+
+	FlyingSnakeBuff: {
+		Description: Mods.WuDao.Buffs.FlyingSnakeBuff.Description
+		DisplayName: Flying Snake Buff
+	}
+
+	ThousandGhostBannerBuff: {
+		DisplayName: Thousand Ghost Banner Buff
+		Description: Mods.WuDao.Buffs.ThousandGhostBannerBuff.Description
 	}
 }
 

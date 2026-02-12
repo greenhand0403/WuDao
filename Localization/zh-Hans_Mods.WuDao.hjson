@@ -522,6 +522,16 @@ Items: {
 		Tooltip: 召唤蝴蝶
 		DisplayName: 蝴蝶杖
 	}
+
+	FlyingSnakeStaff: {
+		Tooltip: 召唤飞蛇
+		DisplayName: 飞蛇杖
+	}
+
+	ThousandGhostBanner: {
+		DisplayName: 召唤鬼魂
+		Tooltip: 万魂幡
+	}
 }
 
 Projectiles: {
@@ -577,9 +587,11 @@ Projectiles: {
 	MagneticHeavenBladeField.DisplayName: 磁场天刀引力场
 	KamehamehaProj.DisplayName: 龟派气功冲击波
 	RoyalShadowBeam.DisplayName: 皇家暗影光束
-	RoyalScepterMinion.DisplayName: 皇家权杖
+	RoyalScepterMinion.DisplayName: 附魔皇家权杖
 	GrasshopperMinion.DisplayName: 蚱蜢
 	ButterflyMinion.DisplayName: 蝴蝶
+	FlyingSnakeMinion.DisplayName: 飞蛇
+	ThousandGhostMinion.DisplayName: 万魂幡
 }
 
 DamageClasses: {
@@ -771,6 +783,16 @@ Buffs: {
 	ButterflyCaneBuff: {
 		Description: 蝴蝶为你而战
 		DisplayName: 蝴蝶守护
+	}
+
+	FlyingSnakeBuff: {
+		Description: 飞蛇为你而战
+		DisplayName: 飞蛇之主
+	}
+
+	ThousandGhostBannerBuff: {
+		DisplayName: 万魂幡之主
+		Description:鬼魂守护
 	}
 }
 

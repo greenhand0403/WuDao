@@ -33,7 +33,7 @@ namespace WuDao.Content.Items.Weapons.Summon
             Item.shoot = ModContent.ProjectileType<GrasshopperMinion>();
             Item.buffType = ModContent.BuffType<GrasshopperBuff>();
 
-            Item.rare = ItemRarityID.Green;
+            Item.rare = ItemRarityID.Blue;
             Item.UseSound = SoundID.Item44;
             Item.value = Item.buyPrice(0, 0, 50);
         }
