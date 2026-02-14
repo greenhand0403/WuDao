@@ -5,6 +5,7 @@ using WuDao.Content.Projectiles.Summon;
 
 namespace WuDao.Content.Buffs
 {
+    // 蚱蜢 Summon Buff
     public class GrasshopperBuff : ModBuff
     {
         public override string Texture => $"Terraria/Images/Item_{ItemID.Grasshopper}";

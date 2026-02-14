@@ -12,6 +12,8 @@ namespace WuDao.Content.Projectiles.Summon
         public override string Texture => $"Terraria/Images/NPC_{NPCID.Ghost}";
         // 寻敌参数
         private const float TargetAcquireRange = 700f;
+        public override bool? CanCutTiles() => false; // 不用于清草
+        public override bool MinionContactDamage() => true;
         public override void SetStaticDefaults()
         {
             // Sets the amount of frames this minion has on its spritesheet
@@ -42,22 +44,10 @@ namespace WuDao.Content.Projectiles.Summon
             Projectile.localNPCHitCooldown = 10; // 约 1/6 秒，可按手感 8~20 调整
         }
 
-        // Here you can decide if your minion breaks things like grass or pots
-        public override bool? CanCutTiles()
-        {
-            return false;
-        }
-
-        // This is mandatory if your minion deals contact damage (further related stuff in AI() in the Movement region)
-        public override bool MinionContactDamage()
-        {
-            return true;
-        }
-
         public override void AI()
         {
             Player owner = Main.player[Projectile.owner];
-            if (!owner.active || owner.dead)
+            if (!owner.active || owner.dead || !owner.HasBuff(ModContent.BuffType<ThousandGhostBannerBuff>()))
             {
                 Projectile.Kill();
                 return;

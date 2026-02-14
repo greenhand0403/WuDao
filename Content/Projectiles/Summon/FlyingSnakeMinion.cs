@@ -51,7 +51,8 @@ namespace WuDao.Content.Projectiles.Summon
         public override void AI()
         {
             Player owner = Main.player[Projectile.owner];
-            if (!owner.active)
+            // ★ 右键取消Buff后：仆从立刻消失
+            if (!owner.active || owner.dead || !owner.HasBuff(ModContent.BuffType<FlyingSnakeBuff>()))
             {
                 Projectile.Kill();
                 return;

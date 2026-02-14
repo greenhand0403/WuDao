@@ -5,6 +5,7 @@ using WuDao.Content.Projectiles.Summon;
 
 namespace WuDao.Content.Buffs
 {
+    // 万魂幡 Summon Buff
     public class ThousandGhostBannerBuff : ModBuff
     {
         public override string Texture => $"Terraria/Images/Item_{ItemID.GhostBanner}";

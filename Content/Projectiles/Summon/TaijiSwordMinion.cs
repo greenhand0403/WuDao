@@ -9,20 +9,19 @@ using WuDao.Content.Buffs;
 
 namespace WuDao.Content.Projectiles.Summon
 {
-    // 蝴蝶仆从
-    public class ButterflyMinion : ModProjectile
+    // 太极剑仆从：12帧动画（前6帧样式1穿甲，后6帧样式2吸血），82x82；AI整合蝴蝶仆从与断裂英雄剑思路，并模仿附魔剑敌怪的突进节奏
+    public class TaijiSwordMinion : ModProjectile
     {
-        // 复用“蝴蝶合集图” 24x576（NPC_356）
-        public override string Texture => "Terraria/Images/NPC_" + NPCID.Butterfly;
         public override bool MinionContactDamage() => true;
-        public override bool? CanCutTiles() => false;
-        // ai[0] = variantIndex (0..7)
-        // ai[1] = 0 (未使用)
-        // localAI[0] = state (0=盘旋, 1=俯冲)
+        public override bool? CanCutTiles() => true;
+
+        // ai[0] = style (0/1)
+        // ai[1] = initFlag
+        // localAI[0] = state (0=盘旋, 1=接敌巡航, 2=俯冲)
         // localAI[1] = timer (状态计时)
         public override void SetStaticDefaults()
         {
-            Main.projFrames[Type] = 3; // 三帧动画
+            Main.projFrames[Type] = 6; // 12帧：前6帧样式1（穿甲），后6帧样式2（吸血）
             ProjectileID.Sets.MinionTargettingFeature[Type] = true;
             Main.projPet[Type] = true;
             ProjectileID.Sets.MinionSacrificable[Type] = true;
@@ -31,41 +30,43 @@ namespace WuDao.Content.Projectiles.Summon
 
         public override void SetDefaults()
         {
-            Projectile.width = 24;
-            Projectile.height = 24; // 你说的单帧24x24 把4帧间隔也算进去了
+            Projectile.width = 82;
+            Projectile.height = 82;
 
             Projectile.friendly = true;
             Projectile.minion = true;
-            Projectile.minionSlots = 1f; // 仍然占1槽，但我们额外强制最多8只
+            Projectile.minionSlots = 1f; // 仍然占1槽，但我们额外强制最多2只（与蝴蝶仆从类似）
 
             Projectile.penetrate = -1;
             Projectile.timeLeft = 18000;
 
             Projectile.tileCollide = false; // 飞行随从，避免卡地形
-            // Projectile.ignoreWater = true;
 
             Projectile.DamageType = DamageClass.Summon;
 
             Projectile.usesLocalNPCImmunity = true;
             Projectile.localNPCHitCooldown = 18;
         }
+
         // 建议：把状态扩展成 3 个（更清晰）
         private const int State_Idle = 0;
         private const int State_Staging = 1;
         private const int State_Dash = 2;
+
         public override void AI()
         {
             Player owner = Main.player[Projectile.owner];
 
             // 1) GeneralBehavior / MaintainBuff
-            if (!owner.active || owner.dead || !owner.HasBuff(ModContent.BuffType<ButterflyCaneBuff>()))
+            // 如果“太极剑匣”用的是别的 Buff，请把这里替换成你的新 BuffType。
+            if (!owner.active || owner.dead || !owner.HasBuff(ModContent.BuffType<TaijiSwordBoxBuff>()))
             {
-                owner.ClearBuff(ModContent.BuffType<ButterflyCaneBuff>());
+                owner.ClearBuff(ModContent.BuffType<TaijiSwordBoxBuff>());
                 Projectile.Kill();
                 return;
             }
-            
-            if (owner.HasBuff(ModContent.BuffType<ButterflyCaneBuff>()))
+
+            if (owner.HasBuff(ModContent.BuffType<TaijiSwordBoxBuff>()))
                 Projectile.timeLeft = 2;
 
             // 防迷路瞬移
@@ -84,7 +85,10 @@ namespace WuDao.Content.Projectiles.Summon
             // 状态与计时器：沿用你的 localAI
             int state = (int)Projectile.localAI[0];
             Projectile.localAI[1]++; // stateTimer
-            Vector2 idlePos=Vector2.Zero;
+            Vector2 idlePos = Vector2.Zero;
+
+            GetIdleSlot(owner, out int index, out int total);
+
             // 3) Movement (State Machine)
             if (!hasTarget)
             {
@@ -92,8 +96,6 @@ namespace WuDao.Content.Projectiles.Summon
                 state = State_Idle;
                 Projectile.localAI[0] = state;
                 Projectile.localAI[1] = 0f;
-
-                GetIdleSlot(owner, out int index, out int total);
 
                 float radius = 40f;
                 float height = -70f;
@@ -103,10 +105,15 @@ namespace WuDao.Content.Projectiles.Summon
                     + new Vector2(radius, 0f).RotatedBy(angle)
                     + new Vector2(0f, height);
 
-                HoverTo(idlePos, speed: 10f, inertia: 18f);
-
-                // 4) Visuals：悬停严格跟玩家方向，不要用 idlePos 决定方向
-                UpdateVisuals(owner, hasTarget: false,idlePos);
+                HoverTo(idlePos, speed: 18f, inertia: 8f);
+                // ✅到位后直接把速度归零，消除抖动
+                if (Vector2.DistanceSquared(Projectile.Center, idlePos) < 4f) // 2px 半径
+                {
+                    Projectile.Center = idlePos;
+                    Projectile.velocity = Vector2.Zero;
+                }
+                // ——空闲时的朝向：指向速度方向；若已就位则保持朝上——
+                Projectile.rotation = -MathHelper.PiOver4;
                 return;
             }
 
@@ -122,8 +129,11 @@ namespace WuDao.Content.Projectiles.Summon
 
             if (state == State_Staging)
             {
-                Vector2 stagingPos = target.Center + new Vector2(0f, -70f);
-                HoverTo(stagingPos, speed: 11f, inertia: 14f);
+                float side = (index == 0) ? -60f : 60f; // ✅两把剑左右分开
+                // 加一点随机偏移
+                Vector2 stagingPos = target.Center + new Vector2(side, 70f * Main.rand.NextFloat(-2f, 2f));
+                // 正常速度 18f，惯性越大转向越慢 8f
+                HoverTo(stagingPos, speed: 18f, inertia: 8f);
 
                 if (Vector2.Distance(Projectile.Center, stagingPos) < 26f)
                 {
@@ -137,78 +147,30 @@ namespace WuDao.Content.Projectiles.Summon
             {
                 Vector2 to = target.Center - Projectile.Center;
 
-                // Dash 速度/转向
-                Projectile.velocity = Vector2.Lerp(
-                    Projectile.velocity,
-                    to.SafeNormalize(Vector2.UnitY) * 16f,
-                    0.35f
-                );
-
-                // Dash 持续一小段时间后回到 Staging 或 Idle
-                if (Projectile.localAI[1] > 22f || to.Length() < 16f)
+                // 第1帧给一个冲刺初速度（之后主要靠惯性飞）
+                if (Projectile.localAI[1] == 1f)
                 {
-                    state = State_Staging; // 你也可以改回 Idle：看你想不想连段
-                    Projectile.localAI[0] = state;
+                    Projectile.velocity = to.SafeNormalize(Vector2.UnitY) * 24f; // 可调：穿刺速度
+                }
+                else
+                {
+                    // ✅减少“追踪修正”，避免蛇形贴转（建议直接去掉 Lerp）
+                    Projectile.velocity *= 0.98f; // 轻微阻尼
+                    // 阻尼越小，减速越快，则惯性滑行距离越短
+                }
+
+                // ✅关键：Dash 持续固定时间后回到巡航位，形成“不断穿刺”
+                // 16 控制惯性距离
+                if (Projectile.localAI[1] >= 16f)
+                {
+                    Projectile.localAI[0] = State_Staging;
                     Projectile.localAI[1] = 0f;
                     Projectile.netUpdate = true;
                 }
             }
 
-            // 4) Visuals：攻击时方向跟速度，旋转让头对齐速度方向
-            UpdateVisuals(owner, hasTarget: true,idlePos);
-        }
-
-        private void UpdateVisuals(Player owner, bool hasTarget,Vector2 idlePos)
-        {
-            if (!hasTarget && Vector2.DistanceSquared(Projectile.Center, idlePos) < 400f)
-            {
-                // 悬停：严格跟玩家方向，不允许任何“目标点 dx”触发翻面
-                Projectile.direction = owner.direction;
-                Projectile.spriteDirection = owner.direction;
-
-                // 悬停不旋转（保持默认“左上45°”观感）
-                Projectile.rotation = 0f;
-
-                // 这里不需要翻面冷却，因为方向完全由玩家决定，不会抖
-                return;
-            }
-
-            // 攻击：方向跟速度（避免 vx≈0 时抖动）
-            float vx = Projectile.velocity.X;
-            if (Math.Abs(vx) > 0.2f)
-            {
-                Projectile.direction = (vx > 0f) ? 1 : -1;
-                Projectile.spriteDirection = Projectile.direction;
-            }
-            else
-            {
-                // 速度太小：保持上一帧方向（别在 0 附近左右跳）
-                if (Projectile.spriteDirection == 0)
-                {
-                    Projectile.direction = owner.direction;
-                    Projectile.spriteDirection = owner.direction;
-                }
-            }
-
-            UpdateRotationToVelocity();
-        }
-
-        private void UpdateRotationToVelocity()
-        {
-            if (Projectile.velocity.LengthSquared() < 0.05f)
-            {
-                Projectile.rotation = 0f;
-                return;
-            }
-
-            float velAngle = Projectile.velocity.ToRotation();
-
-            // 贴图默认头：左上45° => (-1,-1)；翻转后头：右上45° => (1,-1)
-            float headAngle = (Projectile.spriteDirection == 1)
-                ? new Vector2(1f, -1f).ToRotation()   // -45°
-                : new Vector2(-1f, -1f).ToRotation(); // -135°
-
-            Projectile.rotation = velAngle - headAngle;
+            // 攻击时剑尖跟随速度方向并偏转角度，恰好指向敌人
+            Projectile.rotation = Projectile.velocity.SafeNormalize(Vector2.UnitX).ToRotation() + MathHelper.PiOver4;
         }
 
         private void HoverTo(Vector2 targetPos, float speed, float inertia)
@@ -220,11 +182,12 @@ namespace WuDao.Content.Projectiles.Summon
             if (to.Length() < 10f)
                 Projectile.velocity *= 0.85f;
         }
+
         private void GetIdleSlot(Player owner, out int index, out int total)
         {
             total = 0;
 
-            // 扫描所有投射物，找到属于该玩家的 ButterflyMinion
+            // 扫描所有投射物，找到属于该玩家的 TaijiSwordMinion
             for (int i = 0; i < Main.maxProjectiles; i++)
             {
                 Projectile p = Main.projectile[i];
@@ -295,29 +258,49 @@ namespace WuDao.Content.Projectiles.Summon
             return best;
         }
 
-        /// <summary>
-        /// ✅ 手动绘制：按你给的蝴蝶合集贴图规则切 sourceRect
-        /// 贴图：24x576
-        /// 8种蝴蝶，每种块高72
-        /// 每种内：3帧，每帧高20，底部空4
-        /// 帧间隔：4 tick
-        /// </summary>
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
+        {
+            // 样式1：护甲穿透（等价于“附魔剑”那种更容易打出伤害的感觉）
+            if ((int)Projectile.ai[0] == 1)
+            {
+                modifiers.ArmorPenetration += 15; // 你可以按需要调高/调低
+            }
+        }
+
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+        {
+            // 样式2：击中回复 2 点生命
+            if ((int)Projectile.ai[0] == 0)
+            {
+                Player owner = Main.player[Projectile.owner];
+                if (owner != null && owner.active && !owner.dead)
+                {
+                    // 单人/服务器端执行：避免纯客户端改血导致不同步
+                    if (Main.netMode != NetmodeID.MultiplayerClient)
+                    {
+                        owner.Heal(2);
+                    }
+                    else if (Main.myPlayer == owner.whoAmI)
+                    {
+                        // 多人客户端兜底：至少本地先显示回血效果（严格同步可改为自定义 ModPacket 让服务器加血）
+                        owner.Heal(2);
+                    }
+                }
+            }
+        }
+
         public override bool PreDraw(ref Color lightColor)
         {
             Texture2D tex = TextureAssets.Projectile[Type].Value;
 
-            int variant = ((int)Projectile.ai[0] % 8 + 8) % 8; // 0..7
-            int variantBaseY = variant * 72;
+            int style = ((int)Projectile.ai[0] % 2 + 2) % 2; // 0=样式1（前6帧），1=样式2（后6帧）
 
-            // 帧：0,1,2（每4 tick换一次）
-            int frame = (int)((Main.GameUpdateCount / 4) % 3);
-            int srcY = variantBaseY + frame * 24;// 每帧包含帧间隔总长度24
+            // 帧：0..5（每4 tick换一次）
+            int frame = (int)((Main.GameUpdateCount / 4) % 6);
+            int srcFrame = style * 6 + frame;
+            int srcY = srcFrame * Projectile.height;
 
-            Rectangle src = new Rectangle(0, srcY, 24, 24);
-
-            SpriteEffects fx = (Projectile.spriteDirection == 1)
-                ? SpriteEffects.FlipHorizontally
-                : SpriteEffects.None;
+            Rectangle src = new Rectangle(0, srcY, Projectile.width, Projectile.height);
 
             Vector2 origin = src.Size() * 0.5f;
 
@@ -326,10 +309,10 @@ namespace WuDao.Content.Projectiles.Summon
                 Projectile.Center - Main.screenPosition,
                 src,
                 lightColor,
-                Projectile.rotation,   // ✅ 这里用 rotation
+                Projectile.rotation,
                 origin,
                 Projectile.scale,
-                fx,
+                SpriteEffects.None,
                 0
             );
 

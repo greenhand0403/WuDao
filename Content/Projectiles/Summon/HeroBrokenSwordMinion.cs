@@ -49,6 +49,7 @@ namespace WuDao.Content.Projectiles.Summon
             if (player.dead || !player.active)
             {
                 player.ClearBuff(ModContent.BuffType<HeroBrokenSwordBuff>());
+                Projectile.Kill();
                 return;
             }
             if (player.HasBuff(ModContent.BuffType<HeroBrokenSwordBuff>()))
@@ -73,7 +74,7 @@ namespace WuDao.Content.Projectiles.Summon
                 idle.Y += player.gfxOffY;
                 idle = idle.Floor(); // 对齐像素
             }
-
+            // 刚召唤时初始化
             if (Projectile.ai[0] == 0f)
             {
                 // ——Idle 悬停与回位速度上限（距离越远越快，原版写法）——
@@ -111,7 +112,7 @@ namespace WuDao.Content.Projectiles.Summon
                 SeparateFromSameType(0.1f, Projectile.width * 5);
                 return;
             }
-
+            // 无目标时回到待机态
             if (Projectile.ai[0] == -1f)
             {
                 // ——Recover 段：短暂刹车旋转几帧（Dust/音效可加可不加）——

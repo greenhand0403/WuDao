@@ -11,7 +11,13 @@ namespace WuDao.Content.Items.Weapons.Summon
     public class FlyingSnakeStaff : ModItem
     {
         public override string Texture => $"Terraria/Images/Item_{ItemID.ImpStaff}";
-
+        public override void SetStaticDefaults()
+        {
+            ItemID.Sets.GamepadWholeScreenUseRange[Item.type] = true;
+            ItemID.Sets.LockOnIgnoresCollision[Item.type] = true;
+            // 占 1 个召唤栏（保持与刃杖一致）
+            ItemID.Sets.StaffMinionSlotsRequired[Type] = 1f;
+        }
         public override void SetDefaults()
         {
             Item.width = 40;
@@ -51,6 +57,8 @@ namespace WuDao.Content.Items.Weapons.Summon
             {
                 spawnPos = player.Center;
             }
+            
+            player.AddBuff(Item.buffType, 2);
 
             Projectile.NewProjectile(
                 source,

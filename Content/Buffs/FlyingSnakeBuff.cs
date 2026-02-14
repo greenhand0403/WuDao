@@ -7,13 +7,12 @@ namespace WuDao.Content.Buffs
 {
     public class FlyingSnakeBuff : ModBuff
     {
-        public override string Texture => $"Terraria/Images/Item_{ItemID.Snowball}";
+        public override string Texture => $"Terraria/Images/Item_{ItemID.MedusaHead}";
         public override void SetStaticDefaults()
         {
             // 召唤类 Buff 的基本设置
-            Main.buffNoTimeDisplay[Type] = false;
-            Main.buffNoSave[Type] = false;
-            Main.vanityPet[Type] = false;
+            Main.buffNoTimeDisplay[Type] = true;
+            Main.buffNoSave[Type] = true;
         }
 
         public override void Update(Player player, ref int buffIndex)

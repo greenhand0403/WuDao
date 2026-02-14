@@ -532,6 +532,11 @@ Items: {
 		DisplayName: 召唤鬼魂
 		Tooltip: 万魂幡
 	}
+
+	TaijiSwordBox: {
+		// DisplayName: Taiji Sword Box
+		// Tooltip: ""
+	}
 }
 
 Projectiles: {
@@ -592,6 +597,7 @@ Projectiles: {
 	ButterflyMinion.DisplayName: 蝴蝶
 	FlyingSnakeMinion.DisplayName: 飞蛇
 	ThousandGhostMinion.DisplayName: 万魂幡
+	// TaijiSwordMinion.DisplayName: Taiji Sword Minion
 }
 
 DamageClasses: {
@@ -792,7 +798,12 @@ Buffs: {
 
 	ThousandGhostBannerBuff: {
 		DisplayName: 万魂幡之主
-		Description:鬼魂守护
+		Description: 鬼魂守护
+	}
+
+	TaijiSwordBoxBuff: {
+		// DisplayName: Taiji Sword Box Buff
+		// Description: Mods.WuDao.Buffs.TaijiSwordBoxBuff.Description
 	}
 }
 

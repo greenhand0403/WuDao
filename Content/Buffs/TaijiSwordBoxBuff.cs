@@ -5,10 +5,10 @@ using WuDao.Content.Projectiles.Summon;
 
 namespace WuDao.Content.Buffs
 {
-    // 蝴蝶杖 Summon Buff
-    public class ButterflyCaneBuff : ModBuff
+    // 太极剑匣 Summon Buff
+    public class TaijiSwordBoxBuff : ModBuff
     {
-        public override string Texture => $"Terraria/Images/Item_{ItemID.GoldButterfly}";
+        public override string Texture => $"Terraria/Images/Item_{ItemID.EnchantedSword}";
         public override void SetStaticDefaults()
         {
             Main.buffNoSave[Type] = true;
@@ -17,7 +17,7 @@ namespace WuDao.Content.Buffs
 
         public override void Update(Player player, ref int buffIndex)
         {
-            if (player.ownedProjectileCounts[ModContent.ProjectileType<ButterflyMinion>()] > 0)
+            if (player.ownedProjectileCounts[ModContent.ProjectileType<TaijiSwordMinion>()] > 0)
             {
                 player.buffTime[buffIndex] = 18000;
             }

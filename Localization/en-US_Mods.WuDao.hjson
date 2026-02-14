@@ -433,6 +433,11 @@ Items: {
 		DisplayName: Thousand Ghost Banner
 		Tooltip: ""
 	}
+
+	TaijiSwordBox: {
+		DisplayName: Taiji Sword Box
+		Tooltip: ""
+	}
 }
 
 Projectiles: {
@@ -493,6 +498,7 @@ Projectiles: {
 	ButterflyMinion.DisplayName: Butterfly Minion
 	FlyingSnakeMinion.DisplayName: Flying Snake Minion
 	ThousandGhostMinion.DisplayName: Thousand Ghost Minion
+	TaijiSwordMinion.DisplayName: Taiji Sword Minion
 }
 
 DamageClasses: {
@@ -694,6 +700,11 @@ Buffs: {
 	ThousandGhostBannerBuff: {
 		DisplayName: Thousand Ghost Banner Buff
 		Description: Mods.WuDao.Buffs.ThousandGhostBannerBuff.Description
+	}
+
+	TaijiSwordBoxBuff: {
+		DisplayName: Taiji Sword Box Buff
+		Description: Mods.WuDao.Buffs.TaijiSwordBoxBuff.Description
 	}
 }
 

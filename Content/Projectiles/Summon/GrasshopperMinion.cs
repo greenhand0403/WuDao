@@ -13,6 +13,8 @@ namespace WuDao.Content.Projectiles.Summon
         // 复用原版蚱蜢 NPC 贴图（18x24，共2帧，垂直）
         public override string Texture => "Terraria/Images/NPC_" + NPCID.Grasshopper;
 
+        public override bool MinionContactDamage() => true;
+        public override bool? CanCutTiles() => false;
         /*
          * ai/localAI 约定：
          * ai[0]      跳跃冷却（ticks）
@@ -50,13 +52,10 @@ namespace WuDao.Content.Projectiles.Summon
             Projectile.localNPCHitCooldown = 20;
         }
 
-        public override bool MinionContactDamage() => true;
-        public override bool? CanCutTiles() => false;
-
         public override void AI()
         {
             Player owner = Main.player[Projectile.owner];
-            if (!owner.active || owner.dead)
+            if (!owner.active || owner.dead || !owner.HasBuff(ModContent.BuffType<GrasshopperBuff>()))
             {
                 Projectile.Kill();
                 return;
