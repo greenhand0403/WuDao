@@ -1,21 +1,23 @@
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using WuDao.Content.Projectiles.Summon;
 using WuDao.Content.Buffs;
-using Microsoft.Xna.Framework;
+using WuDao.Content.Projectiles.Summon;
 
 namespace WuDao.Content.Items.Weapons.Summon
 {
-    public class BugStuff : ModItem
+    public class GreedyWolfStaff : ModItem
     {
+        // 这里先复用一个原版召唤杖贴图，你也可以换成自己的
         public override string Texture => "Terraria/Images/Item_" + ItemID.SlimeStaff;
 
         public override void SetStaticDefaults()
         {
             ItemID.Sets.GamepadWholeScreenUseRange[Item.type] = true;
             ItemID.Sets.LockOnIgnoresCollision[Item.type] = true;
-            // 占 1 个召唤栏（保持与刃杖一致）
+
+            // 占 1 个召唤栏
             ItemID.Sets.StaffMinionSlotsRequired[Type] = 1f;
         }
 
@@ -23,30 +25,30 @@ namespace WuDao.Content.Items.Weapons.Summon
         {
             Item.CloneDefaults(ItemID.SlimeStaff);
 
-            Item.damage = 10; // 略强于雀杖/史莱姆杖
+            Item.damage = 40;
             Item.knockBack = 2.5f;
             Item.mana = 10;
 
             Item.DamageType = DamageClass.Summon;
             Item.noMelee = true;
 
-            Item.shoot = ModContent.ProjectileType<GrasshopperMinion>();
-            Item.buffType = ModContent.BuffType<GrasshopperBuff>();
+            Item.shoot = ModContent.ProjectileType<GreedyWolfMinion>();
+            Item.buffType = ModContent.BuffType<GreedyWolfBuff>();
 
-            Item.rare = ItemRarityID.Blue;
+            Item.rare = ItemRarityID.Orange;
             Item.UseSound = SoundID.Item44;
-            Item.value = Item.buyPrice(0, 0, 50);
+            Item.value = Item.buyPrice(0, 2, 0, 0);
         }
 
-        public override bool Shoot(Player player, Terraria.DataStructures.EntitySource_ItemUse_WithAmmo source,
-            Vector2 position, Vector2 velocity, int type, int damage, float knockback)
+        public override bool Shoot(Player player, Terraria.DataStructures.EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
+            // 经典召唤杖：在鼠标位置召唤
             player.AddBuff(Item.buffType, 2);
 
             var projectile = Projectile.NewProjectileDirect(source, position, velocity, type, damage, knockback, Main.myPlayer);
             projectile.originalDamage = Item.damage;
-            
-            return true;
+
+            return false;
         }
     }
 }

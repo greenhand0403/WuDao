@@ -438,6 +438,11 @@ Items: {
 		DisplayName: Taiji Sword Box
 		Tooltip: ""
 	}
+
+	GreedyWolfStaff: {
+		DisplayName: Greedy Wolf Staff
+		Tooltip: ""
+	}
 }
 
 Projectiles: {
@@ -499,6 +504,7 @@ Projectiles: {
 	FlyingSnakeMinion.DisplayName: Flying Snake Minion
 	ThousandGhostMinion.DisplayName: Thousand Ghost Minion
 	TaijiSwordMinion.DisplayName: Taiji Sword Minion
+	GreedyWolfMinion.DisplayName: Greedy Wolf Minion
 }
 
 DamageClasses: {
@@ -705,6 +711,11 @@ Buffs: {
 	TaijiSwordBoxBuff: {
 		DisplayName: Taiji Sword Box Buff
 		Description: Mods.WuDao.Buffs.TaijiSwordBoxBuff.Description
+	}
+
+	GreedyWolfBuff: {
+		DisplayName: Greedy Wolf Buff
+		Description: Mods.WuDao.Buffs.GreedyWolfBuff.Description
 	}
 }
 

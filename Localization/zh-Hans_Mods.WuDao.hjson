@@ -534,8 +534,13 @@ Items: {
 	}
 
 	TaijiSwordBox: {
-		// DisplayName: Taiji Sword Box
-		// Tooltip: ""
+		DisplayName: 太极剑匣
+		Tooltip: 召唤太极剑仆从
+	}
+
+	GreedyWolfStaff: {
+		DisplayName: 贪狼
+		Tooltip: 召唤狼仆从
 	}
 }
 
@@ -597,7 +602,8 @@ Projectiles: {
 	ButterflyMinion.DisplayName: 蝴蝶
 	FlyingSnakeMinion.DisplayName: 飞蛇
 	ThousandGhostMinion.DisplayName: 万魂幡
-	// TaijiSwordMinion.DisplayName: Taiji Sword Minion
+	TaijiSwordMinion.DisplayName: 太极剑仆从
+	GreedyWolfMinion.DisplayName: 贪狼仆从
 }
 
 DamageClasses: {
@@ -802,8 +808,13 @@ Buffs: {
 	}
 
 	TaijiSwordBoxBuff: {
-		// DisplayName: Taiji Sword Box Buff
-		// Description: Mods.WuDao.Buffs.TaijiSwordBoxBuff.Description
+		DisplayName: 太极剑仆从守护
+		Description: 太极剑为你而战
+	}
+
+	GreedyWolfBuff: {
+		DisplayName: 贪狼仆从守护
+		Description: 贪狼仆从为你而战
 	}
 }
 

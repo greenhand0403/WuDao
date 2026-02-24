@@ -4,6 +4,7 @@ using Terraria;
 using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.Utilities;
 using WuDao.Content.Buffs;
 
 namespace WuDao.Content.Projectiles.Summon
@@ -28,12 +29,14 @@ namespace WuDao.Content.Projectiles.Summon
             Main.projFrames[Type] = 2; // 两帧
             ProjectileID.Sets.MinionTargettingFeature[Type] = true;
             Main.projPet[Type] = true;
+            ProjectileID.Sets.MinionSacrificable[Projectile.type] = true; // This is needed so your minion can properly spawn when summoned and replaced when other minions are summoned
+            ProjectileID.Sets.CultistIsResistantTo[Projectile.type] = true; // Make the cultist resistant to this projectile, as it's resistant to all homing projectiles.
         }
 
         public override void SetDefaults()
         {
             Projectile.width = 18;
-            Projectile.height = 10; // /2 取1帧 -2 贴地
+            Projectile.height = 12-4; // /2 取1帧 -2 贴地
 
             Projectile.friendly = true;
             Projectile.minion = true;
@@ -57,6 +60,7 @@ namespace WuDao.Content.Projectiles.Summon
             Player owner = Main.player[Projectile.owner];
             if (!owner.active || owner.dead || !owner.HasBuff(ModContent.BuffType<GrasshopperBuff>()))
             {
+                owner.ClearBuff(ModContent.BuffType<GrasshopperBuff>());
                 Projectile.Kill();
                 return;
             }
@@ -65,8 +69,24 @@ namespace WuDao.Content.Projectiles.Summon
             if (owner.HasBuff(ModContent.BuffType<GrasshopperBuff>()))
                 Projectile.timeLeft = 2;
 
-            // 待机点：玩家身后一点
-            Vector2 idlePos = owner.Center + new Vector2(owner.direction * -50f, -20f);
+            // localAI[2] 当作“是否初始化过”的标记
+            if (Projectile.localAI[2] == 0f)
+            {
+                Projectile.localAI[2] = 1f;
+
+                // 用 whoAmI 做种子：每只都不一样且稳定
+                UnifiedRandom r = new UnifiedRandom(Projectile.whoAmI * 1337 + Projectile.owner * 17);
+
+                // 把随机偏移存进 ai[1]（横向）
+                Projectile.ai[1] = r.NextFloat(-80f, 80f); // 像素范围，你可以改成更小/更大
+            }
+
+            // 使用固定偏移
+            float randX = Projectile.ai[1];
+
+            // 如果你希望“更贴近脚底/贴地”，建议改用 owner.Bottom（蚱蜢飞行的话也可以继续用 Center）
+            Vector2 idlePos = owner.Center
+                + new Vector2(owner.direction * -50f + randX, -20f);
 
             // 目标
             int target = FindTarget(owner, 650f);
