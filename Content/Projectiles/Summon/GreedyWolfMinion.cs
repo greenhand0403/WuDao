@@ -208,7 +208,7 @@ namespace WuDao.Content.Projectiles.Summon
                 if (Projectile.frame < 0 || Projectile.frame > 2)
                     Projectile.frame = 0;
 
-                if (Projectile.frameCounter >= 10)
+                if (Projectile.frameCounter >= 30)
                 {
                     Projectile.frameCounter = 0;
                     Projectile.frame++;
@@ -238,7 +238,7 @@ namespace WuDao.Content.Projectiles.Summon
 
             int frameHeight = tex.Height / Main.projFrames[Type];
             // 左右边距5
-            Rectangle src = new Rectangle(5, frameHeight * Projectile.frame, tex.Width, frameHeight);
+            Rectangle src = new Rectangle(5, frameHeight * Projectile.frame, tex.Width - 10, frameHeight);
 
             Vector2 origin = src.Size() * 0.5f;
             Vector2 drawPos = Projectile.Center - Main.screenPosition;

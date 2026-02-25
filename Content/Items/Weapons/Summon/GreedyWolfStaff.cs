@@ -50,5 +50,15 @@ namespace WuDao.Content.Items.Weapons.Summon
 
             return false;
         }
+
+        public override void AddRecipes()
+        {
+            CreateRecipe()
+                .AddIngredient(ItemID.LunarTabletFragment, 2)
+                .AddIngredient(ItemID.LihzahrdPowerCell)
+                .AddIngredient(ItemID.WolfBanner)
+                .AddTile(TileID.LihzahrdFurnace)
+                .Register();
+        }
     }
 }

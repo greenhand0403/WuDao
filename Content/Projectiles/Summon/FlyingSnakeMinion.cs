@@ -4,6 +4,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using WuDao.Content.Buffs;
+using WuDao.Content.Players;
 
 namespace WuDao.Content.Projectiles.Summon
 {
@@ -106,8 +107,12 @@ namespace WuDao.Content.Projectiles.Summon
             }
 
             // —— 回位/跟随（惯性式） ——
-            float speed = 10f;
-            float inertia = 18f;
+            var mp = owner.GetModPlayer<FlyingSnakeWhipPlayer>();
+            float mult = mp.MinionSpeedMult;
+
+            float speed = 10f * mult;
+            float inertia = 18f / mult; // 越小越“灵敏”，但别太夸张
+            if (inertia < 8f) inertia = 8f;
             Vector2 toIdle = idlePos - Projectile.Center;
 
             if (toIdle.Length() > 200f) { speed = 14f; inertia = 12f; }
@@ -143,8 +148,7 @@ namespace WuDao.Content.Projectiles.Summon
                 if (dist <= ShootRange && Projectile.localAI[0] <= 0f)
                 {
                     Vector2 muzzle = GetMuzzleWorldPos(); // ★ 枪口在嘴巴
-                    Vector2 shootVel = (target.Center - muzzle).SafeNormalize(Vector2.UnitX) * SpitSpeed;
-
+                    Vector2 shootVel = (target.Center - muzzle).SafeNormalize(Vector2.UnitX) * (SpitSpeed * mult);
                     int p = Projectile.NewProjectile(
                         Projectile.GetSource_FromThis(),
                         muzzle,

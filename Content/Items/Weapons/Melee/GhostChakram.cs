@@ -80,7 +80,7 @@ namespace WuDao.Content.Items.Weapons.Melee
         {
             Recipe recipe = CreateRecipe();
             recipe.AddIngredient(ItemID.Ectoplasm, 10); // 自定义掉落
-            recipe.AddIngredient(ItemID.SpectreBar, 8);                     // 幽灵锭
+            recipe.AddIngredient(ItemID.SpectreBar, 6);                     // 幽灵锭
             recipe.AddTile(TileID.MythrilAnvil);
             recipe.Register();
         }

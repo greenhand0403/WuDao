@@ -542,6 +542,11 @@ Items: {
 		DisplayName: 贪狼
 		Tooltip: 召唤狼仆从
 	}
+
+	FlyingSnakeWhip: {
+		DisplayName: 飞蛇鞭
+		Tooltip: 手持增加召唤伤害，提升飞蛇仆从移速和射弹速度，击中敌怪时获得短暂的临时生命再生速度并自动衰减，33%几率造成中毒、流血效果
+	}
 }
 
 Projectiles: {
@@ -604,6 +609,7 @@ Projectiles: {
 	ThousandGhostMinion.DisplayName: 万魂幡
 	TaijiSwordMinion.DisplayName: 太极剑仆从
 	GreedyWolfMinion.DisplayName: 贪狼仆从
+	FlyingSnakeWhipProjectile.DisplayName: 飞蛇鞭
 }
 
 DamageClasses: {

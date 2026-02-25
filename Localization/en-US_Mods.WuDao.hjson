@@ -443,6 +443,11 @@ Items: {
 		DisplayName: Greedy Wolf Staff
 		Tooltip: ""
 	}
+
+	FlyingSnakeWhip: {
+		DisplayName: Flying Snake Whip
+		Tooltip: ""
+	}
 }
 
 Projectiles: {
@@ -505,6 +510,7 @@ Projectiles: {
 	ThousandGhostMinion.DisplayName: Thousand Ghost Minion
 	TaijiSwordMinion.DisplayName: Taiji Sword Minion
 	GreedyWolfMinion.DisplayName: Greedy Wolf Minion
+	FlyingSnakeWhipProjectile.DisplayName: Flying Snake Whip Projectile
 }
 
 DamageClasses: {
