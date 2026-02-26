@@ -13,10 +13,10 @@ namespace WuDao.Content.Projectiles.Summon
     public class MonsterTrainMinion : ModProjectile
     {
         public override string Texture => $"Terraria/Images/Item_{ItemID.BeeMinecart}";
-        private const float OrbitRadius = 120f;
-        private const float OrbitAngularSpeed = 0.045f;
+        private const float OrbitRadius = 240f;
+        private const float OrbitAngularSpeed = 0.025f;
 
-        private const float FollowLerp = 0.12f;
+        private const float FollowLerp = 0.28f;
 
         private const float DashTriggerDist = 520f;
         private const float DashSpeed = 18f;
@@ -34,8 +34,8 @@ namespace WuDao.Content.Projectiles.Summon
         private const float TrainHardness = 0.25f;  // 位置纠正强度（越大越“硬”）
         private const float TrainLerp = 0.22f;      // 速度平滑（越大越跟手）
                                                     // === Hard Train Movement (no rotation) ===
-        private const float MaxSpeedX = 16f;   // 横向快
-        private const float MaxSpeedY = 4.5f;  // 纵向慢
+        private const float MaxSpeedX = 36f;   // 横向快
+        private const float MaxSpeedY = 14f;  // 纵向慢
 
         private const float AccelX = 0.35f;
         private const float AccelY = 0.10f;
@@ -47,7 +47,7 @@ namespace WuDao.Content.Projectiles.Summon
         private const float IdleFarX = 240f; // 无敌人时相对玩家左右偏移
         private const float IdleY = -30f;    // 无敌人时相对玩家高度
 
-        private const float CarSpacing = 38f;  // 车厢间距（你原来 TrainSpacing=38 可以直接复用）
+        private const float CarSpacing = 8f;  // 车厢间距（你原来 TrainSpacing=38 可以直接复用）
         // 放在类内部（字段区域）
         private static readonly int[] MinecartItemIDs = new int[]
         {
@@ -133,8 +133,8 @@ namespace WuDao.Content.Projectiles.Summon
             float desiredVx = Math.Clamp(to.X * 0.12f, -MaxSpeedX, MaxSpeedX);
             float desiredVy = Math.Clamp(to.Y * 0.10f, -MaxSpeedY, MaxSpeedY);
 
-            Projectile.velocity.X = MathHelper.Lerp(Projectile.velocity.X, desiredVx, 0.40f);
-            Projectile.velocity.Y = MathHelper.Lerp(Projectile.velocity.Y, desiredVy, 0.14f);
+            Projectile.velocity.X = MathHelper.Lerp(Projectile.velocity.X, desiredVx, 1.44f);
+            Projectile.velocity.Y = MathHelper.Lerp(Projectile.velocity.Y, desiredVy, 0.74f);
 
             Projectile.rotation = 0f;
             Projectile.spriteDirection = Projectile.direction = prev.spriteDirection;
@@ -205,54 +205,82 @@ namespace WuDao.Content.Projectiles.Summon
         }
         private void UpdateHeadMovement(Player owner, NPC target)
         {
-            // ai[0] 用作 shuttleDir（+1/-1），ai[1] 用作 nudgeDir（+1/-1）
-            if (Projectile.ai[0] == 0f)
-                Projectile.ai[0] = 1f;
-            if (Projectile.ai[1] == 0f)
-                Projectile.ai[1] = 1f;
+            // ai[0] = state, ai[1] = stateTimer
+            AIState state = (AIState)(int)Projectile.ai[0];
 
-            Vector2 anchor = (target != null) ? target.Center : owner.Center;
-
-            float farX = (target != null) ? ShuttleFarX : IdleFarX;
-            float wantX = anchor.X + Projectile.ai[0] * farX;
-            float wantY = (target != null) ? anchor.Y : (anchor.Y + IdleY);
-
-            // 有敌人：左右来回穿梭 + 硬核转向“抖一下”
-            if (target != null)
+            if (state == AIState.Dash)
             {
-                float dxToWant = wantX - Projectile.Center.X;
+                Projectile.ai[1]++;
 
-                bool nearSide = Math.Abs(dxToWant) < FlipThreshold;
-                bool passedSide = (Projectile.ai[0] > 0f && Projectile.Center.X > wantX) ||
-                                  (Projectile.ai[0] < 0f && Projectile.Center.X < wantX);
-
-                if (nearSide || passedSide)
+                if (target == null || !target.active || target.friendly || target.dontTakeDamage)
                 {
-                    Projectile.ai[0] *= -1f;   // 翻向
-                    Projectile.ai[1] *= -1f;   // 抖动方向也翻一下
-                    Projectile.velocity.Y = Projectile.ai[1] * TurnNudgeY;
+                    SwitchState(AIState.Orbit);
+                }
+                else
+                {
+                    Vector2 toTarget = target.Center - Projectile.Center;
+                    float dist = toTarget.Length();
+
+                    if (dist < OrbitRadius + 40f || Projectile.ai[1] >= DashTime)
+                    {
+                        SwitchState(AIState.Orbit);
+                    }
+                    else
+                    {
+                        toTarget.Normalize();
+                        Projectile.velocity = toTarget * DashSpeed;
+                    }
+                }
+            }
+            else // Orbit
+            {
+                Vector2 center = (target != null) ? target.Center : owner.Center;
+
+                // 轨道路径计算
+                Vector2 radial = Projectile.Center - center;
+                if (radial.LengthSquared() > 0.01f)
+                {
+                    Vector2 tangent = radial.RotatedBy(MathHelper.PiOver2);
+                    Projectile.spriteDirection = Projectile.direction = (tangent.X >= 0f) ? 1 : -1;
+                    Projectile.rotation = tangent.X * 0.02f;
                 }
 
-                // 翻向后更新 wantX
-                wantX = anchor.X + Projectile.ai[0] * farX;
+                // 环绕角度更新
+                Projectile.localAI[0] += OrbitAngularSpeed;
+                float angle = Projectile.localAI[0];
+
+                Vector2 desiredPos = center + new Vector2(OrbitRadius, 0f).RotatedBy(angle);
+                Vector2 toDesired = desiredPos - Projectile.Center;
+                Vector2 desiredVel = toDesired * 0.25f;
+                Projectile.velocity = Vector2.Lerp(Projectile.velocity, desiredVel, FollowLerp);
+
+                // 检查是否触发冲刺
+                if (target != null)
+                {
+                    float distToTarget = Vector2.Distance(Projectile.Center, target.Center);
+                    if (distToTarget > DashTriggerDist)
+                        SwitchState(AIState.Dash);
+                }
             }
 
-            // 横快竖慢追踪
-            float dx = wantX - Projectile.Center.X;
-            float dy = wantY - Projectile.Center.Y;
+            // 更新朝向和旋转
+            int cartDir = Projectile.spriteDirection;
+            if (Projectile.velocity.LengthSquared() > 0.05f)
+            {
+                cartDir = (Projectile.velocity.X >= 0f) ? 1 : -1;
+                Projectile.spriteDirection = Projectile.direction = cartDir;
+                Projectile.rotation = Projectile.velocity.ToRotation();
+            }
 
-            float desiredVx = Math.Clamp(dx * 0.08f, -MaxSpeedX, MaxSpeedX);
-            float desiredVy = Math.Clamp(dy * 0.06f, -MaxSpeedY, MaxSpeedY);
+            // 矮人朝向逻辑
+            int riderDir = cartDir;
+            if (Projectile.frameCounter > 0 && target != null && target.active)
+                riderDir = (target.Center.X >= Projectile.Center.X) ? 1 : -1;
 
-            Projectile.velocity.X = MathHelper.Lerp(Projectile.velocity.X, desiredVx, AccelX);
-            Projectile.velocity.Y = MathHelper.Lerp(Projectile.velocity.Y, desiredVy, AccelY);
+            Projectile.frame = (riderDir == 1) ? 1 : 0;
 
-            // 不旋转
-            Projectile.rotation = 0f;
-
-            // 贴图朝向：跟随水平运动方向
-            if (Math.Abs(Projectile.velocity.X) > 0.05f)
-                Projectile.spriteDirection = Projectile.direction = (Projectile.velocity.X >= 0f) ? 1 : -1;
+            if (Projectile.frameCounter > 0)
+                Projectile.frameCounter--;
         }
         private void SwitchState(AIState newState)
         {

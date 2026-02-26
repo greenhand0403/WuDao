@@ -9,8 +9,6 @@ namespace WuDao.Content.Items.Weapons.Summon
 {
     public class GreedyWolfStaff : ModItem
     {
-        // 这里先复用一个原版召唤杖贴图，你也可以换成自己的
-        public override string Texture => "Terraria/Images/Item_" + ItemID.SlimeStaff;
 
         public override void SetStaticDefaults()
         {

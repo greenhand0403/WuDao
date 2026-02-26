@@ -9,13 +9,11 @@ using WuDao.Content.Players;
 
 namespace WuDao.Content.Items.Weapons.Summon
 {
-    // TODO: 从三个buff开始往后，补充贴图
     /// <summary>
     /// 蝴蝶召唤杖
     /// </summary>
     public class ButterflyCane : ModItem
     {
-        public override string Texture => $"Terraria/Images/Item_{ItemID.GoldButterfly}";
 
         public override void SetStaticDefaults()
         {

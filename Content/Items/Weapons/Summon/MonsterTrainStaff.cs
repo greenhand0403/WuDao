@@ -10,7 +10,6 @@ namespace WuDao.Content.Items.Weapons.Summon
 {
     public class MonsterTrainStaff : ModItem
     {
-        public override string Texture => $"Terraria/Images/Item_{ItemID.PygmyStaff}";
         public override void SetStaticDefaults()
         {
             ItemID.Sets.GamepadWholeScreenUseRange[Type] = true;
@@ -46,7 +45,7 @@ namespace WuDao.Content.Items.Weapons.Summon
             player.AddBuff(Item.buffType, 2);
 
             int current = player.ownedProjectileCounts[type];
-
+            Main.NewText($"当前召唤数量: {current}");
             if (current > player.maxMinions || current == 8)
                 return false;
 

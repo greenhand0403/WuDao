@@ -14,7 +14,6 @@ namespace WuDao.Content.Items.Weapons.Summon
     /// </summary>
     public class TaijiSwordBox : ModItem
     {
-        public override string Texture => $"Terraria/Images/Item_{ItemID.EnchantedSword}";
 
         public override void SetStaticDefaults()
         {

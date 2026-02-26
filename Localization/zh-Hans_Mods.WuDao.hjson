@@ -515,7 +515,7 @@ Items: {
 
 	BugStuff: {
 		Tooltip: 召唤蚱蜢
-		DisplayName: 虫杖
+		DisplayName: 蝗虫杖
 	}
 
 	ButterflyCane: {
@@ -529,17 +529,17 @@ Items: {
 	}
 
 	ThousandGhostBanner: {
-		DisplayName: 召唤鬼魂
+		DisplayName: 召唤鬼魂仆从
 		Tooltip: 万魂幡
 	}
 
 	TaijiSwordBox: {
 		DisplayName: 太极剑匣
-		Tooltip: 召唤太极剑仆从
+		Tooltip: 召唤两种太极剑，阳剑具有额外护甲穿透，阴剑击中敌怪时为玩家恢复生命值
 	}
 
 	GreedyWolfStaff: {
-		DisplayName: 贪狼
+		DisplayName: 附魔狼牙项链
 		Tooltip: 召唤狼仆从
 	}
 
@@ -555,13 +555,19 @@ Items: {
 	}
 
 	MonsterTrainStaff: {
-		Tooltip: 召唤怪物火车
-		DisplayName: 火车钥匙
+		Tooltip: 召唤怪物火车，最多存在8只
+		DisplayName: 奇异口哨
 	}
 
 	DragonflyCane: {
-		Tooltip: 召唤蜻蜓
-		DisplayName: 蜻蜓召唤杖
+		Tooltip:
+			'''
+				召唤蜻蜓仆从
+				[c/AAAAAA:第一，绝对不意气用事]
+				[c/AAAAAA:第二，绝对不漏抓任何一件坏事]
+				[c/AAAAAA:第三，绝对裁判得公正漂亮]
+			'''
+		DisplayName: 裁判手杖
 	}
 }
 
@@ -624,7 +630,7 @@ Projectiles: {
 	FlyingSnakeMinion.DisplayName: 飞蛇
 	ThousandGhostMinion.DisplayName: 万魂幡
 	TaijiSwordMinion.DisplayName: 太极剑仆从
-	GreedyWolfMinion.DisplayName: 贪狼仆从
+	GreedyWolfMinion.DisplayName: 狼仆从
 	FlyingSnakeWhipProjectile.DisplayName: 飞蛇鞭
 	MonsterTrainMinion.DisplayName: 怪物火车
 	MonsterTrainSpear.DisplayName: 怪物火车矮人长矛
@@ -838,8 +844,8 @@ Buffs: {
 	}
 
 	GreedyWolfBuff: {
-		DisplayName: 贪狼仆从守护
-		Description: 贪狼仆从为你而战
+		DisplayName: 狼仆从守护
+		Description: 狼仆从为你而战
 	}
 
 	MonsterTrainBuff: {

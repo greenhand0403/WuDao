@@ -10,7 +10,6 @@ namespace WuDao.Content.Items.Weapons.Summon
 {
     public class FlyingSnakeStaff : ModItem
     {
-        public override string Texture => $"Terraria/Images/Item_{ItemID.ImpStaff}";
         public override void SetStaticDefaults()
         {
             ItemID.Sets.GamepadWholeScreenUseRange[Item.type] = true;

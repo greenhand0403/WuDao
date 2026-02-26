@@ -14,7 +14,6 @@ namespace WuDao.Content.Items.Weapons.Summon
     /// </summary>
     public class DragonflyCane : ModItem
     {
-        public override string Texture => $"Terraria/Images/Item_{ItemID.BlueDragonfly}";
 
         public override void SetStaticDefaults()
         {

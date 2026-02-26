@@ -9,7 +9,6 @@ namespace WuDao.Content.Items.Weapons.Summon
 {
     public class BugStuff : ModItem
     {
-        public override string Texture => "Terraria/Images/Item_" + ItemID.SlimeStaff;
 
         public override void SetStaticDefaults()
         {
