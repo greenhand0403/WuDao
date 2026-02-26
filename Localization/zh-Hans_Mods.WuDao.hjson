@@ -545,7 +545,23 @@ Items: {
 
 	FlyingSnakeWhip: {
 		DisplayName: 飞蛇鞭
-		Tooltip: 手持增加召唤伤害，提升飞蛇仆从移速和射弹速度，击中敌怪时获得短暂的临时生命再生速度并自动衰减，33%几率造成中毒、流血效果
+		Tooltip:
+			'''
+				手持增加召唤伤害
+				提升飞蛇仆从移速和射弹速度
+				击中敌怪时获得短暂的临时生命再生速度并自动衰减
+				33%几率造成中毒或流血效果
+			'''
+	}
+
+	MonsterTrainStaff: {
+		Tooltip: 召唤怪物火车
+		DisplayName: 火车钥匙
+	}
+
+	DragonflyCane: {
+		Tooltip: 召唤蜻蜓
+		DisplayName: 蜻蜓召唤杖
 	}
 }
 
@@ -610,6 +626,9 @@ Projectiles: {
 	TaijiSwordMinion.DisplayName: 太极剑仆从
 	GreedyWolfMinion.DisplayName: 贪狼仆从
 	FlyingSnakeWhipProjectile.DisplayName: 飞蛇鞭
+	MonsterTrainMinion.DisplayName: 怪物火车
+	MonsterTrainSpear.DisplayName: 怪物火车矮人长矛
+	DragonflyMinion.DisplayName: 蜻蜓仆从
 }
 
 DamageClasses: {
@@ -821,6 +840,16 @@ Buffs: {
 	GreedyWolfBuff: {
 		DisplayName: 贪狼仆从守护
 		Description: 贪狼仆从为你而战
+	}
+
+	MonsterTrainBuff: {
+		Description: 怪物火车为你而战
+		DisplayName: 怪物火车守护
+	}
+
+	DragonflyCaneBuff: {
+		Description: 蜻蜓为你而战
+		DisplayName: 蜻蜓守护
 	}
 }
 

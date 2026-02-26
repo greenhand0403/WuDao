@@ -15,7 +15,7 @@ namespace WuDao.Content.Items.Weapons.Summon
         {
             // This method quickly sets the whip's properties.
             // Mouse over to see its parameters.
-            Item.DefaultToWhip(ModContent.ProjectileType<FlyingSnakeWhipProjectile>(), 20, 2, 4);
+            Item.DefaultToWhip(ModContent.ProjectileType<FlyingSnakeWhipProjectile>(), 120, 3, 8);
             Item.rare = ItemRarityID.Green;
             Item.value = Item.sellPrice(0, 0, 50);
         }

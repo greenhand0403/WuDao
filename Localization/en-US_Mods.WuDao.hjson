@@ -448,6 +448,16 @@ Items: {
 		DisplayName: Flying Snake Whip
 		Tooltip: ""
 	}
+
+	MonsterTrainStaff: {
+		Tooltip: ""
+		DisplayName: Monster Train Staff
+	}
+
+	DragonflyCane: {
+		Tooltip: ""
+		DisplayName: Dragonfly Cane
+	}
 }
 
 Projectiles: {
@@ -511,6 +521,9 @@ Projectiles: {
 	TaijiSwordMinion.DisplayName: Taiji Sword Minion
 	GreedyWolfMinion.DisplayName: Greedy Wolf Minion
 	FlyingSnakeWhipProjectile.DisplayName: Flying Snake Whip Projectile
+	MonsterTrainMinion.DisplayName: Monster Train Minion
+	MonsterTrainSpear.DisplayName: Monster Train Spear
+	DragonflyMinion.DisplayName: Dragonfly Minion
 }
 
 DamageClasses: {
@@ -722,6 +735,16 @@ Buffs: {
 	GreedyWolfBuff: {
 		DisplayName: Greedy Wolf Buff
 		Description: Mods.WuDao.Buffs.GreedyWolfBuff.Description
+	}
+
+	MonsterTrainBuff: {
+		Description: Mods.WuDao.Buffs.MonsterTrainBuff.Description
+		DisplayName: Monster Train Buff
+	}
+
+	DragonflyCaneBuff: {
+		Description: Mods.WuDao.Buffs.DragonflyCaneBuff.Description
+		DisplayName: Dragonfly Cane Buff
 	}
 }
 
