@@ -579,6 +579,11 @@ Items: {
 		Tooltip: 驾驶月亮船
 		DisplayName: 月球船凭证
 	}
+
+	KyubeySoulStone: {
+		Tooltip: 召唤丘比
+		DisplayName: 魔法少女的灵魂石
+	}
 }
 
 Projectiles: {

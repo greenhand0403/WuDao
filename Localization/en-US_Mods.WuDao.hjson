@@ -468,6 +468,11 @@ Items: {
 		Tooltip: ""
 		DisplayName: Lunar Ship Mount Item
 	}
+
+	KyubeySoulStone: {
+		Tooltip: ""
+		DisplayName: Kyubey Soul Stone
+	}
 }
 
 Projectiles: {

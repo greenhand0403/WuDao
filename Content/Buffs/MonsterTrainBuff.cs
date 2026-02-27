@@ -7,7 +7,7 @@ namespace WuDao.Content.Buffs
     // 怪物火车 Summon Buff
     public class MonsterTrainBuff : ModBuff
     {
-        public override string Texture => $"WuDao/Content/Items/Summon/MonsterTrainStaff";
+        public override string Texture => $"WuDao/Content/Items/Weapons/Summon/MonsterTrainStaff";
         public override void SetStaticDefaults()
         {
             // 召唤类 Buff 的基本设置

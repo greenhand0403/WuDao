@@ -7,7 +7,7 @@ namespace WuDao.Content.Buffs
     // 万魂幡 Summon Buff
     public class ThousandGhostBannerBuff : ModBuff
     {
-        public override string Texture => $"WuD ao/Content/Items/Weapons/Summon/ThousandGhostBanner";
+        public override string Texture => $"WuDao/Content/Items/Weapons/Summon/ThousandGhostBanner";
 
         public override void SetStaticDefaults()
         {

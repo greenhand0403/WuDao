@@ -1,3 +1,41 @@
+[h1]Wu Dao Legends: A Wuxia Fantasy Mini Mod for Terraria[/h1]
+
+[i]A fantasy wuxia experience inspired by Chinese martial arts mythology.[/i]
+
+[hr]
+[url=https://github.com/greenhand0403/WuDao]Source Code Repository[/url]
+
+[b]Overview[/b]
+This mod brings a unique wuxia-inspired fantasy experience to Terraria.  
+A martial arts master from another world shattered the void and descended upon Terraria, altering parts of the world's rules and introducing brand-new mechanics and systems.
+
+[hr]
+[b]Main Features[/b]
+[list]
+[*][b]Ultimate Arts System[/b]: Equip martial techniques and consume Qi energy to unleash powerful wuxia-style abilities.
+[*][b]Melee Blade Aura Visuals[/b]: Collect weapons and dyes to customize melee blade effects. Combine them for four different aura color variations.
+[*][b]World Poison Mechanic[/b]: A progressive global debuff that intensifies as the game advances, increasing overall difficulty.
+[*][b]Realm Progression & Scaling Weapons[/b]: Certain techniques, weapons, and accessories grow stronger as bosses are defeated. Includes scaling weapons and throwing-class dart weapons.
+[*][b]Five Elements Armor System[/b]: Armor pieces possess elemental attributes. Matching elements grant additional bonuses.
+[*][b]Cuisine & Cooking System[/b]: Tasting or crafting food for the first time increases Deliciousness and Cooking Skill values, providing bonuses to certain weapons and accessories.
+[/list]
+
+[hr]
+[url=https://docs.google.com/spreadsheets/d/e/2PACX-1vSNLFvdxSPaI9X9J_gbIMaN42z2TKeINIYdKISJyRcCD1zr71McKra1bxVNFPK-PvhAUQqNMwqcF92Q/pubhtml]Mod Item Spreadsheet[/url]
+
+[b]Current Progress: 67%[/b]
+[list]
+[*]Qi & Ultimate Arts System
+[*]Melee Blade Dye System
+[*]World Poison Mechanic
+[*]Realm Progression System
+[*]Five Elements Armor System
+[*]Cuisine & Cooking System
+[/list]
+
+[hr]
+[i]Feedback, ratings, and suggestions are welcome![/i]
+
 [h1]武道传说：泰拉瑞亚奇幻武侠小型模组[/h1]
 
 [hr]
