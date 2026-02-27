@@ -4,6 +4,7 @@ using Terraria.ModLoader;
 
 namespace WuDao.Content.Buffs
 {
+    // 金字塔守护buff
     public class PyramidWard : ModBuff
     {
         public override void SetStaticDefaults()

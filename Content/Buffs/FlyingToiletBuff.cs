@@ -6,6 +6,7 @@ using WuDao.Content.Mounts;
 
 namespace WuDao.Content.Buffs
 {
+    // 飞天马桶坐骑buff
     public class FlyingToiletBuff : ModBuff
     {
         public override string Texture => $"Terraria/Images/Item_{ItemID.TerraToilet}";

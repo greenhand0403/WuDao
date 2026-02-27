@@ -1,4 +1,3 @@
-// Content/Items/WishingWellItem.cs
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -7,7 +6,7 @@ using WuDao.Content.Tiles;
 namespace WuDao.Content.Items
 {
     /// <summary>
-    /// 家具，可以复制宝藏袋或装备 或者 生成BOSS
+    /// 许愿井，家具，可以复制宝藏袋或装备 或者 生成BOSS
     /// </summary>
     public class WishingWellItem : ModItem
     {

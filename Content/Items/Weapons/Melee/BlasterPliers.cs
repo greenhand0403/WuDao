@@ -3,7 +3,6 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using WuDao.Common;
-using WuDao.Content.Players;
 
 namespace WuDao.Content.Items.Weapons.Melee
 {

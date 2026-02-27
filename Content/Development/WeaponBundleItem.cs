@@ -1,14 +1,11 @@
-// ======================== WeaponBundleItem.cs ========================
-using System;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.DataStructures;
 using Terraria.Audio;
 
 namespace WuDao.Content.Development
 {
-    // 开局礼包物品
+    // 开局礼包掉落所有模组物品
     public enum BundleCategory
     {
         Weapons,

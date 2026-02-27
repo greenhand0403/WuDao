@@ -2,8 +2,6 @@ using Terraria.ModLoader;
 using Terraria;
 using Terraria.ID;
 using Microsoft.Xna.Framework;
-using WuDao.Content.Global;
-using WuDao.Content.Items.Accessories;
 using WuDao.Content.Buffs;
 
 namespace WuDao.Content.Projectiles

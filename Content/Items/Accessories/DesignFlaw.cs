@@ -1,12 +1,7 @@
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.DataStructures;
-using Microsoft.Xna.Framework;
-using System;
-using Terraria.GameContent.ItemDropRules;
 using System.Collections.Generic;
-using WuDao.Content.Global.Projectiles;
 using WuDao.Content.Players;
 
 namespace WuDao.Content.Items.Accessories

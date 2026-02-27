@@ -4,6 +4,7 @@ using Terraria.ModLoader;
 
 namespace WuDao.Content.Buffs
 {
+    // 武器巨大化buff
     public class GiantWeapon : ModBuff
     {
         public override void SetStaticDefaults()

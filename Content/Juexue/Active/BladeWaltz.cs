@@ -1,13 +1,11 @@
 using Terraria;
-using Terraria.ModLoader;
-using WuDao.Common;
 using WuDao.Content.Players;
 using WuDao.Content.Juexue.Base;
 using Microsoft.Xna.Framework;
 
 namespace WuDao.Content.Juexue.Active
 {
-    // 利刃华尔兹：120 气，30s 冷却。启动后由 QiPlayer 的 BladeWaltz* 流程驱动 8 段攻击。
+    // 利刃华尔兹：启动后由 QiPlayer 的 BladeWaltz 流程驱动 8 段攻击。
     public class BladeWaltz : JuexueItem
     {
         public override bool IsActive => true;

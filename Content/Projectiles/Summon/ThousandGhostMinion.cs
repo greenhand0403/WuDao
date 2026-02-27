@@ -7,6 +7,7 @@ using WuDao.Content.Buffs;
 
 namespace WuDao.Content.Projectiles.Summon
 {
+    // 鬼魂仆从
     public class ThousandGhostMinion : ModProjectile
     {
         public override string Texture => $"Terraria/Images/NPC_{NPCID.Ghost}";

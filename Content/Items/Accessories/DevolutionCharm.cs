@@ -1,9 +1,7 @@
 using Terraria;
 using Terraria.ID;
-using Terraria.ModLoader;
-using WuDao.Common; // 你的框架命名空间
+using WuDao.Common;
 using System.Collections.Generic;
-using WuDao.Content.Global.NPCs;
 namespace WuDao.Content.Items.Accessories
 {
     // 压制力场 饰品

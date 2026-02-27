@@ -4,6 +4,7 @@ using WuDao.Content.Items.Weapons.Summon;
 
 namespace WuDao.Content.Players
 {
+    // 飞蛇鞭 蛇鞭
     public class FlyingSnakeWhipPlayer : ModPlayer
     {
         // —— 手持鞭子标记（每tick会清空，由 HoldItem 持续置 true）

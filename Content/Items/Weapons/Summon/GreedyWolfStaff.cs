@@ -7,6 +7,7 @@ using WuDao.Content.Projectiles.Summon;
 
 namespace WuDao.Content.Items.Weapons.Summon
 {
+    // 附魔狼牙项链：召唤狼仆从
     public class GreedyWolfStaff : ModItem
     {
 

@@ -11,6 +11,7 @@ using WuDao.Content.Projectiles.Throwing;
 
 namespace WuDao.Content.Systems
 {
+    // 食物雨事件触发系统
     public class FoodRainSystem : ModSystem
     {
         public static bool Active;

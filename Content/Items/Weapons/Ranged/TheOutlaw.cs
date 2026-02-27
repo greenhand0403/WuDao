@@ -1,10 +1,9 @@
-using System;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
-using WuDao.Common.Players;
+using WuDao.Content.Players;
 using WuDao.Content.Projectiles.Ranged;
 /*
     ✅ 基础霰弹：useTime=30，扇形 3 发，子弹穿透 3，穿透每次 -10%（ModifyHitNPC 根据 localAI[0] 递减）

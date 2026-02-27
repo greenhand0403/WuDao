@@ -1,4 +1,3 @@
-// New file: Systems/CuisinePlayer.cs
 using System.Collections.Generic;
 using Terraria.ModLoader;
 using Terraria;

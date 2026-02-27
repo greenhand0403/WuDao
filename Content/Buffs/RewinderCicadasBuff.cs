@@ -4,6 +4,7 @@ using Terraria.ModLoader;
 
 namespace WuDao.Content.Buffs
 {
+    // 春秋蝉buff
     public class RewinderCicadasBuff : ModBuff
     {
         public override string Texture => $"WuDao/Content/Items/Accessories/RewinderCicadas";

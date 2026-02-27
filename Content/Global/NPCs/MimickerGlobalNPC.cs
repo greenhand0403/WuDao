@@ -1,5 +1,4 @@
 using Terraria;
-using Terraria.ID;
 using Terraria.ModLoader;
 using WuDao.Content.Global.Projectiles;
 using WuDao.Content.Players;

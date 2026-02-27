@@ -3,7 +3,6 @@ using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
-using Terraria.Enums;
 using Terraria.ID;
 using Terraria.DataStructures;
 using WuDao.Content.Buffs;
@@ -11,7 +10,7 @@ using WuDao.Content.Buffs;
 namespace WuDao.Content.Tiles
 {
     /// <summary>
-    /// 3x2 雕像方块，向周围玩家赋予“金字塔守护”Buff（极短时长反复刷新）。
+    /// 金字塔雕像 3x2 雕像方块，向周围玩家赋予“金字塔守护”Buff（极短时长反复刷新）。
     /// 具体数值在 BuffPlayer 中处理。
     /// </summary>
     public class PyramidStatueTile : ModTile

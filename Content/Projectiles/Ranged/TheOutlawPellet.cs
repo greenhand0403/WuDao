@@ -3,7 +3,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
-using WuDao.Common.Players;
+using WuDao.Content.Players;
 
 namespace WuDao.Content.Projectiles.Ranged
 {

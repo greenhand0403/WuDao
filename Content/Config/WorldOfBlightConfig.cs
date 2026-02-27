@@ -1,7 +1,6 @@
 using System.ComponentModel;
-using Microsoft.Xna.Framework; // MathHelper
+using Microsoft.Xna.Framework;
 using Terraria;
-using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.Config;
 

@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework;
 
 namespace WuDao.Content.Items.Weapons.Summon
 {
+    // 飞蛇召唤杖
     public class FlyingSnakeStaff : ModItem
     {
         public override void SetStaticDefaults()
@@ -56,7 +57,7 @@ namespace WuDao.Content.Items.Weapons.Summon
             {
                 spawnPos = player.Center;
             }
-            
+
             player.AddBuff(Item.buffType, 2);
 
             Projectile.NewProjectile(

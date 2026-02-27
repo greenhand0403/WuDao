@@ -1,5 +1,3 @@
-using System;
-using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -9,9 +7,8 @@ using WuDao.Content.Projectiles;
 namespace WuDao.Content.Items.Pets
 {
     // 丘比召唤物，召唤丘比作为宠物跟随玩家
-    public class Kyubey : ModItem
+    public class KyubeySoulStone : ModItem
     {
-        public override string Texture => "WuDao/Content/Items/Pets/KyubeySoulStone";
         public override void SetDefaults()
         {
             Item.CloneDefaults(ItemID.ZephyrFish); // 复制微风鱼的物品属性

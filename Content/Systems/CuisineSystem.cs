@@ -1,20 +1,12 @@
-// New file: Systems/CuisineSystem.cs
 using System;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
-using Terraria.DataStructures;
-using Terraria.Localization;
-using Microsoft.Xna.Framework; // for Color
 using WuDao.Content.Players;
-using Terraria.Utilities;
-using System.IO;
-using WuDao.Content.Items;
 using Terraria.GameContent.ItemDropRules;
 using System.Text;
-using System.Linq; // DropRateInfo / IItemDropRule / ReportDroprates
 
 namespace WuDao.Content.Systems
 {

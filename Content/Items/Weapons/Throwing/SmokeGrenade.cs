@@ -1,9 +1,9 @@
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using WuDao.Content.Projectiles.Ranged;
+using WuDao.Content.Projectiles.Throwing;
 
-namespace WuDao.Content.Items.Weapons.Ranged
+namespace WuDao.Content.Items.Weapons.Throwing
 {
     // 烟雾手榴弹
     public class SmokeGrenade : ModItem
@@ -18,7 +18,7 @@ namespace WuDao.Content.Items.Weapons.Ranged
         public override void SetDefaults()
         {
             Item.damage = 0; // 伤害由烟雾造成
-            Item.DamageType = DamageClass.Ranged;
+            Item.DamageType = DamageClass.Throwing;
             Item.width = 20;
             Item.height = 20;
             Item.useTime = 30;

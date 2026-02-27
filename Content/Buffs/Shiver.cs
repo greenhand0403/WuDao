@@ -4,6 +4,7 @@ using Terraria.ModLoader;
 
 namespace WuDao.Content.Buffs
 {
+    // 战栗buff
     public class Shiver : ModBuff
     {
         public override void SetStaticDefaults()

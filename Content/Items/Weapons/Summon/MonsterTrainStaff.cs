@@ -8,6 +8,7 @@ using WuDao.Content.Projectiles.Summon;
 
 namespace WuDao.Content.Items.Weapons.Summon
 {
+    // 奇异口哨：召唤怪物火车仆从
     public class MonsterTrainStaff : ModItem
     {
         public override void SetStaticDefaults()
@@ -45,7 +46,7 @@ namespace WuDao.Content.Items.Weapons.Summon
             player.AddBuff(Item.buffType, 2);
 
             int current = player.ownedProjectileCounts[type];
-            
+
             if (current > player.maxMinions || current == 8)
                 return false;
 

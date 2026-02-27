@@ -8,6 +8,7 @@ using WuDao.Content.Players;
 
 namespace WuDao.Content.Projectiles.Summon
 {
+    // 飞蛇仆从
     public class FlyingSnakeMinion : ModProjectile
     {
         // 使用原版神庙飞蛇的 NPC 贴图来绘制

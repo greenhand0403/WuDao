@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using Terraria.Localization;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Terraria;

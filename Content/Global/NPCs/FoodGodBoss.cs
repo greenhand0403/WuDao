@@ -6,14 +6,12 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using WuDao.Common;
 using WuDao.Content.Projectiles.Throwing;
-using Terraria.Audio;
-using ReLogic.Utilities;
-using Terraria.DataStructures;
 using Terraria.GameContent.ItemDropRules;
 using WuDao.Content.Items;
 
 namespace WuDao.Content.Global.NPCs
 {
+    // 食神 BOSS
     [AutoloadBossHead]
     public class FoodGodBoss : ModNPC
     {

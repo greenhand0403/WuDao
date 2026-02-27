@@ -4,7 +4,6 @@ using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using Terraria.GameContent;
 using Microsoft.Xna.Framework.Graphics;
-using Terraria.DataStructures;
 
 namespace WuDao.Content.Projectiles.Melee
 {

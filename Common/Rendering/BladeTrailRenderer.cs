@@ -6,9 +6,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.Graphics.Shaders;
-using Terraria.ID;
-using Terraria.ModLoader;
-using WuDao.Content.Projectiles.Melee;
 
 namespace WuDao.Common.Rendering
 {

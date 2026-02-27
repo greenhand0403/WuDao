@@ -1,6 +1,5 @@
 using Terraria;
 using Terraria.ModLoader;
-using Terraria.ID;
 using WuDao.Content.Projectiles.Summon;
 
 namespace WuDao.Content.Buffs
@@ -8,7 +7,7 @@ namespace WuDao.Content.Buffs
     // 万魂幡 Summon Buff
     public class ThousandGhostBannerBuff : ModBuff
     {
-        public override string Texture => $"Terraria/Images/Item_{ItemID.GhostBanner}";
+        public override string Texture => $"WuD ao/Content/Items/Weapons/Summon/ThousandGhostBanner";
 
         public override void SetStaticDefaults()
         {

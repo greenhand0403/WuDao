@@ -7,6 +7,7 @@ using WuDao.Content.Items.Accessories;
 
 namespace WuDao.Content.Items
 {
+    // 食神宝藏袋
     public class FoodGodBossBag : ModItem
     {
         public override string Texture => $"Terraria/Images/Item_{ItemID.KingSlimeBossBag}";

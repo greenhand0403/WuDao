@@ -32,7 +32,6 @@ namespace WuDao.Content.Projectiles
         private int stuckCounter = 0;
         private const int BlockedToFlyTicks = 10; // 被挡 >= 10tick 才切飞，防抖
 
-        public override string Texture => "WuDao/Content/Items/Pets/Kyubey";
         public override void SetStaticDefaults()
         {
             Main.projFrames[Projectile.type] = RunCount;  // ← 使用我们刚做好的 6 帧精灵表

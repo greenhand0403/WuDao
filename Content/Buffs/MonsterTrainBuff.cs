@@ -1,13 +1,13 @@
 using Terraria;
 using Terraria.ModLoader;
-using Terraria.ID;
 using WuDao.Content.Projectiles.Summon;
 
 namespace WuDao.Content.Buffs
 {
+    // 怪物火车 Summon Buff
     public class MonsterTrainBuff : ModBuff
     {
-        public override string Texture => $"Terraria/Images/Buff_{BuffID.Pygmies}";
+        public override string Texture => $"WuDao/Content/Items/Summon/MonsterTrainStaff";
         public override void SetStaticDefaults()
         {
             // 召唤类 Buff 的基本设置

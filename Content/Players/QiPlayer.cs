@@ -14,7 +14,6 @@ using Terraria.Audio;
 using WuDao.Content.Buffs;
 using WuDao.Content.Projectiles.Melee;
 using WuDao.Common;
-using Terraria.GameContent;
 
 namespace WuDao.Content.Players
 {

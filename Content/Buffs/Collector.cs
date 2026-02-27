@@ -4,6 +4,7 @@ using Terraria.ModLoader;
 
 namespace WuDao.Content.Buffs
 {
+    // 收集者buff
     public class Collector : ModBuff
     {
         public override void SetStaticDefaults()

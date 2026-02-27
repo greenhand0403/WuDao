@@ -1,8 +1,6 @@
 using Terraria;
-using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using WuDao.Common;
 using WuDao.Content.Players;
 
 namespace WuDao.Content.Juexue.Base

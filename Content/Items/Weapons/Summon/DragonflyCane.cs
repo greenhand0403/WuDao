@@ -5,12 +5,11 @@ using WuDao.Content.Projectiles.Summon;
 using WuDao.Content.Buffs;
 using Microsoft.Xna.Framework;
 using Terraria.DataStructures;
-using WuDao.Content.Players;
 
 namespace WuDao.Content.Items.Weapons.Summon
 {
     /// <summary>
-    /// 蜻蜓召唤杖
+    /// 裁决手杖，召唤蜻蜓
     /// </summary>
     public class DragonflyCane : ModItem
     {

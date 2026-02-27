@@ -1,6 +1,5 @@
 using Microsoft.Xna.Framework;
 using Terraria;
-using Terraria.ID;
 using Terraria.ModLoader;
 using WuDao.Common;
 using WuDao.Content.Players;
@@ -10,7 +9,7 @@ using System;
 
 namespace WuDao.Content.Juexue.Active
 {
-    // 万马奔腾：100 气，从远离鼠标的一侧屏幕边生成多枚投射物横穿屏幕
+    // 万马奔腾：从远离鼠标的一侧屏幕边生成多枚投射物横穿屏幕
     public class Stampede : JuexueItem
     {
         public override bool IsActive => true;

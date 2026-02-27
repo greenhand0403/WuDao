@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 
 namespace WuDao.Content.Items.Weapons.Summon
 {
+    // 虫杖：召唤蚱蜢
     public class BugStuff : ModItem
     {
 
@@ -44,7 +45,7 @@ namespace WuDao.Content.Items.Weapons.Summon
 
             var projectile = Projectile.NewProjectileDirect(source, position, velocity, type, damage, knockback, Main.myPlayer);
             projectile.originalDamage = Item.damage;
-            
+
             return true;
         }
     }

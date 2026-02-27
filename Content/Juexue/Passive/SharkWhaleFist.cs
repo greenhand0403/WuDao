@@ -1,14 +1,11 @@
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.DataStructures;
-using Terraria.ID;
 using Terraria.ModLoader;
 using WuDao.Content.Juexue.Base;
 using WuDao.Content.Players;
 using WuDao.Common;
 using WuDao.Content.Projectiles.Melee;
-using WuDao.Content.Projectiles.Magic;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace WuDao.Content.Juexue.Passive
 {

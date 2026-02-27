@@ -1,12 +1,11 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
 using Terraria;
 using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace WuDao.Content.Items.Weapons.Magic
+namespace WuDao.Content.Projectiles.Magic
 {
     // 魔法号角 随机射弹 石化蜥冲锋
     public class BasiliskChargeProj : ModProjectile

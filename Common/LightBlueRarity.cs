@@ -1,11 +1,11 @@
-using Terraria;
 using Terraria.ModLoader;
-using Terraria.ID;
 using Microsoft.Xna.Framework;
-using System;
 
 namespace WuDao.Common
 {
+    /// <summary>
+    /// 浅蓝色稀有度。
+    /// </summary>
     class LightBlueRarity : ModRarity
     {
         public override Color RarityColor => new Color(55, 113, 187);

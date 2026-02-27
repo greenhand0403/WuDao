@@ -2,10 +2,8 @@ using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
-using Terraria.ModLoader;
 using WuDao.Content.Juexue.Base;
 using WuDao.Content.Players;
-using WuDao.Common;
 
 namespace WuDao.Content.Juexue.Passive
 {

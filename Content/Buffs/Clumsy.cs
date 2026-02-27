@@ -4,6 +4,7 @@ using Terraria.ModLoader;
 
 namespace WuDao.Content.Buffs
 {
+    // 笨拙debuff
     public class Clumsy : ModBuff
     {
         public override void SetStaticDefaults()

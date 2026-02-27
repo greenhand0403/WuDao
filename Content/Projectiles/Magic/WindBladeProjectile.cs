@@ -5,7 +5,6 @@ using Terraria.ModLoader;
 using Terraria.GameContent;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.Audio;
-using Terraria.DataStructures;
 
 namespace WuDao.Content.Projectiles.Magic
 {

@@ -6,7 +6,7 @@ using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace WuDao.Content.Projectiles.Throwing.Base
+namespace WuDao.Content.Projectiles.Throwing
 {
     /// <summary>
     /// 通用飞镖射弹基类（1.4）

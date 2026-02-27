@@ -7,7 +7,6 @@ using WuDao.Content.Players;
 using WuDao.Content.Buffs;
 using WuDao.Common;
 using Microsoft.Xna.Framework;
-using System;
 
 namespace WuDao.Content.Juexue.Active
 {

@@ -3,6 +3,7 @@ using Terraria.ModLoader;
 
 namespace WuDao.Content.Buffs
 {
+    // 光头buff
     public class BaldHead : ModBuff
     {
         public override void SetStaticDefaults()

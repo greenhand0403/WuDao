@@ -1,4 +1,3 @@
-using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -10,6 +9,7 @@ using WuDao.Content.Buffs;
 namespace WuDao.Content.Projectiles.Summon
 {
     // 太极剑仆从：12帧动画（前6帧样式1穿甲，后6帧样式2吸血），82x82；AI整合蝴蝶仆从与断裂英雄剑思路，并模仿附魔剑敌怪的突进节奏
+    // TODO: 穿透敌怪后会左右晃动，bug
     public class TaijiSwordMinion : ModProjectile
     {
         public override bool MinionContactDamage() => true;

@@ -1,4 +1,3 @@
-// 文件：YourMod/Common/BossOwnerGlobalProjectile.cs
 using Terraria;
 using Terraria.ModLoader;
 using Terraria.DataStructures;

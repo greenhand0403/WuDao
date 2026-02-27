@@ -1,11 +1,10 @@
 using Terraria;
-using Terraria.ID;
 using Terraria.ModLoader;
-using Microsoft.Xna.Framework;
 using WuDao.Content.Items.Weapons.Melee;
 
 namespace WuDao.Content.Buffs
 {
+    // 御剪冲刺buff
     public class NormalScissorsDashBuff : ModBuff
     {
         public override string Texture => $"WuDao/Content/Items/Weapons/Melee/NormalScissors";

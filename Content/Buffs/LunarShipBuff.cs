@@ -1,11 +1,10 @@
-// Buffs/FlyingToiletBuff.cs
 using Terraria;
-using Terraria.ID;
 using Terraria.ModLoader;
 using WuDao.Content.Mounts;
 
 namespace WuDao.Content.Buffs
 {
+    // 月亮船坐骑buff
     public class LunarShipBuff : ModBuff
     {
         public override string Texture => $"WuDao/Content/Items/LunarShipMountItem";

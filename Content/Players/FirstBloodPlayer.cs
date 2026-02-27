@@ -1,7 +1,6 @@
 using Terraria.ModLoader;
 using Terraria;
 using Terraria.ID;
-using WuDao.Content.Items.Accessories;
 using WuDao.Common;
 
 namespace WuDao.Content.Players

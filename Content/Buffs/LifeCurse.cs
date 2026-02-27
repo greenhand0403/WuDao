@@ -4,6 +4,7 @@ using Terraria.ModLoader;
 
 namespace WuDao.Content.Buffs
 {
+    // 生命诅咒buff
     public class LifeCurse : ModBuff
     {
         public override void SetStaticDefaults()

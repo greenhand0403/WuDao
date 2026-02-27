@@ -1,10 +1,6 @@
 using Terraria;
 using Terraria.ModLoader;
-using Terraria.ID;
-using Microsoft.Xna.Framework;
 using System;
-using Terraria.DataStructures;
-using Terraria.Localization;
 
 namespace WuDao.Content.Players
 {

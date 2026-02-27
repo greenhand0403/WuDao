@@ -72,7 +72,7 @@ namespace WuDao.Common
                 MeleeRangePixels = mr;
             }
         }
-
+        /// <summary>境界加成：按已击败唯一BOSS数量提供的成长加成。</summary>
         public static class BossProgressPower
         {
             // —— 可调参数（给你默认一套克制的成长线；想改请调这里）——
@@ -122,6 +122,7 @@ namespace WuDao.Common
                 && NPC.downedAncientCultist
                 && NPC.downedMoonlord;
         }
+        /// <summary>获取当前未被击败的原版 BOSS 名称列表。</summary>
         public static List<string> GetRemainingVanillaBossNames()
         {
             var list = new List<string>();

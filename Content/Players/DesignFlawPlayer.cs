@@ -4,7 +4,6 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using WuDao.Content.Global.Projectiles;
-using WuDao.Content.Items.Accessories;
 
 namespace WuDao.Content.Players
 {

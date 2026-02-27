@@ -10,6 +10,7 @@ using System;
 
 namespace WuDao.Content.Projectiles.Summon
 {
+    // 狼仆从
     public class GreedyWolfMinion : ModProjectile
     {
         // 复用原版敌怪狼贴图（NPCID==155，13帧，单行横向切帧）
@@ -30,7 +31,7 @@ namespace WuDao.Content.Projectiles.Summon
         public override void SetDefaults()
         {
             Projectile.width = 80;
-            Projectile.height = 48-4;
+            Projectile.height = 48 - 4;
 
             Projectile.friendly = true;
             Projectile.minion = true;

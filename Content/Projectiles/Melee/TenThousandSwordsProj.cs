@@ -4,7 +4,6 @@ using Terraria.DataStructures;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using Terraria.GameContent;
-using ReLogic.Content;
 using Terraria.ID;
 using WuDao.Common; // 要用 ProjectileID.Sets
 

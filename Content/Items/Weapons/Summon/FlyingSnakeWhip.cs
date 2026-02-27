@@ -1,12 +1,12 @@
 using Terraria;
 using Terraria.ID;
-using Terraria.Localization;
 using Terraria.ModLoader;
 using WuDao.Content.Players;
 using WuDao.Content.Projectiles.Summon;
 
 namespace WuDao.Content.Items.Weapons.Summon
 {
+    // TODO: 检查飞蛇鞭
     public class FlyingSnakeWhip : ModItem
     {
         // public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(FlyingSnakeWhipDebuff.TagDamage);

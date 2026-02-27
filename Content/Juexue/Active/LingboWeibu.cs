@@ -1,13 +1,11 @@
 using Terraria;
-using Terraria.ModLoader;
-using WuDao.Common;
 using WuDao.Content.Players;
 using WuDao.Content.Juexue.Base;
 using Microsoft.Xna.Framework;
 
 namespace WuDao.Content.Juexue.Active
 {
-    // 凌波微步（开关技）：开启不收前置费用，每秒 5 气在 QiPlayer 里统一扣。
+    // 凌波微步（开关技）：开启不收前置费用，每秒消耗气在 QiPlayer 里统一扣。
     // 再次按键关闭时不触发冷却，也不消耗气。
     public class LingboWeibu : JuexueItem
     {

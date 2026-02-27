@@ -4,7 +4,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using Terraria;
-using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 using WuDao.Common;
@@ -23,6 +22,7 @@ namespace WuDao.Content.Items.Accessories
     public class FirstBlood : ModItem
     {
         private static Asset<Texture2D> TexAsset;
+        // 预先资源 加载贴图 加载物品贴图（用于后续绘制）
         public override void Load()
         {
             if (!Main.dedServ)

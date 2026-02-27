@@ -1,5 +1,4 @@
 using Terraria;
-using Terraria.ID;
 using Terraria.ModLoader;
 using WuDao.Content.Projectiles.Summon;
 
@@ -8,7 +7,7 @@ namespace WuDao.Content.Buffs
     // 蝴蝶杖 Summon Buff
     public class ButterflyCaneBuff : ModBuff
     {
-        public override string Texture => $"Terraria/Images/Item_{ItemID.GoldButterfly}";
+        public override string Texture => $"WuDao/Content/Items/Weapons/Summon/ButterflyCane";
         public override void SetStaticDefaults()
         {
             Main.buffNoSave[Type] = true;

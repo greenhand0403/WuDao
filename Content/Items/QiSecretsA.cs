@@ -5,7 +5,7 @@ using WuDao.Content.Players;
 
 namespace WuDao.Content.Items
 {
-    // 静功秘籍 永久提升静止不动时的气力恢复速度
+    // 静功·气功秘籍 永久提升静止不动时的气力恢复速度
     public class QiSecretsA : ModItem
     {
         public override string Texture => $"Terraria/Images/Item_{ItemID.Book}";

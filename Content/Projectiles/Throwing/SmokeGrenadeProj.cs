@@ -4,7 +4,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Audio;
 
-namespace WuDao.Content.Projectiles.Ranged
+namespace WuDao.Content.Projectiles.Throwing
 {
     // 烟雾弹 射弹
     public class SmokeGrenadeProj : ModProjectile

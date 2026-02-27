@@ -5,7 +5,6 @@ using WuDao.Content.Projectiles.Summon;
 using WuDao.Content.Buffs;
 using Microsoft.Xna.Framework;
 using Terraria.DataStructures;
-using WuDao.Content.Players;
 
 namespace WuDao.Content.Items.Weapons.Summon
 {

@@ -1,7 +1,5 @@
 using Terraria;
 using Terraria.ModLoader;
-using Terraria.ID;
-using WuDao.Content.Items;
 using WuDao.Content.Global; // ArmorElementTag
 
 namespace WuDao.Content.Players

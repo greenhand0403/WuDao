@@ -7,7 +7,7 @@ using WuDao.Content.Players;
 using WuDao.Content.Juexue.Base;
 using Microsoft.Xna.Framework;
 
-namespace WuDao.Content.Juexue
+namespace WuDao.Content.Global
 {
     // 右键自动装备绝学到绝学栏的物品
     public class JuexueRightClickGlobal : GlobalItem

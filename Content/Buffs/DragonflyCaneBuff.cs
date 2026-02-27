@@ -1,5 +1,4 @@
 using Terraria;
-using Terraria.ID;
 using Terraria.ModLoader;
 using WuDao.Content.Projectiles.Summon;
 
@@ -8,7 +7,7 @@ namespace WuDao.Content.Buffs
     // 蜻蜓杖 Summon Buff
     public class DragonflyCaneBuff : ModBuff
     {
-        public override string Texture => $"Terraria/Images/Item_{ItemID.BlueDragonfly}";
+        public override string Texture => $"WuDao/Content/Items/Weapons/Summon/DragonflyCane";
         public override void SetStaticDefaults()
         {
             Main.buffNoSave[Type] = true;

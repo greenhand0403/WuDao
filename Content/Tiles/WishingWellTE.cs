@@ -1,8 +1,6 @@
-// Content/Tiles/WishingWellTE.cs
 using System;
 using Microsoft.Xna.Framework;
 using Terraria;
-using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using WuDao.Content.Config;
@@ -10,6 +8,7 @@ using WuDao.Content.Systems;
 
 namespace WuDao.Content.Tiles
 {
+    // 许愿井物块
     public class WishingWellTE : ModTileEntity
     {
         // ✅ 新增：让 Tile 能读到“是否可用”

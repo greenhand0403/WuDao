@@ -9,6 +9,7 @@ using WuDao.Content.Buffs;
 
 namespace WuDao.Content.Projectiles.Summon
 {
+    // 蚱蜢仆从
     public class GrasshopperMinion : ModProjectile
     {
         // 复用原版蚱蜢 NPC 贴图（18x24，共2帧，垂直）
@@ -36,7 +37,7 @@ namespace WuDao.Content.Projectiles.Summon
         public override void SetDefaults()
         {
             Projectile.width = 18;
-            Projectile.height = 12-4; // /2 取1帧 -2 贴地
+            Projectile.height = 12 - 4; // /2 取1帧 -2 贴地
 
             Projectile.friendly = true;
             Projectile.minion = true;

@@ -1,10 +1,8 @@
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using WuDao.Content.Buffs;
 using WuDao.Common;
 using Microsoft.Xna.Framework;
-using Terraria.GameContent;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 

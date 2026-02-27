@@ -2,11 +2,8 @@ using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
-using Terraria.ModLoader;
 using WuDao.Content.Juexue.Base;
 using WuDao.Content.Players;
-using WuDao.Content.Buffs;
-using WuDao.Common;
 
 namespace WuDao.Content.Juexue.Active
 {

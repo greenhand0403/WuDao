@@ -1,10 +1,7 @@
 using Microsoft.Xna.Framework;
 using Terraria;
-using Terraria.DataStructures;
-using Terraria.ID;
 using Terraria.ModLoader;
 using WuDao.Common;
-using WuDao.Content.Global;            // CuisineGlobalItem / CuisineCollections
 using WuDao.Content.Players;           // CuisinePlayer（提供 Deliciousness）
 using static WuDao.Content.Global.CuisineGlobalItem;
 

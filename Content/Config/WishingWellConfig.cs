@@ -1,6 +1,3 @@
-// WuDao/Config/WishingWellConfig.cs
-using System.ComponentModel;
-using Terraria.ModLoader;
 using Terraria.ModLoader.Config;
 
 namespace WuDao.Content.Config

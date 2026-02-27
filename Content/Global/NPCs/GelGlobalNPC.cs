@@ -5,7 +5,7 @@ using WuDao.Content.Buffs;
 
 namespace WuDao.Content.Global.NPCs
 {
-    // 凝胶溅射：减速效果、放大燃烧伤害
+    // 近战凝胶溅射导致的凝胶减益对敌怪造成的效果：减速效果、放大燃烧伤害
     class GelGlobalNPC : GlobalNPC
     {
         public override bool InstancePerEntity => true;

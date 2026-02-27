@@ -5,7 +5,7 @@ using WuDao.Content.Projectiles.Summon;
 
 namespace WuDao.Content.Buffs
 {
-    // 标准召唤 Buff：保证随从存活
+    // 附魔皇家权杖
     public class EnchantedRoyalScepterBuff : ModBuff
     {
         public override string Texture => $"Terraria/Images/Item_{ItemID.RoyalScepter}";

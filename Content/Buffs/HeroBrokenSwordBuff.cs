@@ -4,7 +4,7 @@ using Terraria.ModLoader;
 
 namespace WuDao.Content.Buffs
 {
-    // 英雄破碎剑 Summon Buff
+    // 断裂英雄剑 Summon Buff
     public class HeroBrokenSwordBuff : ModBuff
     {
         public override string Texture => $"Terraria/Images/Item_{ItemID.BrokenHeroSword}";

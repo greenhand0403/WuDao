@@ -3,7 +3,6 @@ using System.IO;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.DataStructures;
-using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using WuDao.Common;
@@ -11,7 +10,7 @@ using WuDao.Content.Config;
 
 namespace WuDao.Content.Global
 {
-    // 给盔甲“打标签”的全局组件（不是Prefix）
+    // 盔甲五行机制，给盔甲“打标签”的全局组件（不是Prefix）
     public class ArmorElementTag : GlobalItem
     {
         // 每件物品各自一份数据

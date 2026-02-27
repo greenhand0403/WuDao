@@ -1,10 +1,8 @@
-using Terraria;
-using Terraria.ID;
-using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace WuDao.Content.Systems
 {
+    // TODO: 创建自己的合成配方组
     public class ButterflyCaneRecipes : ModSystem
     {
         // tr内置蝴蝶配方组，不需要再手动写任意蝴蝶 参考 Terraria\Recipe.cs

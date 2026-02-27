@@ -2,7 +2,6 @@ using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
-using WuDao.Content.Projectiles.Throwing.Base; // 引入我们做的基础射弹类
 
 namespace WuDao.Content.Projectiles.Throwing
 {

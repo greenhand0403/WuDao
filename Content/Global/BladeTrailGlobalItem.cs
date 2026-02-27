@@ -1,13 +1,12 @@
-using System;
 using Microsoft.Xna.Framework;
 using Terraria;
-using Terraria.ID;
 using Terraria.ModLoader;
 using WuDao.Common;
 using WuDao.Content.Projectiles.Melee;
 
 namespace WuDao.Content.Global
 {
+    // 近战刀光染色
     public class BladeTrailGlobalItem : GlobalItem
     {
         public override bool? UseItem(Item item, Player player)

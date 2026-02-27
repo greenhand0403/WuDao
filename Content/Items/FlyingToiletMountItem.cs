@@ -7,6 +7,7 @@ using WuDao.Content.Mounts;
 
 namespace WuDao.Content.Items
 {
+    // 飞天马桶坐骑
     public class FlyingToiletMountItem : ModItem
     {
         public override string Texture => $"Terraria/Images/Item_{ItemID.TerraToilet}";

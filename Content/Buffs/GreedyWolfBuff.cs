@@ -1,14 +1,13 @@
 using Terraria;
-using Terraria.ID;
 using Terraria.ModLoader;
 using WuDao.Content.Projectiles.Summon;
 
 namespace WuDao.Content.Buffs
 {
+    // 附魔狼牙项链召唤buff
     public class GreedyWolfBuff : ModBuff
     {
-        // 先随便用个原版图标，你也可以换成自己的
-        public override string Texture => $"Terraria/Images/Item_{ItemID.WolfMountItem}";
+        public override string Texture => $"WuDao/Content/Items/Weapons/Summon/GreedyWolfStaff";
 
         public override void SetStaticDefaults()
         {

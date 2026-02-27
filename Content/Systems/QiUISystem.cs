@@ -4,7 +4,6 @@ using Terraria;
 using Terraria.ModLoader;
 using Terraria.UI;
 using Terraria.GameContent;
-using Terraria.UI.Chat;
 using WuDao.Content.Players;
 using WuDao.Content.UI;
 using WuDao.Content.Juexue.Base;

@@ -4,6 +4,7 @@ using WuDao.Content.Mounts;
 
 namespace WuDao.Content.Players
 {
+    // 太阳船和月亮船的加成效果
     public class MountPlayer : ModPlayer
     {
         public override void PostUpdateEquips()

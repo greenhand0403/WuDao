@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework;                 // Color
 using Microsoft.Xna.Framework.Graphics;       // Texture2D
 using ReLogic.Content;                        // Asset, AssetRequestMode
 using Terraria.GameContent;
-// Modders toolkit v0.21
+// Modders toolkit v0.21 用于运行时调试代码 方便测试开发
 // MacOS path: /Users/unkvcc/Library/Application Support/Terraria/tModLoader/Mods/Cache/ModdersToolkit_Code.cs
 // C# REPL run:
 // T.R()

@@ -147,7 +147,7 @@ Items: {
 	}
 
 	HarpyWingSword: {
-		DisplayName: 飞羽剑
+		DisplayName: 翼剑
 		Tooltip: 发射鸟妖之羽，空中作战能力更强
 	}
 
@@ -465,7 +465,7 @@ Items: {
 	}
 
 	GelFlask: {
-		DisplayName: 凝胶瓶
+		DisplayName: 凝胶灌注瓶
 		Tooltip: 为近战武器和鞭子提供凝胶溅射增益
 	}
 
@@ -505,17 +505,17 @@ Items: {
 
 	QiSecretsB: {
 		Tooltip: 增加攻击和移动时气力恢复速度
-		DisplayName: 动功秘籍
+		DisplayName: 动功·气功秘籍
 	}
 
 	QiSecretsA: {
 		Tooltip: 增加静止时气力恢复速度
-		DisplayName: 静功秘籍
+		DisplayName: 静功·气功秘籍
 	}
 
 	BugStuff: {
 		Tooltip: 召唤蚱蜢
-		DisplayName: 蝗虫杖
+		DisplayName: 虫杖
 	}
 
 	ButterflyCane: {
@@ -664,7 +664,7 @@ Buffs: {
 	}
 
 	Capitalism: {
-		DisplayName: 金钱之力
+		DisplayName: 金钱至上
 		Description: 携带 10 铂金以上时增加 10% 伤害与耐力，否则减少 10%
 	}
 
@@ -719,17 +719,17 @@ Buffs: {
 	}
 
 	SweetAgile: {
-		DisplayName: 酸味糖果
+		DisplayName: 糖果敏捷
 		Description: 移动速度提升
 	}
 
 	SweetLucky: {
-		DisplayName: 香味糖果
+		DisplayName: 糖果幸运
 		Description: 暴击率提升
 	}
 
 	SweetRegen: {
-		DisplayName: 甜味糖果
+		DisplayName: 糖果再生
 		Description: 生命回复上升
 	}
 
@@ -749,7 +749,7 @@ Buffs: {
 	}
 
 	RewinderCicadasBuff: {
-		DisplayName: 蝉蜕之时
+		DisplayName: 春秋蝉冷却中
 		Description: 春秋蝉正在积蓄力量，暂时无法使用
 	}
 
@@ -759,7 +759,7 @@ Buffs: {
 	}
 
 	OutlawBackstepBuff: {
-		DisplayName: 极速后仰冷却中
+		DisplayName: 狂徒霰弹枪后仰冷却中
 		Description: 暂时无法使用后仰
 	}
 
@@ -790,7 +790,7 @@ Buffs: {
 
 	GelFlaskDebuff: {
 		Description: 减速，怕火
-		DisplayName: 黏糊糊的凝胶
+		DisplayName: 黏糊糊的凝胶减益
 	}
 
 	GelFlaskBuff: {
@@ -799,7 +799,7 @@ Buffs: {
 	}
 
 	HeroBrokenSwordBuff: {
-		Description: 断裂英雄剑
+		Description: 断裂英雄剑为你而战
 		DisplayName: 断裂英雄剑
 	}
 
@@ -840,7 +840,7 @@ Buffs: {
 
 	FlyingSnakeBuff: {
 		Description: 飞蛇为你而战
-		DisplayName: 飞蛇之主
+		DisplayName: 飞蛇守护
 	}
 
 	ThousandGhostBannerBuff: {

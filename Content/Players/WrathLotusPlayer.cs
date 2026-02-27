@@ -1,6 +1,5 @@
 using Terraria;
 using Terraria.ModLoader;
-using Terraria.ID;
 using WuDao.Content.Projectiles.Magic;
 using Microsoft.Xna.Framework;
 

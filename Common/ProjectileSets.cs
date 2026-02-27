@@ -53,7 +53,7 @@ namespace WuDao.Common
     public static class ItemSets
     {
         /// <summary>
-        /// 覆盖范围：铜/锡/铁/铅/银/钨/金/铂金/陨石/钴/钯/秘银/山铜(Orichalcum)/精金/泰坦/叶绿（含多种头盔分支）
+        /// 五行盔甲覆盖范围：铜/锡/铁/铅/银/钨/金/铂金/陨石/钴/钯/秘银/山铜(Orichalcum)/精金/泰坦/叶绿（含多种头盔分支）
         /// </summary>
         public static readonly HashSet<int> OreArmorSet = new()
         {
@@ -107,6 +107,7 @@ namespace WuDao.Common
             ItemID.ChlorophyteHelmet, ItemID.ChlorophyteMask, ItemID.ChlorophyteHeadgear,
             ItemID.ChlorophytePlateMail, ItemID.ChlorophyteGreaves,
         };
+        // 刀光染色物品（包含所有刀光颜色）
         public static readonly HashSet<int> BladeTrailSet = new()
         {
             ItemID.CopperBroadsword,
@@ -179,6 +180,7 @@ namespace WuDao.Common
             ItemID.ChristmasTreeSword,
             ItemID.Seedler
         };
+        // 万剑归宗和无敌包含的剑型射弹
         public static readonly HashSet<int> SwordItemSet = new()
         {
             ItemID.CopperBroadsword,
@@ -203,6 +205,7 @@ namespace WuDao.Common
             ItemID.InfluxWaver,
             ItemID.Zenith
         };
+        // 所有的光剑
         public static readonly HashSet<int> PhasebladeSet = new()
         {
             ItemID.RedPhaseblade,
@@ -220,6 +223,7 @@ namespace WuDao.Common
             ItemID.OrangePhasesaber,
             ItemID.WhitePhasesaber,
         };
+        // 所有的宝石
         public static readonly HashSet<int> GemSet = new()
         {
             ItemID.Diamond,
@@ -230,6 +234,7 @@ namespace WuDao.Common
             ItemID.Topaz,
             ItemID.Amethyst
         };
+        // 所有的水果
         public static readonly HashSet<int> FruitSet = new()
         {
             ItemID.Apple,
@@ -252,6 +257,7 @@ namespace WuDao.Common
             ItemID.Pomegranate,
             ItemID.SpicyPepper
         };
+        // 所有的蛋
         public static readonly HashSet<int> EggSet = new()
         {
             ItemID.DD2BetsyPetItem,
@@ -266,6 +272,7 @@ namespace WuDao.Common
     }
     public static class ProjectileSets
     {
+        /// <summary>所有的箭，注意箭尖的方向！</summary>
         public static readonly HashSet<int> ArrowSet = new()
         {
             // 朝下
@@ -294,7 +301,7 @@ namespace WuDao.Common
             ProjectileID.ShimmerArrow,
             ProjectileID.Hellwing
         };
-
+        /// <summary>所有的照明弹</summary>
         public static readonly HashSet<int> FlareSet = new()
         {
             ProjectileID.Flare,
@@ -304,7 +311,7 @@ namespace WuDao.Common
             ProjectileID.RainbowFlare,
             ProjectileID.ShimmerFlare
         };
-
+        /// <summary>所有的子弹</summary>
         public static readonly HashSet<int> BulletSet = new()
         {
             // 向右
@@ -324,7 +331,9 @@ namespace WuDao.Common
             ProjectileID.MoonlordBullet,
             ProjectileID.SilverBullet
         };
-
+        /// <summary>
+        /// 所有的回旋镖
+        /// </summary>
         public static readonly HashSet<int> BoomerangSet = new()
         {
             // 向左
@@ -344,7 +353,7 @@ namespace WuDao.Common
             ProjectileID.Trimarang,
             ProjectileID.CombatWrench
         };
-
+        /// <summary>所有的镰刀</summary>
         public static readonly HashSet<int> ScytheSet = new()
         {
             ProjectileID.DemonScythe,
@@ -352,7 +361,7 @@ namespace WuDao.Common
             ProjectileID.DeathSickle,
             ProjectileID.Electrosphere
         };
-
+        /// <summary>所有的飞刀</summary>
         public static readonly HashSet<int> KnifeSet = new()
         {
             ProjectileID.ThrowingKnife,
@@ -363,6 +372,7 @@ namespace WuDao.Common
             ProjectileID.ShadowFlameKnife,
             ProjectileID.FrostDaggerfish
         };
+        /// <summary>所有的激光</summary>
         public static readonly HashSet<int> LaserSet = new()
         {
             ProjectileID.PurpleLaser,

@@ -1,9 +1,10 @@
 
-using System.Collections.Generic;
 using Terraria;
 using Terraria.ModLoader;
 
-namespace WuDao.Content.Buffs {
+namespace WuDao.Content.Buffs
+{
+    // 幻想破灭debuff
     public class BrokenDreams : ModBuff
     {
         public override void SetStaticDefaults()

@@ -1,8 +1,6 @@
-using Terraria;
 using Terraria.ModLoader;
-using Terraria.DataStructures; // PlayerDrawSet
+using Terraria.DataStructures;
 using WuDao.Content.Mounts;
-using Microsoft.Xna.Framework;
 
 namespace WuDao.Content.Players
 {

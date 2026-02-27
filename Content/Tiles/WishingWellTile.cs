@@ -1,4 +1,3 @@
-// Content/Tiles/WishingWellTile.cs
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.DataStructures;
@@ -10,6 +9,7 @@ using Terraria.ObjectData;
 
 namespace WuDao.Content.Tiles
 {
+    // 许愿井物块 让地图可以识别到许愿井提示信息
     public class WishingWellTile : ModTile
     {
         // 如需直接引用原版贴图，可取消注释（不同版本路径可能不同，若编译报错，请改用自带贴图）：
@@ -65,7 +65,7 @@ namespace WuDao.Content.Tiles
                 frameY = 0;
             }
         }
-        
+
         public override void PlaceInWorld(int i, int j, Item item)
         {
             if (Main.netMode == NetmodeID.MultiplayerClient) return;

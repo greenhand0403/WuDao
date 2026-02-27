@@ -1,14 +1,12 @@
 using Microsoft.Xna.Framework;
 using Terraria;
-using Terraria.ID;
-using WuDao.Common;
 using WuDao.Content.Players;
 using WuDao.Content.Juexue.Base;
 using WuDao.Content.Systems;
 
 namespace WuDao.Content.Juexue.Active
 {
-    // 天外飞仙：60 气，移除大部分减益 + 短时突进（无敌），并发出飞剑弹幕。
+    // 天外飞仙：移除大部分减益 + 短时突进（无敌），并发出飞剑弹幕。
     public class Feixian : JuexueItem
     {
         public override bool IsActive => true;

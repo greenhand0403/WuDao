@@ -1,13 +1,10 @@
 using Terraria;
 using Terraria.ModLoader;
-using Terraria.ID;
-using Microsoft.Xna.Framework;
-using System;
 using WuDao.Content.Projectiles;
 
 namespace WuDao.Content.Buffs
 {
-    // 1) Buff：显示为虚饰宠物，维持时间并保证召唤
+    // 丘比跟随宠物Buff：显示为虚饰宠物，维持时间并保证召唤
     public class KyubeyPetBuff : ModBuff
     {
         public override string Texture => "WuDao/Content/Items/Pets/KyubeySoulStone";

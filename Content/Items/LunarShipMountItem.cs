@@ -1,4 +1,3 @@
-// Items/FlyingToiletMountItem.cs
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
@@ -7,6 +6,7 @@ using WuDao.Content.Mounts;
 
 namespace WuDao.Content.Items
 {
+    // 月亮船坐骑
     public class LunarShipMountItem : ModItem
     {
         public override void SetDefaults()

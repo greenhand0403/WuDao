@@ -2,7 +2,7 @@ using Terraria;
 using Terraria.ModLoader;
 using WuDao.Content.Buffs;
 
-namespace WuDao.Common.Players
+namespace WuDao.Content.Players
 {
     // 法外狂徒技能冷却，负责：暴击计数、下一次强力射击标记、后跳冷却
     public class TheOutlawPlayer : ModPlayer

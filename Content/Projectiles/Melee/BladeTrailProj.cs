@@ -3,11 +3,9 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using WuDao.Common.Rendering;   // 你的 BladeTrailRenderer
-using WuDao.Common;
 using Terraria.GameContent;
 using System;
 using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
 using System.Collections.Generic;
 using Terraria.DataStructures;   // 你的 ItemSets.BladeTrailSet
 

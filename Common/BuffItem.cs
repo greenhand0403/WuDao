@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using WuDao.Content.Items.Weapons.Melee;
 using WuDao.Content.Items.Accessories;
-using WuDao.Content.Global.NPCs;
 using WuDao.Content.Players;
 
 // ----------------------------------------------------------

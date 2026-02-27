@@ -2,7 +2,6 @@ using Terraria;
 using Terraria.ID;
 using WuDao.Content.Systems;
 using Terraria.ModLoader;
-using Microsoft.Xna.Framework;
 
 namespace WuDao.Content.Items
 {

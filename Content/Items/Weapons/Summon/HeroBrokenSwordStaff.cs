@@ -8,7 +8,7 @@ using WuDao.Content.Projectiles.Summon;
 
 namespace WuDao.Content.Items.Weapons.Summon
 {
-    // 附魔英雄断剑
+    // 附魔断裂英雄剑，召唤附魔断裂英雄剑仆从
     public class HeroBrokenSwordStaff : ModItem
     {
         // 物品贴图直接复用断裂英雄剑

@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework;
 
 namespace WuDao.Content.Items.Weapons.Summon
 {
+    // 万魂幡：召唤鬼魂仆从
     public class ThousandGhostBanner : ModItem
     {
         public override void SetStaticDefaults()

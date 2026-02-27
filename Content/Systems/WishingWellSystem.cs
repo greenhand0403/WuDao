@@ -1,16 +1,12 @@
-// Systems/WishingWellSystem.cs
 using System;
 using System.Collections.Generic;
-using Microsoft.Xna.Framework;
 using Terraria;
-using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.ModLoader.IO;
-using WuDao.Content.Tiles;
 
 namespace WuDao.Content.Systems
 {
+    // 许愿井复制物品效果
     public class WishingWellSystem : ModSystem
     {
         // private List<Point> wishingWellPositions = new();

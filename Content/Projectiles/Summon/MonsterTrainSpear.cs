@@ -5,6 +5,7 @@ using Terraria.ModLoader;
 
 namespace WuDao.Content.Projectiles.Summon
 {
+    // 怪物火车乘客矮人的长矛
     public class MonsterTrainSpear : ModProjectile
     {
         // 继续复用原版矛贴图（10x42，尖端朝上）

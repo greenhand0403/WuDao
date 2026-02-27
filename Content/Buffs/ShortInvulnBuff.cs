@@ -3,6 +3,7 @@ using Terraria.ModLoader;
 
 namespace WuDao.Content.Buffs
 {
+    // 短暂无敌buff
     public class ShortInvulnBuff : ModBuff
     {
         // 释放乾坤大挪移时给玩家的临时无敌buff

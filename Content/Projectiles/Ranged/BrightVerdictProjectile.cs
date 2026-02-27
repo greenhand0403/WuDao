@@ -3,7 +3,6 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Audio;
 using Microsoft.Xna.Framework;
-using System;
 
 namespace WuDao.Content.Projectiles.Ranged
 {

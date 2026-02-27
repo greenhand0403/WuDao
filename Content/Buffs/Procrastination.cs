@@ -4,6 +4,7 @@ using Terraria.ModLoader;
 
 namespace WuDao.Content.Buffs
 {
+    // 拖延症buff
     public class Procrastination : ModBuff
     {
         public override void SetStaticDefaults()

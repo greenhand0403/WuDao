@@ -6,6 +6,7 @@ using WuDao.Content.Players;
 
 namespace WuDao.Content.Items
 {
+    // 永生酒：躲避死亡
     public class EverlastingWine : ModItem
     {
         public override void SetDefaults()

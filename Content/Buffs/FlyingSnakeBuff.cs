@@ -1,13 +1,13 @@
 using Terraria;
 using Terraria.ModLoader;
-using Terraria.ID;
 using WuDao.Content.Projectiles.Summon;
 
 namespace WuDao.Content.Buffs
 {
+    // 飞蛇杖 Summon Buff
     public class FlyingSnakeBuff : ModBuff
     {
-        public override string Texture => $"Terraria/Images/Item_{ItemID.MedusaHead}";
+        public override string Texture => $"WuDao/Content/Items/Weapons/Summon/FlyingSnakeStaff";
         public override void SetStaticDefaults()
         {
             // 召唤类 Buff 的基本设置

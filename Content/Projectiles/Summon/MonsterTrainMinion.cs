@@ -9,6 +9,7 @@ using WuDao.Content.Buffs;
 
 namespace WuDao.Content.Projectiles.Summon
 {
+    // 怪物火车仆从
     public class MonsterTrainMinion : ModProjectile
     {
         public override string Texture => $"Terraria/Images/Item_{ItemID.BeeMinecart}";

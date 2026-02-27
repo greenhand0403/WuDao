@@ -4,6 +4,7 @@ using Terraria.ModLoader;
 
 namespace WuDao.Content.Buffs
 {
+    // 糖果再生buff
     public class SweetRegen : ModBuff
     {
         public override void SetStaticDefaults()
