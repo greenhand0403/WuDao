@@ -1,7 +1,6 @@
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
 using Terraria;
 using Terraria.GameContent;
 using Terraria.ID;
@@ -24,29 +23,9 @@ namespace WuDao.Content.Projectiles.Summon
 
         private const int ShootCooldown = 40; // 约 0.67 秒
         private const float ShootSpeed = 10f;
-
-        private static readonly int PygmyBase = 191; // 191~194
-        private const int PygmyFrames = 18;
-        private const int PygmyFrameW = 50;
-        private const int PygmyFrameH = 48; // 864/18
         public override bool? CanCutTiles() => false;
-        private const float TrainSpacing = 38f;     // 车厢间距，按矿车贴图调
-        private const float TrainHardness = 0.25f;  // 位置纠正强度（越大越“硬”）
-        private const float TrainLerp = 0.22f;      // 速度平滑（越大越跟手）
-                                                    // === Hard Train Movement (no rotation) ===
         private const float MaxSpeedX = 36f;   // 横向快
         private const float MaxSpeedY = 14f;  // 纵向慢
-
-        private const float AccelX = 0.35f;
-        private const float AccelY = 0.10f;
-
-        private const float ShuttleFarX = 420f;    // 敌人左右穿梭的“远距离”
-        private const float FlipThreshold = 40f;   // 接近目标侧就翻向
-        private const float TurnNudgeY = 2.8f;     // 翻向时上下抖一下
-
-        private const float IdleFarX = 240f; // 无敌人时相对玩家左右偏移
-        private const float IdleY = -30f;    // 无敌人时相对玩家高度
-
         private const float CarSpacing = 8f;  // 车厢间距（你原来 TrainSpacing=38 可以直接复用）
         // 放在类内部（字段区域）
         private static readonly int[] MinecartItemIDs = new int[]
@@ -60,11 +39,6 @@ namespace WuDao.Content.Projectiles.Summon
             ItemID.FartMinecart,          // 6 放屁矿车
             ItemID.SteampunkMinecart      // 7 蒸汽矿车
         };
-        private enum AIState : int
-        {
-            Orbit = 0,
-            Dash = 1
-        }
 
         public override void SetStaticDefaults()
         {
@@ -90,6 +64,8 @@ namespace WuDao.Content.Projectiles.Summon
             // 接触伤害节奏更稳定
             Projectile.usesLocalNPCImmunity = true;
             Projectile.localNPCHitCooldown = 18;
+            // 发光
+            Projectile.light = 0.5f;
         }
         private int GetTrainCount()
         {
@@ -171,8 +147,35 @@ namespace WuDao.Content.Projectiles.Summon
                 return;
             }
 
-            if (owner.HasBuff(ModContent.BuffType<MonsterTrainBuff>()))
-                Projectile.timeLeft = 2;
+            int buffType = ModContent.BuffType<MonsterTrainBuff>();
+
+            if (owner.HasBuff(buffType))
+            {
+                Projectile.timeLeft = 2; // 维持存在
+            }
+            else
+            {
+                // 没 buff = 不该存在（避免莫名其妙的残留/消失不明）
+                Projectile.Kill();
+                return;
+            }
+            // ===== 防走丢兜底：离玩家太远就瞬移回轨道 =====
+            float teleportDist = 1600f;
+            if (Vector2.DistanceSquared(Projectile.Center, owner.Center) > teleportDist * teleportDist)
+            {
+                // 给一个随机角度，避免所有车头回家后叠在同一点
+                Projectile.localAI[0] = Main.rand.NextFloat(MathHelper.TwoPi);
+
+                // 瞬移到“轨道点”而不是固定点
+                Vector2 orbitPos = owner.Center + new Vector2(OrbitRadius, 0f).RotatedBy(Projectile.localAI[0]);
+                Projectile.Center = orbitPos;
+
+                Projectile.velocity = Vector2.Zero;
+                Projectile.ai[0] = 0f;
+                Projectile.ai[1] = 0f;
+
+                Projectile.netUpdate = true;
+            }
 
             NPC target = FindTarget(owner, 900f);
 
@@ -180,7 +183,7 @@ namespace WuDao.Content.Projectiles.Summon
 
             // 运动：车头/车厢分工
             if (carIndex == 0)
-                UpdateHeadMovement(owner, target);
+                UpdateHeadMovement(owner);
             else
                 DoTrainCarFollow(carIndex);
 
@@ -203,90 +206,26 @@ namespace WuDao.Content.Projectiles.Summon
             if (Projectile.frameCounter > 0)
                 Projectile.frameCounter--;
         }
-        private void UpdateHeadMovement(Player owner, NPC target)
+        private void UpdateHeadMovement(Player owner)
         {
-            // ai[0] = state, ai[1] = stateTimer
-            AIState state = (AIState)(int)Projectile.ai[0];
+            // 永远绕玩家
+            Projectile.localAI[0] += OrbitAngularSpeed;
+            float angle = Projectile.localAI[0];
 
-            if (state == AIState.Dash)
-            {
-                Projectile.ai[1]++;
+            Vector2 center = owner.Center;
+            Vector2 desiredPos = center + new Vector2(OrbitRadius, 0f).RotatedBy(angle);
 
-                if (target == null || !target.active || target.friendly || target.dontTakeDamage)
-                {
-                    SwitchState(AIState.Orbit);
-                }
-                else
-                {
-                    Vector2 toTarget = target.Center - Projectile.Center;
-                    float dist = toTarget.Length();
+            Vector2 toDesired = desiredPos - Projectile.Center;
+            Vector2 desiredVel = toDesired * 0.25f;
 
-                    if (dist < OrbitRadius + 40f || Projectile.ai[1] >= DashTime)
-                    {
-                        SwitchState(AIState.Orbit);
-                    }
-                    else
-                    {
-                        toTarget.Normalize();
-                        Projectile.velocity = toTarget * DashSpeed;
-                    }
-                }
-            }
-            else // Orbit
-            {
-                Vector2 center = (target != null) ? target.Center : owner.Center;
+            Projectile.velocity = Vector2.Lerp(Projectile.velocity, desiredVel, FollowLerp);
 
-                // 轨道路径计算
-                Vector2 radial = Projectile.Center - center;
-                if (radial.LengthSquared() > 0.01f)
-                {
-                    Vector2 tangent = radial.RotatedBy(MathHelper.PiOver2);
-                    Projectile.spriteDirection = Projectile.direction = (tangent.X >= 0f) ? 1 : -1;
-                    Projectile.rotation = tangent.X * 0.02f;
-                }
+            // 不旋转（矿车）
+            Projectile.rotation = 0f;
 
-                // 环绕角度更新
-                Projectile.localAI[0] += OrbitAngularSpeed;
-                float angle = Projectile.localAI[0];
-
-                Vector2 desiredPos = center + new Vector2(OrbitRadius, 0f).RotatedBy(angle);
-                Vector2 toDesired = desiredPos - Projectile.Center;
-                Vector2 desiredVel = toDesired * 0.25f;
-                Projectile.velocity = Vector2.Lerp(Projectile.velocity, desiredVel, FollowLerp);
-
-                // 检查是否触发冲刺
-                if (target != null)
-                {
-                    float distToTarget = Vector2.Distance(Projectile.Center, target.Center);
-                    if (distToTarget > DashTriggerDist)
-                        SwitchState(AIState.Dash);
-                }
-            }
-
-            // 更新朝向和旋转
-            int cartDir = Projectile.spriteDirection;
-            if (Projectile.velocity.LengthSquared() > 0.05f)
-            {
-                cartDir = (Projectile.velocity.X >= 0f) ? 1 : -1;
-                Projectile.spriteDirection = Projectile.direction = cartDir;
-                Projectile.rotation = Projectile.velocity.ToRotation();
-            }
-
-            // 矮人朝向逻辑
-            int riderDir = cartDir;
-            if (Projectile.frameCounter > 0 && target != null && target.active)
-                riderDir = (target.Center.X >= Projectile.Center.X) ? 1 : -1;
-
-            Projectile.frame = (riderDir == 1) ? 1 : 0;
-
-            if (Projectile.frameCounter > 0)
-                Projectile.frameCounter--;
-        }
-        private void SwitchState(AIState newState)
-        {
-            Projectile.ai[0] = (float)newState;
-            Projectile.ai[1] = 0f;
-            Projectile.netUpdate = true;
+            // 根据水平速度翻转
+            if (Math.Abs(Projectile.velocity.X) > 0.05f)
+                Projectile.spriteDirection = Projectile.direction = (Projectile.velocity.X >= 0f) ? 1 : -1;
         }
 
         private NPC FindTarget(Player owner, float maxRange)

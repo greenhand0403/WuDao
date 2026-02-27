@@ -25,9 +25,8 @@ namespace WuDao.Content.Mounts
         // 4096..4127 共 32 个马桶
         private const int FirstToiletId = 4096;
         private const int LastToiletId = 4127;
+        // 计算马桶总数
         private const int CycleCount = LastToiletId - FirstToiletId + 1;
-        private const int SwapIntervalTicks = 60 * 5; // 5 秒（60 tick = 1 秒）
-                                                      // 放在类里（字段区）
         private const float VerticalAccel = 0.60f; // 上/下加速度
         private const float VerticalMaxSpeed = 8.00f; // 竖直最大速度
         private const float HoverBrakeFactor = 0.90f; // 悬停刹车
@@ -53,7 +52,7 @@ namespace WuDao.Content.Mounts
 
             // 悬停 + 无限飞行
             mountData.usesHover = true;
-            mountData.flightTimeMax = int.MaxValue / 2; // 实际上视为无限
+            mountData.flightTimeMax = int.MaxValue; // 实际上视为无限
 
             // 帧与偏移（我们自己画，不需要复杂帧）
             mountData.totalFrames = 1;
@@ -74,9 +73,7 @@ namespace WuDao.Content.Mounts
             // 初始化玩家专属轮播数据
             player.mount._mountSpecificData = new ToiletCycleData
             {
-                // currentItemId = FirstToiletId,
                 currentItemId = FirstToiletId + Main.rand.Next(CycleCount),
-                // nextSwapTick = Main.GameUpdateCount + SwapIntervalTicks
             };
 
             // 进入时的尘埃/特效可以自定义；此处略
@@ -84,17 +81,6 @@ namespace WuDao.Content.Mounts
 
         public override void UpdateEffects(Player player)
         {
-            // ====== 1) 轮播切换不同马桶 ======
-            // if (player.mount?._mountSpecificData is ToiletCycleData data)
-            // {
-            //     if (Main.GameUpdateCount >= data.nextSwapTick)
-            //     {
-            //         int idx = (data.currentItemId - FirstToiletId + 1) % CycleCount;
-            //         data.currentItemId = FirstToiletId + idx;
-            //         data.nextSwapTick += (uint)SwapIntervalTicks;
-            //     }
-            // }
-
             // ====== 2) 水平手感（原样保留） ======
             if (!player.controlLeft && !player.controlRight)
             {

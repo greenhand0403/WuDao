@@ -458,6 +458,16 @@ Items: {
 		Tooltip: ""
 		DisplayName: Dragonfly Cane
 	}
+
+	SolarShipMountItem: {
+		Tooltip: ""
+		DisplayName: Solar Ship Mount Item
+	}
+
+	LunarShipMountItem: {
+		Tooltip: ""
+		DisplayName: Lunar Ship Mount Item
+	}
 }
 
 Projectiles: {
@@ -745,6 +755,16 @@ Buffs: {
 	DragonflyCaneBuff: {
 		Description: Mods.WuDao.Buffs.DragonflyCaneBuff.Description
 		DisplayName: Dragonfly Cane Buff
+	}
+
+	SolarShipBuff: {
+		Description: Mods.WuDao.Buffs.SolarShipBuff.Description
+		DisplayName: Solar Ship Buff
+	}
+
+	LunarShipBuff: {
+		Description: Mods.WuDao.Buffs.LunarShipBuff.Description
+		DisplayName: Lunar Ship Buff
 	}
 }
 
