@@ -16,11 +16,6 @@ namespace WuDao.Content.Global.NPCs
         public override bool InstancePerEntity => true;
         public int mimickerHitTimer; // 以tick计时，>0 表示最近被模仿者击中过
 
-        // public override void ResetEffects(NPC npc)
-        // {
-        //     lastHitByMimicker = false; // 每tick重置，由 OnHitByProjectile 再标记
-        //     lastHitterPlayer = -1;
-        // }
         public override void AI(NPC npc)
         {
             if (mimickerHitTimer > 0) mimickerHitTimer--;

@@ -45,19 +45,6 @@ namespace WuDao.Content.Juexue.Active
             // 3) 启动“飞仙定向冻结”：只冻结 NPC 与敌对弹幕，放行本玩家友方弹幕
             TimeStopSystem.StartFeixianFreeze(player.whoAmI, qi.FeixianTicks);
 
-            // Vector2 p0 = player.Center, p1 = Main.MouseWorld;
-            // qi.StartQiankunCurveDash(p0, (p0 + p1) * 0.5f /*c点在中点*/, p1, duration: QiPlayer.FeixianTotalTicks);
-            // // 因为 c 在 p0-p1 直线上，弧高 H=0，自然就走直线
-
-            // 4) 视觉：发射一枚“天顶剑”占位投射物（无需 tile 碰撞）
-            // Vector2 dir = (player.Center - qi.FeixianTarget).SafeNormalize(Vector2.UnitX);
-            // int proj = ProjectileID.FirstFractal; // ★ 天顶剑视觉
-            // // 跟冲刺速度相同
-            // int p = Projectile.NewProjectile(player.GetSource_ItemUse(Item), qi.FeixianTarget, dir * 26f, proj, 140, 4f, player.whoAmI);
-            // Main.projectile[p].tileCollide = false;
-            // Main.projectile[p].extraUpdates = 0;
-            // Main.projectile[p].alpha = 100;
-
             return true;
         }
     }

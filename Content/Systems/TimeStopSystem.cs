@@ -7,7 +7,7 @@ namespace WuDao.Content.Systems
 {
     // TODO: 拆分一下这些类
     public enum FreezeScope { None, Global, Feixian }
-    // 静止游鱼和天外飞行 冻结时间的辅助类
+    // 静止游鱼和天外飞仙 冻结时间的辅助类
     public static class TimeStopSystem
     {
         public static bool IsFrozen = false;
@@ -16,17 +16,9 @@ namespace WuDao.Content.Systems
         public static int CooldownTimer = 0;         // 冷却计时器（帧）
         private static int _pendingCooldown = 0;     // 本次冻结结束后要应用的冷却（帧）
         public static bool IsOnCooldown => CooldownTimer > 0;
-        public static int CooldownSeconds => (CooldownTimer + 59) / 60;
         // ★ 新增：冻结作用域 & 允许放行的玩家（飞仙施法者）
         public static FreezeScope Scope = FreezeScope.None;
         public static int AllowedPlayer = -1;
-        public static void StartFreeze(int duration = 300)
-        {
-            IsFrozen = true;
-            Timer = duration;
-            Scope = FreezeScope.Global;
-            AllowedPlayer = -1;
-        }
         // ★ 新增：仅用于天外飞仙的“定向冻结”，放行某位玩家的友方弹幕
         public static void StartFeixianFreeze(int playerWhoAmI, int duration)
         {
@@ -142,12 +134,18 @@ namespace WuDao.Content.Systems
 
         public override bool PreAI(NPC npc)
         {
+            // 测试：打印尖刺史莱姆ai 状态
+            // if (npc.type == NPCID.SpikedJungleSlime)
+            // {
+            //     Main.NewText($"pre尖刺史莱姆ai 状态：{npc.ai[0]}");
+            // }
+
             if (!TimeStopSystem.IsFrozen)
-            {
-                // 解冻：清缓存
-                if (cacheValid) ClearCache();
-                return true;
-            }
+                {
+                    // 解冻：清缓存
+                    if (cacheValid) ClearCache();
+                    return true;
+                }
 
             // 冻结：第一次冻结帧记录一下
             Capture(npc);
@@ -160,6 +158,12 @@ namespace WuDao.Content.Systems
 
         public override void PostAI(NPC npc)
         {
+            // 测试：打印尖刺史莱姆ai 状态
+            // if (npc.type == NPCID.SpikedJungleSlime)
+            // {
+            //     Main.NewText($"post尖刺史莱姆ai 状态：{npc.ai[0]}");
+            // }
+
             if (TimeStopSystem.IsFrozen)
             {
                 // 双保险：就算有别的地方改了，也把数值写回

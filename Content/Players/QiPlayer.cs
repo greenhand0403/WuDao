@@ -819,24 +819,6 @@ namespace WuDao.Content.Players
                 Player.AddBuff(ModContent.BuffType<ShortInvulnBuff>(), invulnOnEnd);
             }
         }
-        private void SpawnShiftDust(Vector2 at, Vector2 vel)
-        {
-            if (Main.netMode == NetmodeID.Server) return;
-
-            // 主体尾迹电光
-            for (int i = 0; i < 2; i++)
-            {
-                var d = Dust.NewDustPerfect(at + Main.rand.NextVector2Circular(12, 12), DustID.MagicMirror,
-                    -vel * Main.rand.NextFloat(0.05f, 0.2f), 160, default, Main.rand.NextFloat(1.0f, 1.35f));
-                d.noGravity = true;
-            }
-            // 侧向微粒
-            if (Main.rand.NextBool(3))
-            {
-                var d2 = Dust.NewDustPerfect(at, DustID.GemDiamond, Main.rand.NextVector2Circular(1.5f, 1.5f), 100, default, 1.05f);
-                d2.noGravity = true;
-            }
-        }
 
         private void PushTrail(Vector2 p)
         {
