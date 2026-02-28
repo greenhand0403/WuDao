@@ -8,28 +8,28 @@ using WuDao.Content.Juexue.Passive;
 
 namespace WuDao.Content.Global.NPCs
 {
-    // TODO: 增加流浪乞丐的贴图
-    // 跟乞丐对话时，bug 绝学栏位置会发生偏移
+    // TODO: 含有中文提示信息
+    // bug流浪乞丐不会在夜晚自动离开
     public class WanderingBeggar : ModNPC
     {
-        public override string Texture => "Terraria/Images/NPC_368";
         public override void SetStaticDefaults()
         {
-            Main.npcFrameCount[Type] = Main.npcFrameCount[NPCID.TravellingMerchant];
+            // 26帧
+            Main.npcFrameCount[Type] = 20;
             NPCID.Sets.ActsLikeTownNPC[Type] = true;
             NPCID.Sets.NoTownNPCHappiness[Type] = true;
+            NPCID.Sets.CannotSitOnFurniture[Type] = true; // ✅ 避免坐下状态用到不存在的动画
         }
 
         public override void SetDefaults()
         {
             NPC.CloneDefaults(NPCID.TravellingMerchant);
-            NPC.townNPC = true;
+
             NPC.friendly = true;
             NPC.lifeMax = 400;
             NPC.defense = 15;
             NPC.knockBackResist = 0.5f;
-            AnimationType = NPCID.TravellingMerchant;
-            NPC.dontTakeDamage = true;
+            AnimationType = -1;
         }
         // —— 允许命中的“白名单” ——
         // 先放入经典案例：腐烂的鸡蛋（原版能砸到城镇NPC）
@@ -43,7 +43,47 @@ namespace WuDao.Content.Global.NPCs
             // 默认拒绝近战/道具直接命中（有特殊原版道具再按需加白名单 ItemID）
             return false;
         }
+        // 0-15 walk (16 frames)
+        // 16-17 idle (2 frames)
+        // 18-19 talk (2 frames)
+        public override void FindFrame(int frameHeight)
+        {
+            const int WalkStart = 0;
+            const int WalkCount = 16;
 
+            const int IdleStart = 16;
+            const int IdleCount = 2;
+
+            const int TalkStart = 18;
+            const int TalkCount = 2;
+
+            // 交谈优先：玩家正在跟他对话时，强制播放交谈帧
+            bool isTalking = Main.LocalPlayer.talkNPC == NPC.whoAmI;
+
+            if (isTalking)
+            {
+                // 交谈动画速度（数字越小越快）
+                NPC.frameCounter++;
+                int talkFrame = TalkStart + (int)(NPC.frameCounter / 60) % TalkCount;
+                NPC.frame.Y = talkFrame * frameHeight;
+                return;
+            }
+
+            // 行走：有水平速度就播放行走帧
+            if (System.Math.Abs(NPC.velocity.X) > 0.1f)
+            {
+                // 行走动画速度（数字越小越快）
+                NPC.frameCounter++;
+                int walkFrame = WalkStart + (int)(NPC.frameCounter / 3) % WalkCount;
+                NPC.frame.Y = walkFrame * frameHeight;
+                return;
+            }
+
+            // 待机：站着不动播放待机帧
+            NPC.frameCounter++;
+            int idleFrame = IdleStart + (int)(NPC.frameCounter / 60) % IdleCount;
+            NPC.frame.Y = idleFrame * frameHeight;
+        }
         // 第一层：仅允许白名单弹幕命中（玩家自有弹幕）
         public override bool? CanBeHitByProjectile(Projectile projectile)
         {
@@ -66,19 +106,21 @@ namespace WuDao.Content.Global.NPCs
             return 0f;
         }
 
-        public override void AI()
+        public override void PostAI()
         {
-            // 夜晚离开
-            if (!Main.dayTime)
+            bool isTalking = Main.LocalPlayer.talkNPC == NPC.whoAmI;
+
+            if (!Main.dayTime && !isTalking)
             {
                 NPC.EncourageDespawn(10);
             }
-            NPC.spriteDirection = NPC.direction;   // 如发现还是反了，就改为 = -NPC.direction
+
+            NPC.spriteDirection = NPC.direction;
         }
 
         public override string GetChat()
         {
-            return "客官行行好……不如买本绝学吧？";
+            return "少侠请留步，我看你骨骼清奇，天人之资，必是练武奇才！不如买本武林绝学吧？";
         }
         public override void SetChatButtons(ref string button, ref string button2)
         {
@@ -96,7 +138,6 @@ namespace WuDao.Content.Global.NPCs
             }
         }
 
-        // ✅ 改用 AddShops
         public override void AddShops()
         {
             var shop = new NPCShop(Type, "绝学铺");
@@ -116,20 +157,20 @@ namespace WuDao.Content.Global.NPCs
 
             shop.Add<HeavenlyPetals>(new Condition("击败任意机械BOSS", () => NPC.downedMechBossAny));
             shop.Add<Kamehameha>(new Condition("击败任意机械BOSS", () => NPC.downedMechBossAny));
-            
+
             shop.Add<LingboWeibu>(new Condition("击败全部机械Boss", () => NPC.downedMechBoss1 && NPC.downedMechBoss2 && NPC.downedMechBoss3));
-            shop.Add<Stampede>(new Condition("击败全部机械Boss", () => NPC.downedMechBoss1&&NPC.downedMechBoss2&&NPC.downedMechBoss3));
+            shop.Add<Stampede>(new Condition("击败全部机械Boss", () => NPC.downedMechBoss1 && NPC.downedMechBoss2 && NPC.downedMechBoss3));
 
             shop.Add<WhiteBoneClaw>(new Condition("击败猪鲨", () => NPC.downedFishron));
             shop.Add<BladeWaltz>(new Condition("击败光女", () => NPC.downedHalloweenKing));
-            
+
             shop.Register();
         }
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
             bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
-                new FlavorTextBestiaryInfoElement("行遍四方的流浪者，据说掌握江湖奇书的门路。白天现身，夜晚离去。")
+                new FlavorTextBestiaryInfoElement("行遍四方的流浪者，据说掌握江湖奇书的门路。会被馒头吸引，夜晚时自动离去。")
             });
         }
     }

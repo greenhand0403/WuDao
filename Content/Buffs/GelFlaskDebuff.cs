@@ -1,11 +1,9 @@
 using Terraria.ModLoader;
-using Terraria.ID;
-
 namespace WuDao.Content.Buffs
 {
-    // TODO: 更换贴图 凝胶减益debuff
+    // 凝胶灌注减益buff 作用于敌怪
     class GelFlaskDebuff : ModBuff
     {
-        public override string Texture => $"Terraria/Images/Buff_{BuffID.Slow}";
+
     }
 }

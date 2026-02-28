@@ -96,8 +96,6 @@ namespace WuDao.Common.Rendering
             if (verts == null || verts.Count < 3) return;
 
             var gd = Main.graphics.GraphicsDevice;
-            // 放在这里染料效果会大打折扣 挪到 Render 了
-            // Main.spriteBatch.End();
 
             // if (verts.Count >= 3)
             {
@@ -164,8 +162,8 @@ namespace WuDao.Common.Rendering
 
             for (int i = 0; i < len - 1; i++)
             {
-                float wf = 1f + (float)System.Math.Cos(oldRot[i] - MathHelper.PiOver2) * playerDir * extraLen;
-                wf = System.Math.Max(0.2f, wf);
+                float wf = 1f + (float)Math.Cos(oldRot[i] - MathHelper.PiOver2) * playerDir * extraLen;
+                wf = Math.Max(0.2f, wf);
 
                 Vector2 p0 = center + new Vector2(0f, -outerRadius).RotatedBy(oldRot[i]);
                 Vector2 p1 = center + new Vector2(0f, -outerRadius).RotatedBy(oldRot[i + 1]);

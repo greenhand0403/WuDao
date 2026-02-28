@@ -10,7 +10,6 @@ namespace WuDao.Content.Items
     /// </summary>
     class GelFlask : ModItem
     {
-        public override string Texture => $"Terraria/Images/Item_{ItemID.FlaskofIchor}";
         public override void SetDefaults()
         {
             Item.UseSound = SoundID.Item3;

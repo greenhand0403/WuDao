@@ -13,6 +13,7 @@ using WuDao.Content.Items.Accessories;
 
 namespace WuDao.Content.Global
 {
+    // TODO: 含中文文字提示信息
     /// <summary>
     /// “厨具 / 美食”集合及查询。
     /// 只要把物品 type 放到相应集合里，系统就会在伤害结算时给出加成。
@@ -161,7 +162,7 @@ namespace WuDao.Content.Global
             float extra = MathHelper.Clamp(cp.Deliciousness * PerDeliciousPointToBonus, 0f, MaxExtraMultiplier);
 
             // 把“进度”线性映射成防御值（满 300% 时给 +MaxGourmetDefenseBonus）
-            int defBonus = (int)System.Math.Round(MaxGourmetDefenseBonus * (extra / MaxExtraMultiplier));
+            int defBonus = (int)Math.Round(MaxGourmetDefenseBonus * (extra / MaxExtraMultiplier));
 
             if (defBonus > 0)
                 player.statDefense += defBonus; // 给到最终防御

@@ -45,25 +45,10 @@ namespace WuDao.Content.DrawLayers
                     // 平移到残影位置（DrawData.position 是屏幕坐标，delta 需要减去屏幕滚动差）
                     DrawData clone = dd;
                     clone.position += delta;           // 因为 dd 已是屏幕坐标，delta 也应是世界坐标差。二者一致，无需再减 screenPosition
-                    // clone.color = MultiplyColor(dd.color, tint);
-                    // 可选：稍微缩小越旧的残影（想要同尺寸可注释掉）
-                    // clone.scale *= MathHelper.Lerp(0.9f, 1f, k);
 
                     drawInfo.DrawDataCache.Add(clone);
                 }
             }
-        }
-
-        // 颜色相乘（保留原有色相明度的乘区）
-        private static Color MultiplyColor(Color a, Color b)
-        {
-            // 按分量相乘，并把 alpha 取乘积
-            return new Color(
-                (byte)(a.R * b.R / 255),
-                (byte)(a.G * b.G / 255),
-                (byte)(a.B * b.B / 255),
-                (byte)(a.A * b.A / 255)
-            );
         }
     }
     //

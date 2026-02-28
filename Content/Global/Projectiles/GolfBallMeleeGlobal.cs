@@ -80,6 +80,9 @@ namespace WuDao.Content.Global.Projectiles
 
         public override void PostAI(Projectile projectile)
         {
+            // 仅处理彩虹高尔夫球射弹。不要干扰其他原版射弹
+            if (!IsGolfBall(projectile.type)) return;
+
             // —— 补课式初始化：有些生成路径拿不到 item/source，这里兜底一次 ——
             if (projectile.ai[1] != 1f && IsGolfBall(projectile.type))
             {

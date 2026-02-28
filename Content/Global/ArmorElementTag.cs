@@ -10,6 +10,7 @@ using WuDao.Content.Config;
 
 namespace WuDao.Content.Global
 {
+    // TODO: 含中文文字提示信息
     // 盔甲五行机制，给盔甲“打标签”的全局组件（不是Prefix）
     public class ArmorElementTag : GlobalItem
     {

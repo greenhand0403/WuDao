@@ -12,15 +12,9 @@ namespace WuDao.Content.Development
         Accessories,
         Others
     }
-
+    // TODO: 含打印提示信息
     public class WeaponBundleItem : ModItem
     {
-        public override void SetStaticDefaults()
-        {
-            // 可选：显示“右键使用”提示
-            // Tooltip.SetDefault("右键打开选择面板：武器 / 饰品 / 其他");
-        }
-
         public override void SetDefaults()
         {
             Item.width = 20;

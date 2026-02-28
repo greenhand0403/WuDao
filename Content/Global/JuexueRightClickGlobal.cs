@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework;
 
 namespace WuDao.Content.Global
 {
+    // TODO: 含打印信息，中文提示
     // 右键自动装备绝学到绝学栏的物品
     public class JuexueRightClickGlobal : GlobalItem
     {

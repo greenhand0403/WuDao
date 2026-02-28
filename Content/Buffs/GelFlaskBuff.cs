@@ -5,10 +5,9 @@ using WuDao.Content.Players;
 
 namespace WuDao.Content.Buffs
 {
-    // TODO: 更换贴图 近战武器凝胶灌注buff
     class GelFlaskBuff : ModBuff
     {
-        public override string Texture => $"Terraria/Images/Buff_{BuffID.WeaponImbueIchor}";
+        public override string Texture => $"WuDao/Content/Items/GelFlask";
         public override void SetStaticDefaults()
         {
             BuffID.Sets.IsAFlaskBuff[Type] = true;

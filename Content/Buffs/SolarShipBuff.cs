@@ -1,4 +1,3 @@
-// Buffs/FlyingToiletBuff.cs
 using Terraria;
 using Terraria.ModLoader;
 using WuDao.Content.Mounts;

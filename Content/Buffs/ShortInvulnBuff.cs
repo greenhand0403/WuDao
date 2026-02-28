@@ -7,7 +7,6 @@ namespace WuDao.Content.Buffs
     public class ShortInvulnBuff : ModBuff
     {
         // 释放乾坤大挪移时给玩家的临时无敌buff
-        public override string Texture => "Terraria/Images/Buff_2";
         public override void SetStaticDefaults()
         {
             Main.debuff[Type] = false;

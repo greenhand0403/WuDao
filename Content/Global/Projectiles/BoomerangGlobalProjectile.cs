@@ -19,10 +19,6 @@ namespace WuDao.Content.Global.Projectiles
 
         // —— 可调参数 —— 
         private const int SuppressFrames = 3;         // 抑制帧数（2~4都行）
-        private const float MaxReturnSpeedMul = 2f;   // 归心似箭倍率（外放初速*2）
-        private const float MinCatchRadius = 18f;     // 接住半径（像素）
-        private const float ApproachSoftness = 0.5f;  // Lerp系数，越大越灵敏（0.35~0.6）
-        private const float NearSpeedFloor = 6f;      // 距离很近时至少保持的速度
 
         private bool inReturnPhase;        // —— 新增：回程阶段“锁存”状态（解决只翻倍一次）
         private int lastAi0;               // —— 新增：监控 ai[0] 的跃迁
@@ -31,10 +27,11 @@ namespace WuDao.Content.Global.Projectiles
         public override void OnSpawn(Projectile projectile, IEntitySource source)
         {
             if (IsBoomerang(projectile))
+            {
                 initialSpeed = projectile.velocity.Length();
-
-            inReturnPhase = false;
-            lastAi0 = 0;
+                inReturnPhase = false;
+                lastAi0 = 0;
+            }
         }
 
         public override void PostAI(Projectile projectile)
@@ -164,7 +161,7 @@ namespace WuDao.Content.Global.Projectiles
         /// <summary>是否是原版回旋镖AI</summary>
         private static bool IsBoomerang(Projectile p)
         {
-            return (p.aiStyle == ProjAIStyleID.Boomerang);
+            return p.aiStyle == ProjAIStyleID.Boomerang;
         }
     }
 }

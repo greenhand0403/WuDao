@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel;
 using Microsoft.Xna.Framework;
 using Terraria;
@@ -106,7 +107,7 @@ namespace WuDao.Content.Config
                 int current = Player.lifeRegen;
                 if (current > 0)
                 {
-                    int reduction = System.Math.Min(penaltyTicks, current);
+                    int reduction = Math.Min(penaltyTicks, current);
                     Player.lifeRegen = current - reduction; // 最多降到 0
                 }
                 // 如果当前已经<=0（来自流血、狱炎等），不在这里进一步拉低，避免“本模组效果”导致更负

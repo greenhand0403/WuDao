@@ -16,10 +16,5 @@ namespace WuDao.Content.Buffs
             Main.buffNoSave[Type] = false;   // 存档（随存档记忆剩余时间）
             Main.buffNoTimeDisplay[Type] = false; // 显示剩余时间
         }
-
-        public override void Update(Player player, ref int buffIndex)
-        {
-            // 只是显示用，不做额外逻辑
-        }
     }
 }

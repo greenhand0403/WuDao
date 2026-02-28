@@ -1,6 +1,7 @@
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using WuDao.Content.Items.Accessories;
 
 namespace WuDao.Content.Global
 {
@@ -47,7 +48,7 @@ namespace WuDao.Content.Global
         /// <summary>扫描“背包、四大钱箱/仓库、所有饰品栏（含扩展槽）”，判断是否已有春秋蝉</summary>
         public static bool HasCicadaAnywhere(Player player)
         {
-            int cicada = ModContent.ItemType<Items.Accessories.RewinderCicadas>();
+            int cicada = ModContent.ItemType<RewinderCicadas>();
 
             // 背包（含快捷栏 & 钱币/弹药位在 inventory 里）
             for (int i = 0; i < player.inventory.Length; i++)

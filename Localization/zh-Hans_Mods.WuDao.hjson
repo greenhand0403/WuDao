@@ -971,6 +971,15 @@ Configs: {
 
 		DisplayName: 护甲前缀配置
 	}
+
+	WudaoConfig: {
+		// DisplayName: Wudao Config
+
+		EnableJueXueSystem: {
+			// Label: Enable Jue Xue System
+			// Tooltip: ""
+		}
+	}
 }
 
 Tiles.PyramidStatueTile.MapEntry: 迷你金字塔物块

@@ -860,6 +860,15 @@ Configs: {
 
 		DisplayName: Armor Prefix Config
 	}
+
+	WudaoConfig: {
+		DisplayName: Wudao Config
+
+		EnableJueXueSystem: {
+			Label: Enable Jue Xue System
+			Tooltip: ""
+		}
+	}
 }
 
 Tiles.PyramidStatueTile.MapEntry: Pyramid Statue Tile

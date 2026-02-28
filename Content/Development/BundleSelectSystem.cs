@@ -1,5 +1,5 @@
-// ======================== BundleSelectSystem.cs ========================
 using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
@@ -56,7 +56,7 @@ namespace WuDao.Content.Development
                 _ui?.Update(gameTime);
         }
 
-        public override void ModifyInterfaceLayers(System.Collections.Generic.List<GameInterfaceLayer> layers)
+        public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
         {
             if (!_visible || _ui == null) return;
 
