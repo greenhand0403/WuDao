@@ -32,16 +32,44 @@ namespace WuDao.Content.Global.NPCs
             if (!modPlr.hasFlaw || modPlr.recordedNPCType != npc.type || modPlr.defeatCount <= 0)
                 return;
 
-            // 额外掉落次数 = 1 + 被该NPC击败次数
-            int times = 1 + modPlr.defeatCount;
+            // 额外掉落次数 = 被该NPC击败次数
+            int times = modPlr.defeatCount;
 
             RunVanillaLootTableMultipleTimes(npc, player, times);
+
+            // 在NPC死亡的位置，额外掉落宝藏袋
+            int bossBagItemID = GetBossBagItemIDForNPCType(npc.type);
+            if (bossBagItemID > 0)
+            {
+                Item.NewItem(npc.GetSource_Death(), npc.position, npc.width, npc.height, bossBagItemID,times);
+            }
 
             // 清空记录
             modPlr.recordedNPCType = -1;
             modPlr.defeatCount = 0;
         }
-
+        // 简易映射（把常用 boss 列出来）
+        private static int GetBossBagItemIDForNPCType(int npcType)
+        {
+            switch (npcType)
+            {
+                case NPCID.KingSlime: return ItemID.KingSlimeBossBag;
+                case NPCID.EyeofCthulhu: return ItemID.EyeOfCthulhuBossBag;
+                case NPCID.BrainofCthulhu: return ItemID.BrainOfCthulhuBossBag;
+                case NPCID.QueenBee: return ItemID.QueenBeeBossBag;
+                case NPCID.SkeletronHead: return ItemID.SkeletronBossBag;
+                case NPCID.WallofFlesh: return ItemID.WallOfFleshBossBag;
+                case NPCID.QueenSlimeBoss: return ItemID.QueenSlimeBossBag;
+                case NPCID.Plantera: return ItemID.PlanteraBossBag;
+                case NPCID.Golem: return ItemID.GolemBossBag;
+                case NPCID.DukeFishron: return ItemID.FishronBossBag;
+                case NPCID.CultistBoss: return ItemID.CultistBossBag;
+                case NPCID.MoonLordCore: return ItemID.MoonLordBossBag; // Moon Lord
+                                                                        // ... 继续补齐你要支持的 boss
+                default:
+                    return 0;
+            }
+        }
         private static void RunVanillaLootTableMultipleTimes(NPC npc, Player owner, int times)
         {
             // 取得该NPC的规则集合（包含它的完整原版掉落）

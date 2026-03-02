@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using Terraria;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using WuDao.Common;
 using WuDao.Content.Players;
@@ -47,7 +48,7 @@ namespace WuDao.Content.Items.Accessories
         public override void UpdateInventory(Player player)
         {
             if (Helpers.AllVanillaBossesDowned())
-                Item.SetNameOverride("勇者之证");     // 切换名称
+                Item.SetNameOverride(Language.GetTextValue("Items.FirstBlood.DisplayName2"));     // 切换名称
             else
                 Item.SetNameOverride(null);            // 恢复原名（使用 DisplayName）
         }
@@ -63,8 +64,8 @@ namespace WuDao.Content.Items.Accessories
             if (Helpers.AllVanillaBossesDowned())
             {
                 // 已完成 → 展示勇者之证说明
-                tooltips.Add(new TooltipLine(Mod, "HeroNameInfo", "（已觉醒为：勇者之证）"));
-                tooltips.Add(new TooltipLine(Mod, "HeroEffect", "对生命值 >90% 的敌怪的首次攻击 +300% 伤害"));
+                tooltips.Add(new TooltipLine(Mod, "HeroNameInfo", Language.GetTextValue("Mods.WuDao.Items.FirstBlood.HeroNameInfo")));
+                tooltips.Add(new TooltipLine(Mod, "HeroEffect", Language.GetTextValue("Mods.WuDao.Items.FirstBlood.HeroEffect")));
                 return;
             }
 
@@ -72,7 +73,8 @@ namespace WuDao.Content.Items.Accessories
             var remaining = Helpers.GetRemainingVanillaBossNames();
             if (remaining.Count > 0)
             {
-                tooltips.Add(new TooltipLine(Mod, "FB_Header", "尚未击败的原版BOSS："));
+                // hjson 注意路径要完整
+                tooltips.Add(new TooltipLine(Mod, "Effect", Language.GetTextValue("Mods.WuDao.Items.FirstBlood.Effect")));
 
                 // 每行放 4 个名字，防止一行太长
                 const int perLine = 4;
@@ -82,8 +84,6 @@ namespace WuDao.Content.Items.Accessories
                     string line = string.Join("、", remaining.GetRange(i, take));
                     tooltips.Add(new TooltipLine(Mod, $"FB_List_{i}", line));
                 }
-
-                tooltips.Add(new TooltipLine(Mod, "FB_Effect", "装备时：对以上BOSS伤害 +10%"));
             }
         }
 

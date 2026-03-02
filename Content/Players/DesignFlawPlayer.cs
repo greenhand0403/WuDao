@@ -52,26 +52,26 @@ namespace WuDao.Content.Players
             }
 
             // 3) 仍没找到 → 选择“距离玩家最近的 Boss”
-            if (killerBossNpcIndex == null)
-            {
-                float best = float.MaxValue;
-                int bestIdx = -1;
-                for (int i = 0; i < Main.maxNPCs; i++)
-                {
-                    NPC n = Main.npc[i];
-                    if (!n.active) continue;
-                    if (!(n.boss || NPCID.Sets.ShouldBeCountedAsBoss[n.type])) continue;
+            // if (killerBossNpcIndex == null)
+            // {
+            //     float best = float.MaxValue;
+            //     int bestIdx = -1;
+            //     for (int i = 0; i < Main.maxNPCs; i++)
+            //     {
+            //         NPC n = Main.npc[i];
+            //         if (!n.active) continue;
+            //         if (!(n.boss || NPCID.Sets.ShouldBeCountedAsBoss[n.type])) continue;
 
-                    float d = Vector2.Distance(Player.Center, n.Center);
-                    if (d < best)
-                    {
-                        best = d;
-                        bestIdx = i;
-                    }
-                }
-                if (bestIdx >= 0)
-                    killerBossNpcIndex = bestIdx;
-            }
+            //         float d = Vector2.Distance(Player.Center, n.Center);
+            //         if (d < best)
+            //         {
+            //             best = d;
+            //             bestIdx = i;
+            //         }
+            //     }
+            //     if (bestIdx >= 0)
+            //         killerBossNpcIndex = bestIdx;
+            // }
 
             // 4) 只记录 Boss：有就记录/覆盖；没有就不动
             if (killerBossNpcIndex is int idx && idx >= 0)

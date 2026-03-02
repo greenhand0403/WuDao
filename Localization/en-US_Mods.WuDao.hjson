@@ -191,12 +191,18 @@ Items: {
 
 	DesignFlaw: {
 		DisplayName: Design Flaw
-		Tooltip: ""
+		Tooltip: Records which NPC killed you. Grants bonus damage & extra drops against recorded NPCs.
+		TooltipRecorded: Recorded: {0} ×{1} (bonus damage per 10% & extra drops against it),
+		TooltipNoRecord: No NPC recorded yet.
 	}
 
 	FirstBlood: {
 		DisplayName: First Blood
+		DisplayName2: The Proof of Brave
 		Tooltip: ""
+		HeroNameInfo: Transform to The Proof of Brave
+		HeroEffect: Grants bonus damage & extra drops against recorded NPCs.
+		Effect: Grants bonus damage ：
 	}
 
 	Candy: {
@@ -879,7 +885,13 @@ Keybinds: {
 }
 
 NPCs: {
-	WanderingBeggar.DisplayName: Wandering Beggar
+	WanderingBeggar: {
+		DisplayName: Wandering Beggar
+		Chat.Default: I'm a wandering beggar. I'm here to help you. But I'm not sure if I'll be able to help you.
+		Shop.Name: Wandering Beggar Shop
+		Info: Wandering Beggar Info
+	}
+
 	FoodGodBoss.DisplayName: Food God Boss
 }
 

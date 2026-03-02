@@ -242,15 +242,21 @@ Items: {
 			增加你对BOSS的伤害
 			[c/FFD700:经历的胜利]
 			'''
+		TooltipRecorded: 记录：{0} ×{1}（对该 NPC 造成额外10%倍伤害与额外掉落）
+		TooltipNoRecord: 当前未记录任何 NPC 击杀信息
 	}
 
 	FirstBlood: {
 		DisplayName: 第一滴血
+		DisplayName2: 勇者之证
 		Tooltip:
 			'''
 			对未击败的BOSS造成的伤害增加
 			击败所有BOSS后转化为新饰品
 			'''
+		HeroNameInfo: 已觉醒为：勇者之证
+		HeroEffect: 对生命值 >90% 的敌怪的首次攻击 +300% 伤害
+		Effect: 装备对以下BOSS伤害 +10% ：
 	}
 
 	Candy: {
@@ -973,11 +979,11 @@ Configs: {
 	}
 
 	WudaoConfig: {
-		// DisplayName: Wudao Config
+		DisplayName: 武道模组配置
 
 		EnableJueXueSystem: {
-			// Label: Enable Jue Xue System
-			// Tooltip: ""
+			Label: 绝学系统
+			Tooltip: 是否启用绝学系统
 		}
 	}
 }
@@ -990,7 +996,13 @@ Keybinds: {
 }
 
 NPCs: {
-	WanderingBeggar.DisplayName: 流浪乞丐
+	WanderingBeggar: {
+		DisplayName: 流浪乞丐
+		Chat.Default: 少侠请留步，我看你骨骼清奇，天人之资，必是练武奇才！不如买本武林绝学吧
+		Shop.Name: 绝学铺
+		Info: 行遍四方的流浪者，据说掌握江湖奇书的门路。会被馒头吸引，夜晚时自动离去
+	}
+
 	FoodGodBoss.DisplayName: 食神
 }
 
