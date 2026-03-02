@@ -1,5 +1,7 @@
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using WuDao.Content.Players;
 
@@ -33,7 +35,7 @@ namespace WuDao.Content.Items
             var qi = player.GetModPlayer<QiPlayer>();
             qi.Used_PassionFruit++;
             qi.QiMaxFromItems += 10;
-            Main.NewText("你感到内息更稳（气力上限 +10）。", Microsoft.Xna.Framework.Color.LightSeaGreen);
+            Main.NewText(Language.GetTextValue("Mods.WuDao.PassionFruit.Messages"), Color.LightSeaGreen);
             return true;
         }
         public override void AddRecipes()

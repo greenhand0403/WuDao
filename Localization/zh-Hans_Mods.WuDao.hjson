@@ -86,7 +86,37 @@ Items: {
 
 	NormalScissors: {
 		DisplayName: 御剪
-		Tooltip: 一把会随着冒险成长的奇怪剪刀
+
+		Tooltip: {
+			GrowthInfo: 成长型武器：会随击败特定 Boss 解锁能力
+
+			QueenBee: {
+				Unlocked: ✓ [蜂后已击败]：武器尺寸增大
+				Locked: ✗ [击败蜂后后解锁]：武器尺寸增大
+			}
+
+			Skeletron: {
+				Unlocked: ✓ [骷髅王已击败]：左键平A攒能量 → 满后自动释放剑气
+				Locked: ✗ [击败骷髅王后解锁]：左键攒能量释放剑气
+			}
+
+			WallOfFlesh: {
+				Unlocked: ✓ [血肉墙已击败]：右键冲刺切割（CD 1s）
+				Locked: ✗ [击败血肉墙后解锁]：右键冲刺切割
+			}
+
+			Twins: {
+				Unlocked: ✓ [双子魔眼已击败]：近战命中时额外发射斩波
+				Locked: ✗ [击败双子魔眼后解锁]：近战命中发射斩波
+			}
+
+			Plantera: {
+				Unlocked: ✓ [世纪之花已击败]：额外发射泰拉剑气
+				Locked: ✗ [击败世纪之花后解锁]：额外发射泰拉剑气
+			}
+		}
+
+		Messages.EnergyFull: 能量充盈
 	}
 
 	TimeStopItem: {
@@ -172,7 +202,29 @@ Items: {
 
 	TheOutlaw: {
 		DisplayName: 法外狂徒
-		Tooltip: 一次射出四到五发子弹，随游戏进度变强
+		Messages.UltimateBomb: 终极爆弹
+
+		Tooltip: {
+			Base: 消耗子弹的霰弹枪。每秒射击 2 次，扇形散射，弹丸可穿透 3 个目标，每次穿透后伤害 -10%
+			GrowthTitle: 成长解锁：
+
+			Mark: {
+				Ok: ✓
+				No: ✗
+			}
+
+			LineFormat: "{0} {1}"
+
+			Growth: {
+				SlimeKing: 击败史莱姆王：每次射击发射 4 发霰弹
+				QueenBee: 击败蜂王：每次射击发射 4~5 发霰弹（随机）
+				Deerclops: 击败巨鹿：暴击后，下次射击发射 6 发并获得 +30% 伤害
+				WallOfFlesh: 击败血肉墙：右键触发后跳（2 分钟冷却），短暂无敌；暴击减少 10 秒冷却
+				AnyMechBoss: 击败任意机械 Boss：额外发射 1 枚分裂弹，命中后分裂成左右爆破弹
+				Plantera: 击败世纪之花：分裂时必定生成 2 秒火墙，接触造成伤害
+				AncientCultist: 击败拜月邪教徒：累计 4 次暴击后，下次射击发射【终极爆弹】（基础伤害×5，扇形溅射）
+			}
+		}
 	}
 
 	GhostChakram: {
@@ -225,22 +277,25 @@ Items: {
 
 	Cookbook: {
 		DisplayName: 菜谱
-		Tooltip:
-			'''
-			给你一些食物配方
-			快去制作今日美食吧
-			可以获得双倍奖励并积累厨艺值
-			'''
+
+		Tooltip: {
+			MadeCount: 已制作：{0} / {1} 种食物
+			CookingSkill: 厨艺值：{0}
+			TodayRecommend: 今日推荐：{0}
+			NoRecipeHint: 配方未知（可能由敌怪掉落/NPC购买/宝匣/礼物袋）
+		}
 	}
 
 	FoodLogItem: {
 		DisplayName: 食谱
-		Tooltip:
-			'''
-			给你一些食物线索
-			快去品尝美食
-			积累美味值吧
-			'''
+
+		Tooltip: {
+			ClosedName: 未知书籍，收藏后显现
+			ClosedHint: 收藏后，会显示未品尝的食物建议
+			EatenProgress: 已吃过：{0} / {1} 种食物
+			Deliciousness: 美味值：{0}
+			SuggestionsTitle: 快去品尝这些食物吧
+		}
 	}
 
 	WishingWellItem: {
@@ -401,6 +456,7 @@ Items: {
 	PassionFruit: {
 		Tooltip: 每次使用增加10点气力上限，最多可增加50点
 		DisplayName: 异果
+		Messages: 你感到内息更稳（气力上限 +10）
 	}
 
 	Kyubey: {
@@ -411,11 +467,13 @@ Items: {
 	ReiShi: {
 		DisplayName: 灵芝
 		Tooltip: 使用增加50点气力上限，限一次
+		Messages: 你感到丹田充盈（气力上限 +50）
 	}
 
 	SteamedBun: {
 		DisplayName: 馒头
 		Tooltip: 可能吸引流浪乞丐的到来
+		Messages: 流浪乞丐被食物吸引到附近
 	}
 
 	BladeWaltz: {
@@ -526,11 +584,13 @@ Items: {
 	QiSecretsB: {
 		Tooltip: 增加攻击和移动时气力恢复速度
 		DisplayName: 动功·气功秘籍
+		Messages.DonggongProgress: 动功有成！移动或攻击时回气 +{0}/s（{1}/{2}）
 	}
 
 	QiSecretsA: {
 		Tooltip: 增加静止时气力恢复速度
 		DisplayName: 静功·气功秘籍
+		Messages.JinggongProgress: 静功有成！静止回气 +{0}/s（{1}/{2}）
 	}
 
 	BugStuff: {
@@ -1125,3 +1185,5 @@ Cuisine: {
 		Entry: "{0} ({1}%)"
 	}
 }
+
+RecipeGroup.AnyFairy: 任意仙灵

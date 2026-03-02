@@ -4,6 +4,7 @@ using Terraria.ModLoader;
 using WuDao.Content.Players;
 using WuDao.Content.Systems;
 using System.Collections.Generic;
+using Terraria.Localization;
 
 namespace WuDao.Content.Items
 {
@@ -32,28 +33,60 @@ namespace WuDao.Content.Items
         {
             var p = Main.LocalPlayer;
             var cp = p.GetModPlayer<CuisinePlayer>();
-            // 显示“已制作过/总数（食物池）”
-            tooltips.Add(new TooltipLine(Mod, "CookbookMadeCount", $"已制作：{cp.CraftedFoodTypes.Count} / {CuisineSystem.FoodPool.Count} 种食物"));
-            tooltips.Add(new TooltipLine(Mod, "CookbookCookingSkill", $"厨艺值：{cp.CookingSkill}"));
+
+            // 已制作：X / Y
+            tooltips.Add(new TooltipLine(
+                Mod, "CookbookMadeCount",
+                Language.GetTextValue(
+                    "Mods.WuDao.Items.Cookbook.Tooltip.MadeCount",
+                    cp.CraftedFoodTypes.Count,
+                    CuisineSystem.FoodPool.Count
+                )
+            ));
+
+            // 厨艺值：X
+            tooltips.Add(new TooltipLine(
+                Mod, "CookbookCookingSkill",
+                Language.GetTextValue(
+                    "Mods.WuDao.Items.Cookbook.Tooltip.CookingSkill",
+                    cp.CookingSkill
+                )
+            ));
+
             CuisineSystem.GetTodayTwo(p, out int a, out int b);
+
             if (a > 0)
             {
-                tooltips.Add(new TooltipLine(Mod, "CookbookTodayA", $"今日推荐：[i:{a}] {Lang.GetItemNameValue(a)}"));
+                string aText = $"[i:{a}] {Lang.GetItemNameValue(a)}";
+                tooltips.Add(new TooltipLine(
+                    Mod, "CookbookTodayA",
+                    Language.GetTextValue("Mods.WuDao.Items.Cookbook.Tooltip.TodayRecommend", aText)
+                ));
+
                 var ra = CuisineSystem.DescribeRecipeCompact(a);
-                if (!string.IsNullOrEmpty(ra))
-                    tooltips.Add(new TooltipLine(Mod, "CookbookTodayARecipe", ra));
-                else
-                    tooltips.Add(new TooltipLine(Mod, "CookbookTodayARecipe", "无配方（可能为掉落/购买/宝匣/礼物袋）"));
+                tooltips.Add(new TooltipLine(
+                    Mod, "CookbookTodayARecipe",
+                    !string.IsNullOrEmpty(ra)
+                        ? ra
+                        : Language.GetTextValue("Mods.WuDao.Items.Cookbook.Tooltip.NoRecipeHint")
+                ));
             }
 
             if (b > 0)
             {
-                tooltips.Add(new TooltipLine(Mod, "CookbookTodayB", $"今日推荐：[i:{b}] {Lang.GetItemNameValue(b)}"));
+                string bText = $"[i:{b}] {Lang.GetItemNameValue(b)}";
+                tooltips.Add(new TooltipLine(
+                    Mod, "CookbookTodayB",
+                    Language.GetTextValue("Mods.WuDao.Items.Cookbook.Tooltip.TodayRecommend", bText)
+                ));
+
                 var rb = CuisineSystem.DescribeRecipeCompact(b);
-                if (!string.IsNullOrEmpty(rb))
-                    tooltips.Add(new TooltipLine(Mod, "CookbookTodayBRecipe", rb));
-                else
-                    tooltips.Add(new TooltipLine(Mod, "CookbookTodayBRecipe", "无配方（可能为掉落/购买/宝匣/礼物袋）"));
+                tooltips.Add(new TooltipLine(
+                    Mod, "CookbookTodayBRecipe",
+                    !string.IsNullOrEmpty(rb)
+                        ? rb
+                        : Language.GetTextValue("Mods.WuDao.Items.Cookbook.Tooltip.NoRecipeHint")
+                ));
             }
         }
     }

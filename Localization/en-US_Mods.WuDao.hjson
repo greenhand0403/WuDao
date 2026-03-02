@@ -70,7 +70,37 @@ Items: {
 
 	NormalScissors: {
 		DisplayName: Normal Scissors
-		Tooltip: ""
+
+		Tooltip: {
+			GrowthInfo: Evolving weapon: unlocks new abilities after defeating certain bosses.
+
+			QueenBee: {
+				Unlocked: ✓ [Queen Bee defeated]: Increased weapon size
+				Locked: ✗ [Unlock after Queen Bee]: Increased weapon size
+			}
+
+			Skeletron: {
+				Unlocked: ✓ [Skeletron defeated]: Build energy on hits → auto release a slash at full charge
+				Locked: ✗ [Unlock after Skeletron]: Build energy → release a slash at full charge
+			}
+
+			WallOfFlesh: {
+				Unlocked: ✓ [Wall of Flesh defeated]: Right-click dash slash (CD 1s)
+				Locked: ✗ [Unlock after Wall of Flesh]: Right-click dash slash
+			}
+
+			Twins: {
+				Unlocked: ✓ [The Twins defeated]: Extra wave on melee hit
+				Locked: ✗ [Unlock after The Twins]: Wave on melee hit
+			}
+
+			Plantera: {
+				Unlocked: ✓ [Plantera defeated]: Fires an extra Terra beam
+				Locked: ✗ [Unlock after Plantera]: Fires an extra Terra beam
+			}
+		}
+
+		Messages.EnergyFull: Energy Full
 	}
 
 	TimeStopItem: {
@@ -150,7 +180,29 @@ Items: {
 
 	TheOutlaw: {
 		DisplayName: The Outlaw
-		Tooltip: ""
+		Messages.UltimateBomb: ULTIMATE BOMB!
+
+		Tooltip: {
+			Base: A bullet-consuming shotgun. Fires twice per second in a cone. Pellets pierce up to 3 targets, losing 10% damage per pierce.
+			GrowthTitle: Growth Unlocks:
+
+			Mark: {
+				Ok: ✓
+				No: ✗
+			}
+
+			LineFormat: "{0} {1}"
+
+			Growth: {
+				SlimeKing: Defeat King Slime: fires 4 pellets per shot
+				QueenBee: Defeat Queen Bee: fires 4–5 pellets per shot (random)
+				Deerclops: Defeat Deerclops: after a crit, next shot fires 6 pellets and gains +30% damage
+				WallOfFlesh: Defeat Wall of Flesh: right-click backstep (2 min cooldown), brief immunity; crit reduces cooldown by 10s
+				AnyMechBoss: Defeat any Mechanical Boss: fires 1 extra split shot that breaks into left/right bomblets on hit
+				Plantera: Defeat Plantera: split shots always create a 2s firewall on split
+				AncientCultist: Defeat Lunatic Cultist: after 4 crits, next shot fires an ULTIMATE BOMB (x5 base damage, cone splash)
+			}
+		}
 	}
 
 	GhostChakram: {
@@ -190,12 +242,25 @@ Items: {
 
 	Cookbook: {
 		DisplayName: Cookbook
-		Tooltip: ""
+
+		Tooltip: {
+			MadeCount: Crafted: {0} / {1} foods
+			CookingSkill: Cooking skill: {0}
+			TodayRecommend: Today's recommendation: {0}
+			NoRecipeHint: No recipe (may be drop / purchase / crate / goodie bag)
+		}
 	}
 
 	FoodLogItem: {
 		DisplayName: Food Log Item
-		Tooltip: ""
+
+		Tooltip: {
+			ClosedName: Food Log
+			ClosedHint: Favorite this item to show suggestions for foods you haven't tried.
+			EatenProgress: Eaten: {0} / {1} foods
+			Deliciousness: Deliciousness: {0}
+			SuggestionsTitle: Go taste these foods!
+		}
 	}
 
 	WishingWellItem: {
@@ -312,6 +377,7 @@ Items: {
 	PassionFruit: {
 		Tooltip: ""
 		DisplayName: Passion Fruit
+		Messages: You feel more stable in your inner breath (max Qi energy +10)
 	}
 
 	Kyubey: {
@@ -322,11 +388,13 @@ Items: {
 	ReiShi: {
 		DisplayName: Rei Shi
 		Tooltip: ""
+		Messages: You feel your Dantian full (max Qi energy +50)
 	}
 
 	SteamedBun: {
 		DisplayName: Steamed Bun
 		Tooltip: ""
+		Messages: Wandering beggars are attracted by food
 	}
 
 	BladeWaltz: {
@@ -427,11 +495,13 @@ Items: {
 	QiSecretsB: {
 		Tooltip: ""
 		DisplayName: Qi Secrets B
+		Messages.DonggongProgress: Meditation improved! +{0}/s mana regen when move or attack ({1}/{2})
 	}
 
 	QiSecretsA: {
 		Tooltip: ""
 		DisplayName: Qi Secrets A
+		Messages.JinggongProgress: Meditation improved! +{0}/s mana regen while stationary ({1}/{2})
 	}
 
 	BugStuff: {
@@ -1014,3 +1084,5 @@ Cuisine: {
 		Entry: "{0} ({1}%)"
 	}
 }
+
+RecipeGroup.AnyFairy: Any Fairy

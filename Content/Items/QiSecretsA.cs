@@ -1,5 +1,6 @@
 using Terraria;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using WuDao.Content.Players;
 
@@ -38,8 +39,14 @@ namespace WuDao.Content.Items
             qi.QiRegenStandBonus += BonusPerUse;
 
             if (player.whoAmI == Main.myPlayer)
-                Main.NewText($"静功有成！静止回气 +{BonusPerUse}/s（{qi.JinggongUsed}/{MaxUses}）");
-
+                Main.NewText(
+                    Language.GetTextValue(
+                        "Mods.WuDao.Items.QiSecretsA.Messages.JinggongProgress",
+                        BonusPerUse,
+                        qi.JinggongUsed,
+                        MaxUses
+                    )
+                );
             return true;
         }
         public override void AddRecipes()

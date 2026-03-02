@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using WuDao.Content.Players;
 using WuDao.Content.Projectiles.Ranged;
@@ -76,8 +77,11 @@ namespace WuDao.Content.Items.Weapons.Ranged
                 // 终极爆弹：基础伤害*5
                 int dmg = (int)(damage * 5f);
                 int proj = Projectile.NewProjectile(source, position, velocity, ModContent.ProjectileType<TheOutlawUltimateBomb>(), dmg, knockback, player.whoAmI);
-                // Main.NewText($"终极爆弹！", 255, 240, 150);
-                CombatText.NewText(new Rectangle((int)player.position.X, (int)player.position.Y, 150, 30), Color.Red, $"终极爆弹！");
+                CombatText.NewText(
+                    new Rectangle((int)player.position.X, (int)player.position.Y, 150, 30),
+                    Color.Red,
+                    Language.GetTextValue("Mods.WuDao.Items.TheOutlaw.Messages.UltimateBomb")
+                );
                 // 不走普通扇形逻辑
                 return false;
             }
@@ -123,7 +127,6 @@ namespace WuDao.Content.Items.Weapons.Ranged
 
         public override void ModifyTooltips(System.Collections.Generic.List<TooltipLine> tooltips)
         {
-            var p = Main.LocalPlayer;
             // 逐项判定 Boss 击败状态
             bool slime = NPC.downedSlimeKing;
             bool bee = NPC.downedQueenBee;
@@ -133,27 +136,46 @@ namespace WuDao.Content.Items.Weapons.Ranged
             bool plan = NPC.downedPlantBoss;
             bool cult = NPC.downedAncientCultist;
 
-            // 第一行：基础说明（固定）
-            tooltips.Add(new TooltipLine(Mod, "Outlaw_Base",
-                "消耗子弹的霰弹枪。每秒射击 2 次，扇形散射，弹丸可穿透 3 个目标，每次穿透后伤害 -10%。"));
+            // 第一行：基础说明
+            tooltips.Add(new TooltipLine(
+                Mod,
+                "Outlaw_Base",
+                Language.GetTextValue("Mods.WuDao.Items.TheOutlaw.Tooltip.Base")
+            ));
 
             // 成长解锁标题
-            tooltips.Add(new TooltipLine(Mod, "Outlaw_Title", "成长解锁："));
+            tooltips.Add(new TooltipLine(
+                Mod,
+                "Outlaw_Title",
+                Language.GetTextValue("Mods.WuDao.Items.TheOutlaw.Tooltip.GrowthTitle")
+            ));
 
-            // 逐条展示（✅/❌）
-            void AddLine(string key, bool ok, string text)
+            // ✅/❌ 标记（也可以本地化；先用最简单方式）
+            string okMark = Language.GetTextValue("Mods.WuDao.Items.TheOutlaw.Tooltip.Mark.Ok");
+            string noMark = Language.GetTextValue("Mods.WuDao.Items.TheOutlaw.Tooltip.Mark.No");
+
+            // 行模板：让不同语言可以调整顺序，例如 "{0} {1}" / "{1} {0}"
+            string lineFormatKey = "Mods.WuDao.Items.TheOutlaw.Tooltip.LineFormat";
+
+            void AddLine(string name, bool ok, string descKey)
             {
-                string mark = ok ? "✅" : "❌";
-                tooltips.Add(new TooltipLine(Mod, key, $"{mark} {text}"));
+                string mark = ok ? okMark : noMark;
+                string desc = Language.GetTextValue(descKey);
+
+                tooltips.Add(new TooltipLine(
+                    Mod,
+                    name,
+                    Language.GetTextValue(lineFormatKey, mark, desc)
+                ));
             }
 
-            AddLine("SK", slime, "击败史莱姆王：每次射击发射 4 发霰弹");
-            AddLine("QB", bee, "击败蜂王：每次射击发射 4~5 发霰弹（随机）");
-            AddLine("DEER", deer, "击败巨鹿：暴击后，下次射击发射 6 发并获得 +30% 伤害");
-            AddLine("WALL", wall, "击败血肉墙：右键触发后跳（2 分钟冷却），短暂无敌；暴击减少 10 秒冷却");
-            AddLine("MECH", mech, "击败任意机械 Boss：额外发射 1 枚分裂弹，命中后分裂成左右爆破弹");
-            AddLine("PLAN", plan, "击败世纪之花：分裂时必定生成 2 秒火墙，接触造成伤害");
-            AddLine("CULT", cult, "击败拜月邪教徒：累计 4 次暴击后，下次射击发射【终极爆弹】（基础伤害×5，扇形溅射）");
+            AddLine("SK", slime, "Mods.WuDao.Items.TheOutlaw.Tooltip.Growth.SlimeKing");
+            AddLine("QB", bee, "Mods.WuDao.Items.TheOutlaw.Tooltip.Growth.QueenBee");
+            AddLine("DEER", deer, "Mods.WuDao.Items.TheOutlaw.Tooltip.Growth.Deerclops");
+            AddLine("WALL", wall, "Mods.WuDao.Items.TheOutlaw.Tooltip.Growth.WallOfFlesh");
+            AddLine("MECH", mech, "Mods.WuDao.Items.TheOutlaw.Tooltip.Growth.AnyMechBoss");
+            AddLine("PLAN", plan, "Mods.WuDao.Items.TheOutlaw.Tooltip.Growth.Plantera");
+            AddLine("CULT", cult, "Mods.WuDao.Items.TheOutlaw.Tooltip.Growth.AncientCultist");
         }
         public override Vector2? HoldoutOffset()
         {

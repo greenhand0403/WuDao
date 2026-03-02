@@ -1,5 +1,6 @@
 using Terraria;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using WuDao.Content.Players;
 
@@ -39,7 +40,14 @@ namespace WuDao.Content.Items
             qi.QiRegenMoveBonus += BonusPerUse;
 
             if (player.whoAmI == Main.myPlayer)
-                Main.NewText($"动功精进！动/攻回气 +{BonusPerUse}/s（{qi.DonggongUsed}/{MaxUses}）");
+                Main.NewText(
+                    Language.GetTextValue(
+                        "Mods.WuDao.Items.QiSecretsB.Messages.DonggongProgress",
+                        BonusPerUse,
+                        qi.DonggongUsed,
+                        MaxUses
+                    )
+                );
 
             return true;
         }

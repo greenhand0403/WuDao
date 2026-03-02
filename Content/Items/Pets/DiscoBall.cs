@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using WuDao.Content.Buffs;
 using WuDao.Content.Projectiles;
@@ -34,7 +35,7 @@ namespace WuDao.Content.Items.Pets
         public override void AddRecipes()
         {
             // 先定义一个 RecipeGroup，把三种仙灵都算作同一类材料
-            RecipeGroup fairyGroup = new RecipeGroup(() => "任意仙灵",
+            RecipeGroup fairyGroup = new RecipeGroup(() => Language.GetTextValue("Mods.WuDao.RecipeGroup.AnyFairy"),
                 ItemID.FairyCritterBlue,
                 ItemID.FairyCritterGreen,
                 ItemID.FairyCritterPink);

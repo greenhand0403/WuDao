@@ -53,7 +53,7 @@ namespace WuDao.Content.Items.Weapons.Melee
             if (player.whoAmI != Main.myPlayer) return true;
 
             // 在鼠标附近随机生成
-            Vector2 spawnPos = Main.MouseWorld + 150 * (new Vector2(Main.rand.NextFloat(-1, 1f), Main.rand.NextFloat(-1, 1f)));
+            Vector2 spawnPos = Main.MouseWorld + 150 * new Vector2(Main.rand.NextFloat(-1, 1f), Main.rand.NextFloat(-1, 1f));
             InvincibleBladePlayer mp = player.GetModPlayer<InvincibleBladePlayer>();
             // 发射的射弹随着使用时间增多
             int cold = mp.Cooldown;

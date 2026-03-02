@@ -1,5 +1,7 @@
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using WuDao.Content.Systems;
 
@@ -32,7 +34,7 @@ namespace WuDao.Content.Items
                 return false;
             }
             BeggarSystem.SpawnBeggarNear(player);
-            Main.NewText("流浪乞丐正在附近", Microsoft.Xna.Framework.Color.LightGreen);
+            Main.NewText(Language.GetTextValue("Mods.WuDao.Items.SteamedBun.Messages"), Color.LightGreen);
             return true;
         }
     }

@@ -11,7 +11,6 @@ namespace WuDao.Content.Items.Weapons.Melee
     {
         public override void SetDefaults()
         {
-            // Item.CloneDefaults(ItemID.CombatWrench);
             Item.useTime = 30;
             Item.useAnimation = 30;
             Item.damage = 30;
@@ -40,22 +39,6 @@ namespace WuDao.Content.Items.Weapons.Melee
         {
             return new Vector2(-4, 2); // 向内偏移4像素
         }
-        // 根据敌怪稀有度增加伤害
-        // public override void ModifyHitNPC(Player player, NPC target, ref NPC.HitModifiers modifiers)
-        // {
-        //     int g = target.rarity;
-        //     if (g > 0)
-        //     {
-        //         float multiplier = 1f + g * 0.5f;
-        //         modifiers.FinalDamage *= multiplier;
-
-        //         CombatText.NewText(
-        //             target.Hitbox,
-        //             new Color(180, 220, 255),
-        //             $"敌怪稀有度 {g}"
-        //         );
-        //     }
-        // }
         public override void AddRecipes()
         {
             CreateRecipe()

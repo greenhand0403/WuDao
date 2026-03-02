@@ -62,10 +62,6 @@ namespace WuDao.Content.Items.Weapons.Melee
             if (player.altFunctionUse == 2)
             {
                 paletteIndex = (paletteIndex + 1) % 3;
-                // 简单提示（可选）
-                CombatText.NewText(player.getRect(),
-                    paletteIndex == 0 ? new Color(205, 127, 50) : paletteIndex == 1 ? new Color(180, 180, 195) : new Color(192, 192, 192),
-                    paletteIndex == 0 ? "铜" : paletteIndex == 1 ? "铁" : "银");
                 return false; // 右键只切换，不挥砍
             }
             return base.CanUseItem(player);

@@ -5,6 +5,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Audio;
 using WuDao.Content.Buffs;
+using Terraria.Localization;
 
 // TODO: 重绘贴图 成长型武器，剪刀，改成了发射斩波 辅助类未拆分到目录
 // ModPlayer ModItem ModProjectile 写在一个文件了
@@ -242,7 +243,11 @@ namespace WuDao.Content.Items.Weapons.Melee
                 mp.energy = NormalScissorsPlayer.EnergyMax;   // 能量直接拉满
                 mp.forceChargedOnNextSwing = true;            // 标记：下一次左键必放斩波
                 if (Main.netMode != NetmodeID.Server)
-                    CombatText.NewText(player.Hitbox, new Color(120, 255, 120), "能量充盈");
+                    CombatText.NewText(
+                    player.Hitbox,
+                    new Color(120, 255, 120),
+                    Language.GetTextValue("Mods.WuDao.Items.NormalScissors.Messages.EnergyFull")
+                );
             }
             else
             {
@@ -292,40 +297,52 @@ namespace WuDao.Content.Items.Weapons.Melee
 
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
-            Player player = Main.LocalPlayer;
+            // 基础说明
+            tooltips.Add(new TooltipLine(
+                Mod, "GrowthInfo",
+                Language.GetTextValue("Mods.WuDao.Items.NormalScissors.Tooltip.GrowthInfo")
+            ));
 
-            // 添加基础说明
-            tooltips.Add(new TooltipLine(Mod, "GrowthInfo", "成长型武器：会随击败特定 Boss 解锁能力"));
+            // Queen Bee
+            tooltips.Add(new TooltipLine(
+                Mod, "QueenBeeUpgrade",
+                Language.GetTextValue(NPC.downedQueenBee
+                    ? "Mods.WuDao.Items.NormalScissors.Tooltip.QueenBee.Unlocked"
+                    : "Mods.WuDao.Items.NormalScissors.Tooltip.QueenBee.Locked")
+            ));
 
-            // 击败蜂后
-            if (NPC.downedQueenBee)
-                tooltips.Add(new TooltipLine(Mod, "QueenBeeUpgrade", "✓ [蜂后已击败]：武器尺寸增大"));
-            else
-                tooltips.Add(new TooltipLine(Mod, "QueenBeeUpgrade", "✗ [击败蜂后后解锁]：武器尺寸增大"));
+            // Skeletron OR Deerclops
+            bool skeletronUnlocked = NPC.downedBoss3 || NPC.downedDeerclops;
+            tooltips.Add(new TooltipLine(
+                Mod, "SkeletronUpgrade",
+                Language.GetTextValue(skeletronUnlocked
+                    ? "Mods.WuDao.Items.NormalScissors.Tooltip.Skeletron.Unlocked"
+                    : "Mods.WuDao.Items.NormalScissors.Tooltip.Skeletron.Locked")
+            ));
 
-            // 击败骷髅王/鹿角怪
-            if (NPC.downedBoss3 || NPC.downedDeerclops)
-                tooltips.Add(new TooltipLine(Mod, "SkeletronUpgrade", "✓ [骷髅王已击败]：左键平A攒能量 → 满后自动释放剑气"));
-            else
-                tooltips.Add(new TooltipLine(Mod, "SkeletronUpgrade", "✗ [击败骷髅王后解锁]：左键攒能量释放剑气"));
+            // Wall of Flesh (Hardmode)
+            tooltips.Add(new TooltipLine(
+                Mod, "WallOfFleshUpgrade",
+                Language.GetTextValue(Main.hardMode
+                    ? "Mods.WuDao.Items.NormalScissors.Tooltip.WallOfFlesh.Unlocked"
+                    : "Mods.WuDao.Items.NormalScissors.Tooltip.WallOfFlesh.Locked")
+            ));
 
-            // 血肉墙
-            if (Main.hardMode)
-                tooltips.Add(new TooltipLine(Mod, "WallOfFleshUpgrade", "✓ [血肉墙已击败]：右键冲刺切割（CD 1s）"));
-            else
-                tooltips.Add(new TooltipLine(Mod, "WallOfFleshUpgrade", "✗ [击败血肉墙后解锁]：右键冲刺切割"));
+            // Twins
+            tooltips.Add(new TooltipLine(
+                Mod, "MechEyeUpgrade",
+                Language.GetTextValue(NPC.downedMechBoss2
+                    ? "Mods.WuDao.Items.NormalScissors.Tooltip.Twins.Unlocked"
+                    : "Mods.WuDao.Items.NormalScissors.Tooltip.Twins.Locked")
+            ));
 
-            // 机械魔眼
-            if (NPC.downedMechBoss2)
-                tooltips.Add(new TooltipLine(Mod, "MechEyeUpgrade", "✓ [双子魔眼已击败]：近战命中时额外发射斩波"));
-            else
-                tooltips.Add(new TooltipLine(Mod, "MechEyeUpgrade", "✗ [击败双子魔眼后解锁]：近战命中发射斩波"));
-
-            // 世纪之花
-            if (NPC.downedPlantBoss)
-                tooltips.Add(new TooltipLine(Mod, "PlanteraUpgrade", "✓ [世纪之花已击败]：额外发射泰拉剑气"));
-            else
-                tooltips.Add(new TooltipLine(Mod, "PlanteraUpgrade", "✗ [击败世纪之花后解锁]：额外发射泰拉剑气"));
+            // Plantera
+            tooltips.Add(new TooltipLine(
+                Mod, "PlanteraUpgrade",
+                Language.GetTextValue(NPC.downedPlantBoss
+                    ? "Mods.WuDao.Items.NormalScissors.Tooltip.Plantera.Unlocked"
+                    : "Mods.WuDao.Items.NormalScissors.Tooltip.Plantera.Locked")
+            ));
         }
 
         public override void AddRecipes()

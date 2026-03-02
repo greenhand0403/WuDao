@@ -4,6 +4,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using WuDao.Content.Systems;
 using WuDao.Content.Players;
+using Terraria.Localization;
 
 namespace WuDao.Content.Items
 {
@@ -40,31 +41,59 @@ namespace WuDao.Content.Items
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
             var cp = Main.LocalPlayer.GetModPlayer<CuisinePlayer>();
+
+            // 未开启（未收藏）时：显示“说明版”Tooltip
             if (!cp.HasFoodLogItem)
             {
                 tooltips.Clear();
-                tooltips.Add(new TooltipLine(Mod, "ItemName", "食谱"));
-                tooltips.Add(new TooltipLine(Mod, "Title", "收藏后，会显示未品尝的食物建议"));
+
+                tooltips.Add(new TooltipLine(
+                    Mod, "ItemName",
+                    Language.GetTextValue("Mods.WuDao.Items.FoodLogItem.Tooltip.ClosedName")
+                ));
+
+                tooltips.Add(new TooltipLine(
+                    Mod, "Title",
+                    Language.GetTextValue("Mods.WuDao.Items.FoodLogItem.Tooltip.ClosedHint")
+                ));
+
                 return;
             }
 
-            // 全部食物（包括不可合成 + 模组食物）：扫描 ItemLoader.ItemCount + IsFood 标记
             int totalFood = CuisineSystem.TotalFoodCount;
 
-            tooltips.Add(new TooltipLine(Mod, "FoodEatenProgress", $"已吃过：{cp.FoodsEatenAll.Count} / {totalFood} 种食物"));
-            tooltips.Add(new TooltipLine(Mod, "FoodDeliciousness", $"美味值：{cp.Deliciousness}"));
-            if (cp.HasFoodLogItem && cp.SuggestedFoods6.Count > 0)
+            tooltips.Add(new TooltipLine(
+                Mod, "FoodEatenProgress",
+                Language.GetTextValue(
+                    "Mods.WuDao.Items.FoodLogItem.Tooltip.EatenProgress",
+                    cp.FoodsEatenAll.Count, totalFood
+                )
+            ));
+
+            tooltips.Add(new TooltipLine(
+                Mod, "FoodDeliciousness",
+                Language.GetTextValue(
+                    "Mods.WuDao.Items.FoodLogItem.Tooltip.Deliciousness",
+                    cp.Deliciousness
+                )
+            ));
+
+            if (cp.SuggestedFoods6.Count > 0)
             {
-                tooltips.Add(new TooltipLine(Mod, "FoodHintsTitle", "快去品尝这些食物吧"));
+                tooltips.Add(new TooltipLine(
+                    Mod, "FoodHintsTitle",
+                    Language.GetTextValue("Mods.WuDao.Items.FoodLogItem.Tooltip.SuggestionsTitle")
+                ));
+
                 foreach (int t in cp.SuggestedFoods6)
                 {
-                    // tooltips.Add(new TooltipLine(Mod, $"· [i:{t}] FoodHint_{t}", Lang.GetItemNameValue(t)));
-                    tooltips.Add(new TooltipLine(Mod, $"FoodHint_{t}", $"[i:{t}] {Lang.GetItemNameValue(t)}"));
+                    tooltips.Add(new TooltipLine(
+                        Mod, $"FoodHint_{t}",
+                        $"[i:{t}] {Lang.GetItemNameValue(t)}"
+                    ));
+
                     var rec = CuisineSystem.DescribeRecipeCompact(t);
-                    // if (!string.IsNullOrEmpty(rec))
-                        tooltips.Add(new TooltipLine(Mod, $"FoodHintRecipe_{t}", rec));
-                    // else
-                    //     tooltips.Add(new TooltipLine(Mod, $"FoodHintRecipe_{t}", CuisineSystem.DescribeAcquisition(t)));
+                    tooltips.Add(new TooltipLine(Mod, $"FoodHintRecipe_{t}", rec));
                 }
             }
         }

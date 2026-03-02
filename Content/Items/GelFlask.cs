@@ -32,7 +32,6 @@ namespace WuDao.Content.Items
             CreateRecipe()
                 .AddIngredient(ItemID.BottledWater)
                 .AddIngredient(ItemID.Gel)
-                // .AddIngredient<ExampleItem>(2)
                 .AddTile(TileID.ImbuingStation)
                 .Register();
         }

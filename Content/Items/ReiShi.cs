@@ -1,5 +1,7 @@
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using WuDao.Content.Players;
 
@@ -32,7 +34,7 @@ namespace WuDao.Content.Items
             var qi = player.GetModPlayer<QiPlayer>();
             qi.Used_ReiShi++;
             qi.QiMaxFromItems += 50;
-            Main.NewText("你感到丹田充盈（气力上限 +50）。", Microsoft.Xna.Framework.Color.SkyBlue);
+            Main.NewText(Language.GetTextValue("Mods.WuDao.ReiShi.Messages"), Color.SkyBlue);
             return true;
         }
         public override void AddRecipes()

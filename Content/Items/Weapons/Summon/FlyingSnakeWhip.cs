@@ -6,7 +6,7 @@ using WuDao.Content.Projectiles.Summon;
 
 namespace WuDao.Content.Items.Weapons.Summon
 {
-    // TODO: 检查飞蛇鞭
+    // TODO: 飞蛇鞭物品贴图重置
     public class FlyingSnakeWhip : ModItem
     {
         // public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(FlyingSnakeWhipDebuff.TagDamage);

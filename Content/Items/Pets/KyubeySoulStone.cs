@@ -24,7 +24,5 @@ namespace WuDao.Content.Items.Pets
             }
             return true;
         }
-        // 如需合成，可在这里添加配方
-        // public override void AddRecipes() { ... }
     }
 }
