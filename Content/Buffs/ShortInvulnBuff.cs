@@ -17,7 +17,6 @@ namespace WuDao.Content.Buffs
         public override void Update(Player player, ref int buffIndex)
         {
             player.immune = true;
-            // player.immuneTime = 5; // 每帧刷新
         }
     }
 }

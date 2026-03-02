@@ -35,7 +35,7 @@ namespace WuDao.Common
                     AllowedItemIDs.Add(id);
             }
 
-            // 2) 可选集合（如果你有）
+            // 2) 包含光剑集合（如果你有）
             if (cfg.IncludePhaseblades && ItemSets.PhasebladeSet is not null)
             {
                 foreach (var id in ItemSets.PhasebladeSet)

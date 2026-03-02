@@ -3,14 +3,15 @@ using System.IO;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using WuDao.Common;
 using WuDao.Content.Config;
+using static WuDao.Content.Config.ArmorPrefixConfig;
 
 namespace WuDao.Content.Global
 {
-    // TODO: 含中文文字提示信息
     // 盔甲五行机制，给盔甲“打标签”的全局组件（不是Prefix）
     public class ArmorElementTag : GlobalItem
     {
@@ -58,12 +59,20 @@ namespace WuDao.Content.Global
             // ① 显示“附带【X】属性”并着色（如果该盔甲有元素标签）
             if (Element >= 0)
             {
-                string name = ElementName(Element);
-                var line = new TooltipLine(Mod, "WuDaoArmorElement", $"【{name}】")
+                string name = ElementName(Element); // 下面我们会把 ElementName 改成“本地化版本”
+
+                // 紧随物品名字
+                int nameIndex = tooltips.FindIndex(t => t.Name == "ItemName" && t.Mod == "Terraria");
+
+                if (nameIndex != -1)
                 {
-                    OverrideColor = ElementColor(Element)
-                };
-                tooltips.Add(line);
+                    var nameLine = tooltips[nameIndex];
+
+                    Color c = ElementColor(Element);
+                    string hex = $"{c.R:X2}{c.G:X2}{c.B:X2}";
+
+                    nameLine.Text += $" [c/{hex}:【{name}】]";
+                }
             }
 
             // ② 若玩家当前激活了某个五行“三件套”，则在每个盔甲的 Tooltip 里追加一条“激活【X】三件套效果”
@@ -72,20 +81,16 @@ namespace WuDao.Content.Global
             {
                 string actName = ElementName(activeFullSet);
                 Color actColor = ElementColor(activeFullSet);
-
-                // a) 在任意位置追加一条“激活”提示（让三件都能看见）
-                // var activeLine = new TooltipLine(Mod, "WuDaoFullSetActive", $"五行【{actName}】效果")
-                // {
-                //     OverrideColor = actColor
-                // };
-                // tooltips.Add(activeLine);
-
                 // b) 如果该物品的 Tooltip 里有“套装奖励(Set Bonus)”，就在它下面再插入一条“五行套装加成：……”
                 int setBonusIndex = tooltips.FindIndex(t => t.Name == "SetBonus"); // 原版名称
                 if (setBonusIndex != -1)
                 {
                     string bonusDesc = FullSetExtraBonusText(activeFullSet);
-                    var bonusLine = new TooltipLine(Mod, "WuDaoFullSetExtraBonus", $"盔甲五行：{bonusDesc}")
+                    var bonusLine = new TooltipLine(
+                        Mod,
+                        "WuDaoFullSetExtraBonus",
+                        Language.GetTextValue("Mods.WuDao.ArmorElement.Tooltip.SetBonusPrefix", bonusDesc) // "盔甲五行：{0}"
+                    )
                     {
                         OverrideColor = actColor
                     };
@@ -93,14 +98,13 @@ namespace WuDao.Content.Global
                 }
             }
         }
-        // 三件套“额外效果”的文字描述（显示在 Set Bonus 下面）
         private static string FullSetExtraBonusText(int e) => e switch
         {
-            0 => "额外 +3% 伤害，护甲穿透 +6",
-            1 => "额外 +3 生命再生，上限 +30%",
-            2 => "额外 +4% 移速，加速度与减速度 +10%",
-            3 => "额外 +2% 暴击率，暴击伤害 +10%",
-            4 => "额外 +3 防御，耐力减伤 +10%",
+            0 => Language.GetTextValue("Mods.WuDao.ArmorElement.SetBonus.Metal"),
+            1 => Language.GetTextValue("Mods.WuDao.ArmorElement.SetBonus.Wood"),
+            2 => Language.GetTextValue("Mods.WuDao.ArmorElement.SetBonus.Water"),
+            3 => Language.GetTextValue("Mods.WuDao.ArmorElement.SetBonus.Fire"),
+            4 => Language.GetTextValue("Mods.WuDao.ArmorElement.SetBonus.Earth"),
             _ => ""
         };
 
@@ -134,26 +138,23 @@ namespace WuDao.Content.Global
         };
         public static string ElementName(int e) => e switch
         {
-            0 => "金",
-            1 => "木",
-            2 => "水",
-            3 => "火",
-            4 => "土",
-            _ => "无"
+            0 => Language.GetTextValue("Mods.WuDao.ArmorElement.Name.Metal"),
+            1 => Language.GetTextValue("Mods.WuDao.ArmorElement.Name.Wood"),
+            2 => Language.GetTextValue("Mods.WuDao.ArmorElement.Name.Water"),
+            3 => Language.GetTextValue("Mods.WuDao.ArmorElement.Name.Fire"),
+            4 => Language.GetTextValue("Mods.WuDao.ArmorElement.Name.Earth"),
+            _ => Language.GetTextValue("Mods.WuDao.ArmorElement.Name.None")
         };
         private void TryAssign(Item item)
         {
             if (!IsArmor(item) || Element >= 0) return; // 已有标签则不覆盖
 
             var cfg = ModContent.GetInstance<ArmorPrefixConfig>();
-            if (cfg.PrefixMode == "禁用") return;
-            if (cfg.PrefixMode == "仅矿物盔甲" && !IsVanillaOreArmor(item)) return;
+            if (cfg.PrefixMode == ArmorPrefixMode.Disabled) return;
+            if (cfg.PrefixMode == ArmorPrefixMode.OreArmorOnly && !IsVanillaOreArmor(item)) return;
 
             // 只在“获得盔甲时”随机赋值一次
             Element = Main.rand.Next(0, 5);
-
-            // 可选：调试观察
-            // Main.NewText($"获得盔甲：{Lang.GetItemNameValue(item.type)} → 元素={ElementName(Element)}");
         }
 
         private static bool IsArmor(Item item)

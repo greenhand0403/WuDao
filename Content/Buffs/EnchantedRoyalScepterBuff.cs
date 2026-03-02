@@ -11,8 +11,6 @@ namespace WuDao.Content.Buffs
         public override string Texture => $"Terraria/Images/Item_{ItemID.RoyalScepter}";
         public override void SetStaticDefaults()
         {
-            // DisplayName.SetDefault("附魔皇家权杖");
-            // Description.SetDefault("一把皇家权杖在你头顶守护你");
             Main.buffNoTimeDisplay[Type] = true;
             Main.buffNoSave[Type] = false;
             Main.debuff[Type] = false; // 允许右键移除

@@ -4,6 +4,7 @@ using Terraria.DataStructures;
 using Terraria.ModLoader;
 using WuDao.Content.Players;
 using WuDao.Content.Juexue.Passive;
+using WuDao.Content.Config;
 
 namespace WuDao.Content.Global.Projectiles
 {
@@ -14,20 +15,22 @@ namespace WuDao.Content.Global.Projectiles
 
         public override bool Shoot(Item item, Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-
-            var qi = player.GetModPlayer<QiPlayer>();
-            if (qi.JuexueSlot.ModItem is SharkWhaleFist sw)
+            if (!ModContent.GetInstance<WudaoConfig>().EnableJueXueSystem)
             {
-                sw.TryPassiveTriggerOnShoot(player, qi, source, position, velocity, type, damage, knockback);
+                var qi = player.GetModPlayer<QiPlayer>();
+                if (qi.JuexueSlot.ModItem is SharkWhaleFist sw)
+                {
+                    sw.TryPassiveTriggerOnShoot(player, qi, source, position, velocity, type, damage, knockback);
+                }
+                if (qi.JuexueSlot.ModItem is HeavenlyPetals hp)
+                {
+                    hp.TryPassiveTriggerOnShoot(player, qi, source, position, velocity, type, damage, knockback);
+                }
+                if (qi.JuexueSlot.ModItem is WhiteBoneClaw wbc)
+                    wbc.TryPassiveTriggerOnShoot(player, qi, source, position, velocity, type, damage, knockback);
+                if (qi.JuexueSlot.ModItem is XiangLong18 xl)
+                    xl.TryPassiveTriggerOnShoot(player, qi, source, position, velocity, type, damage, knockback);
             }
-            if (qi.JuexueSlot.ModItem is HeavenlyPetals hp)
-            {
-                hp.TryPassiveTriggerOnShoot(player, qi, source, position, velocity, type, damage, knockback);
-            }
-            if (qi.JuexueSlot.ModItem is WhiteBoneClaw wbc)
-                wbc.TryPassiveTriggerOnShoot(player, qi, source, position, velocity, type, damage, knockback);
-            if (qi.JuexueSlot.ModItem is XiangLong18 xl)
-                xl.TryPassiveTriggerOnShoot(player, qi, source, position, velocity, type, damage, knockback);
             return base.Shoot(item, player, source, position, velocity, type, damage, knockback);
         }
     }

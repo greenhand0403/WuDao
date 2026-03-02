@@ -12,7 +12,6 @@ namespace WuDao.Common
     public static class Helpers
     {
         // 绘制有关的辅助方法
-        public static Vector2 MouseWorld() => Main.MouseWorld;
 
         public static bool IsPlayerAttackingOrMoving(Player p)
         {
@@ -47,13 +46,6 @@ namespace WuDao.Common
             return list[rand.Next(list.Count)];
         }
 
-        /// <summary>
-        /// 判断某个物品是否属于指定集合 ItemSetHelper.InSet(item.type, ItemID.Sets.IsFood);
-        /// </summary>
-        public static bool InSet(int itemID, bool[] itemSet)
-        {
-            return itemID >= 0 && itemID < itemSet.Length && itemSet[itemID];
-        }
         /// <summary>按已击败唯一BOSS数量提供的加成数值。</summary>
         public readonly struct BossProgressBonus
         {

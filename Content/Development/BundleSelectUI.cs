@@ -5,11 +5,11 @@ using Microsoft.Xna.Framework.Input;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent.UI.Elements;
+using Terraria.Localization;
 using Terraria.UI;
 
 namespace WuDao.Content.Development
 {
-    // TODO: 中文文本，开局礼包选择UI菜单
     public class BundleSelectUI : UIState
     {
         public Action<BundleCategory> OnSelect;
@@ -41,7 +41,7 @@ namespace WuDao.Content.Development
             };
             Append(_panel);
 
-            _title = new UIText("选择要领取的类别", 0.9f) { HAlign = 0.5f };
+            _title = new UIText(Language.GetTextValue("Mods.WuDao.Items.WeaponBundleItem.UIText"), 0.9f) { HAlign = 0.5f };
             _title.Top.Set(TitleTop, 0f);
             _panel.Append(_title);
 
@@ -62,9 +62,9 @@ namespace WuDao.Content.Development
             _list.SetScrollbar(_scrollbar);
 
             // ===== 你的三个选项 =====
-            AddButton("武器（含弹药）", () => Select(BundleCategory.Weapons));
-            AddButton("饰品", () => Select(BundleCategory.Accessories));
-            AddButton("其他", () => Select(BundleCategory.Others));
+            AddButton(Language.GetTextValue("Mods.WuDao.Items.WeaponBundleItem.ItemType0"), () => Select(BundleCategory.Weapons));
+            AddButton(Language.GetTextValue("Mods.WuDao.Items.WeaponBundleItem.ItemType1"), () => Select(BundleCategory.Accessories));
+            AddButton(Language.GetTextValue("Mods.WuDao.Items.WeaponBundleItem.ItemType2"), () => Select(BundleCategory.Others));
 
             _layoutDirty = true;
         }

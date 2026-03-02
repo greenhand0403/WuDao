@@ -2,6 +2,7 @@ using Terraria.ModLoader;
 
 namespace WuDao.Content.DamageClasses
 {
+    // TODO: 特殊伤害类型暂时没有使用
     public class ChiEnergyDamageClass : DamageClass
     {
         public override StatInheritanceData GetModifierInheritance(DamageClass dc)

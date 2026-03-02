@@ -31,9 +31,9 @@ namespace WuDao.Content.Global.NPCs
 
         public override void ModifyHitPlayer(NPC npc, Player target, ref Player.HurtModifiers modifiers)
         {
-            // 敌怪打玩家 → 伤害 ×0.6
+            // 敌怪打玩家 → 伤害 ×0.9
             if (!npc.friendly && AnyAuraHolderAffecting(npc))
-                modifiers.SourceDamage *= 0.6f;
+                modifiers.SourceDamage *= 0.9f;
         }
 
         public override void ModifyIncomingHit(NPC npc, ref NPC.HitModifiers modifiers)
@@ -41,17 +41,9 @@ namespace WuDao.Content.Global.NPCs
             if (npc.friendly) return;
             if (!AnyAuraHolderAffecting(npc)) return;
 
-            // 提高敌怪承受的伤害
-            modifiers.FinalDamage *= 1.4f;
+            // 提高敌怪承受的伤害10%
+            modifiers.FinalDamage *= 1.1f;
         }
-
-        // public override void UpdateLifeRegen(NPC npc, ref int damage)
-        // {
-        //     if (npc.friendly) return;
-        //     if (!AnyAuraHolderAffecting(npc)) return;
-        //     // 生命再生减少
-        //     npc.lifeRegen = (int)(npc.lifeRegen * 0.6f);
-        // }
     }
 
 }

@@ -2,17 +2,18 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Audio;
+using Terraria.Localization;
 
 namespace WuDao.Content.Development
 {
-    // 开局礼包掉落所有模组物品
+    // 开局礼包掉落武道模组所有物品
     public enum BundleCategory
     {
         Weapons,
         Accessories,
         Others
     }
-    // TODO: 含打印提示信息
+
     public class WeaponBundleItem : ModItem
     {
         public override void SetDefaults()
@@ -79,7 +80,10 @@ namespace WuDao.Content.Development
             }
 
             Main.NewText(
-                $"领取完成：进入背包 {addedKinds} 种；掉落 {droppedKinds} 种（共 {droppedTotal} 件/叠）。",
+                Language.GetTextValue(
+                    "Mods.WuDao.Messages.BundleClaimed",
+                    addedKinds, droppedKinds, droppedTotal
+                ),
                 255, 240, 20
             );
 

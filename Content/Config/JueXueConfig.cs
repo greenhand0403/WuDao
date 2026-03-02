@@ -4,9 +4,7 @@ using Terraria.ModLoader.Config;
 namespace WuDao.Content.Config
 {
     /// <summary>
-    /// 默认开启 juexue 系统，使用方法
-    /// if (!ModContent.GetInstance<WudaoConfig>().EnableJueXueSystem)
-    /// return;
+    /// 默认开启 juexue 系统
     /// </summary>
     public class WudaoConfig : ModConfig
     {

@@ -10,10 +10,10 @@ using System.Collections.Generic;
 using WuDao.Content.Items.Weapons.Melee;
 using System;
 using WuDao.Content.Items.Accessories;
+using Terraria.Localization;
 
 namespace WuDao.Content.Global
 {
-    // TODO: 含中文文字提示信息
     /// <summary>
     /// “厨具 / 美食”集合及查询。
     /// 只要把物品 type 放到相应集合里，系统就会在伤害结算时给出加成。
@@ -95,7 +95,11 @@ namespace WuDao.Content.Global
                     // 首次‘品尝’累加美味值
                     int bt = ContentSamples.ItemsByType[item.type].rare;
                     if (bt > 0) p.Deliciousness += bt;
-                    CombatText.NewText(player.Hitbox, Color.Green, "品尝新食物");
+                    CombatText.NewText(
+                        player.Hitbox,
+                        Color.Green,
+                        Language.GetTextValue("Mods.WuDao.Cuisine.Messages.TastedNewFood")
+                    );
                     // 触发食物海事件
                     FoodRainSystem.TryTrigger(player);
                 }
@@ -125,7 +129,11 @@ namespace WuDao.Content.Global
             {
                 player.QuickSpawnItem(player.GetSource_GiftOrReward(), item.type, item.stack);
                 player.QuickSpawnItem(player.GetSource_GiftOrReward(), item.type, item.stack);
-                CombatText.NewText(player.Hitbox, Color.Yellow, $"菜谱双倍奖励");
+                CombatText.NewText(
+                    player.Hitbox,
+                    Color.Yellow,
+                    Language.GetTextValue("Mods.WuDao.Cuisine.Messages.CookbookDoubleReward")
+                );
                 cp.CraftedFoodTypes.Add(item.type);
                 // —— 立刻补位（做掉第一道/第二道的规则在系统里处理）——
                 CuisineSystem.OnCraftedAndRefresh(player, item.type);
@@ -174,25 +182,63 @@ namespace WuDao.Content.Global
             // 厨具武器加成
             if (CuisineCollections.IsCookware(item.type))
             {
-                tooltips.Add(new TooltipLine(Mod, "CuisineTag", "厨具"));
+                // 放在物品名字的下一行
+                var line = new TooltipLine(
+                    Mod, "CuisineTag",
+                    Language.GetTextValue("Mods.WuDao.Cuisine.Tooltip.Tag.Cookware")
+                );
+                int nameIndex = tooltips.FindIndex(t => t.Name == "ItemName");
+
+                if (nameIndex != -1)
+                {
+                    tooltips.Insert(nameIndex + 1, line); // 插到名字下面
+                }
+                else
+                {
+                    tooltips.Insert(0, line); // fallback
+                }
+
                 if (cp != null)
                 {
                     float extra = MathHelper.Clamp(cp.CookingSkill * PerCookingPointToBonus, 0f, MaxExtraMultiplier);
                     int percent = (int)(extra * 100);
-                    tooltips.Add(new TooltipLine(Mod, "CuisineBonus",
-                        $"当前厨艺加成：+{percent}% 伤害（最高 +{MaxExtraMultiplier * 100}%）"));
+                    int maxPercent = (int)(MaxExtraMultiplier * 100);
+
+                    tooltips.Add(new TooltipLine(
+                        Mod, "CuisineBonus",
+                        Language.GetTextValue("Mods.WuDao.Cuisine.Tooltip.CookwareDamageBonus", percent, maxPercent)
+                    ));
                 }
             }
             // 美食武器加成
             if (CuisineCollections.IsGourmet(item.type))
             {
-                tooltips.Add(new TooltipLine(Mod, "CuisineTag", "美食"));
+                // 放在物品名字的下一行
+                var line = new TooltipLine(
+                    Mod, "CuisineTag",
+                    Language.GetTextValue("Mods.WuDao.Cuisine.Tooltip.Tag.Gourmet")
+                );
+                int nameIndex = tooltips.FindIndex(t => t.Name == "ItemName");
+
+                if (nameIndex != -1)
+                {
+                    tooltips.Insert(nameIndex + 1, line); // 插到名字下面
+                }
+                else
+                {
+                    tooltips.Insert(0, line); // fallback
+                }
+
                 if (cp != null)
                 {
                     float extra = MathHelper.Clamp(cp.Deliciousness * PerDeliciousPointToBonus, 0f, MaxExtraMultiplier);
                     int percent = (int)(extra * 100);
-                    tooltips.Add(new TooltipLine(Mod, "CuisineBonus",
-                        $"当前美味加成：+{percent}% 伤害（最高 +{MaxExtraMultiplier * 100}%）"));
+                    int maxPercent = (int)(MaxExtraMultiplier * 100);
+
+                    tooltips.Add(new TooltipLine(
+                        Mod, "CuisineBonus",
+                        Language.GetTextValue("Mods.WuDao.Cuisine.Tooltip.GourmetDamageBonus", percent, maxPercent)
+                    ));
                 }
             }
 
@@ -201,8 +247,10 @@ namespace WuDao.Content.Global
             {
                 float extra = MathHelper.Clamp(cp.Deliciousness * PerDeliciousPointToBonus, 0f, MaxExtraMultiplier);
                 int defBonus = (int)Math.Round(MaxGourmetDefenseBonus * (extra / MaxExtraMultiplier));
-                tooltips.Add(new TooltipLine(Mod, "CuisineDefense",
-                    $"美食饰品加成：+{defBonus} 防御（随美味值，提高至最高 +{MaxGourmetDefenseBonus}）"));
+                tooltips.Add(new TooltipLine(
+                    Mod, "CuisineDefense",
+                    Language.GetTextValue("Mods.WuDao.Cuisine.Tooltip.GourmetAccessoryDefenseBonus", defBonus, MaxGourmetDefenseBonus)
+                ));
             }
         }
 

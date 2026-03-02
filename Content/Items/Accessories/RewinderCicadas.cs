@@ -22,18 +22,5 @@ namespace WuDao.Content.Items.Accessories
         {
             player.GetModPlayer<RewinderCicadasPlayer>().equipped = true;
         }
-
-        // public override void AddRecipes()
-        // {
-        //     CreateRecipe()
-        //         .AddIngredient(ItemID.Firefly, 3)
-        //         .AddIngredient(ItemID.SoulofMight, 3)
-        //         .AddIngredient(ItemID.SoulofSight, 3)
-        //         .AddIngredient(ItemID.SoulofFright, 3)
-        //         .AddIngredient(ItemID.HallowedBar, 5)
-        //         .AddIngredient(ItemID.LifeCrystal, 5)
-        //         .AddTile(TileID.MythrilAnvil)
-        //         .Register();
-        // }
     }
 }

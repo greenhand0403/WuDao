@@ -55,7 +55,7 @@ namespace WuDao.Content.Items
             tooltips.Add(new TooltipLine(Mod, "FoodDeliciousness", $"美味值：{cp.Deliciousness}"));
             if (cp.HasFoodLogItem && cp.SuggestedFoods6.Count > 0)
             {
-                tooltips.Add(new TooltipLine(Mod, "FoodHintsTitle", "快去品尝这些食物吧："));
+                tooltips.Add(new TooltipLine(Mod, "FoodHintsTitle", "快去品尝这些食物吧"));
                 foreach (int t in cp.SuggestedFoods6)
                 {
                     // tooltips.Add(new TooltipLine(Mod, $"· [i:{t}] FoodHint_{t}", Lang.GetItemNameValue(t)));

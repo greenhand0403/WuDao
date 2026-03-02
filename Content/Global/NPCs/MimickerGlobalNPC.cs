@@ -4,10 +4,10 @@ using WuDao.Content.Global.Projectiles;
 using WuDao.Content.Players;
 using Microsoft.Xna.Framework;
 using WuDao.Content.Systems;
+using Terraria.Localization;
 
 namespace WuDao.Content.Global.NPCs
 {
-    // TODO: 有中文提示信息 
     // 模仿者：击杀敌怪获取它的射弹
     // 记录“最后一次受到来自模仿者弹体的伤害”的NPC
     public class MimickerGlobalNPC : GlobalNPC
@@ -47,20 +47,36 @@ namespace WuDao.Content.Global.NPCs
             cur++;
             mp.killProgress[def.NpcType] = cur;
 
+            string projName = Lang.GetProjectileName(def.ProjectileType).Value;
+
             if (cur >= def.Required && !mp.unlockedProjectiles.Contains(def.ProjectileType))
             {
                 mp.unlockedProjectiles.Add(def.ProjectileType);
 
                 if (p.whoAmI == Main.myPlayer)
                 {
-                    CombatText.NewText(p.getRect(), new Color(255, 220, 100), $"解锁：{def.DisplayName} 射弹！");
-                    Main.NewText($"[模仿者] 你已解锁 {def.DisplayName} 射弹。", 255, 240, 150);
+
+                    CombatText.NewText(
+                        p.getRect(),
+                        new Color(255, 220, 100),
+                        Language.GetTextValue("Mods.WuDao.Items.Mimicker.UnlockCombatText", projName)
+                    );
+
+                    Main.NewText(
+                        Language.GetTextValue("Mods.WuDao.Items.Mimicker.UnlockChatText", projName),
+                        255, 240, 150
+                    );
                 }
             }
             else if (p.whoAmI == Main.myPlayer)
             {
                 int remain = System.Math.Max(0, def.Required - cur);
-                CombatText.NewText(p.getRect(), new Color(180, 220, 255), $"{def.DisplayName} 解锁还需 {remain}");
+
+                CombatText.NewText(
+                    p.getRect(),
+                    new Color(180, 220, 255),
+                    Language.GetTextValue("Mods.WuDao.Items.Mimicker.RemainCombatText", projName, remain)
+                );
             }
         }
     }

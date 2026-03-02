@@ -1,3 +1,5 @@
+using System.ComponentModel;
+using Terraria.Localization;
 using Terraria.ModLoader.Config;
 
 namespace WuDao.Content.Config
@@ -7,8 +9,19 @@ namespace WuDao.Content.Config
     {
         public override ConfigScope Mode => ConfigScope.ServerSide;
 
-        // [Label("盔甲前缀适用范围")]
-        [OptionStrings(new string[] { "禁用", "仅矿物盔甲", "所有盔甲" })]
-        public string PrefixMode = "仅矿物盔甲";
+        // ✅ 配置在菜单里的名字（可本地化）
+        public override LocalizedText DisplayName =>
+            Language.GetText("Mods.WuDao.Configs.ArmorPrefixConfig.DisplayName");
+
+        public enum ArmorPrefixMode
+        {
+            Disabled,
+            OreArmorOnly,
+            AllArmor
+        }
+
+        [Header("$Mods.WuDao.Configs.ArmorPrefixConfig.Headers.Main")]
+        [DefaultValue(ArmorPrefixMode.OreArmorOnly)]
+        public ArmorPrefixMode PrefixMode { get; set; } = ArmorPrefixMode.OreArmorOnly;
     }
 }

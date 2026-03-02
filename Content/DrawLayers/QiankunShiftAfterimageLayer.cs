@@ -2,11 +2,11 @@ using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ModLoader;
+using WuDao.Content.Config;
 using WuDao.Content.Players;
 
 namespace WuDao.Content.DrawLayers
 {
-    //
     // 乾坤大挪移：玩家残影绘制
     public class QiankunShiftAfterimageLayer : PlayerDrawLayer
     {
@@ -15,6 +15,9 @@ namespace WuDao.Content.DrawLayers
 
         protected override void Draw(ref PlayerDrawSet drawInfo)
         {
+            if (!ModContent.GetInstance<WudaoConfig>().EnableJueXueSystem)
+                return;
+
             Player p = drawInfo.drawPlayer;
             var qi = p.GetModPlayer<QiPlayer>();
             if (!qi.ShiftActive || qi.ShiftTrailCount <= 1)

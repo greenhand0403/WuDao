@@ -3,10 +3,11 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ModLoader;
+using WuDao.Content.Config;
 
 namespace WuDao.Content.DrawLayers
 {
-    // 已修改: 图标承担技能冷却指示器的功能，提示玩家绝学技能正在冷却中
+    // 绝学虚影承担技能冷却指示器的功能，提示玩家绝学技能正在冷却中
     // 绝学系统：在人物之上再画一层绝学技能图标的虚影
     public class JuexueGhostLayer : PlayerDrawLayer
     {
@@ -14,6 +15,9 @@ namespace WuDao.Content.DrawLayers
 
         protected override void Draw(ref PlayerDrawSet drawInfo)
         {
+            if (!ModContent.GetInstance<WudaoConfig>().EnableJueXueSystem)
+                return;
+
             var player = drawInfo.drawPlayer;
             var qi = player.GetModPlayer<Players.QiPlayer>();
             if (qi.Ghost.TimeLeft <= 0)

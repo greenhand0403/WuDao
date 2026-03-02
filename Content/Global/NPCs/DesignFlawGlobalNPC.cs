@@ -64,8 +64,7 @@ namespace WuDao.Content.Global.NPCs
                 case NPCID.Golem: return ItemID.GolemBossBag;
                 case NPCID.DukeFishron: return ItemID.FishronBossBag;
                 case NPCID.CultistBoss: return ItemID.CultistBossBag;
-                case NPCID.MoonLordCore: return ItemID.MoonLordBossBag; // Moon Lord
-                                                                        // ... 继续补齐你要支持的 boss
+                case NPCID.MoonLordCore: return ItemID.MoonLordBossBag;
                 default:
                     return 0;
             }
@@ -82,7 +81,7 @@ namespace WuDao.Content.Global.NPCs
             {
                 npc = npc,
                 player = owner,
-                rng = Main.rand,                  // 使用全局 RNG；如需更独立，也可 new UnifiedRandom(Main.rand.Next())
+                rng = Main.rand,// 使用全局 RNG；如需更独立，也可 new UnifiedRandom(Main.rand.Next())
                 IsExpertMode = Main.expertMode,
                 IsMasterMode = Main.masterMode,
                 IsInSimulation = false,

@@ -32,6 +32,10 @@ Items: {
 	WeaponBundleItem: {
 		DisplayName: Weapon Bundle Item
 		Tooltip: ""
+		UIText: Choose your weapon bundle item
+		ItemType0: Weapons
+		ItemType1: Accessories
+		ItemType2: Other
 	}
 
 	FlameShuriken: {
@@ -91,7 +95,17 @@ Items: {
 
 	Mimicker: {
 		DisplayName: Mimicker
-		Tooltip: ""
+
+		Tooltip: {
+			$parentVal: ""
+			RandomPoolSummary: Random Pool: {0} (Base Remain: {1}/{2}, Unlocked: {3})
+			ProgressLine: "{0} needs {1} more to unlock {2}"
+			MoreHidden: ... {0} more unlock goals not shown
+		}
+
+		UnlockCombatText: Unlocked: {0} projectile
+		UnlockChatText: Mimicker: You unlocked the {0} projectile
+		RemainCombatText: "{0} needs {1} more"
 	}
 
 	WindBlade: {
@@ -832,14 +846,14 @@ Configs: {
 		DisplayName: Blade Trail Config
 
 		Headers: {
-			全局刀光: 全局刀光 Header
-			默认集合: 默认集合 Header
-			自定义白名单: 自定义白名单 Header
+			CustomWhitelist: Whitelist Header
+			DefaultSets: Include Default Blade Trail Set Header
+			GlobalBladeTrail: Enable Vertex Blade Trail Header
 		}
 
 		EnableVertexBladeTrail: {
 			Label: Enable Vertex Blade Trail
-			Tooltip: ""
+			Tooltip: The total switch enables global knife light staining by default
 		}
 
 		IncludeDefaultBladeTrailSet: {
@@ -865,6 +879,7 @@ Configs: {
 		}
 
 		DisplayName: Armor Prefix Config
+		Headers.Main: Prefix Mode Header
 	}
 
 	WudaoConfig: {
@@ -872,6 +887,25 @@ Configs: {
 
 		EnableJueXueSystem: {
 			Label: Enable Jue Xue System
+			Tooltip: ""
+		}
+	}
+
+	ArmorPrefixMode: {
+		Tooltip: ""
+
+		Disabled: {
+			Label: Disabled
+			Tooltip: ""
+		}
+
+		OreArmorOnly: {
+			Label: Ore Armor Only
+			Tooltip: ""
+		}
+
+		AllArmor: {
+			Label: All Armor
 			Tooltip: ""
 		}
 	}
@@ -901,4 +935,82 @@ Prefixes: {
 	GoldPrefix.DisplayName: Gold Prefix
 	FirePrefix.DisplayName: Fire Prefix
 	EarthPrefix.DisplayName: Earth Prefix
+}
+
+Messages: {
+	JueXue.CoolDown: Can't use. Jue Xue is cooling down.
+	BundleClaimed: Claimed: added {0} kinds to inventory; dropped {1} kinds ({2} total stacks/items).
+}
+
+ArmorElement: {
+	Name: {
+		None: None
+		Metal: Metal
+		Wood: Wood
+		Water: Water
+		Fire: Fire
+		Earth: Earth
+	}
+
+	Tooltip: {
+		ElementTag: "[{0}]"
+		SetBonusPrefix: Armor Element: {0}
+	}
+
+	SetBonus: {
+		Metal: +3% damage, +6 armor penetration
+		Wood: +3 life regen, +30% max life
+		Water: +4% move speed, +10% accel/decel
+		Fire: +2% crit chance, +10% crit damage
+		Earth: +3 defense, +10% endurance damage reduction
+	}
+}
+
+Cuisine: {
+	Messages: {
+		TastedNewFood: Tasted a new food!
+		CookbookDoubleReward: Cookbook double reward!
+	}
+
+	Tooltip: {
+		Tag: {
+			Cookware: Cookware
+			Gourmet: Gourmet
+		}
+
+		CookwareDamageBonus: Cooking bonus: +{0}% damage (max +{1}%)
+		GourmetDamageBonus: Delicious bonus: +{0}% damage (max +{1}%)
+		GourmetAccessoryDefenseBonus: Gourmet accessory: +{0} defense (up to +{1})
+	}
+
+	Hints: {
+		TravelingMerchantInSnow: Sold by the Traveling Merchant in Snow biome
+		TravelingMerchant: Sometimes sold by the Traveling Merchant
+		Fishing: Obtained from fishing
+		ShakeForestTrees: Obtained by shaking forest trees
+		ShakeOceanPalms: Obtained by shaking ocean palm trees
+		ShakeSnowTrees: Obtained by shaking snow trees
+		ShakeJungleTrees: Obtained by shaking jungle trees
+		ShakeHellTrees: Obtained by shaking underworld trees
+		ShakeHolyTrees: Obtained by shaking hallowed trees
+		GiftBag: Dropped from Goodie Bags
+		Chest: Found in crates
+		BoughtFromNPC: Bought from the Merchant
+		ShakeEvilTrees: Obtained by shaking Corruption trees and palms
+		ShakeCrimsonTrees: Obtained by shaking Crimson trees and palms
+		ShuckedOyster: Obtained by opening oysters (Desert fishing)
+		CookedMarshmallow: Roast marshmallow at a campfire (Marshmallow + Wood)
+	}
+
+	Recipe: {
+		BulletDrop: · Drop: {0}
+		BulletRecipePrefix: "· Recipe: "
+		StationSuffix: " @ {0}"
+		MultiRecipeSuffix: " (Total {0} recipes)"
+	}
+
+	Drop: {
+		Separator: ", "
+		Entry: "{0} ({1}%)"
+	}
 }

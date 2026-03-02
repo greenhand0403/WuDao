@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace WuDao.Common.Rendering
 {
+    // 近战刀光染色
     public enum DiagDir
     {
         // 从右上 → 左下（你之前的需求）

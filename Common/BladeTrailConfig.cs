@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
+using Terraria.Localization;
 using Terraria.ModLoader.Config;
 
 namespace WuDao.Common
@@ -8,33 +9,33 @@ namespace WuDao.Common
     {
         public override ConfigScope Mode => ConfigScope.ServerSide;
 
-        [Header("全局刀光")]
+        // ✅ 配置标题（显示在模组配置列表里）
+        public override LocalizedText DisplayName =>
+            Language.GetText("Mods.WuDao.Configs.BladeTrailConfig.DisplayName");
+        // ✅ 全局刀光配置
+        [Header("$Mods.WuDao.Configs.BladeTrailConfig.Headers.GlobalBladeTrail")]
+        [LabelKey("$Mods.WuDao.Configs.BladeTrailConfig.EnableVertexBladeTrail.Label")]
+        [TooltipKey("$Mods.WuDao.Configs.BladeTrailConfig.EnableVertexBladeTrail.Tooltip")]
         [DefaultValue(true)]
-        // [Label("启用全局顶点刀光效果")]
         public bool EnableVertexBladeTrail { get; set; } = true;
-
-        [Header("默认集合")]
+        // ✅ 默认白名单配置
+        [Header("$Mods.WuDao.Configs.BladeTrailConfig.Headers.DefaultSets")]
+        [LabelKey("$Mods.WuDao.Configs.BladeTrailConfig.IncludeDefaultBladeTrailSet.Label")]
+        [TooltipKey("$Mods.WuDao.Configs.BladeTrailConfig.IncludeDefaultBladeTrailSet.Tooltip")]
         [DefaultValue(true)]
-        // [Label("包含默认白名单（BladeTrailSet）")]
         public bool IncludeDefaultBladeTrailSet { get; set; } = true;
-
+        // ✅ 包含光剑
+        [LabelKey("$Mods.WuDao.Configs.BladeTrailConfig.IncludePhaseblades.Label")]
+        [TooltipKey("$Mods.WuDao.Configs.BladeTrailConfig.IncludePhaseblades.Tooltip")]
         [DefaultValue(true)]
-        // [Label("包含相位剑/光剑集合（可选）")]
         public bool IncludePhaseblades { get; set; } = true;
-
-        [Header("自定义白名单")]
-        // [Label("武器白名单（可增删）")]
+        // ✅ 白名单配置
+        [Header("$Mods.WuDao.Configs.BladeTrailConfig.Headers.CustomWhitelist")]
+        [LabelKey("$Mods.WuDao.Configs.BladeTrailConfig.Whitelist.Label")]
+        [TooltipKey("$Mods.WuDao.Configs.BladeTrailConfig.Whitelist.Tooltip")]
         public List<ItemDefinition> Whitelist { get; set; } = new();
 
-        public override void OnLoaded()
-        {
-            // 直接使用当前实例，避免在此时序里再去 GetInstance 造成 null
-            BladeTrailRuntime.ApplyFromConfig(this);
-        }
-
-        public override void OnChanged()
-        {
-            BladeTrailRuntime.ApplyFromConfig(this);
-        }
+        public override void OnLoaded() => BladeTrailRuntime.ApplyFromConfig(this);
+        public override void OnChanged() => BladeTrailRuntime.ApplyFromConfig(this);
     }
 }

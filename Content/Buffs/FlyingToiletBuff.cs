@@ -1,4 +1,3 @@
-// Buffs/FlyingToiletBuff.cs
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -17,12 +16,6 @@ namespace WuDao.Content.Buffs
         }
         public override void Update(Player player, ref int buffIndex)
         {
-            // if (player.mount.Type != ModContent.MountType<FlyingToiletMount>())
-            // {
-            //     player.DelBuff(buffIndex);
-            //     buffIndex--;
-            //     return;
-            // }
             // 每 tick 重置 buffTime
             player.buffTime[buffIndex] = 10;
 

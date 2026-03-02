@@ -9,6 +9,7 @@ using Terraria.ModLoader;
 using WuDao.Content.Players;
 using WuDao.Content.Systems;
 using WuDao.Content.Global.Projectiles;
+using Terraria.Localization;
 
 namespace WuDao.Content.Items.Weapons.Magic
 {
@@ -85,8 +86,8 @@ namespace WuDao.Content.Items.Weapons.Magic
 
                 // 汇总信息
                 tooltips.Add(new TooltipLine(Mod, "MimickerInfo",
-                    $"随机池：{totalPool}（基础剩余 {remainBase}/{baseInit}，已解锁 {unlocked}）"));
-
+                    Language.GetTextValue("Mods.WuDao.Items.Mimicker.Tooltip.RandomPoolSummary",
+                        totalPool, remainBase, baseInit, unlocked)));
                 // 逐条进度（仅显示“尚未解锁”的目标）
                 int lines = 0;
                 const int MaxLines = 8; // 防止过长，你可调大/去掉限制
@@ -107,8 +108,8 @@ namespace WuDao.Content.Items.Weapons.Magic
                         string projName = Lang.GetProjectileName(def.ProjectileType).Value;
 
                         tooltips.Add(new TooltipLine(Mod, "MimickerProgress",
-                            $"击败 {npcName} 还需 {remain} 次 → 解锁 {projName}"));
-
+                            Language.GetTextValue("Mods.WuDao.Items.Mimicker.Tooltip.ProgressLine",
+                                npcName, remain, projName)));
                         lines++;
                         if (lines >= MaxLines) break;
                     }
@@ -121,7 +122,7 @@ namespace WuDao.Content.Items.Weapons.Magic
                 if (hidden > 0)
                 {
                     tooltips.Add(new TooltipLine(Mod, "MimickerMore",
-                        $"…还有 {hidden} 项未显示的解锁进度"));
+                        Language.GetTextValue("Mods.WuDao.Items.Mimicker.Tooltip.MoreHidden", hidden)));
                 }
             }
         }

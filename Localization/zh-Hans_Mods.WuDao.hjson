@@ -36,6 +36,10 @@ Items: {
 	WeaponBundleItem: {
 		DisplayName: 模组礼包
 		Tooltip: 包含武道模组的武器、弹药、工具、配件等
+		UIText: 选择你想要的物品类型
+		ItemType0: 武器和弹药
+		ItemType1: 饰品
+		ItemType2: 其他
 	}
 
 	FlameShuriken: {
@@ -113,7 +117,17 @@ Items: {
 
 	Mimicker: {
 		DisplayName: 模仿者
-		Tooltip: 击败特定数量的敌怪可以习得它们的射弹
+
+		Tooltip: {
+			$parentVal: 击败特定数量的敌怪可以习得它们的射弹
+			RandomPoolSummary: 随机池：{0} 基础剩余 {1}/{2} 已解锁 {3}
+			ProgressLine: 击败 {0} 还需 {1} 次 → 解锁 {2}
+			MoreHidden: 还有 {0} 项未显示的解锁进度
+		}
+
+		UnlockCombatText: 解锁：{0} 射弹
+		UnlockChatText: "[模仿者] 你已解锁 {0} 射弹"
+		RemainCombatText: "{0} 解锁还需 {1}"
 	}
 
 	WindBlade: {
@@ -943,29 +957,29 @@ Configs: {
 		DisplayName: 近战刀光配置
 
 		Headers: {
-			全局刀光: 全局近战刀光
-			默认集合: 默认刀光集合
-			自定义白名单: 自定义刀光白名单
+			CustomWhitelist: 自定义白名单
+			DefaultSets: 默认白名单
+			GlobalBladeTrail: 全局刀光
 		}
 
 		EnableVertexBladeTrail: {
-			Label: 全局刀光
-			Tooltip: 启用全局刀光
+			Label: 全局刀光配置
+			Tooltip: 总开关，默认启用全局刀光
 		}
 
 		IncludeDefaultBladeTrailSet: {
-			Label: 默认近战刀光集合
-			Tooltip: 启用默认近战刀光集合
+			Label: 近战刀光配置
+			Tooltip: 默认集合启用近战刀光
 		}
 
 		IncludePhaseblades: {
-			Label: 自定义刀光集合
-			Tooltip: 启用自定义刀光集合
+			Label: 光剑配置
+			Tooltip: 默认启用光剑的近战刀光
 		}
 
 		Whitelist: {
-			Label: 白名单
-			Tooltip: 启用近战刀光
+			Label: 白名单配置
+			Tooltip: 启用白名单的近战刀光
 		}
 	}
 
@@ -976,6 +990,7 @@ Configs: {
 		}
 
 		DisplayName: 护甲前缀配置
+		Headers.Main: 盔甲五行系统
 	}
 
 	WudaoConfig: {
@@ -983,7 +998,26 @@ Configs: {
 
 		EnableJueXueSystem: {
 			Label: 绝学系统
-			Tooltip: 是否启用绝学系统
+			Tooltip: 默认启用绝学系统
+		}
+	}
+
+	ArmorPrefixMode: {
+		Tooltip: 盔甲五行系统
+
+		Disabled: {
+			Label: 禁用
+			Tooltip: ""
+		}
+
+		OreArmorOnly: {
+			Label: 仅对矿物盔甲启用
+			Tooltip: ""
+		}
+
+		AllArmor: {
+			Label: 对所有盔甲启用
+			Tooltip: ""
 		}
 	}
 }
@@ -1012,4 +1046,82 @@ Prefixes: {
 	GoldPrefix.DisplayName: 金
 	FirePrefix.DisplayName: 火
 	EarthPrefix.DisplayName: 土
+}
+
+Messages: {
+	JueXue.CoolDown: 正在冷却中，无法使用绝学
+	BundleClaimed: 领取完成：进入背包 {0} 种；掉落 {1} 种（共 {2} 件/叠）
+}
+
+ArmorElement: {
+	Name: {
+		None: 无
+		Metal: 金
+		Wood: 木
+		Water: 水
+		Fire: 火
+		Earth: 土
+	}
+
+	Tooltip: {
+		ElementTag: 【{0}】
+		SetBonusPrefix: 盔甲五行：{0}
+	}
+
+	SetBonus: {
+		Metal: 额外+3%伤害，+6护甲穿透
+		Wood: 额外+3生命再生，+30%最大生命值
+		Water: +4%移动速度，+10%加速度/减速度
+		Fire: +2%暴击率，+10%暴击伤害
+		Earth: +3防御，+10%耐力伤害减少
+	}
+}
+
+Cuisine: {
+	Messages: {
+		TastedNewFood: 品尝新食物
+		CookbookDoubleReward: 菜谱双倍奖励
+	}
+
+	Tooltip: {
+		Tag: {
+			Cookware: 厨具
+			Gourmet: 美食
+		}
+
+		CookwareDamageBonus: 当前厨艺加成：+{0}% 伤害（最高 +{1}%）
+		GourmetDamageBonus: 当前美味加成：+{0}% 伤害（最高 +{1}%）
+		GourmetAccessoryDefenseBonus: 美食饰品加成：+{0} 防御（随美味值，提高至最高 +{1}）
+	}
+
+	Hints: {
+		TravelingMerchantInSnow: 旅商在雪地环境下售卖
+		TravelingMerchant: 旅商有时会售卖
+		Fishing: 钓鱼获得
+		ShakeForestTrees: 摇晃森林的树木获得
+		ShakeOceanPalms: 摇晃海洋的棕榈树获得
+		ShakeSnowTrees: 摇晃雪地的树木获得
+		ShakeJungleTrees: 摇晃丛林的树木获得
+		ShakeHellTrees: 摇晃地狱的树木获得
+		ShakeHolyTrees: 摇晃神圣地树木获得
+		GiftBag: 礼物袋掉落
+		Chest: 宝匣中获得
+		BoughtFromNPC: 从商人购买
+		ShakeEvilTrees: 摇晃腐化环境树和棕榈树
+		ShakeCrimsonTrees: 摇晃猩红环境树和棕榈树
+		ShuckedOyster: 打开牡蛎(沙漠环境钓鱼)获得
+		CookedMarshmallow: 篝火处烤棉花糖棍(棉花糖+木材)
+	}
+
+	Recipe: {
+		BulletDrop: · 掉落：{0}
+		BulletRecipePrefix: · 配方：
+		StationSuffix: " @ {0}"
+		MultiRecipeSuffix: " (共 {0} 条配方)"
+	}
+
+	Drop: {
+		Separator: ", "
+		Entry: "{0} ({1}%)"
+	}
 }

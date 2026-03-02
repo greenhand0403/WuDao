@@ -20,12 +20,6 @@ namespace WuDao.Content.Global.Projectiles
             {
                 OwnerNPC = npc1.whoAmI;
             }
-            // else if (source is EntitySource_FromAI a && a.Entity is NPC npc2)
-            // {
-            //     OwnerNPC = npc2.whoAmI;
-            // }
-            // 其他少见情况可以继续扩：例如 EntitySource_Parent? / EntitySource_Misc 等
-            // 默认为 -1：未知来源
         }
     }
 }

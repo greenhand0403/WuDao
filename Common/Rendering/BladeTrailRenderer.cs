@@ -9,6 +9,7 @@ using Terraria.Graphics.Shaders;
 
 namespace WuDao.Common.Rendering
 {
+    // 近战刀光染色
     // 参数包：把“与具体武器相关的选择”一次性喂给渲染器
     public struct BladeTrailParams
     {

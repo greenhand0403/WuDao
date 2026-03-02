@@ -67,25 +67,6 @@ namespace WuDao.Common
                     if (p.HasBuff(buffIds[k])) return true;
                 return false;
             };
-
-        /// <summary>
-		/// 是否处于任意“吃得饱”系列增益（Well Fed/Well Fed 2/3）。
-        /// <br>用法示例rules.Add(new StatRule(</br>
-        /// <br>BuffConditions.InForest.And(BuffConditions.IsWellFedAny),</br>
-        /// <br>StatEffect.LifeRegen(2)</br>
-		/// </summary>
-        public static Func<Player, Item, bool> IsWellFedAny
-            => (p, i) =>
-            {
-                // 利用官方集合，兼容全系“吃得饱”Buff
-                for (int idx = 0; idx < p.buffType.Length; idx++)
-                {
-                    int t = p.buffType[idx];
-                    if (t > 0 && BuffID.Sets.IsWellFed[t]) // 见 BuffID.Sets.IsWellFed
-                        return true;
-                }
-                return false;
-            };
     }
     #endregion
 
@@ -507,8 +488,8 @@ namespace WuDao.Common
         private static readonly List<StatRule> _statRules = new();
         public override void HoldItem(Item item, Player player)
         {
-            if (item.accessory) return;           // ⛔ 即便拿在手上是个饰品，也不要应用
-            TryApplyFromItem(player, item);       // ✔ 武器手持走这里
+            if (item.accessory) return;// ⛔ 即便拿在手上是个饰品，也不要应用
+            TryApplyFromItem(player, item);// ✔ 武器手持走这里
         }
         // 应用饰品的近战尺寸加成
         public override void ModifyItemScale(Item item, Player player, ref float scale)

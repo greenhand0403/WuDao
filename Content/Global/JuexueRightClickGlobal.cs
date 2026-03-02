@@ -6,10 +6,10 @@ using Terraria.ModLoader;
 using WuDao.Content.Players;
 using WuDao.Content.Juexue.Base;
 using Microsoft.Xna.Framework;
+using WuDao.Content.Config;
 
 namespace WuDao.Content.Global
 {
-    // TODO: 含打印信息，中文提示
     // 右键自动装备绝学到绝学栏的物品
     public class JuexueRightClickGlobal : GlobalItem
     {
@@ -20,6 +20,10 @@ namespace WuDao.Content.Global
 
         public override void RightClick(Item item, Player player)
         {
+            // 未启用绝学系统时，不处理绝学书籍的右键自动装备
+            if (!ModContent.GetInstance<WudaoConfig>().EnableJueXueSystem)
+                return;
+
             var qi = player.GetModPlayer<QiPlayer>();
             SoundEngine.PlaySound(SoundID.Grab, player.Center);
 
@@ -37,7 +41,7 @@ namespace WuDao.Content.Global
                 // 注意：这里千万别动 item / Main.mouseItem / 背包数据
                 SoundEngine.PlaySound(SoundID.MenuClose, player.Center);
                 if (player.whoAmI == Main.myPlayer)
-                    Main.NewText("绝学冷却中，无法更换绝学。", Color.OrangeRed);
+                    Main.NewText(Mod.GetLocalization("Mods.WuDao.Messages.JueXue.CoolDown"), Color.OrangeRed);
                 // 默认当作“被消费了一次”，无法替换新绝学时，需要把当前物品克隆一份放回原位
                 player.inventory[idx] = item.Clone();
                 // 可选：防止这次右键继续被处理

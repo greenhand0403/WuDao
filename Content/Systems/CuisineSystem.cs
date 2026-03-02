@@ -7,6 +7,7 @@ using Terraria.ModLoader.IO;
 using WuDao.Content.Players;
 using Terraria.GameContent.ItemDropRules;
 using System.Text;
+using Terraria.Localization;
 
 namespace WuDao.Content.Systems
 {
@@ -15,22 +16,26 @@ namespace WuDao.Content.Systems
     /// </summary>
     public class CuisineSystem : ModSystem
     {
-        // CuisineSystem.cs 里（类内静态区域）
         public static class FoodHintText
         {
-            public const string TravelingMerchantInSnow = "旅商在雪地环境下售卖";
-            public const string TravelingMerchant = "旅商有时会售卖";
-            public const string Fishing = "钓鱼获得";
-            public const string ShakeForestTrees = "摇晃森林的树木获得";
-            public const string ShakeOceanPalms = "摇晃海洋的棕榈树获得";
-            public const string ShakeSnowTrees = "摇晃雪地的树木获得";
-            public const string ShakeJungleTrees = "摇晃丛林的树木获得";
-            public const string ShakeHellTrees = "摇晃地狱的树木获得";
-            public const string ShakeHolyTrees = "摇晃神圣地树木获得";
-            public const string GiftBag = "礼物袋掉落";
-            public const string Chest = "宝匣中获得";
-            public const string BoughtFromNPC = "从商人处购买";
-            // …按需要继续补充
+            public const string TravelingMerchantInSnow = "Mods.WuDao.Cuisine.Hints.TravelingMerchantInSnow";
+            public const string TravelingMerchant = "Mods.WuDao.Cuisine.Hints.TravelingMerchant";
+            public const string Fishing = "Mods.WuDao.Cuisine.Hints.Fishing";
+            public const string ShakeForestTrees = "Mods.WuDao.Cuisine.Hints.ShakeForestTrees";
+            public const string ShakeOceanPalms = "Mods.WuDao.Cuisine.Hints.ShakeOceanPalms";
+            public const string ShakeSnowTrees = "Mods.WuDao.Cuisine.Hints.ShakeSnowTrees";
+            public const string ShakeJungleTrees = "Mods.WuDao.Cuisine.Hints.ShakeJungleTrees";
+            public const string ShakeHellTrees = "Mods.WuDao.Cuisine.Hints.ShakeHellTrees";
+            public const string ShakeHolyTrees = "Mods.WuDao.Cuisine.Hints.ShakeHolyTrees";
+            public const string GiftBag = "Mods.WuDao.Cuisine.Hints.GiftBag";
+            public const string Chest = "Mods.WuDao.Cuisine.Hints.Chest";
+            public const string BoughtFromNPC = "Mods.WuDao.Cuisine.Hints.BoughtFromNPC";
+
+            // 下面这些原来是直接写中文的特殊提示，也改成 key
+            public const string ShakeEvilTrees = "Mods.WuDao.Cuisine.Hints.ShakeEvilTrees";
+            public const string ShakeCrimsonTrees = "Mods.WuDao.Cuisine.Hints.ShakeCrimsonTrees";
+            public const string ShuckedOyster = "Mods.WuDao.Cuisine.Hints.ShuckedOyster";
+            public const string CookedMarshmallow = "Mods.WuDao.Cuisine.Hints.CookedMarshmallow";
         }
 
         private static readonly int[] VanillaFoodWhitelist = new int[] {
@@ -101,12 +106,13 @@ namespace WuDao.Content.Systems
                     TotalFoodCount++;
             }
             ManualFoodHints[ItemID.Marshmallow] = FoodHintText.TravelingMerchantInSnow;
-            ManualFoodHints[ItemID.Elderberry] = "摇晃腐化环境树和棕榈树";
-            ManualFoodHints[ItemID.BlackCurrant] = "摇晃腐化环境树和棕榈树";
-            ManualFoodHints[ItemID.BloodOrange] = "摇晃猩红环境树和棕榈树";
-            ManualFoodHints[ItemID.Rambutan] = "摇晃猩红环境树和棕榈树";
-            ManualFoodHints[ItemID.ShuckedOyster] = "打开牡蛎(沙漠环境钓鱼)获得";
-            RegisterHint(ItemID.CookedMarshmallow, "篝火处烤棉花糖棍(棉花糖+木材)");
+            ManualFoodHints[ItemID.Elderberry] = FoodHintText.ShakeEvilTrees;
+            ManualFoodHints[ItemID.BlackCurrant] = FoodHintText.ShakeEvilTrees;
+            ManualFoodHints[ItemID.BloodOrange] = FoodHintText.ShakeCrimsonTrees;
+            ManualFoodHints[ItemID.Rambutan] = FoodHintText.ShakeCrimsonTrees;
+            ManualFoodHints[ItemID.ShuckedOyster] = FoodHintText.ShuckedOyster;
+
+            RegisterHint(ItemID.CookedMarshmallow, FoodHintText.CookedMarshmallow);
             RegisterHint(ItemID.JojaCola, FoodHintText.Fishing);
             RegisterHint(ItemID.Banana, FoodHintText.ShakeOceanPalms);
             RegisterHint(ItemID.Coconut, FoodHintText.ShakeOceanPalms);
@@ -287,13 +293,28 @@ namespace WuDao.Content.Systems
 
             // 5) 组装提示
             var sb = new StringBuilder();
+            // for (int i = 0; i < hits.Count; i++)
+            // {
+            //     if (i > 0) sb.Append("、");
+            //     // 格式示例：僵尸(2.0%)
+            //     sb.Append($"{hits[i].npcName}({Math.Round(hits[i].chance * 100, 1)}%)");
+            // }
+            string sep = Language.GetTextValue("Mods.WuDao.Cuisine.Drop.Separator");
             for (int i = 0; i < hits.Count; i++)
             {
-                if (i > 0) sb.Append("、");
-                // 格式示例：僵尸(2.0%)
-                sb.Append($"{hits[i].npcName}({Math.Round(hits[i].chance * 100, 1)}%)");
+                if (i > 0) sb.Append(sep);
+
+                double pct = Math.Round(hits[i].chance * 100, 1);
+                sb.Append(Language.GetTextValue("Mods.WuDao.Cuisine.Drop.Entry", hits[i].npcName, pct));
             }
             return sb.ToString();
+        }
+        private static string L(string keyOrText)
+        {
+            // 我们约定：以 "Mods." 开头的是本地化 key，否则当作普通文本原样返回
+            return keyOrText != null && keyOrText.StartsWith("Mods.", StringComparison.Ordinal)
+                ? Language.GetTextValue(keyOrText)
+                : keyOrText ?? string.Empty;
         }
         // 紧凑配方：返回例如 “配方： [i:ID]材料×数 + [i:ID]材料×数 @ 烹饪锅（共N种配方）”
         public static string DescribeRecipeCompact(int itemType, int maxMats = 6)
@@ -309,12 +330,12 @@ namespace WuDao.Content.Systems
             if (matches.Count == 0)
             {
                 // ★ 1) 手动覆盖优先
-                if (ManualFoodHints.TryGetValue(itemType, out string hint))
-                    return $"· 掉落： {hint}";
+                if (ManualFoodHints.TryGetValue(itemType, out string hintKey))
+                    return Language.GetTextValue("Mods.WuDao.Cuisine.Recipe.BulletDrop", L(hintKey));
                 // ★ 2) 无手动覆盖时，再从原版掉落数据库推断
                 string drop = DescribeFromVanillaDropDB(itemType);
                 if (!string.IsNullOrEmpty(drop))
-                    return $"· 掉落： {drop}";
+                    return Language.GetTextValue("Mods.WuDao.Cuisine.Recipe.BulletDrop", drop);
                 else
                     return string.Empty;
             }
@@ -322,7 +343,9 @@ namespace WuDao.Content.Systems
             // 只展示第一条，末尾标注“共 N 种配方”
             Recipe first = matches[0];
             var sb = new StringBuilder();
-            sb.Append("· 配方： ");
+
+            // 有配方时：
+            sb.Append(Language.GetTextValue("Mods.WuDao.Cuisine.Recipe.BulletRecipePrefix"));
 
             int shown = 0;
             for (int k = 0; k < first.requiredItem.Count; k++)
@@ -337,8 +360,9 @@ namespace WuDao.Content.Systems
                 }
             }
 
-            // 合成站（取第一个），无则“任意”
-            string station = "任意";
+            // 合成站（取第一个），无则显示"无"
+            string station = Language.GetTextValue("LegacyMisc.23");
+
             for (int t = 0; t < first.requiredTile.Count; t++)
             {
                 int tile = first.requiredTile[t];
@@ -348,10 +372,10 @@ namespace WuDao.Content.Systems
                     if (!string.IsNullOrEmpty(name)) { station = name; break; }
                 }
             }
-            sb.Append($" @ {station}");
+            sb.Append(Language.GetTextValue("Mods.WuDao.Cuisine.Recipe.StationSuffix", station));
 
             if (matches.Count > 1)
-                sb.Append($"（共{matches.Count}种配方）");
+                sb.Append(Language.GetTextValue("Mods.WuDao.Cuisine.Recipe.MultiRecipeSuffix", matches.Count));
 
             return sb.ToString();
         }
