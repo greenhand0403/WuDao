@@ -5,6 +5,7 @@ using WuDao.Content.Config;
 
 namespace WuDao.Common
 {
+    // 敌怪、弹幕和陷阱物块隐身
     public static class InvisibleEnemies
     {
         public static bool HasSpectreGoggles(Player player)

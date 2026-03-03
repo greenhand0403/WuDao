@@ -18,10 +18,11 @@ A martial arts master from another world shattered the void and descended upon T
 [*][b]Realm Progression & Scaling Weapons[/b]: Certain techniques, weapons, and accessories grow stronger as bosses are defeated. Includes scaling weapons and throwing-class dart weapons.
 [*][b]Five Elements Armor System[/b]: Armor pieces possess elemental attributes. Matching elements grant additional bonuses.
 [*][b]Cuisine & Cooking System[/b]: Tasting or crafting food for the first time increases Deliciousness and Cooking Skill values, providing bonuses to certain weapons and accessories.
+[*][b]InvisibleEnemies: Configurable echo stealth effects for enemies, barrages, and trap blocks
 [/list]
 
 [hr]
-[url=https://docs.google.com/spreadsheets/d/e/2PACX-1vSNLFvdxSPaI9X9J_gbIMaN42z2TKeINIYdKISJyRcCD1zr71McKra1bxVNFPK-PvhAUQqNMwqcF92Q/pubhtml]Mod Item Spreadsheet[/url]
+[url=https://docs.google.com/spreadsheets/d/1hgZ5utxDtxubCBmULulSPM4aYQ4Ocr2JJmSGwDwntaE]Mod Item Spreadsheet[/url]
 
 [b]Current Progress: 67%[/b]
 [list]
@@ -31,9 +32,11 @@ A martial arts master from another world shattered the void and descended upon T
 [*]Realm Progression System
 [*]Five Elements Armor System
 [*]Cuisine & Cooking System
+[*]InvisibleEnemies
 [/list]
 
 [hr]
+[i]Additional enemies are provided by darkly天昏地暗 with materials and design ideas, thank you![/i]
 [i]Feedback, ratings, and suggestions are welcome![/i]
 
 [h1]武道传说：泰拉瑞亚奇幻武侠小型模组[/h1]
@@ -52,10 +55,11 @@ A martial arts master from another world shattered the void and descended upon T
 [*]境界加成和成长型武器：部分绝学、武器和饰品随游戏进度增强，增添了部分随进度成长的武器，启用飞镖类武器造成投掷伤害
 [*]盔甲五行：盔甲部件具有额外五行属性，提供额外加成效果
 [*]厨艺和美食系统：首次品尝和制作食物，提升美味值和厨艺值，部分武器和饰品可获得额外的加成
+[*]隐身敌怪：可配置敌怪、弹幕和陷阱物块的回声隐身效果
 [/list]
 
 [hr]
-[url=https://docs.google.com/spreadsheets/d/e/2PACX-1vSNLFvdxSPaI9X9J_gbIMaN42z2TKeINIYdKISJyRcCD1zr71McKra1bxVNFPK-PvhAUQqNMwqcF92Q/pubhtml]模组物品表格[/url]
+[url=https://docs.google.com/spreadsheets/d/1hgZ5utxDtxubCBmULulSPM4aYQ4Ocr2JJmSGwDwntaE]模组物品表格[/url]
 [b]当前进度：67%[/b]
 [list]
 [*]气力和绝学机制
@@ -64,7 +68,9 @@ A martial arts master from another world shattered the void and descended upon T
 [*]境界机制
 [*]盔甲五行机制
 [*]厨艺和美食系统
+[*]隐身敌怪
 [/list]
 
 [hr]
+[i]额外敌怪由网友 darkly天昏地暗 提供素材和设计思路，感谢！[/i]
 [i]欢迎点赞、评论与反馈！[/i]

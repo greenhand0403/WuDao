@@ -12,6 +12,7 @@ Core Features:
 - Realm Progression: Ultimate Arts damage and certain weapons and accessories scale with boss progression. Includes scaling weapons and dart-style throwing weapons.
 - Five Elements Armor: Armor pieces possess elemental attributes. Matching elements grant additional bonuses.
 - Deliciousness & Cooking Skill: Tasting or crafting food for the first time increases attributes that enhance certain weapons and accessories.
+- InvisibleEnemies：Configurable Block Echo Stealth.
 
 The mod is still in development. More wuxia-themed content and unique systems will be added in future updates.
 
@@ -25,7 +26,10 @@ The mod is still in development. More wuxia-themed content and unique systems wi
 - 境界机制：“绝学伤害、部分武器和饰品的效果随击败 BOSS 进度逐渐增强。同时模组也有成长型武器、飞镖等投掷类武器。
 - 五行盔甲：盔甲部件具有五行属性，同属性获得额外效果。
 - 美味值与厨艺值：首次品尝或制作食物可提升相应属性，对部分武器和饰品有加成。
+- 隐身敌怪：可配置的物块回声隐身
 
-详情参考：docs.google.com/spreadsheets/d/e/2PACX-1vSNLFvdxSPaI9X9J_gbIMaN42z2TKeINIYdKISJyRcCD1zr71McKra1bxVNFPK-PvhAUQqNMwqcF92Q/pubhtml
+额外敌怪由B站网友 darkly天昏地暗 提供素材和设计思路，感谢！Thanks♪(･ω･)ﾉ
+
+详情参考：https://docs.google.com/spreadsheets/d/1hgZ5utxDtxubCBmULulSPM4aYQ4Ocr2JJmSGwDwntaE
 
 模组正在开发中，后续会有更多武侠相关内容和独特机制加入！
