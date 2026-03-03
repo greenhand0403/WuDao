@@ -7,7 +7,7 @@ namespace WuDao.Common
 {
     public class BladeTrailConfig : ModConfig
     {
-        public override ConfigScope Mode => ConfigScope.ServerSide;
+        public override ConfigScope Mode => ConfigScope.ClientSide;
 
         // ✅ 配置标题（显示在模组配置列表里）
         public override LocalizedText DisplayName =>

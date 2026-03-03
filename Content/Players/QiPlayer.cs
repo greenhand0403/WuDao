@@ -14,6 +14,8 @@ using Terraria.Audio;
 using WuDao.Content.Buffs;
 using WuDao.Content.Projectiles.Melee;
 using WuDao.Common;
+using Terraria.Localization;
+using WuDao.Content.Config;
 
 namespace WuDao.Content.Players
 {
@@ -107,7 +109,7 @@ namespace WuDao.Content.Players
         public Vector2 GetShiftTrailPos(int i) => trail[i];
         // —— 被动触发冷却（按物品type区分） —— //
 
-        public bool CanProcPassiveNow(int key, int cooldownTicks)
+        public bool CanProcPassiveNow(int key)
         {
             uint now = Main.GameUpdateCount;
             return !perPassiveNextProcTick.TryGetValue(key, out uint next) || now >= next;
@@ -562,7 +564,7 @@ namespace WuDao.Content.Players
                 Player.immune = true;        // 开启无敌标记
                 Player.immuneTime = 15;      // 0.25 秒
                 // 可加一小段水波/闪避提示
-                Main.NewText("凌波微步-闪避近战", Color.SkyBlue);
+                Main.NewText(Language.GetTextValue("Mods.WuDao.Messages.JueXue.Immune"), Color.SkyBlue);
                 // 闪避成功消耗2倍气力
                 QiCurrent -= LingboQiCost * 2;
                 // 气力不足退出状态
@@ -584,7 +586,7 @@ namespace WuDao.Content.Players
                 Player.immune = true;        // 开启无敌标记
                 Player.immuneTime = 15;      // 0.25 秒
                 // 可加一小段水波/闪避提示
-                Main.NewText("凌波微步-闪避射弹", Color.SkyBlue);
+                Main.NewText(Language.GetTextValue("Mods.WuDao.Messages.JueXue.Immune"), Color.SkyBlue);
                 // 闪避成功消耗2倍气力
                 QiCurrent -= LingboQiCost * 2;
                 // 气力不足退出状态
@@ -607,6 +609,9 @@ namespace WuDao.Content.Players
 
         public bool CanUseActiveNow(int itemType, int extraCooldownTicks)
         {
+            if (!ModContent.GetInstance<WudaoConfig>().EnableJueXueSystem)
+                return false;
+
             // 公共冷却时间
             if (Main.GameUpdateCount < nextGlobalActiveTick) return false;
 
@@ -655,7 +660,7 @@ namespace WuDao.Content.Players
                     }
                     else
                     {
-                        Main.NewText("绝学尚未冷却。", Color.OrangeRed);
+                        Main.NewText(Language.GetTextValue("Mods.WuDao.Messages.JueXue.Cooldown"), Color.OrangeRed);
                     }
                 }
                 else if (JuexueSlot.ModItem is JuexueItem ji && ji.IsActive)

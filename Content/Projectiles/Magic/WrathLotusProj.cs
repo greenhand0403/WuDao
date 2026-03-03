@@ -11,10 +11,9 @@ namespace WuDao.Content.Projectiles.Magic
     // 佛怒火莲 射弹
     public class WrathLotusProj : ModProjectile
     {
-        // public override string Texture => $"Terraria/Images/Projectile_{ProjectileID.LavaBomb}";
         // 视觉参数（可按审美微调）
-        private const float StartScale = 1.15f;  // 出生时缩放
-        private const float EndScale = 2.10f;  // 呼吸峰值
+        // private const float StartScale = 1.15f;  // 出生时缩放
+        // private const float EndScale = 2.10f;  // 呼吸峰值
         private const int LifeTicks = 60;    // 1 秒存活
         private const int RingDustCount = 20;  // 出生/命中一圈尘粒数量
                                                // 在 Projectile 里做动画：

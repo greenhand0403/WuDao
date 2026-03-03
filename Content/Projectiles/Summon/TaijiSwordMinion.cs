@@ -9,7 +9,6 @@ using WuDao.Content.Buffs;
 namespace WuDao.Content.Projectiles.Summon
 {
     // 太极剑仆从：12帧动画（前6帧样式1穿甲，后6帧样式2吸血），82x82；AI整合蝴蝶仆从与断裂英雄剑思路，并模仿附魔剑敌怪的突进节奏
-    // TODO: 穿透敌怪后会左右晃动，bug
     public class TaijiSwordMinion : ModProjectile
     {
         public override bool MinionContactDamage() => true;
@@ -170,7 +169,21 @@ namespace WuDao.Content.Projectiles.Summon
             }
 
             // 攻击时剑尖跟随速度方向并偏转角度，恰好指向敌人
-            Projectile.rotation = Projectile.velocity.SafeNormalize(Vector2.UnitX).ToRotation() + MathHelper.PiOver4;
+            // ✅避免速度接近0时 SafeNormalize 兜底导致角度跳变（扭动）
+            // 速度足够大：用速度方向
+            if (Projectile.velocity.LengthSquared() > 0.25f * 0.25f)
+            {
+                Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver4;
+            }
+            // 速度太小：有目标就朝目标；无目标就固定朝上
+            else if (hasTarget)
+            {
+                Projectile.rotation = (target.Center - Projectile.Center).ToRotation() + MathHelper.PiOver4;
+            }
+            else
+            {
+                Projectile.rotation = -MathHelper.PiOver4; // 贴图右上45° -> 指向正上
+            }
         }
 
         private void HoverTo(Vector2 targetPos, float speed, float inertia)

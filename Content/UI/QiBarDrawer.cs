@@ -28,9 +28,9 @@ namespace WuDao.Content.UI
 
             // 文本
             string text = $"{label} {System.Math.Floor(value)}/{max}";
-            var size = Terraria.GameContent.FontAssets.MouseText.Value.MeasureString(text);
+            var size = FontAssets.MouseText.Value.MeasureString(text);
             var pos = new Vector2(rect.Center.X - size.X / 2f, rect.Y - 16);
-            Terraria.Utils.DrawBorderString(sb, text, pos, Color.White);
+            Utils.DrawBorderString(sb, text, pos, Color.White);
         }
 
         private static void DrawBorder(Rectangle rect, Color color)

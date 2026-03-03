@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 
 namespace WuDao.Content.Projectiles.Ranged
 {
-    // S圣光裁决，十字星射弹 改了碰撞箱
+    // 圣光裁决，十字星射弹 改了碰撞箱
     public class BrightVerdictProjectile : ModProjectile
     {
         private bool _burstFired;

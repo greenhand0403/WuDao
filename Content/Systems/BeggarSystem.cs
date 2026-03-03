@@ -39,7 +39,7 @@ namespace WuDao.Content.Systems
                 if (n.active && n.type == ModContent.NPCType<WanderingBeggar>()) return;
             }
             var pos = p.Center + new Vector2(120f * (p.direction == 0 ? 1 : p.direction), -16);
-            NPC.NewNPC(p.GetSource_Misc("BaoziSummon"), (int)pos.X, (int)pos.Y, ModContent.NPCType<WanderingBeggar>());
+            NPC.NewNPC(p.GetSource_Misc("WanderingBeggarSummon"), (int)pos.X, (int)pos.Y, ModContent.NPCType<WanderingBeggar>());
         }
     }
 }

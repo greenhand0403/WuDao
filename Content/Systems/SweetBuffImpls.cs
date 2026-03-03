@@ -27,7 +27,7 @@ namespace WuDao.Content.Systems
                     }
                     if (p.HasBuff<SweetLucky>())
                     {
-                        p.GetCritChance(Terraria.ModLoader.DamageClass.Generic) += 5f; // +5% 暴击
+                        p.GetCritChance(DamageClass.Generic) += 5f; // +5% 暴击
                     }
                 }
             }

@@ -2,6 +2,7 @@ using System;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using WuDao.Content.Config;
 using WuDao.Content.Systems;
@@ -40,14 +41,14 @@ namespace WuDao.Content.Tiles
                 // 仅处理“BOSS 关联物”
                 if (!WishingWellSystem.TryResolveBossFromItem(it, out int bossID))
                 {
-                    CombatText.NewText(player.Hitbox, Color.Gray, $"许愿井对它不感兴趣");
+                    CombatText.NewText(player.Hitbox, Color.Gray, Language.GetTextValue("Mods.WuDao.WishingWellItem.Messages.ResolveBossFromItemFail"));
                     continue;
                 }
 
                 // 环境不满足：完全不响应（也不吞）
                 if (!WishingWellSystem.CheckEnvOk(bossID, player))
                 {
-                    CombatText.NewText(player.Hitbox, Color.Gray, $"BOSS生成环境不满足");
+                    CombatText.NewText(player.Hitbox, Color.Gray, Language.GetTextValue("Mods.WuDao.WishingWellItem.Messages.CheckEnvFail"));
                     continue;
                 }
 
@@ -60,7 +61,7 @@ namespace WuDao.Content.Tiles
 
                 if (giveDouble)
                 {
-                    CombatText.NewText(player.Hitbox, Color.Yellow, $"额外奖励{r}个");
+                    CombatText.NewText(player.Hitbox, Color.Yellow, Language.GetTextValue("Mods.WuDao.WishingWellItem.Messages.Success", r));
                     player.QuickSpawnItem(player.GetSource_GiftOrReward(), it.type, r);
                     for (int d = 0; d < 18; d++)
                     {
@@ -70,7 +71,7 @@ namespace WuDao.Content.Tiles
                 }
                 else
                 {
-                    CombatText.NewText(player.Hitbox, Color.Yellow, $"运气不佳");
+                    CombatText.NewText(player.Hitbox, Color.Yellow, Language.GetTextValue("Mods.WuDao.WishingWellItem.Messages.Fail"));
                     for (int bossAmount = 0; bossAmount < r; bossAmount++)
                     {
                         WishingWellSystem.SpawnBoss(player, bossID);

@@ -5,7 +5,7 @@ namespace WuDao.Content.Config
     // 许愿井系统
     public class WishingWellConfig : ModConfig
     {
-        public override ConfigScope Mode => ConfigScope.ServerSide;
+        public override ConfigScope Mode => ConfigScope.ClientSide;
 
         [Range(10, 90)]
         [Increment(10)]

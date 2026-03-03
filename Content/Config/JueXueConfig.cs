@@ -9,7 +9,7 @@ namespace WuDao.Content.Config
     public class WudaoConfig : ModConfig
     {
         // 多人联机要统一就用 ServerSide；只影响本地表现就用 ClientSide
-        public override ConfigScope Mode => ConfigScope.ServerSide;
+        public override ConfigScope Mode => ConfigScope.ClientSide;
 
         [DefaultValue(true)]
         public bool EnableJueXueSystem;

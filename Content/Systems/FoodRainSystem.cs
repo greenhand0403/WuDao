@@ -4,6 +4,7 @@ using ReLogic.Graphics; // ★ 关键：DynamicSpriteFont
 using Terraria;
 using Terraria.GameContent;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using WuDao.Common;
 using WuDao.Content.Global.NPCs;
@@ -28,14 +29,14 @@ namespace WuDao.Content.Systems
         public static void TryTrigger(Player p)
         {
             if (Active) return;
-            if (p.ZoneBeach && Main.rand.NextFloat() < 0.90f)
+            if (p.ZoneBeach && Main.rand.NextFloat() < 0.33f)
             {
                 Active = true;
                 TimeLeft = DURATION;
                 PostWinDelay = 0;
                 Owner = p.whoAmI;
                 if (Main.netMode != NetmodeID.Server)
-                    Main.NewText("食物从天而降！躲开红光，吃下绿光！", 255, 180, 80);
+                    Main.NewText(Language.GetTextValue("Mods.WuDao.Events.FoodRain.Start"), 255, 180, 80);
             }
         }
 
@@ -62,7 +63,7 @@ namespace WuDao.Content.Systems
                     Active = false;
                     PostWinDelay = 60 * 10;
                     if (Main.netMode != NetmodeID.Server)
-                        Main.NewText("你撑过了食物海！食神即将到来……", 255, 220, 120);
+                        Main.NewText(Language.GetTextValue("Mods.WuDao.Events.FoodRain.Win"), 255, 220, 120);
                 }
             }
 
@@ -121,14 +122,14 @@ namespace WuDao.Content.Systems
             if (showDoing)
             {
                 percent = MathHelper.Clamp(1f - TimeLeft / (float)DURATION, 0f, 1f);
-                title = "食物海事件";
-                sub = $"抵挡来袭：{(int)(percent * 100)}%   剩余 {FormatTime(TimeLeft)}";
+                title = Language.GetTextValue("Mods.WuDao.Events.FoodRain.UI.Title");
+                sub = Language.GetTextValue("Mods.WuDao.Events.FoodRain.UI.Progress", (int)(percent * 100), FormatTime(TimeLeft));
             }
             else
             {
                 percent = MathHelper.Clamp(1f - PostWinDelay / 600f, 0f, 1f);
-                title = "胜利！食神即将到来";
-                sub = $"召唤倒计时：{(PostWinDelay / 60f):0.0}s";
+                title = Language.GetTextValue("Mods.WuDao.Events.FoodRain.UI.WinTitle");
+                sub = Language.GetTextValue("Mods.WuDao.Events.FoodRain.UI.SummonCountdown", PostWinDelay / 60f);
             }
 
             DrawBar(spriteBatch, pos, width, height, percent, title, sub);

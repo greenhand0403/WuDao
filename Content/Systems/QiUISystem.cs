@@ -7,6 +7,7 @@ using Terraria.GameContent;
 using WuDao.Content.Players;
 using WuDao.Content.UI;
 using WuDao.Content.Juexue.Base;
+using Terraria.Localization;
 
 namespace WuDao.Content.Systems
 {
@@ -55,7 +56,8 @@ namespace WuDao.Content.Systems
             int x = Main.screenWidth / 2 - barWidth / 2;
             int y = 16;
 
-            QiBarDrawer.DrawSimpleBar(new Rectangle(x, y, barWidth, barHeight), qi.QiCurrent, qi.QiMax, "气力");
+            string qiLabel = Language.GetTextValue("Mods.WuDao.UI.Qi.BarLabel");
+            QiBarDrawer.DrawSimpleBar(new Rectangle(x, y, barWidth, barHeight), qi.QiCurrent, qi.QiMax, qiLabel);
         }
 
         private void DrawJuexueSlot()
@@ -113,7 +115,7 @@ namespace WuDao.Content.Systems
                     }
                     else
                     {
-                        Main.NewText("该槽位只能放入“绝学”类物品。", Color.OrangeRed);
+                        Main.NewText(Language.GetTextValue("Mods.WuDao.UI.Qi.JuexueSlot.OnlyJuexue"), Color.OrangeRed);
                     }
                     Main.mouseLeftRelease = false;
                 }
@@ -141,7 +143,7 @@ namespace WuDao.Content.Systems
                         }
                         else
                         {
-                            Main.NewText("背包已满，无法卸下绝学。", Microsoft.Xna.Framework.Color.OrangeRed);
+                            Main.NewText(Language.GetTextValue("Mods.WuDao.UI.Qi.JuexueSlot.InventoryFull"), Color.OrangeRed);
                         }
                     }
 
@@ -150,14 +152,13 @@ namespace WuDao.Content.Systems
                 }
                 // 默认显示
                 Main.HoverItem = new Item();
-                Main.hoverItemName = "放入一件绝学以激活其效果";
-                // 这句话会在拿着绝学物品，光标移到绝学槽时显示
-                Main.instance.MouseText("将绝学放置到绝学槽中");
+                Main.hoverItemName = Language.GetTextValue("Mods.WuDao.UI.Qi.JuexueSlot.HoverEmpty");
+                Main.instance.MouseText(Language.GetTextValue("Mods.WuDao.UI.Qi.JuexueSlot.MouseTextHint"));
 
                 if (!qi.JuexueSlot.IsAir)
                 {
                     Main.HoverItem = qi.JuexueSlot.Clone();
-                    Main.hoverItemName = "可以装备绝学";
+                    Main.hoverItemName = Language.GetTextValue("Mods.WuDao.UI.Qi.JuexueSlot.HoverHasItem");
                 }
 
                 // 阻断其它 UI 交互

@@ -244,7 +244,7 @@ Items: {
 
 	DevolutionCharm: {
 		DisplayName: 压制力场
-		Tooltip: 削弱玩家和敌怪的大部分属性
+		Tooltip: 30格半径内的敌怪造成的伤害减少10%受到的伤害增加10%
 	}
 
 	WrathLotus: {
@@ -273,12 +273,18 @@ Items: {
 			受到致命伤时，将生命值恢复到3秒前
 			[c/FFD700:春秋蝉鸣少年归]
 			'''
+
+		Messages: {
+			RewindTriggered: 春秋蝉回到了光阴长河
+			Heal: 时间回溯，恢复 {0} 生命值
+		}
 	}
 
 	Cookbook: {
 		DisplayName: 菜谱
 
 		Tooltip: {
+			$parentVal: ""
 			MadeCount: 已制作：{0} / {1} 种食物
 			CookingSkill: 厨艺值：{0}
 			TodayRecommend: 今日推荐：{0}
@@ -290,17 +296,25 @@ Items: {
 		DisplayName: 食谱
 
 		Tooltip: {
+			$parentVal: ""
 			ClosedName: 未知书籍，收藏后显现
 			ClosedHint: 收藏后，会显示未品尝的食物建议
 			EatenProgress: 已吃过：{0} / {1} 种食物
 			Deliciousness: 美味值：{0}
-			SuggestionsTitle: 快去品尝这些食物吧
+			SuggestionsTitle: 快去品尝食物吧(在海边更合适)
 		}
 	}
 
 	WishingWellItem: {
 		DisplayName: 许愿井
 		Tooltip: 将BOSS的战利品丢进去可能发生意想不到的事
+
+		Messages: {
+			ResolveBossFromItemFail: 许愿井对它不感兴趣
+			CheckEnvFail: 环境条件不满足
+			Success: 额外奖励 {0}
+			Fail: 运气不佳
+		}
 	}
 
 	DesignFlaw: {
@@ -478,7 +492,7 @@ Items: {
 
 	BladeWaltz: {
 		DisplayName: 绝学·利刃华尔兹
-		Tooltip: 利刃华尔兹！
+		Tooltip: 八段连续的冲刺斩击
 	}
 
 	Feixian: {
@@ -530,11 +544,6 @@ Items: {
 	FoodGodSummonItem: {
 		DisplayName: 米饭
 		Tooltip: 召唤食神
-	}
-
-	GlitteringClaw: {
-		Tooltip: 锋利的爪子闪耀着金铁的寒光
-		DisplayName: 闪亮爪套
 	}
 
 	ScallionSword: {
@@ -609,8 +618,8 @@ Items: {
 	}
 
 	ThousandGhostBanner: {
-		DisplayName: 召唤鬼魂仆从
-		Tooltip: 万魂幡
+		DisplayName: 万魂幡
+		Tooltip: 召唤鬼魂仆从
 	}
 
 	TaijiSwordBox: {
@@ -1109,8 +1118,27 @@ Prefixes: {
 }
 
 Messages: {
-	JueXue.CoolDown: 正在冷却中，无法使用绝学
+	JueXue: {
+		CoolDown: 正在冷却中，无法使用绝学
+		NotEnoughQi: 无法使用绝学，气力不足
+		Immune: 闪避
+	}
+
 	BundleClaimed: 领取完成：进入背包 {0} 种；掉落 {1} 种（共 {2} 件/叠）
+}
+
+Events: {
+	FoodRain: {
+		Start: 食物从天而降！躲开红光，吃下绿光！
+		Win: 你成功撑过了食物雨！食神即将到来！
+
+		UI: {
+			Title: 食物雨
+			Progress: 抵挡来袭：{0}% 还有 {1} 波
+			WinTitle: 胜利！食神正在赶来
+			SummonCountdown: 食神降临倒计时：{0:0.0}s
+		}
+	}
 }
 
 ArmorElement: {
@@ -1187,3 +1215,17 @@ Cuisine: {
 }
 
 RecipeGroup.AnyFairy: 任意仙灵
+
+UI: {
+	Qi: {
+		BarLabel: 气力
+
+		JuexueSlot: {
+			OnlyJuexue: 该槽位只能放入“绝学”类物品
+			InventoryFull: 背包已满，无法卸下绝学
+			HoverEmpty: 放入一件绝学以激活其效果
+			MouseTextHint: 将绝学放置到绝学槽中
+			HoverHasItem: 可以装备绝学
+		}
+	}
+}

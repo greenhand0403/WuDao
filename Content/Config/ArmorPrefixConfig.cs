@@ -7,7 +7,7 @@ namespace WuDao.Content.Config
     // 盔甲五行系统
     public class ArmorPrefixConfig : ModConfig
     {
-        public override ConfigScope Mode => ConfigScope.ServerSide;
+        public override ConfigScope Mode => ConfigScope.ClientSide;
 
         // ✅ 配置在菜单里的名字（可本地化）
         public override LocalizedText DisplayName =>

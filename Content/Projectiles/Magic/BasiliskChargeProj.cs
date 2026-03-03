@@ -13,18 +13,7 @@ namespace WuDao.Content.Projectiles.Magic
         public override string Texture => $"Terraria/Images/NPC_{NPCID.DesertBeast}";
         public int FrameTicksPerFrame = 5;
         public float MinSpeed = 8f;
-        // private static Asset<Texture2D> TexAsset;
-        // public override void Load()
-        // {
-        //     if (!Main.dedServ)
-        //     {
-        //         TexAsset = ModContent.Request<Texture2D>(Texture, AssetRequestMode.AsyncLoad);
-        //     }
-        // }
-        // public override void Unload()
-        // {
-        //     TexAsset = null;
-        // }
+        
         public override void SetStaticDefaults()
         {
             // 原版石化蜥有多帧

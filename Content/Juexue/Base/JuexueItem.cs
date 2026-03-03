@@ -1,6 +1,9 @@
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
+using WuDao.Content.Config;
 using WuDao.Content.Players;
 
 namespace WuDao.Content.Juexue.Base
@@ -25,17 +28,20 @@ namespace WuDao.Content.Juexue.Base
         // 主动释放：默认检查气力、公冷却、专属冷却
         public virtual bool TryActivate(Player player, QiPlayer qi)
         {
+            if (!ModContent.GetInstance<WudaoConfig>().EnableJueXueSystem)
+                return false;
+                
             if (!IsActive) return false;
             if (qi.QiMax <= 0) return false;
 
             if (!qi.CanUseActiveNow(Item.type, SpecialCooldownTicks))
             {
-                Main.NewText("绝学尚未冷却。", Microsoft.Xna.Framework.Color.OrangeRed);
+                Main.NewText(Language.GetTextValue("Mods.WuDao.Messages.JueXue.Cooldown"), Color.OrangeRed);
                 return false;
             }
             if (!qi.TrySpendQi(QiCost))
             {
-                Main.NewText("气力不足！", Microsoft.Xna.Framework.Color.OrangeRed);
+                Main.NewText(Language.GetTextValue("Mods.WuDao.Messages.JueXue.NotEnoughQi"), Color.OrangeRed);
                 return false;
             }
 

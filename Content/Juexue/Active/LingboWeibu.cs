@@ -2,6 +2,9 @@ using Terraria;
 using WuDao.Content.Players;
 using WuDao.Content.Juexue.Base;
 using Microsoft.Xna.Framework;
+using Terraria.Localization;
+using WuDao.Content.Config;
+using Terraria.ModLoader;
 
 namespace WuDao.Content.Juexue.Active
 {
@@ -15,18 +18,21 @@ namespace WuDao.Content.Juexue.Active
         public const int LingboWeibuFrameIndex = 3;
         public override bool TryActivate(Player player, QiPlayer qi)
         {
+            if (!ModContent.GetInstance<WudaoConfig>().EnableJueXueSystem)
+                return false;
+                
             // 已开启 -> 直接关闭，不进 CD，不扣气
             if (qi.LingboActive)
             {
                 qi.LingboActive = false;
-                Main.NewText("凌波微步：关闭", Color.LightGray);
+                Main.NewText(DisplayName, Color.LightGray);
                 return true;
             }
             if (!qi.TrySpendQi(QiCost)) return false;
             // 未开启 -> 正常走公共冷却时间检查
             if (!qi.CanUseActiveNow(Item.type, SpecialCooldownTicks))
             {
-                Main.NewText("绝学尚未冷却。", Color.OrangeRed);
+                Main.NewText(Language.GetTextValue("Mods.WuDao.Messages.JueXue.Cooldown"), Color.OrangeRed);
                 return false;
             }
 
@@ -40,7 +46,7 @@ namespace WuDao.Content.Juexue.Active
             if (qi.QiMax <= 0) return false;
             qi.LingboActive = true;
             qi.LingboQiCost = QiCost;
-            Main.NewText("凌波微步-开启闪避", Color.SkyBlue);
+            Main.NewText(DisplayName, Color.SkyBlue);
             // —— 启动“凌波微步虚影” —— //
             if (!Main.dedServ)
             {

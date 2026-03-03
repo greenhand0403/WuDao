@@ -31,8 +31,14 @@ namespace WuDao.Content.Items
         }
         public override void ModifyItemLoot(ItemLoot itemLoot)
         {
-            itemLoot.Add(ItemDropRule.NotScalingWithLuck(ModContent.ItemType<ScallionSword>(), 7));
-            itemLoot.Add(ItemDropRule.NotScalingWithLuck(ModContent.ItemType<ScallionShield>(), 7));
+            // itemLoot.Add(ItemDropRule.NotScalingWithLuck(ModContent.ItemType<ScallionSword>(), 7));
+           
+            // 33% 几率掉落葱剑或葱盾
+            itemLoot.Add(ItemDropRule.OneFromOptions(3,
+                ModContent.ItemType<ScallionSword>(),
+                ModContent.ItemType<ScallionShield>()
+            ));
+
             itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<SteamedBun>(), 1, 2, 16));
             itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<Candy>(), 1, 1, 5));
             itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<GlowingMeal>(), 1, 1, 2));

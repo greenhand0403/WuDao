@@ -59,7 +59,7 @@ namespace WuDao.Content.Projectiles.Ranged
 
             if (targetIndex != -1)
             {
-                Vector2 desired = (Main.npc[targetIndex].Center - Projectile.Center);
+                Vector2 desired = Main.npc[targetIndex].Center - Projectile.Center;
                 if (desired.Length() > 6f)
                     desired.Normalize();
 

@@ -17,10 +17,6 @@ namespace WuDao.Content.Projectiles.Ranged
         public const float SplashDamageMult = 0.90f;  // 溅射伤害倍率
 
         public override string Texture => $"Terraria/Images/Projectile_{ProjectileID.MiniNukeGrenadeI}";
-        // public override void SetStaticDefaults()
-        // {
-        //     DisplayName.SetDefault("终极爆弹");
-        // }
 
         public override void SetDefaults()
         {

@@ -1,37 +1,41 @@
 Items: {
 	NebulaRocket: {
 		DisplayName: Nebula Rocket
-		Tooltip: ""
+		Tooltip: Fires a nebula rocket
 	}
 
 	SolarBullet: {
 		DisplayName: Solar Bullet
-		Tooltip: ""
+		Tooltip: Fires an explosive bullet that inflicts the Daybreak debuff
 	}
 
 	SteelHeavySword: {
 		DisplayName: Steel Heavy Sword
-		Tooltip: ""
+		Tooltip:
+			'''
+			Right-click to perform a heavy forward slash
+			[c/AAAAAA:A blade without an edge]
+			'''
 	}
 
 	WoodenShuriken: {
 		DisplayName: Wooden Shuriken
-		Tooltip: ""
+		Tooltip: Throws a shuriken
 	}
 
 	GoldenShuriken: {
 		DisplayName: Golden Shuriken
-		Tooltip: ""
+		Tooltip: Throws a shuriken with a chance to inflict the Midas debuff
 	}
 
 	FlyStone: {
 		DisplayName: Fly Stone
-		Tooltip: ""
+		Tooltip: Throws a flying stone
 	}
 
 	WeaponBundleItem: {
 		DisplayName: Weapon Bundle Item
-		Tooltip: ""
+		Tooltip: Contains WuDao Mod weapons, ammo, tools, accessories, etc.
 		UIText: Choose your weapon bundle item
 		ItemType0: Weapons
 		ItemType1: Accessories
@@ -40,32 +44,44 @@ Items: {
 
 	FlameShuriken: {
 		DisplayName: Flame Shuriken
-		Tooltip: ""
+		Tooltip: Throws a shuriken with a chance to inflict On Fire!
 	}
 
 	IceShuriken: {
 		DisplayName: Ice Shuriken
-		Tooltip: ""
+		Tooltip: Throws a shuriken with a chance to inflict Frostburn
 	}
 
 	PoisonedShuriken: {
 		DisplayName: Poisoned Shuriken
-		Tooltip: ""
+		Tooltip: Throws a shuriken with a chance to inflict Poisoned
 	}
 
 	CactusNeedle: {
 		DisplayName: Cactus Needle
-		Tooltip: ""
+		Tooltip: Throws a cactus needle
 	}
 
 	OceanBlueSword: {
 		DisplayName: Ocean Blue Sword
-		Tooltip: ""
+		Tooltip:
+			'''
+			Grants underwater breathing, water walking, and swimming
+			Immunity to Chilled and Frozen
+			Fires ocean vortex projectiles
+			Attacks may inflict Frostburn
+			'''
 	}
 
 	HellfireSword: {
 		DisplayName: Hellfire Sword
-		Tooltip: ""
+		Tooltip:
+			'''
+			Surrounded by a ring of fire
+			Immunity to On Fire!, Burning, and Lava
+			Fires hell slashes
+			Attacks may inflict On Fire!
+			'''
 	}
 
 	NormalScissors: {
@@ -105,22 +121,28 @@ Items: {
 
 	TimeStopItem: {
 		DisplayName: Time Stop Item
-		Tooltip: ""
+		Tooltip:
+			'''
+			Freezes time for 5 seconds
+			Only you can move, but you can still take damage
+			[c/AAAAAA:Life is not about escaping before drowning]
+			[c/AAAAAA:But swimming endlessly until thought itself ceases]
+			'''
 	}
 
 	CloudArrow: {
 		DisplayName: Cloud Arrow
-		Tooltip: ""
+		Tooltip: "[c/AAAAAA:One arrow pierces the clouds, and armies gather at its call]"
 	}
 
 	BrightVerdict: {
 		DisplayName: Bright Verdict
-		Tooltip: ""
+		Tooltip: Shoots a sacred cross star
 	}
 
 	MagicHorn: {
 		DisplayName: Magic Horn
-		Tooltip: ""
+		Tooltip: Fires random magic projectiles based on game progression
 	}
 
 	Mimicker: {
@@ -140,42 +162,42 @@ Items: {
 
 	WindBlade: {
 		DisplayName: Wind Blade
-		Tooltip: ""
+		Tooltip: Consumes mana to fire wind blades
 	}
 
 	ForestSword: {
 		DisplayName: Forest Sword
-		Tooltip: ""
+		Tooltip: Move faster in the forest
 	}
 
 	ImmortalSword: {
 		DisplayName: Immortal Sword
-		Tooltip: ""
+		Tooltip: Increases vitality
 	}
 
 	RainBowGolfClubs: {
 		DisplayName: Rain Bow Golf Clubs
-		Tooltip: ""
+		Tooltip: Fires random golf balls
 	}
 
 	SteelBroadSword: {
 		DisplayName: Steel Broad Sword
-		Tooltip: ""
+		Tooltip: Emits sword light when swung
 	}
 
 	SteelShortSword: {
 		DisplayName: Steel Short Sword
-		Tooltip: ""
+		Tooltip: Move faster during the daytime
 	}
 
 	HarpyWingSword: {
 		DisplayName: Harpy Wing Sword
-		Tooltip: ""
+		Tooltip: Fires harpy feathers and excels in aerial combat
 	}
 
 	SmokeGrenade: {
 		DisplayName: Smoke Grenade
-		Tooltip: ""
+		Tooltip: Leaves behind damaging smoke
 	}
 
 	TheOutlaw: {
@@ -207,43 +229,61 @@ Items: {
 
 	GhostChakram: {
 		DisplayName: Ghost Chakram
-		Tooltip: ""
+		Tooltip: Increases in size and damage when passing through enemies
 	}
 
 	InvincibleBlade: {
 		DisplayName: Invincible Blade
-		Tooltip: ""
+		Tooltip:
+			'''
+			Deals damage based on a percentage of enemy max life
+			[c/C040FF:No enemy is unbeatable]
+			[c/AAAAAA:I wished for invincibility and ended up with zero damage]
+			'''
 	}
 
 	DevolutionCharm: {
 		DisplayName: Devolution Charm
-		Tooltip: ""
+		Tooltip: Enemies within a 30-block radius deal 10% less damage and 10% increased damage taken
 	}
 
 	WrathLotus: {
 		DisplayName: Wrath Lotus
-		Tooltip: ""
+		Tooltip: Reflects damage when hurt and grants immunity to Burning and On Fire!
 	}
 
 	DiscoBallRemote: {
 		DisplayName: Disco Ball Remote
-		Tooltip: ""
+		Tooltip: A dazzling disco ball
 	}
 
 	BlasterPliers: {
 		DisplayName: Blaster Pliers
-		Tooltip: ""
+		Tooltip:
+			'''
+			Hotdogs in your inventory increase this weapon's damage
+			[c/C040FF:Juicy bite]
+			'''
 	}
 
 	RewinderCicadas: {
 		DisplayName: Rewinder Cicadas
-		Tooltip: ""
+		Tooltip: 
+			'''
+			When mortally wounded, restore health to 3 seconds ago
+			[c/FFD700: Spring and Autumn Cicadas Return of the Youth]
+			'''
+		Messages: {
+			RewindTriggered: Rewinder Cicadas returned to the Time River
+			Heal: Healed {0} life
+		}
 	}
 
 	Cookbook: {
 		DisplayName: Cookbook
 
 		Tooltip: {
+			$parentVal: ""
 			MadeCount: Crafted: {0} / {1} foods
 			CookingSkill: Cooking skill: {0}
 			TodayRecommend: Today's recommendation: {0}
@@ -255,312 +295,376 @@ Items: {
 		DisplayName: Food Log Item
 
 		Tooltip: {
+			$parentVal: ""
 			ClosedName: Food Log
 			ClosedHint: Favorite this item to show suggestions for foods you haven't tried.
 			EatenProgress: Eaten: {0} / {1} foods
 			Deliciousness: Deliciousness: {0}
-			SuggestionsTitle: Go taste these foods!
+			SuggestionsTitle: Go taste these foods!(Suitable by the sea)
 		}
 	}
 
 	WishingWellItem: {
 		DisplayName: Wishing Well Item
-		Tooltip: ""
+		Tooltip: Throwing the boss's loot in it can cause unexpected things
+
+		Messages: {
+			ResolveBossFromItemFail: The wishing well shows no interest in it.
+			CheckEnvFail: The environmental conditions are not met.
+			Success: Additional rewards {0}
+			Fail: Bad luck
+		}
 	}
 
 	DesignFlaw: {
 		DisplayName: Design Flaw
 		Tooltip: Records which NPC killed you. Grants bonus damage & extra drops against recorded NPCs.
-		TooltipRecorded: Recorded: {0} ×{1} (bonus damage per 10% & extra drops against it),
+		TooltipRecorded: Recorded: {0} ×{1} (grants +10% damage and extra drops against it)
 		TooltipNoRecord: No NPC recorded yet.
 	}
 
 	FirstBlood: {
 		DisplayName: First Blood
 		DisplayName2: The Proof of Brave
-		Tooltip: ""
+		Tooltip: 
+			'''
+			Increased damage dealt to undefeated bosses
+			Transform into new accessories after defeating all bosses
+			'''
 		HeroNameInfo: Transform to The Proof of Brave
-		HeroEffect: Grants bonus damage & extra drops against recorded NPCs.
+		HeroEffect: First attack against enemies above 90% life deals +300% damage
 		Effect: Grants bonus damage ：
 	}
 
 	Candy: {
 		DisplayName: Candy
-		Tooltip: ""
+		Tooltip:
+			'''
+			A mixture of different candies
+			Grants a random buff when used
+			'''
 	}
 
 	GlowingMeal: {
 		DisplayName: Glowing Meal
-		Tooltip: ""
+		Tooltip:
+			'''
+			An extremely hearty meal
+			Grants a powerful food buff
+			And 5 additional random buffs from the pool
+			'''
 	}
 
 	PyramidStatue: {
 		DisplayName: Pyramid Statue
-		Tooltip: ""
+		Tooltip:
+			'''
+			Emits ancient protective power
+			Standing still on solid blocks grants strong damage reduction
+			'''
 	}
 
 	GuixinAccessory: {
 		DisplayName: Guixin Accessory
-		Tooltip: ""
+		Tooltip: Your boomerangs return faster
 	}
 
 	SoulGem: {
 		DisplayName: Soul Gem
-		Tooltip: ""
+		Tooltip: Heart Arrows no longer consume life and gain stronger homing
 	}
 
 	YanfanAccessory: {
 		DisplayName: Yanfan Accessory
-		Tooltip: ""
+		Tooltip: Your boomerangs deal double damage on return
 	}
 
 	YueshengAccessory: {
 		DisplayName: Yuesheng Accessory
-		Tooltip: ""
+		Tooltip: Your boomerangs can pass through tiles and enemies
 	}
 
 	HeartArrow: {
 		DisplayName: Heart Arrow
-		Tooltip: ""
+		Tooltip:
+			'''
+			Consumes 2 life
+			Weak homing ability
+			Restores 1 life on hit
+			Killing enemies drops healing hearts
+			[c/FF4040:Even love cannot stop life from fading]
+			'''
 	}
 
 	CupidBow: {
 		DisplayName: Cupid Bow
-		Tooltip: ""
+		Tooltip:
+			'''
+			Converts Wooden Arrows into Heart Arrows
+			Heart Arrows only cost 1 life
+			'''
 	}
 
 	ApeTouch: {
 		DisplayName: Ape Touch
-		Tooltip: ""
+		Tooltip:
+			'''
+			When life is below 51%
+			Taking damage consumes double mana to negate 50% contact damage (fails if insufficient mana)
+			Touching friendly units restores 5 life per second
+			'''
 	}
 
 	NearsightedGlasses: {
 		DisplayName: Nearsighted Glasses
-		Tooltip: ""
+		Tooltip:
+			'''
+			Grants different effects based on distance to enemies
+			Close: +10% damage
+			Medium: +15% damage and -15% projectile damage taken
+			Far: -10% projectile damage taken
+			'''
 	}
 
 	DiamondSkin: {
 		DisplayName: Diamond Skin
-		Tooltip: ""
+		Tooltip: Briefly increases endurance by 70%
 	}
 
 	Kamehameha: {
 		DisplayName: Kamehameha
-		Tooltip: ""
+		Tooltip: Charge up to fire a Ki wave
 	}
 
 	MagneticHeavenBlade: {
 		DisplayName: Magnetic Heaven Blade
-		Tooltip: ""
+		Tooltip: Spin a magnetic field to pull enemies together, then strike with the Heaven Blade
 	}
 
 	QiankunShift: {
 		DisplayName: Qiankun Shift
-		Tooltip: ""
+		Tooltip: Teleport to the cursor position
 	}
 
 	TenThousandSwords: {
 		DisplayName: Ten Thousand Swords
-		Tooltip: ""
+		Tooltip: Summon a sword rain to strike enemies
 	}
 
 	HeavenlyPetals: {
 		DisplayName: Heavenly Petals
-		Tooltip: ""
+		Tooltip: Attacks have a chance to fire extra projectiles in all directions
 	}
 
 	SharkWhaleFist: {
 		DisplayName: Shark Whale Fist
-		Tooltip: ""
+		Tooltip: Attacks have a chance to fire shark and whale projectiles
 	}
 
 	PassionFruit: {
-		Tooltip: ""
+		Tooltip: Each use increases max Qi by 10, up to +50
 		DisplayName: Passion Fruit
 		Messages: You feel more stable in your inner breath (max Qi energy +10)
 	}
 
 	Kyubey: {
 		DisplayName: Kyubey
-		Tooltip: ""
+		Tooltip: A contract familiar of magical girls
 	}
 
 	ReiShi: {
 		DisplayName: Rei Shi
-		Tooltip: ""
+		Tooltip: Use to increase max Qi by 50 (once)
 		Messages: You feel your Dantian full (max Qi energy +50)
 	}
 
 	SteamedBun: {
 		DisplayName: Steamed Bun
-		Tooltip: ""
+		Tooltip: May attract a wandering beggar
 		Messages: Wandering beggars are attracted by food
 	}
 
 	BladeWaltz: {
 		DisplayName: Blade Waltz
-		Tooltip: ""
+		Tooltip: Eight consecutive sprinting strikes
 	}
 
 	Feixian: {
 		DisplayName: Feixian
-		Tooltip: ""
+		Tooltip: Clears debuffs, dashes along a path, and fires projectiles
 	}
 
 	LingboWeibu: {
 		DisplayName: Lingbo Weibu
-		Tooltip: ""
+		Tooltip: While active, you have a chance to dodge enemy attacks
 	}
 
 	ShengLongBa: {
 		DisplayName: Sheng Long Ba
-		Tooltip: ""
+		Tooltip: Uppercut to unleash a dragon-shaped projectile
 	}
 
 	Stampede: {
 		DisplayName: Stampede
-		Tooltip: ""
+		Tooltip: Summon pegasi to charge through enemies
 	}
 
 	WhiteBoneClaw: {
 		DisplayName: White Bone Claw
-		Tooltip: ""
+		Tooltip: Attacks summon shadow claws to rend enemies
 	}
 
 	XiangLong18: {
 		DisplayName: Xiang Long18
-		Tooltip: ""
+		Tooltip: Attacks fire extra projectiles; the 8th and 10th hits deal 8x and 10x damage
 	}
 
 	PotionSpirit: {
 		DisplayName: Potion Spirit
-		Tooltip: ""
+		Tooltip: Automatically drinks a healing potion when near death, prioritizing the earliest potions in your inventory
 	}
 
 	EverlastingWine: {
 		DisplayName: Everlasting Wine
-		Tooltip: ""
+		Tooltip:
+			'''
+			Has a chance to grant invincibility frames
+			Automatically drinks when near death
+			Reduces max life by 20 after use
+			5-minute cooldown
+			'''
 	}
 
 	FoodGodSummonItem: {
 		DisplayName: Food God Summon Item
-		Tooltip: ""
-	}
-
-	GlitteringClaw: {
-		Tooltip: ""
-		DisplayName: Glittering Claw
+		Tooltip: Summons the Food God
 	}
 
 	ScallionSword: {
-		Tooltip: ""
+		Tooltip: Scallion Duck is tasty—and deadly
 		DisplayName: Scallion Sword
 	}
 
 	GelFlask: {
 		DisplayName: Gel Flask
-		Tooltip: ""
+		Tooltip: Grants melee weapons and whips a gel splash imbuement
 	}
 
 	GemPouch: {
-		Tooltip: ""
+		Tooltip: Throws random gems; different types have different effects
 		DisplayName: Gem Pouch
 	}
 
 	ScallionShield: {
 		DisplayName: Scallion Shield
-		Tooltip: ""
+		Tooltip:
+			'''
+			Double tap to dash
+			Deliciousness extends dash distance
+			'''
 	}
 
 	FoodGodBossBag: {
 		DisplayName: Food God Boss Bag
-		Tooltip: ""
+		Tooltip: Right click to open
 	}
 
 	HeroBrokenSwordStaff: {
-		Tooltip: ""
+		Tooltip: Summons the Broken Hero Sword
 		DisplayName: Hero Broken Sword Staff
 	}
 
 	FlyingToiletMountItem: {
 		DisplayName: Flying Toilet Mount Item
-		Tooltip: ""
+		Tooltip: Take off
 	}
 
 	EnchantedRoyalScepter: {
-		Tooltip: ""
+		Tooltip: Summons the one and only Royal Scepter
 		DisplayName: Enchanted Royal Scepter
 	}
 
 	QiSecretsB: {
-		Tooltip: ""
+		Tooltip: Increases Qi recovery while moving or attacking
 		DisplayName: Qi Secrets B
 		Messages.DonggongProgress: Meditation improved! +{0}/s mana regen when move or attack ({1}/{2})
 	}
 
 	QiSecretsA: {
-		Tooltip: ""
+		Tooltip: Increases Qi recovery while stationary
 		DisplayName: Qi Secrets A
 		Messages.JinggongProgress: Meditation improved! +{0}/s mana regen while stationary ({1}/{2})
 	}
 
 	BugStuff: {
-		Tooltip: ""
+		Tooltip: Summons a grasshopper
 		DisplayName: Bug Stuff
 	}
 
 	ButterflyCane: {
-		Tooltip: ""
+		Tooltip: Summons a butterfly
 		DisplayName: Butterfly Cane
 	}
 
 	FlyingSnakeStaff: {
-		Tooltip: ""
+		Tooltip: Summons a flying snake
 		DisplayName: Flying Snake Staff
 	}
 
 	ThousandGhostBanner: {
-		DisplayName: Thousand Ghost Banner
-		Tooltip: ""
+		DisplayName: Summons ghost minions
+		Tooltip: Thousand Ghost Banner
 	}
 
 	TaijiSwordBox: {
 		DisplayName: Taiji Sword Box
-		Tooltip: ""
+		Tooltip: Summons two Taiji swords—Yang sword has extra armor penetration, Yin sword heals you on hit
 	}
 
 	GreedyWolfStaff: {
 		DisplayName: Greedy Wolf Staff
-		Tooltip: ""
+		Tooltip: Summons a wolf minion
 	}
 
 	FlyingSnakeWhip: {
 		DisplayName: Flying Snake Whip
-		Tooltip: ""
+		Tooltip:
+			'''
+			While held, increases summon damage
+			Boosts flying snake minion speed and projectile speed
+			Hitting enemies grants temporary life regeneration that fades over time
+			33% chance to inflict Poisoned or Bleeding
+			'''
 	}
 
 	MonsterTrainStaff: {
-		Tooltip: ""
+		Tooltip: Summons a monster train, up to 8 can exist
 		DisplayName: Monster Train Staff
 	}
 
 	DragonflyCane: {
-		Tooltip: ""
+		Tooltip:
+			'''
+			Summons a dragonfly minion
+			[c/AAAAAA:First, never act on impulse]
+			[c/AAAAAA:Second, never miss a single wrongdoing]
+			[c/AAAAAA:Third, always judge fairly and beautifully]
+			'''
 		DisplayName: Dragonfly Cane
 	}
 
 	SolarShipMountItem: {
-		Tooltip: ""
+		Tooltip: Pilot the Solar Ship
 		DisplayName: Solar Ship Mount Item
 	}
 
 	LunarShipMountItem: {
-		Tooltip: ""
+		Tooltip: Pilot the Lunar Ship
 		DisplayName: Lunar Ship Mount Item
 	}
 
 	KyubeySoulStone: {
-		Tooltip: ""
+		Tooltip: Summons Kyubey
 		DisplayName: Kyubey Soul Stone
 	}
 }
@@ -632,233 +736,233 @@ Projectiles: {
 }
 
 DamageClasses: {
-	ChiEnergyDamageClass.DisplayName: Chi Energy Damage Class
-	SupremeDamageClass.DisplayName: Supreme Damage Class
+	ChiEnergyDamageClass.DisplayName: Chi Energy
+	SupremeDamageClass.DisplayName: Supreme Qi
 }
 
 Buffs: {
 	DiscoBallPetBuff: {
 		DisplayName: Disco Ball Pet Buff
-		Description: Mods.WuDao.Buffs.DiscoBallPetBuff.Description
+		Description: Lights the way
 	}
 
 	BrokenDreams: {
 		DisplayName: Broken Dreams
-		Description: Mods.WuDao.Buffs.BrokenDreams.Description
+		Description: Reduces damage, critical chance, endurance, and speed
 	}
 
 	Capitalism: {
 		DisplayName: Capitalism
-		Description: Mods.WuDao.Buffs.Capitalism.Description
+		Description: If you carry 10+ Platinum Coins, gain +10% damage and endurance; otherwise lose 10%
 	}
 
 	Clumsy: {
 		DisplayName: Clumsy
-		Description: Mods.WuDao.Buffs.Clumsy.Description
+		Description: Critical chance reduced by 90%
 	}
 
 	Collector: {
 		DisplayName: Collector
-		Description: Mods.WuDao.Buffs.Collector.Description
+		Description: Increases damage based on weapon rarity; increases defense based on accessory rarity
 	}
 
 	FiveDecay: {
 		DisplayName: Five Decay
-		Description: Mods.WuDao.Buffs.FiveDecay.Description
+		Description: Every 2 seconds, gain a random dreadful debuff
 	}
 
 	GiantWeapon: {
 		DisplayName: Giant Weapon
-		Description: Mods.WuDao.Buffs.GiantWeapon.Description
+		Description: Melee weapon size increased by 20%
 	}
 
 	Impatient: {
 		DisplayName: Impatient
-		Description: Mods.WuDao.Buffs.Impatient.Description
+		Description: Greatly increased movement speed
 	}
 
 	LifeCurse: {
 		DisplayName: Life Curse
-		Description: Mods.WuDao.Buffs.LifeCurse.Description
+		Description: Takes damage over time based on max life
 	}
 
 	Procrastination: {
 		DisplayName: Procrastination
-		Description: Mods.WuDao.Buffs.Procrastination.Description
+		Description: Greatly reduced movement speed
 	}
 
 	PyramidWard: {
 		DisplayName: Pyramid Ward
-		Description: Mods.WuDao.Buffs.PyramidWard.Description
+		Description: Standing still on solid blocks grants damage reduction
 	}
 
 	Shiver: {
 		DisplayName: Shiver
-		Description: Mods.WuDao.Buffs.Shiver.Description
+		Description: You tremble in fear and may drop items while using them
 	}
 
 	Suicidal: {
 		DisplayName: Suicidal
-		Description: Mods.WuDao.Buffs.Suicidal.Description
+		Description: Greatly reduced defense
 	}
 
 	SweetAgile: {
 		DisplayName: Sweet Agile
-		Description: Mods.WuDao.Buffs.SweetAgile.Description
+		Description: Increased movement speed
 	}
 
 	SweetLucky: {
 		DisplayName: Sweet Lucky
-		Description: Mods.WuDao.Buffs.SweetLucky.Description
+		Description: Increased critical strike chance
 	}
 
 	SweetRegen: {
 		DisplayName: Sweet Regen
-		Description: Mods.WuDao.Buffs.SweetRegen.Description
+		Description: Increased life regeneration
 	}
 
 	Weakness: {
 		DisplayName: Weakness
-		Description: Mods.WuDao.Buffs.Weakness.Description
+		Description: Your damage is reduced by 90%
 	}
 
 	WitheredMind: {
 		DisplayName: Withered Mind
-		Description: Mods.WuDao.Buffs.WitheredMind.Description
+		Description: Your mana constantly drains and is hard to recover
 	}
 
 	SacrificialBranding: {
 		DisplayName: Sacrificial Branding
-		Description: Mods.WuDao.Buffs.SacrificialBranding.Description
+		Description: Take 50% increased damage from bosses
 	}
 
 	RewinderCicadasBuff: {
 		DisplayName: Rewinder Cicadas Buff
-		Description: Mods.WuDao.Buffs.RewinderCicadasBuff.Description
+		Description: The Rewinder Cicadas are gathering power and cannot be used yet
 	}
 
 	NormalScissorsDashBuff: {
 		DisplayName: Normal Scissors Dash Buff
-		Description: Mods.WuDao.Buffs.NormalScissorsDashBuff.Description
+		Description: Dash is temporarily unavailable
 	}
 
 	OutlawBackstepBuff: {
 		DisplayName: Outlaw Backstep Buff
-		Description: Mods.WuDao.Buffs.OutlawBackstepBuff.Description
+		Description: Backstep is temporarily unavailable
 	}
 
 	BaldHead: {
 		DisplayName: Bald Head
-		Description: Mods.WuDao.Buffs.BaldHead.Description
+		Description: +4% damage, +4% crit chance, +4% damage taken
 	}
 
 	DiamondSkinBuff: {
 		DisplayName: Diamond Skin Buff
-		Description: Mods.WuDao.Buffs.DiamondSkinBuff.Description
+		Description: A vajra body protects you
 	}
 
 	ShortInvulnBuff: {
 		DisplayName: Short Invuln Buff
-		Description: Mods.WuDao.Buffs.ShortInvulnBuff.Description
+		Description: This secret technique is temporarily unavailable
 	}
 
 	KyubeyPetBuff: {
 		Description: Mods.WuDao.Buffs.KyubeyPetBuff.Description
-		DisplayName: Kyubey Pet Buff
+		Description: Kyubey follows you
 	}
 
 	WineCooldownBuff: {
 		DisplayName: Wine Cooldown Buff
-		Description: Mods.WuDao.Buffs.WineCooldownBuff.Description
+		Description: Everlasting Wine is temporarily unavailable
 	}
 
 	GelFlaskDebuff: {
-		Description: Mods.WuDao.Buffs.GelFlaskDebuff.Description
+		Description: Slowed and vulnerable to fire
 		DisplayName: Gel Flask Debuff
 	}
 
 	GelFlaskBuff: {
-		Description: Mods.WuDao.Buffs.GelFlaskBuff.Description
+		Description: Hitting enemies inflicts the Sticky Gel debuff
 		DisplayName: Gel Flask Buff
 	}
 
 	HeroBrokenSwordBuff: {
-		Description: Mods.WuDao.Buffs.HeroBrokenSwordBuff.Description
+		Description: The Broken Hero Sword fights for you
 		DisplayName: Hero Broken Sword Buff
 	}
 
 	FlyingToiletBuff: {
 		DisplayName: Flying Toilet Buff
-		Description: Mods.WuDao.Buffs.FlyingToiletBuff.Description
+		Description: Take off
 	}
 
 	EnchantedRoyalScepterBuff: {
-		Description: Mods.WuDao.Buffs.EnchantedRoyalScepterBuff.Description
+		Description: The Royal Scepter protects you
 		DisplayName: Enchanted Royal Scepter Buff
 	}
 
 	Encumbered: {
-		Description: Mods.WuDao.Buffs.Encumbered.Description
+		Description: Lose 1 life per second for each occupied inventory slot
 		DisplayName: Encumbered
 	}
 
 	BarrenLand: {
-		Description: Mods.WuDao.Buffs.BarrenLand.Description
+		Description: Lose 1 life per second based on the number of buffs you have
 		DisplayName: Barren Land
 	}
 
 	AllIn: {
-		Description: Mods.WuDao.Buffs.AllIn.Description
+		Description: Based on empty inventory slots and empty accessory slots: +1% damage, movement speed, and crit chance; -1% damage reduction
 		DisplayName: All In
 	}
 
 	GrasshopperBuff: {
-		Description: Mods.WuDao.Buffs.GrasshopperBuff.Description
+		Description: The grasshopper fights for you
 		DisplayName: Grasshopper Buff
 	}
 
 	ButterflyCaneBuff: {
-		Description: Mods.WuDao.Buffs.ButterflyCaneBuff.Description
+		Description: The butterfly fights for you
 		DisplayName: Butterfly Cane Buff
 	}
 
 	FlyingSnakeBuff: {
-		Description: Mods.WuDao.Buffs.FlyingSnakeBuff.Description
+		Description: The flying snake fights for you
 		DisplayName: Flying Snake Buff
 	}
 
 	ThousandGhostBannerBuff: {
 		DisplayName: Thousand Ghost Banner Buff
-		Description: Mods.WuDao.Buffs.ThousandGhostBannerBuff.Description
+		Description: Ghosts guard you
 	}
 
 	TaijiSwordBoxBuff: {
 		DisplayName: Taiji Sword Box Buff
-		Description: Mods.WuDao.Buffs.TaijiSwordBoxBuff.Description
+		Description: The Taiji swords fight for you
 	}
 
 	GreedyWolfBuff: {
 		DisplayName: Greedy Wolf Buff
-		Description: Mods.WuDao.Buffs.GreedyWolfBuff.Description
+		Description: The wolf minion fights for you
 	}
 
 	MonsterTrainBuff: {
-		Description: Mods.WuDao.Buffs.MonsterTrainBuff.Description
+		Description: The monster train fights for you
 		DisplayName: Monster Train Buff
 	}
 
 	DragonflyCaneBuff: {
-		Description: Mods.WuDao.Buffs.DragonflyCaneBuff.Description
+		Description: The dragonfly fights for you
 		DisplayName: Dragonfly Cane Buff
 	}
 
 	SolarShipBuff: {
-		Description: Mods.WuDao.Buffs.SolarShipBuff.Description
+		Description: Pilot the Solar Ship
 		DisplayName: Solar Ship Buff
 	}
 
 	LunarShipBuff: {
-		Description: Mods.WuDao.Buffs.LunarShipBuff.Description
+		Description: Pilot the Lunar Ship
 		DisplayName: Lunar Ship Buff
 	}
 }
@@ -874,7 +978,7 @@ Configs: {
 
 		Chance: {
 			Label: Chance
-			Tooltip: ""
+			Tooltip: Chance that the wishing well drops a reward
 		}
 	}
 
@@ -882,33 +986,33 @@ Configs: {
 		DisplayName: World Of Blight Config
 
 		Enabled: {
-			Label: 启用世界之毒全局效果
+			Label: Enable World Of Blight global effects
 			Tooltip: ""
 		}
 
 		DamagePenaltyPerStep: {
-			Label: 每个进度的伤害减少(%)
-			Tooltip: 每达成一个进度，玩家造成的所有伤害按百分比减少。范围 0%~10%。默认 4%。
+			Label: Damage reduction per step (%)
+			Tooltip: Each completed step reduces all damage you deal by a percentage. Range: 0%–10%. Default: 4%.
 		}
 
 		LifeRegenPenaltyPerStep: {
-			Label: 每个进度的生命再生减少(每秒)
-			Tooltip: 每达成一个进度，玩家生命再生每秒减少的数值。范围 0~20。默认 4。提示：Terraria内部以每秒*2结算，代码中会自动换算。
+			Label: Life regeneration reduction per step (per second)
+			Tooltip: Each completed step reduces your life regeneration by this amount per second. Range: 0–20. Default: 4. Note: Terraria internally counts life regen in half-seconds (per second ×2); the code will convert automatically.
 		}
 
 		DefensePenaltyPerStep: {
-			Label: 每个进度的防御减少
-			Tooltip: 每达成一个进度，玩家防御减少的数值。范围 0~30。默认 4。
+			Label: Defense reduction per step
+			Tooltip: Each completed step reduces your defense by this amount. Range: 0–30. Default: 4.
 		}
 
 		DamageFloorMultiplier: {
-			Label: 伤害最小倍率下限
-			Tooltip: 为避免伤害被削成0，这里设置一个下限。例如 0.1 表示最低保留10%伤害。设置为0则不设下限。
+			Label: Minimum damage multiplier
+			Tooltip: Prevents damage from being reduced to 0. For example, 0.1 means you always keep at least 10% damage. Set to 0 to disable the minimum.
 		}
 
 		ClampLifeRegenNonNegative: {
-			Label: 防止本DEBUFF把生命再生降为负数
-			Tooltip: 勾选后：世界之毒在削减生命再生时，最多把正向生命再生削到 0，不会由本效果导致负数。默认启用。
+			Label: Prevent this debuff from making life regen negative
+			Tooltip: When enabled, World Of Blight can only reduce positive life regen down to 0, and will not make it negative. Enabled by default.
 		}
 	}
 
@@ -928,23 +1032,23 @@ Configs: {
 
 		IncludeDefaultBladeTrailSet: {
 			Label: Include Default Blade Trail Set
-			Tooltip: ""
+			Tooltip: The default collection has melee knife light enabled
 		}
 
 		IncludePhaseblades: {
 			Label: Include Phaseblades
-			Tooltip: ""
+			Tooltip: By default, lightsaber's melee blade light is enabled
 		}
 
 		Whitelist: {
 			Label: Whitelist
-			Tooltip: ""
+			Tooltip: Enable whitelisted melee sword light
 		}
 	}
 
 	ArmorPrefixConfig: {
 		PrefixMode: {
-			Tooltip: ""
+			Tooltip: Armor possesses the attributes of the five elements
 			Label: Prefix Mode
 		}
 
@@ -957,7 +1061,7 @@ Configs: {
 
 		EnableJueXueSystem: {
 			Label: Enable Jue Xue System
-			Tooltip: ""
+			Tooltip: The exclusive skill system is enabled by default
 		}
 	}
 
@@ -991,7 +1095,7 @@ Keybinds: {
 NPCs: {
 	WanderingBeggar: {
 		DisplayName: Wandering Beggar
-		Chat.Default: I'm a wandering beggar. I'm here to help you. But I'm not sure if I'll be able to help you.
+		Chat.Default: I'm a wandering beggar. I'm here to help you. But I'm not sure if I'll be able to help you
 		Shop.Name: Wandering Beggar Shop
 		Info: Wandering Beggar Info
 	}
@@ -1008,8 +1112,27 @@ Prefixes: {
 }
 
 Messages: {
-	JueXue.CoolDown: Can't use. Jue Xue is cooling down.
-	BundleClaimed: Claimed: added {0} kinds to inventory; dropped {1} kinds ({2} total stacks/items).
+	JueXue: {
+		CoolDown: Can't use. Jue Xue is cooling down
+		NotEnoughQi: Can't use. Not enough qi
+		Immune: Dodge!
+	}
+
+	BundleClaimed: Claimed: added {0} kinds to inventory; dropped {1} kinds ({2} total stacks/items)
+}
+
+Events: {
+	FoodRain: {
+		Start: Food is raining from the sky! Dodge the red light, eat the green light!
+		Win: You survived the Food Sea! The Food God is coming
+
+		UI: {
+			Title: Food Rain
+			Progress: Hold the line: {0}%   Remaining {1}
+			WinTitle: Victory! The Food God is coming
+			SummonCountdown: Summon in: {0:0.0}s
+		}
+	}
 }
 
 ArmorElement: {
@@ -1086,3 +1209,17 @@ Cuisine: {
 }
 
 RecipeGroup.AnyFairy: Any Fairy
+
+UI: {
+	Qi: {
+		BarLabel: Qi
+
+		JuexueSlot: {
+			OnlyJuexue: This slot only accepts Juexue items.
+			InventoryFull: Inventory is full. Can't unequip the Juexue.
+			HoverEmpty: Place a Juexue here to activate its effect
+			MouseTextHint: Place the Juexue into the Juexue slot
+			HoverHasItem: Juexue equipped
+		}
+	}
+}

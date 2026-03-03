@@ -22,13 +22,13 @@ namespace WuDao.Content.Players
             hasPotionSpirit = false;
         }
 
-        public override void UpdateEquips()
-        {
+        // public override void UpdateEquips()
+        // {
             // 这里不需要处理酒的冷却，冷却用 Buff 表示
-        }
+        // }
 
-        public override void PostUpdateMiscEffects()
-        {
+        // public override void PostUpdateMiscEffects()
+        // {
             // 将上限惩罚应用到 statLifeMax2（不低于 20，避免 0/负数）
             // if (maxLifePenalty > 0)
             // {
@@ -40,7 +40,7 @@ namespace WuDao.Content.Players
             //     if (Player.statLife > Player.statLifeMax2)
             //         Player.statLife = Player.statLifeMax2;
             // }
-        }
+        // }
 
         public override void SaveData(TagCompound tag)
         {
@@ -209,7 +209,7 @@ namespace WuDao.Content.Players
                         }
 
                         // 提示效果（可选）
-                        CombatText.NewText(Player.Hitbox, Microsoft.Xna.Framework.Color.MediumPurple, "永生之酒！");
+                        CombatText.NewText(Player.Hitbox, Microsoft.Xna.Framework.Color.MediumPurple, item.Name);
                     }
 
                     return true;

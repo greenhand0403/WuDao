@@ -2,6 +2,9 @@ using Terraria;
 using WuDao.Content.Players;
 using WuDao.Content.Juexue.Base;
 using Microsoft.Xna.Framework;
+using Terraria.Localization;
+using Terraria.ModLoader;
+using WuDao.Content.Config;
 
 namespace WuDao.Content.Juexue.Active
 {
@@ -14,6 +17,9 @@ namespace WuDao.Content.Juexue.Active
         public const int BladeWaltzFrameIndex = 10;
         public override bool TryActivate(Player player, QiPlayer qi)
         {
+            if (!ModContent.GetInstance<WudaoConfig>().EnableJueXueSystem)
+                return false;
+                
             // 进行中：静默忽略
             if (qi.BladeWaltzTicks > 0)
                 return false;
@@ -21,14 +27,14 @@ namespace WuDao.Content.Juexue.Active
             // 冷却检查
             if (!qi.CanUseActiveNow(Item.type, SpecialCooldownTicks))
             {
-                Main.NewText("绝学尚未冷却。", Color.OrangeRed);
+                Main.NewText(Language.GetTextValue("Mods.WuDao.Messages.JueXue.Cooldown"), Color.OrangeRed);
                 return false;
             }
 
             // 启动时仅扣一次
             if (!qi.TrySpendQi(QiCost))
             {
-                Main.NewText("气力不足！", Color.OrangeRed);
+                Main.NewText(Language.GetTextValue("Mods.WuDao.Messages.JueXue.NotEnoughQi"), Color.OrangeRed);
                 return false;
             }
 
@@ -43,7 +49,7 @@ namespace WuDao.Content.Juexue.Active
             // 盖章冷却（含 2s 公共冷却）
             qi.StampActiveUse(Item.type, SpecialCooldownTicks);
 
-            Main.NewText("利刃华尔兹！", Color.MediumPurple);
+            Main.NewText(DisplayName, Color.MediumPurple);
             // 冷却图标
             qi.TriggerJuexueCooldownIcon(
                 frameIndex: BladeWaltzFrameIndex,

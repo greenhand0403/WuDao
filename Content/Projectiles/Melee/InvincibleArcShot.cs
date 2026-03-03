@@ -179,26 +179,5 @@ namespace WuDao.Content.Projectiles.Melee
             return false;
 
         }
-
-        // private int FindClosestNPC(float maxDetect, out Vector2 pos)
-        // {
-        //     pos = Vector2.Zero;
-        //     int best = -1;
-        //     float min = maxDetect;
-
-        //     for (int i = 0; i < Main.maxNPCs; i++)
-        //     {
-        //         NPC n = Main.npc[i];
-        //         if (!n.active || n.friendly || n.life <= 0) continue;
-        //         float d = Vector2.Distance(n.Center, Projectile.Center);
-        //         if (d < min)
-        //         {
-        //             min = d;
-        //             best = i;
-        //             pos = n.Center;
-        //         }
-        //     }
-        //     return best;
-        // }
     }
 }

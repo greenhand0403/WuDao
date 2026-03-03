@@ -2,6 +2,7 @@ using System;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using WuDao.Content.Buffs;
 using WuDao.Content.Items.Accessories;
@@ -93,7 +94,10 @@ namespace WuDao.Content.Players
 
             // 播个简洁特效（非必须）
             Terraria.Audio.SoundEngine.PlaySound(Terraria.ID.SoundID.Item29, Player.Center); // 魔法“倒带”音效
-            CombatText.NewText(Player.Hitbox, Color.Green, $"时间回溯恢复生命{healedAmount}");
+            CombatText.NewText(Player.Hitbox, Color.Green, Language.GetTextValue(
+                "Mods.WuDao.Items.RewinderCicadas.Messages.Heal",
+                healedAmount
+            ));
             for (int i = 0; i < 25; i++)
             {
                 int d = Dust.NewDust(Player.position, Player.width, Player.height, Terraria.ID.DustID.MagicMirror);
@@ -126,7 +130,7 @@ namespace WuDao.Content.Players
 
                     // 一点点反馈（可选）
                     Terraria.Audio.SoundEngine.PlaySound(Terraria.ID.SoundID.Grass, Player.Center);
-                    CombatText.NewText(Player.Hitbox, Color.LightGreen, "春秋蝉回到了光阴长河");
+                    CombatText.NewText(Player.Hitbox, Color.LightGreen, Language.GetTextValue("Mods.WuDao.Items.RewinderCicadas.Messages.RewindTriggered"));
 
                     // 同步给其他玩家（多人联机时建议）
                     if (Main.netMode == Terraria.ID.NetmodeID.MultiplayerClient)
@@ -138,44 +142,5 @@ namespace WuDao.Content.Players
                 }
             }
         }
-
-        //（可选）在人物 UI 上给个冷却提示：鼠标划过饰品时显示剩余冷却
-        // public override void PostUpdateEquips()
-        // {
-        //     if (equipped && Main.LocalPlayer == Player && Main.mouseItem?.ModItem is RewinderCicadas)
-        //     {
-        // 当玩家正把饰品拿在鼠标上时，你也可以动态修改 Tooltip（需要 GlobalItem/ModifyTooltips 实现）
-        // 这里不做演示，见下方 GlobalItem 可选实现。
-        //     }
-        // }
-
-        // 对外暴露一个查询方法（可用于 GlobalItem Tooltip）
-        // public int GetCooldownSecondsLeft()
-        // {
-        //     long now = Main.GameUpdateCount;
-        //     return (int)Math.Max(0, (nextReadyTick - now) / 60);
-        // }
     }
-
-    // public class TimeRewinderGlobalItem : GlobalItem
-    // {
-    //     public override bool InstancePerEntity => true;
-
-    //     public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
-    //     {
-    //         if (item.ModItem is RewinderCicadas)
-    //         {
-    //             var mp = Main.LocalPlayer.GetModPlayer<RewinderCicadasPlayer>();
-    //             int left = mp.GetCooldownSecondsLeft();
-    //             if (left > 0)
-    //             {
-    //                 tooltips.Add(new TooltipLine(Mod, "CooldownLeft", $"冷却剩余：{left} 秒"));
-    //             }
-    //             else
-    //             {
-    //                 tooltips.Add(new TooltipLine(Mod, "CooldownReady", "冷却就绪"));
-    //             }
-    //         }
-    //     }
-    // }
 }

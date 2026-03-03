@@ -4,7 +4,7 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
-using WuDao.Common;          // 你前面做的 SpriteSheetsSystem / SpriteSheets
+using WuDao.Common;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace WuDao.Content.Projectiles.Melee

@@ -24,7 +24,7 @@ namespace WuDao.Content.Juexue.Passive
         {
             if (Main.rand.NextFloat() > Chance) return;
             // ★ 冷却检查（在消耗气力之前）
-            if (!qi.CanProcPassiveNow(Item.type, SpecialCooldownTicks)) return;
+            if (!qi.CanProcPassiveNow(Item.type)) return;
             if (!qi.TrySpendQi(QiCost)) return;
             // ★ 通过后立刻盖章，避免同一帧多枚弹丸连触发
             qi.StampPassiveProc(Item.type, SpecialCooldownTicks);

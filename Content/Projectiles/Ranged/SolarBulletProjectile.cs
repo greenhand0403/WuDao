@@ -32,7 +32,7 @@ namespace WuDao.Content.Projectiles.Ranged
             var owner = Main.player[Projectile.owner];
             Projectile.position.Y -= 5f * owner.gravDir;
             // 提前移动一点，对齐枪口位置
-            Projectile.position += (Projectile.velocity.SafeNormalize(Vector2.UnitX) * 10f);
+            Projectile.position += Projectile.velocity.SafeNormalize(Vector2.UnitX) * 10f;
         }
 
         public override bool OnTileCollide(Vector2 oldVelocity)
