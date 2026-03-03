@@ -320,7 +320,7 @@ Items: {
 	DesignFlaw: {
 		DisplayName: Design Flaw
 		Tooltip: Records which NPC killed you. Grants bonus damage & extra drops against recorded NPCs.
-		TooltipRecorded: Recorded: {0} ×{1} (grants +10% damage and extra drops against it)
+		TooltipRecorded: Recorded: {0}x{1} (grants +10% damage and extra drops against it)
 		TooltipNoRecord: No NPC recorded yet.
 	}
 
@@ -334,7 +334,7 @@ Items: {
 			'''
 		HeroNameInfo: Transform to The Proof of Brave
 		HeroEffect: First attack against enemies above 90% life deals +300% damage
-		Effect: Grants bonus damage ：
+		Effect: Grants bonus damage:
 	}
 
 	Candy: {
@@ -1115,6 +1115,13 @@ NPCs: {
 	}
 
 	FoodGodBoss.DisplayName: Food God Boss
+	BloodySlime.DisplayName: Bloody Slime
+	DecaySlime.DisplayName: Decay Slime
+	FesterMotherDecaySlime.DisplayName: Fester Mother Decay Slime
+	MotherGreenSlime.DisplayName: Mother Green Slime
+	MotherIceSlime.DisplayName: Mother Ice Slime
+	SpikedMotherBloodySlime.DisplayName: Spiked Mother Bloody Slime
+	VirulentSlime.DisplayName: Virulent Slime
 }
 
 Prefixes: {

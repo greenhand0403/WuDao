@@ -325,7 +325,7 @@ Items: {
 			增加你对BOSS的伤害
 			[c/FFD700:经历的胜利]
 			'''
-		TooltipRecorded: 记录：{0} ×{1}（对该 NPC 造成额外10%倍伤害与额外掉落）
+		TooltipRecorded: 记录：{0}x{1}（对该 NPC 造成额外10%倍伤害与额外掉落）
 		TooltipNoRecord: 当前未记录任何 NPC 击杀信息
 	}
 
@@ -339,7 +339,7 @@ Items: {
 			'''
 		HeroNameInfo: 已觉醒为：勇者之证
 		HeroEffect: 对生命值 >90% 的敌怪的首次攻击 +300% 伤害
-		Effect: 装备对以下BOSS伤害 +10% ：
+		Effect: 装备对以下BOSS伤害 +10%:
 	}
 
 	Candy: {
@@ -1120,6 +1120,13 @@ NPCs: {
 	}
 
 	FoodGodBoss.DisplayName: 食神
+	BloodySlime.DisplayName: 血污史莱姆
+	DecaySlime.DisplayName: 腐蚀史莱姆
+	FesterMotherDecaySlime.DisplayName: 腐蚀史莱姆之母
+	MotherGreenSlime.DisplayName: 绿史莱姆之母
+	MotherIceSlime.DisplayName: 冰雪史莱姆之母
+	SpikedMotherBloodySlime.DisplayName: 尖刺血污史莱姆之母
+	VirulentSlime.DisplayName: 剧毒史莱姆
 }
 
 Prefixes: {
