@@ -1048,7 +1048,7 @@ Configs: {
 
 		Whitelist: {
 			Label: 白名单配置
-			Tooltip: 启用白名单的近战刀光
+			Tooltip: 已包含默认近战和光剑集合
 		}
 	}
 
@@ -1069,6 +1069,19 @@ Configs: {
 			Label: 绝学系统
 			Tooltip: 默认启用绝学系统
 		}
+
+		IgnoreSpectreGoggles: {
+			Tooltip: 勾选后，即使佩戴幽灵护目镜，也会强制全体敌怪、射弹和陷阱回声隐身
+			Label: 忽略幽灵护目镜效果
+		}
+
+		InvisibleEnemies: {
+			Tooltip: 勾选使全体敌怪、射弹和陷阱回声隐身
+			Label: 敌怪隐身
+			Whitelist: 允许的物块类型列表
+		}
+
+		InvisibleTileIDs.Tooltip: ""
 	}
 
 	ArmorPrefixMode: {

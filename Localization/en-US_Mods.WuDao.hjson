@@ -268,11 +268,12 @@ Items: {
 
 	RewinderCicadas: {
 		DisplayName: Rewinder Cicadas
-		Tooltip: 
+		Tooltip:
 			'''
 			When mortally wounded, restore health to 3 seconds ago
 			[c/FFD700: Spring and Autumn Cicadas Return of the Youth]
 			'''
+
 		Messages: {
 			RewindTriggered: Rewinder Cicadas returned to the Time River
 			Heal: Healed {0} life
@@ -326,7 +327,7 @@ Items: {
 	FirstBlood: {
 		DisplayName: First Blood
 		DisplayName2: The Proof of Brave
-		Tooltip: 
+		Tooltip:
 			'''
 			Increased damage dealt to undefeated bosses
 			Transform into new accessories after defeating all bosses
@@ -867,8 +868,8 @@ Buffs: {
 	}
 
 	KyubeyPetBuff: {
-		Description: Mods.WuDao.Buffs.KyubeyPetBuff.Description
 		Description: Kyubey follows you
+		DisplayName: Kyubey Pet Buff
 	}
 
 	WineCooldownBuff: {
@@ -1042,7 +1043,7 @@ Configs: {
 
 		Whitelist: {
 			Label: Whitelist
-			Tooltip: Enable whitelisted melee sword light
+			Tooltip: Includes default melee sword and lightsaber collections
 		}
 	}
 
@@ -1063,6 +1064,19 @@ Configs: {
 			Label: Enable Jue Xue System
 			Tooltip: The exclusive skill system is enabled by default
 		}
+
+		IgnoreSpectreGoggles: {
+			Tooltip: When checked, even wearing Ghost Goggles will force all enemies, projectiles, and traps to become invisible
+			Label: Ignore Spectre Goggles
+		}
+
+		InvisibleEnemies: {
+			Tooltip: Tick to make all enemies, projectiles, and trap echoes invisible
+			Label: Invisible Enemies
+			Whitelist: Tile whitelist
+		}
+
+		InvisibleTileIDs.Tooltip: ""
 	}
 
 	ArmorPrefixMode: {

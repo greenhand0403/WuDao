@@ -107,7 +107,7 @@ namespace WuDao.Common
             ItemID.ChlorophyteHelmet, ItemID.ChlorophyteMask, ItemID.ChlorophyteHeadgear,
             ItemID.ChlorophytePlateMail, ItemID.ChlorophyteGreaves,
         };
-        // 刀光染色物品（包含所有刀光颜色）
+        // ?默认启用的刀光染色物品（包含所有刀光颜色）
         public static readonly HashSet<int> BladeTrailSet = new()
         {
             ItemID.CopperBroadsword,
