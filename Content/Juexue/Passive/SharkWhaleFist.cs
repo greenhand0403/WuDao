@@ -6,6 +6,7 @@ using WuDao.Content.Juexue.Base;
 using WuDao.Content.Players;
 using WuDao.Common;
 using WuDao.Content.Projectiles.Melee;
+using WuDao.Content.DamageClasses;
 
 namespace WuDao.Content.Juexue.Passive
 {
@@ -16,7 +17,7 @@ namespace WuDao.Content.Juexue.Passive
         public override int QiCost => 15;
         public const float Chance = 0.25f; // 随机触发几率（与发射射弹同步
         public const int SharkWhaleFistFrameIndex = 11;
-        public const int baseDamge = 51;// 基础伤害
+        public const int baseDamage = 51;// 基础伤害
         // 新增：被动触发冷却（单位tick）复用主动技能冷却
         public override int SpecialCooldownTicks => 60;
         public void TryPassiveTriggerOnShoot(Player player, QiPlayer qi, EntitySource_ItemUse_WithAmmo src,
@@ -35,19 +36,24 @@ namespace WuDao.Content.Juexue.Passive
             Helpers.BossProgressBonus progressBonus = Helpers.BossProgressPower.Get(player);
             // 沿用发射时射弹的初速度
             Vector2 v = vel.SafeNormalize(Vector2.UnitX) * vel.Length() * progressBonus.ProjSpeedMult;
-            int projDamage = (int)(baseDamge * progressBonus.DamageMult);
+            ChiEnergyDamageClass chi = ModContent.GetInstance<ChiEnergyDamageClass>();
+
+            int finalDamage = (int)(player.GetTotalDamage(chi).ApplyTo(baseDamage) * progressBonus.DamageMult);
+
             // 25%转化为鲸鱼射弹
             if (Main.rand.NextBool(4))
             {
                 projType = ModContent.ProjectileType<OrcaProjectile>();
-                projDamage *= 3;
+                finalDamage *= 3;
             }
             Vector2 spawnPos = pos + v.SafeNormalize(Vector2.UnitX) * 32f; // 固定往前前推 32 像素
-            int proj = Projectile.NewProjectile(src, spawnPos, v, projType, projDamage, knockback, player.whoAmI);
+            int proj = Projectile.NewProjectile(src, spawnPos, v, projType, finalDamage, knockback, player.whoAmI);
             if (proj < 0) return;
             Main.projectile[proj].friendly = true;
             Main.projectile[proj].hostile = false;
-
+            Main.projectile[proj].DamageType = chi;
+            Main.projectile[proj].originalDamage = finalDamage;
+            
             // —— 启动“鲨鱼虚影” —— //
             if (!Main.dedServ)
             {

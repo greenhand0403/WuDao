@@ -57,7 +57,7 @@ namespace WuDao.Content.Enemy
         // 5%掉落猩红立方
         public override void ModifyNPCLoot(NPCLoot npcLoot)
         {
-            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<CrimPowerCube>(), 5));
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<CrimPowerCube>(), 100));
         }
     }
 }

@@ -20,9 +20,6 @@ namespace WuDao.Content.Global
 
         public override void RightClick(Item item, Player player)
         {
-            // 未启用绝学系统时，不处理绝学书籍的右键自动装备
-            if (!ModContent.GetInstance<WudaoConfig>().EnableJueXueSystem)
-                return;
 
             var qi = player.GetModPlayer<QiPlayer>();
             SoundEngine.PlaySound(SoundID.Grab, player.Center);
@@ -30,23 +27,32 @@ namespace WuDao.Content.Global
             // 找到“这件被右键的物品”所在的背包槽位索引
             int idx = -1;
             for (int i = 0; i < player.inventory.Length; i++)
-                if (object.ReferenceEquals(player.inventory[i], item)) { idx = i; break; }
+            {
+                if (ReferenceEquals(player.inventory[i], item))
+                {
+                    idx = i; break;
+                }
+            }
 
+            // 未启用绝学系统时，不处理绝学书籍的右键自动装备
+            if (!ModContent.GetInstance<WudaoConfig>().EnableJueXueSystem)
+            {
+                if (player.whoAmI == Main.myPlayer)
+                    Main.NewText(Mod.GetLocalization("Mods.WuDao.Messages.JueXue.Config"), Color.OrangeRed);
+
+                HandleFailedEquip(player, item, idx);
+                return;
+            }
             // 仅当“当前槽位是主动绝学且仍在冷却”时，禁止更换
             if (!qi.JuexueSlot.IsAir
                 && qi.JuexueSlot.ModItem is JuexueItem cur
                 && cur.IsActive
                 && !qi.CanUseActiveNow(qi.JuexueSlot.type, cur.SpecialCooldownTicks))
             {
-                // 注意：这里千万别动 item / Main.mouseItem / 背包数据
-                SoundEngine.PlaySound(SoundID.MenuClose, player.Center);
                 if (player.whoAmI == Main.myPlayer)
-                    Main.NewText(Mod.GetLocalization("Mods.WuDao.Messages.JueXue.CoolDown"), Color.OrangeRed);
-                // 默认当作“被消费了一次”，无法替换新绝学时，需要把当前物品克隆一份放回原位
-                player.inventory[idx] = item.Clone();
-                // 可选：防止这次右键继续被处理
-                player.mouseInterface = true;
-                Main.mouseRightRelease = false;
+                    Main.NewText(Mod.GetLocalization("Mods.WuDao.Messages.JueXue.Cooldown"), Color.OrangeRed);
+
+                HandleFailedEquip(player, item, idx);
                 return;
             }
 
@@ -91,6 +97,17 @@ namespace WuDao.Content.Global
             player.mouseInterface = true;
             Main.mouseRightRelease = false;
             Main.stackSplit = 9999; // 防止右键连击分堆干扰（稳一点）
+        }
+        // 处理装备失败的情况
+        private void HandleFailedEquip(Player player, Item item, int inventoryIndex)
+        {
+            // 注意：这里千万别动 item / Main.mouseItem / 背包数据
+            SoundEngine.PlaySound(SoundID.MenuClose, player.Center);
+            // 默认当作“被消费了一次”，无法替换新绝学时，需要把当前物品克隆一份放回原位
+            player.inventory[inventoryIndex] = item.Clone();
+            // 防止这次右键继续被处理
+            player.mouseInterface = true;
+            Main.mouseRightRelease = false;
         }
     }
 }

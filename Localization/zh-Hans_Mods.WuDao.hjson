@@ -683,6 +683,21 @@ Items: {
 		Tooltip: 增加4%减伤2%移速，在腐化环境+4%伤害
 		DisplayName: 腐化立方
 	}
+
+	NLNSLegs: {
+		Tooltip: ""
+		DisplayName: NLNS 腿部
+	}
+
+	NLNSHelm: {
+		Tooltip: ""
+		DisplayName: NLNS 头盔
+	}
+
+	NLNSBody: {
+		Tooltip: ""
+		DisplayName: NLNS 身体
+	}
 }
 
 Projectiles: {
@@ -1149,9 +1164,10 @@ Prefixes: {
 
 Messages: {
 	JueXue: {
-		CoolDown: 正在冷却中，无法使用绝学
+		Cooldown: 绝学正在冷却中
 		NotEnoughQi: 无法使用绝学，气力不足
 		Immune: 闪避
+		Config: 请在配置菜单中启用绝学系统
 	}
 
 	BundleClaimed: 领取完成：进入背包 {0} 种；掉落 {1} 种（共 {2} 件/叠）

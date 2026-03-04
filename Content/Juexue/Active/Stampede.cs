@@ -6,6 +6,7 @@ using WuDao.Content.Players;
 using WuDao.Content.Juexue.Base;
 using WuDao.Content.Projectiles.Melee;
 using System;
+using WuDao.Content.DamageClasses;
 
 namespace WuDao.Content.Juexue.Active
 {
@@ -16,7 +17,7 @@ namespace WuDao.Content.Juexue.Active
         public override int QiCost => 90;
         public override int SpecialCooldownTicks => 60 * 60;
         public const int StampedeFrameIndex = 7;
-        public const int baseDamge = 460;// 基础伤害
+        public const int baseDamage = 460;// 基础伤害
         public const int baseVelocity = 20;// 基础速度
         protected override bool OnActivate(Player player, QiPlayer qi)
         {
@@ -33,7 +34,10 @@ namespace WuDao.Content.Juexue.Active
             int rowCount = Main.rand.Next(4, 6);
             // 生成骏马射弹的总数
             int count = Main.rand.Next(4, 6) * rowCount;
-            int projDamage = (int)(baseDamge * progressBonus.DamageMult);
+
+            SupremeDamageClass sup = ModContent.GetInstance<SupremeDamageClass>();
+            int finalDamage = (int)(player.GetTotalDamage(sup).ApplyTo(baseDamage) * progressBonus.DamageMult);
+
             if (player.whoAmI == Main.myPlayer)
             {
                 float spawnY;
@@ -62,11 +66,14 @@ namespace WuDao.Content.Juexue.Active
                         spawn + new Vector2(0, 82 + 60),
                         v,
                         ModContent.ProjectileType<HorseItemVariantProjectile>(),
-                        projDamage,
+                        finalDamage,
                         3f,
                         player.whoAmI,
                         i
                     );
+
+                    Main.projectile[idx].DamageType = sup;
+                    Main.projectile[idx].originalDamage = finalDamage;
                 }
             }
             if (!Main.dedServ)

@@ -205,7 +205,7 @@ namespace WuDao.Content.Enemy
         // 10%掉落腐化立方
         public override void ModifyNPCLoot(NPCLoot npcLoot)
         {
-            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<CorruptPowerCube>(), 10));
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<CorruptPowerCube>(), 50));
         }
     }
 }

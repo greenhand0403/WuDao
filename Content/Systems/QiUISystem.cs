@@ -8,6 +8,7 @@ using WuDao.Content.Players;
 using WuDao.Content.UI;
 using WuDao.Content.Juexue.Base;
 using Terraria.Localization;
+using WuDao.Content.Config;
 
 namespace WuDao.Content.Systems
 {
@@ -16,6 +17,9 @@ namespace WuDao.Content.Systems
     {
         public override void ModifyInterfaceLayers(System.Collections.Generic.List<GameInterfaceLayer> layers)
         {
+            // 如果禁用了绝学就不会显示气力条
+            if (!ModContent.GetInstance<WudaoConfig>().EnableJueXueSystem) return;
+            
             int idx = layers.FindIndex(l => l.Name.Equals("Vanilla: Interface Logic 1"));
             if (idx != -1)
             {
@@ -100,9 +104,9 @@ namespace WuDao.Content.Systems
             {
                 var mouse = Main.mouseItem;
                 bool mouseIsJuexue = !mouse.IsAir && mouse.ModItem is JuexueItem;
-
+                
                 // —— 左键交换：你的原逻辑不变 ——
-                if (Main.mouseLeft && Main.mouseLeftRelease)
+                if (Main.mouseLeft && Main.mouseLeftRelease && qi.Ghost.TimeLeft <= 0)
                 {
                     if (mouse.IsAir)
                     {
@@ -121,7 +125,7 @@ namespace WuDao.Content.Systems
                 }
                 // —— 右键：从绝学栏卸下到背包空格 ——
                 // 放在左键交换处理之后
-                if (Main.mouseRight && Main.mouseRightRelease)
+                if (Main.mouseRight && Main.mouseRightRelease && qi.Ghost.TimeLeft <= 0)
                 {
                     if (!qi.JuexueSlot.IsAir)
                     {

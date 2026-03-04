@@ -5,6 +5,8 @@ using Terraria.ID;
 using WuDao.Content.Players;
 using WuDao.Content.Juexue.Base;
 using System.Collections.Generic;
+using WuDao.Content.DamageClasses;
+using Terraria.ModLoader;
 
 namespace WuDao.Content.Juexue.Passive
 {
@@ -16,6 +18,7 @@ namespace WuDao.Content.Juexue.Passive
         public const int Cost = 15;
         public const float Chance = 0.30f; // 被动触发率
         public const int WhiteBoneClawFrameIndex = 12;
+        public const int baseDamage = 201;
         // 九阴白骨爪（被动）：复刻原版“暗影爪(964)”生成逻辑
         public void TryPassiveTriggerOnShoot(Player player, QiPlayer qi, EntitySource_ItemUse_WithAmmo src,
             Vector2 pos, Vector2 vel, int type, int dmg, float kb)
@@ -49,22 +52,26 @@ namespace WuDao.Content.Juexue.Passive
                 out float ai0,
                 out float ai1
             );
-
+            
+            SupremeDamageClass sup = ModContent.GetInstance<SupremeDamageClass>();
+            int finalDamage = (int)player.GetTotalDamage(sup).ApplyTo(baseDamage);
             // —— 生成原版 964 号弹幕（友方暗影爪） —— //
             int projType = ProjectileID.InsanityShadowFriendly;
-            int projDamage = 201;//(int)(dmg * 0.9f) + 70 * Helpers.BossProgressPower.GetUniqueBossCount();
             float knockBack = 0f;   // 原版就是 0
-            Projectile.NewProjectile(
+            int proj = Projectile.NewProjectile(
                 src,
                 spawnPos,
                 spawnVel,
                 projType,
-                projDamage,
+                finalDamage,
                 knockBack,
                 player.whoAmI,
                 ai0,
                 ai1
             );
+            Projectile p = Main.projectile[proj];
+            p.DamageType = sup;
+            p.originalDamage = finalDamage; // 建议也同步，避免某些逻辑用 originalDamage
 
             // —— 启动“白骨爪虚影” —— //
             if (!Main.dedServ)

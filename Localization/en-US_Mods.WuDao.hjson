@@ -678,6 +678,21 @@ Items: {
 		Tooltip: Increases 4% endurance, 2% movespeed, and 4% damage in Corrupt environment
 		DisplayName: Corrupt Power Cube
 	}
+
+	NLNSLegs: {
+		Tooltip: ""
+		DisplayName: NLNS Legs
+	}
+
+	NLNSHelm: {
+		Tooltip: ""
+		DisplayName: NLNS Helm
+	}
+
+	NLNSBody: {
+		Tooltip: ""
+		DisplayName: NLNS Body
+	}
 }
 
 Projectiles: {
@@ -1144,9 +1159,10 @@ Prefixes: {
 
 Messages: {
 	JueXue: {
-		CoolDown: Can't use. Jue Xue is cooling down
+		Cooldown: Jue Xue is cooling down
 		NotEnoughQi: Can't use. Not enough qi
 		Immune: Dodge!
+		Config: Please enable the JueXue system in the configuration menu
 	}
 
 	BundleClaimed: Claimed: added {0} kinds to inventory; dropped {1} kinds ({2} total stacks/items)

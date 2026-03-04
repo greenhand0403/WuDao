@@ -15,11 +15,12 @@ namespace WuDao.Content.Juexue.Active
         public override int QiCost => 90;
         public override int SpecialCooldownTicks => 60 * 120; // 120s
         public const int BladeWaltzFrameIndex = 10;
+        public const int baseDamage = 115;//总共8*115=920
         public override bool TryActivate(Player player, QiPlayer qi)
         {
             if (!ModContent.GetInstance<WudaoConfig>().EnableJueXueSystem)
                 return false;
-                
+
             // 进行中：静默忽略
             if (qi.BladeWaltzTicks > 0)
                 return false;

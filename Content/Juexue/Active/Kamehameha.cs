@@ -7,6 +7,7 @@ using WuDao.Content.Juexue.Base;
 using WuDao.Content.Players;
 using WuDao.Common;
 using WuDao.Content.Projectiles.Melee;
+using WuDao.Content.DamageClasses;
 
 namespace WuDao.Content.Juexue.Active
 {
@@ -16,6 +17,7 @@ namespace WuDao.Content.Juexue.Active
         public override int QiCost => 1; // 蓄力期间每帧-1气
         public override int SpecialCooldownTicks => 60 * 120; // 2 分钟
         public const int KamehamehaFrameIndex = 4;
+        public const int baseDamage = 60;
         // 龟派气功不在 TryActivate 中直接释放，由 QiPlayer.ProcessTriggers 处理按住/松开
         protected override bool OnActivate(Player player, QiPlayer qi)
         {
@@ -31,16 +33,18 @@ namespace WuDao.Content.Juexue.Active
             float speed = 14f;
 
             int projType = ModContent.ProjectileType<KamehamehaProj>();
-            int baseDmg = 60;
+            
             float mult = 0.10f * spentQi + Helpers.BossProgressPower.GetUniqueBossCount();
-            int damage = (int)(baseDmg * mult);
+            
+            SupremeDamageClass sup = ModContent.GetInstance<SupremeDamageClass>();
+            int finalDamage = (int)(player.GetTotalDamage(sup).ApplyTo(baseDamage)* mult);
 
             int pid = Projectile.NewProjectile(
                 player.GetSource_ItemUse(Item),
                 player.Center,
                 dir * speed,
                 projType,
-                damage,
+                finalDamage,
                 3f,
                 player.whoAmI,
                 spentQi,
@@ -48,6 +52,8 @@ namespace WuDao.Content.Juexue.Active
             );
             Main.projectile[pid].friendly = true;
             Main.projectile[pid].hostile = false;
+            Main.projectile[pid].DamageType = sup;
+            Main.projectile[pid].originalDamage = finalDamage;
 
             SoundEngine.PlaySound(SoundID.Item33, player.Center);
 

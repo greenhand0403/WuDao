@@ -13,6 +13,8 @@ namespace WuDao.Content.Juexue.Active
         public override int QiCost => 45;
         public override int SpecialCooldownTicks => 30 * 60; // 60s
         public const int FeixianFrameIndex = 9;
+        // 伤害：240
+        public const int Damage = 240;
         protected override bool OnActivate(Player player, QiPlayer qi)
         {
             // 1) 清多数减益

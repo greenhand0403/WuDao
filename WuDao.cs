@@ -46,14 +46,14 @@ namespace WuDao
 						}
 
 						// 服务端把这个包转发给所有其他客户端（避免只同步给发起者）
-						if (Main.netMode == NetmodeID.Server)
-						{
-							ModPacket echo = GetPacket();
-							echo.Write((byte)MessageType.SyncLifePenalty);
-							echo.Write(plr);
-							echo.Write(penalty);
-							echo.Send(toClient: -1, ignoreClient: whoAmI);
-						}
+						// if (Main.netMode == NetmodeID.Server)
+						// {
+						// 	ModPacket echo = GetPacket();
+						// 	echo.Write((byte)MessageType.SyncLifePenalty);
+						// 	echo.Write(plr);
+						// 	echo.Write(penalty);
+						// 	echo.Send(toClient: -1, ignoreClient: whoAmI);
+						// }
 						break;
 					}
 			}

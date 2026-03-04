@@ -2,6 +2,7 @@ using System;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using WuDao.Content.Buffs;
@@ -93,14 +94,14 @@ namespace WuDao.Content.Players
             Player.AddBuff(ModContent.BuffType<RewinderCicadasBuff>(), CooldownTicks);
 
             // 播个简洁特效（非必须）
-            Terraria.Audio.SoundEngine.PlaySound(Terraria.ID.SoundID.Item29, Player.Center); // 魔法“倒带”音效
+            Terraria.Audio.SoundEngine.PlaySound(SoundID.Item29, Player.Center); // 魔法“倒带”音效
             CombatText.NewText(Player.Hitbox, Color.Green, Language.GetTextValue(
                 "Mods.WuDao.Items.RewinderCicadas.Messages.Heal",
                 healedAmount
             ));
             for (int i = 0; i < 25; i++)
             {
-                int d = Dust.NewDust(Player.position, Player.width, Player.height, Terraria.ID.DustID.MagicMirror);
+                int d = Dust.NewDust(Player.position, Player.width, Player.height, DustID.MagicMirror);
                 Main.dust[d].velocity *= 1.5f;
                 Main.dust[d].noGravity = true;
             }
@@ -129,14 +130,14 @@ namespace WuDao.Content.Players
                     equipped = false;
 
                     // 一点点反馈（可选）
-                    Terraria.Audio.SoundEngine.PlaySound(Terraria.ID.SoundID.Grass, Player.Center);
+                    Terraria.Audio.SoundEngine.PlaySound(SoundID.Grass, Player.Center);
                     CombatText.NewText(Player.Hitbox, Color.LightGreen, Language.GetTextValue("Mods.WuDao.Items.RewinderCicadas.Messages.RewindTriggered"));
 
                     // 同步给其他玩家（多人联机时建议）
-                    if (Main.netMode == Terraria.ID.NetmodeID.MultiplayerClient)
+                    if (Main.netMode == NetmodeID.MultiplayerClient)
                     {
                         // 发送本玩家的饰品栏变动
-                        NetMessage.SendData(Terraria.ID.MessageID.SyncEquipment, number: Player.whoAmI, number2: i);
+                        NetMessage.SendData(MessageID.SyncEquipment, number: Player.whoAmI, number2: i);
                     }
                     return; // 只消耗一个
                 }

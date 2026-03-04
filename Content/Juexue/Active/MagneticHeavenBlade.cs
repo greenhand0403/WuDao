@@ -7,6 +7,7 @@ using WuDao.Content.Juexue.Base;
 using WuDao.Content.Players;
 using WuDao.Common;
 using WuDao.Content.Projectiles.Melee;
+using WuDao.Content.DamageClasses;
 
 namespace WuDao.Content.Juexue.Active
 {
@@ -16,7 +17,7 @@ namespace WuDao.Content.Juexue.Active
         public override int QiCost => 90;
         public override int SpecialCooldownTicks => 60 * 60; // 1 分钟冷却
         public const int MagneticHeavenBladeFrameIndex = 13;
-        public const int baseDamge = 410;// 基础伤害
+        public const int baseDamage = 410;// 基础伤害
         public const int baseVelocity = 20;// 基础速度
         protected override bool OnActivate(Player player, QiPlayer qi)
         {
@@ -44,15 +45,20 @@ namespace WuDao.Content.Juexue.Active
             Helpers.BossProgressBonus progressBonus = Helpers.BossProgressPower.Get(player);
             // 初速度朝向中心
             Vector2 v = (mouse - spawn).SafeNormalize(Vector2.UnitY) * baseVelocity * progressBonus.ProjSpeedMult;
-            int projDamage = (int)(baseDamge * progressBonus.DamageMult);
-            int p = Projectile.NewProjectile(src, spawn, v, ModContent.ProjectileType<MagneticHeavenBladeProj>(), projDamage, 3f, player.whoAmI, mouse.X, mouse.Y);
+
+            SupremeDamageClass sup = ModContent.GetInstance<SupremeDamageClass>();
+            int finalDamage = (int)(player.GetTotalDamage(sup).ApplyTo(baseDamage) * progressBonus.DamageMult);
+
+            int p = Projectile.NewProjectile(src, spawn, v, ModContent.ProjectileType<MagneticHeavenBladeProj>(), finalDamage, 3f, player.whoAmI, mouse.X, mouse.Y);
 
             if (p >= 0)
             {
                 var proj = Main.projectile[p];
                 proj.netUpdate = true;
+                proj.DamageType = sup;
+                proj.originalDamage = finalDamage; // 建议也同步，避免某些逻辑用 originalDamage
             }
-
+            
             if (!Main.dedServ)
             {
                 // 冷却图标

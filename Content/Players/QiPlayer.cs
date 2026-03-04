@@ -16,6 +16,7 @@ using WuDao.Content.Projectiles.Melee;
 using WuDao.Common;
 using Terraria.Localization;
 using WuDao.Content.Config;
+using WuDao.Content.DamageClasses;
 
 namespace WuDao.Content.Players
 {
@@ -108,7 +109,8 @@ namespace WuDao.Content.Players
         public int ShiftTrailCount => trailCount;
         public Vector2 GetShiftTrailPos(int i) => trail[i];
         // —— 被动触发冷却（按物品type区分） —— //
-
+        private ChiEnergyDamageClass chi;
+        private SupremeDamageClass sup;
         public bool CanProcPassiveNow(int key)
         {
             uint now = Main.GameUpdateCount;
@@ -141,6 +143,9 @@ namespace WuDao.Content.Players
                 QiRegenMove = 120;
                 GlobalActiveCooldownTicks = 10;
             }
+
+            chi = ModContent.GetInstance<ChiEnergyDamageClass>();
+            sup = ModContent.GetInstance<SupremeDamageClass>();
         }
         public override void Initialize()
         {
@@ -303,7 +308,7 @@ namespace WuDao.Content.Players
                 }
             }
 
-            // —— 天外飞仙：逐帧推进 & 路径伤害 —— //
+            // —— 释放天外飞仙：逐帧推进 & 路径伤害 —— //
             if (FeixianTicks > 0)
             {
                 // 基础无敌 & 隐身
@@ -340,22 +345,28 @@ namespace WuDao.Content.Players
                     Player.noKnockback = true;
 
                     Player.velocity = dir * speed;
-                    int damage = 240;// * Helpers.BossProgressPower.GetUniqueBossCount();
+                    int baseDamage = Feixian.Damage;
 
                     // 每 2 帧在当前位置生成极短命友方投射物（路径伤害；放行已在 TimeStopSystem 里处理）
                     if ((FeixianTicks % 2) == 0)
                     {
-                        // int projType = ModContent.ProjectileType<FirstFractalCloneProj>();
+                        int finalDamage = (int)Player.GetTotalDamage(chi).ApplyTo(baseDamage);
+
                         int proj = Projectile.NewProjectile(
                             Player.GetSource_Misc("FeixianTrail"),
                             Player.Center,
                             Player.velocity,
                             ProjectileID.FirstFractal,
-                            damage,
+                            finalDamage,
                             4f,
-                            Player.whoAmI);
-                        Main.projectile[proj].timeLeft = 20;
-                        Main.projectile[proj].tileCollide = false;
+                            Player.whoAmI
+                        );
+
+                        Projectile p = Main.projectile[proj];
+                        p.DamageType = chi;
+                        p.originalDamage = finalDamage; // 建议也同步，避免某些逻辑用 originalDamage
+                        p.timeLeft = 20;
+                        p.tileCollide = false;
                     }
                     // ★ 在飞行路径四周生成“花瓣环”：每 6 帧一圈，6~8 片
                     if ((FeixianTicks % 6) == 0)
@@ -369,6 +380,8 @@ namespace WuDao.Content.Players
                         // 法线（与 dir 垂直），用于做环
                         Vector2 normal = new Vector2(-dir.Y, dir.X);
                         float baseAngle = Main.rand.NextFloat(0f, MathHelper.TwoPi);
+
+                        int finalDamage = (int)Player.GetTotalDamage(chi).ApplyTo(baseDamage) / petals;
 
                         for (int i = 0; i < petals; i++)
                         {
@@ -386,10 +399,11 @@ namespace WuDao.Content.Players
                                 spawnPos,
                                 vel,
                                 ProjectileID.FlowerPetal,        // 原版花瓣
-                                damage,
+                                finalDamage,
                                 3f,
                                 Player.whoAmI
                             );
+
                             if (p != null)
                             {
                                 p.friendly = true;
@@ -399,8 +413,8 @@ namespace WuDao.Content.Players
                                 p.penetrate = 1;                 // 每片最多命中 1 次（按需调整）
                                 p.usesLocalNPCImmunity = true;   // 本地免疫，避免一群花瓣同帧狂打
                                 p.localNPCHitCooldown = 12;
-                                // 可选：近战系数
-                                p.DamageType = DamageClass.Melee; // 或 Generic
+                                p.DamageType = chi;
+                                p.originalDamage = finalDamage; // 建议也同步，避免某些逻辑用 originalDamage
                             }
                         }
                     }
@@ -459,10 +473,12 @@ namespace WuDao.Content.Players
                     // 方向与速度
                     var dir = (targetPos - spawn).SafeNormalize(Vector2.UnitX);
                     float speed = 14f; // 速度越高，视觉越“快斩”
-                    int damage = 115;//80 * (1 + Helpers.BossProgressPower.GetUniqueBossCount());
+
+                    int finalDamage = (int)Player.GetTotalDamage(chi).ApplyTo(BladeWaltz.baseDamage);
+
                     float knockback = 3f;
 
-                    if (Main.netMode != NetmodeID.MultiplayerClient) // 只在服务端
+                    if (Main.netMode != NetmodeID.MultiplayerClient) // TODO: 只在服务端? 单机游玩时，本机属于服务端吗？
                     {
                         // int projType = ModContent.ProjectileType<FirstFractalCloneProj>();
 
@@ -471,7 +487,7 @@ namespace WuDao.Content.Players
                             spawn,
                             dir * speed,
                             ProjectileID.FirstFractal,
-                            damage,
+                            finalDamage,
                             knockback,
                             Player.whoAmI
                         );
@@ -483,8 +499,8 @@ namespace WuDao.Content.Players
                             p.usesLocalNPCImmunity = true;
                             p.localNPCHitCooldown = 10;
                             p.netUpdate = true;
-                            // p.width = 56;
-                            // p.height = 56;
+                            p.DamageType = chi;
+                            p.originalDamage = finalDamage; // 建议也同步，避免某些逻辑用 originalDamage
                         }
                     }
                 }

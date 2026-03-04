@@ -2,22 +2,33 @@ using Terraria.ModLoader;
 
 namespace WuDao.Content.DamageClasses
 {
-    // TODO: 特殊伤害类型暂时没有使用
     public class ChiEnergyDamageClass : DamageClass
     {
         public override StatInheritanceData GetModifierInheritance(DamageClass dc)
         {
             var data = StatInheritanceData.None;
 
-            // 真气 = 近战(50%) + 远程(50%)
-            if (dc == DamageClass.Melee || dc == DamageClass.Ranged)
+            // 真气 = 近战(80%) + 远程(80%)
+            if (dc == DamageClass.Melee)
             {
-                data.damageInheritance = 0.5f;        // 伤害%
-                data.critChanceInheritance = 0.5f;    // 暴击%（不想继承就删掉）
-                data.knockbackInheritance = 0.5f;     // 击退（可选）
-                data.attackSpeedInheritance = 0.5f;   // 攻速（可选）
-                data.armorPenInheritance = 0.5f; // 护甲穿透（可选）
-                                                 // 还有 flatDamageInheritance / scalingArmorPenetration 等字段，可按需使用
+                return new StatInheritanceData(
+                    damageInheritance: 0.8f,
+                    critChanceInheritance: 0.8f,
+                    attackSpeedInheritance: 0.8f,
+                    armorPenInheritance: 0.8f,
+                    knockbackInheritance: 0.8f
+                );
+            }
+
+            if (dc == DamageClass.Ranged)
+            {
+                return new StatInheritanceData(
+                    damageInheritance: 0.8f,
+                    critChanceInheritance: 0.8f,
+                    attackSpeedInheritance: 0.8f,
+                    armorPenInheritance: 0.8f,
+                    knockbackInheritance: 0.8f
+                );
             }
             return data;
         }

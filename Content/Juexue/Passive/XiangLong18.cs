@@ -6,6 +6,7 @@ using WuDao.Content.Players;
 using WuDao.Content.Juexue.Base;
 using WuDao.Content.Projectiles.Melee;
 using WuDao.Common;
+using WuDao.Content.DamageClasses;
 
 namespace WuDao.Content.Juexue.Passive
 {
@@ -17,7 +18,7 @@ namespace WuDao.Content.Juexue.Passive
         public override int QiCost => 30;
         public const float Chance = 0.25f; // 可按需调整
         public const int XiangLong18FrameIndex = 8;
-        public const int baseDamge = 127;// 基础伤害
+        public const int baseDamage = 560;
         // 新增：被动触发冷却（单位tick）复用主动技能冷却
         public override int SpecialCooldownTicks => 60;
         public void TryPassiveTriggerOnShoot(Player player, QiPlayer qi, EntitySource_ItemUse_WithAmmo src,
@@ -38,18 +39,23 @@ namespace WuDao.Content.Juexue.Passive
             // 计算境界伤害和射弹速度加成
             Helpers.BossProgressBonus progressBonus = Helpers.BossProgressPower.Get(player);
             Vector2 dir = (Main.MouseWorld - player.Center).SafeNormalize(Vector2.UnitX) * vel.Length() * progressBonus.ProjSpeedMult;
-            int projDamage = (int)(baseDamge * mult * progressBonus.DamageMult);
+
+            ChiEnergyDamageClass chi = ModContent.GetInstance<ChiEnergyDamageClass>();
+            int finalDamage = (int)(player.GetTotalDamage(chi).ApplyTo(baseDamage)* mult * progressBonus.DamageMult);
+
             // 略微下移一点对齐发射口
             int proj = Projectile.NewProjectile(
                 src,
                 player.Center + Vector2.UnitY * 8,
                 dir,
                 ModContent.ProjectileType<PhantomDragonProjectile>(),
-                projDamage,
+                finalDamage,
                 kb + 2f,
                 player.whoAmI
             );
-
+            Main.projectile[proj].DamageType = chi;
+            Main.projectile[proj].originalDamage = finalDamage;
+            
             if (!Main.dedServ)
             {
                 // 触发 2 秒虚影，稍微放大 1.1 倍，向上偏移 16 像素（站位更好看）

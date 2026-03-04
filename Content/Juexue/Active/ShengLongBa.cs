@@ -5,6 +5,7 @@ using WuDao.Common;
 using WuDao.Content.Players;
 using WuDao.Content.Juexue.Base;
 using WuDao.Content.Projectiles;
+using WuDao.Content.DamageClasses;
 
 namespace WuDao.Content.Juexue.Active
 {
@@ -15,14 +16,17 @@ namespace WuDao.Content.Juexue.Active
         public override int QiCost => 60;
         public override int SpecialCooldownTicks => 60 * 45; // 45s
         public const int ShengLongBaFrameIndex = 0;
-        public const int baseDamge = 255;// 基础伤害
+        public const int baseDamage = 255;// 基础伤害
         public const int baseVelocity = 14;// 基础速度
         protected override bool OnActivate(Player player, QiPlayer qi)
         {
             Vector2 at = Main.MouseWorld + new Vector2(0, 200f);
             // 计算境界伤害和射弹速度加成
             Helpers.BossProgressBonus progressBonus = Helpers.BossProgressPower.Get(player);
-            int projDamage = (int)(baseDamge * progressBonus.DamageMult);
+            
+            ChiEnergyDamageClass chi = ModContent.GetInstance<ChiEnergyDamageClass>();
+            int finalDamage = (int)(player.GetTotalDamage(chi).ApplyTo(baseDamage)* progressBonus.DamageMult);
+            
             Vector2 v = Vector2.UnitY * -baseVelocity;
             for (int i = 0; i < 1; i++)
             {
@@ -31,10 +35,12 @@ namespace WuDao.Content.Juexue.Active
                     at,
                     v,
                     ModContent.ProjectileType<WyvernCompositeProjectile>(),
-                    projDamage,
+                    finalDamage,
                     3f,
                     player.whoAmI);
                 var p = Main.projectile[proj];
+                p.DamageType = chi;
+                p.originalDamage = finalDamage;
             }
             if (!Main.dedServ)
             {
