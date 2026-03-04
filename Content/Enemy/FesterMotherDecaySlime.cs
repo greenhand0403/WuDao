@@ -1,7 +1,9 @@
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
+using WuDao.Content.Items.Accessories;
 
 namespace WuDao.Content.Enemy
 {
@@ -14,8 +16,9 @@ namespace WuDao.Content.Enemy
 
         public override void SetDefaults()
         {
-            NPC.width = 74;
-            NPC.height = 52;
+            NPC.width = 174;
+            NPC.height = 145;
+            NPC.scale = 0.5f;
 
             NPC.damage = 180;
             NPC.defense = 26;
@@ -122,14 +125,34 @@ namespace WuDao.Content.Enemy
         }
         public override void FindFrame(int frameHeight)
         {
-            // 不管在地面/空中都循环播放（你要求“不断循环即可”）
-            NPC.frameCounter++;
-            if (NPC.frameCounter >= 6) // 数值越小动画越快
+            if (NPC.velocity.Y == 0)
             {
-                NPC.frameCounter = 0;
-                NPC.frame.Y += frameHeight;
-                if (NPC.frame.Y >= frameHeight * 4)
+                // 在地面，播放待机两帧
+                NPC.frameCounter++;
+                if (NPC.frameCounter >= 20)
+                {
+                    NPC.frame.Y += frameHeight;
+                    NPC.frameCounter = 0;
+                }
+
+                if (NPC.frame.Y >= frameHeight * 2)
                     NPC.frame.Y = 0;
+            }
+            else
+            {
+                // 空中阶段
+                if (NPC.velocity.Y < 0)
+                {
+                    NPC.frame.Y = frameHeight * 2; // 起跳
+                }
+                else if (NPC.velocity.Y < 6f)
+                {
+                    NPC.frame.Y = frameHeight * 3; // 空中
+                }
+                else if (NPC.velocity.Y >= 6f)
+                {
+                    NPC.frame.Y = frameHeight * 4; // 下落
+                }
             }
         }
         public override void OnKill()
@@ -178,6 +201,11 @@ namespace WuDao.Content.Enemy
                 return 0.25f;
             }
             return 0f;
+        }
+        // 10%掉落腐化立方
+        public override void ModifyNPCLoot(NPCLoot npcLoot)
+        {
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<CorruptPowerCube>(), 10));
         }
     }
 }

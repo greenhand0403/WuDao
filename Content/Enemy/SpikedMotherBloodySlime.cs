@@ -1,8 +1,10 @@
 using System;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
+using WuDao.Content.Items.Accessories;
 
 namespace WuDao.Content.Enemy
 {
@@ -16,7 +18,7 @@ namespace WuDao.Content.Enemy
         public override void SetDefaults()
         {
             NPC.width = 174;
-            NPC.height = 144;
+            NPC.height = 145;
             NPC.scale = 0.5f;
 
             NPC.damage = 180;
@@ -212,6 +214,11 @@ namespace WuDao.Content.Enemy
                 return 0.25f;
             }
             return 0f;
+        }
+        // 10%掉落猩红立方
+        public override void ModifyNPCLoot(NPCLoot npcLoot)
+        {
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<CrimPowerCube>(), 10));
         }
     }
 }

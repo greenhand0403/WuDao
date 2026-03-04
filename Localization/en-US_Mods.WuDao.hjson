@@ -668,6 +668,16 @@ Items: {
 		Tooltip: Summons Kyubey
 		DisplayName: Kyubey Soul Stone
 	}
+
+	CrimPowerCube: {
+		Tooltip: Increases 4% endurance, 2% movespeed, and 4% damage in Crim environment
+		DisplayName: Crim Power Cube
+	}
+
+	CorruptPowerCube: {
+		Tooltip: Increases 4% endurance, 2% movespeed, and 4% damage in Corrupt environment
+		DisplayName: Corrupt Power Cube
+	}
 }
 
 Projectiles: {

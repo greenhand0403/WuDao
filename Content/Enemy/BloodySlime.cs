@@ -1,6 +1,8 @@
 using Terraria;
+using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
+using WuDao.Content.Items.Accessories;
 
 namespace WuDao.Content.Enemy
 {
@@ -51,6 +53,11 @@ namespace WuDao.Content.Enemy
                 return 0.25f;
             }
             return 0f;
+        }
+        // 5%掉落猩红立方
+        public override void ModifyNPCLoot(NPCLoot npcLoot)
+        {
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<CrimPowerCube>(), 5));
         }
     }
 }

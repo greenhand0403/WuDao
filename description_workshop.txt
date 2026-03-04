@@ -1,76 +1,39 @@
-[h1]Wu Dao Legends: A Wuxia Fantasy Mini Mod for Terraria[/h1]
-
-[i]A fantasy wuxia experience inspired by Chinese martial arts mythology.[/i]
-
-[hr]
-[url=https://github.com/greenhand0403/WuDao]Source Code Repository[/url]
-
-[b]Overview[/b]
-This mod brings a unique wuxia-inspired fantasy experience to Terraria.  
-A martial arts master from another world shattered the void and descended upon Terraria, altering parts of the world's rules and introducing brand-new mechanics and systems.
-
-[hr]
-[b]Main Features[/b]
-[list]
-[*][b]Ultimate Arts System[/b]: Equip martial techniques and consume Qi energy to unleash powerful wuxia-style abilities.
-[*][b]Melee Blade Aura Visuals[/b]: Collect weapons and dyes to customize melee blade effects. Combine them for four different aura color variations.
-[*][b]World Poison Mechanic[/b]: A progressive global debuff that intensifies as the game advances, increasing overall difficulty.
-[*][b]Realm Progression & Scaling Weapons[/b]: Certain techniques, weapons, and accessories grow stronger as bosses are defeated. Includes scaling weapons and throwing-class dart weapons.
-[*][b]Five Elements Armor System[/b]: Armor pieces possess elemental attributes. Matching elements grant additional bonuses.
-[*][b]Cuisine & Cooking System[/b]: Tasting or crafting food for the first time increases Deliciousness and Cooking Skill values, providing bonuses to certain weapons and accessories.
-[*][b]InvisibleEnemies: Configurable echo stealth effects for enemies, barrages, and trap blocks
-[/list]
-
-[hr]
-[url=https://docs.google.com/spreadsheets/d/1hgZ5utxDtxubCBmULulSPM4aYQ4Ocr2JJmSGwDwntaE]Mod Item Spreadsheet[/url]
-
-[b]Current Progress: 67%[/b]
-[list]
-[*]Qi & Ultimate Arts System
-[*]Melee Blade Dye System
-[*]World Poison Mechanic
-[*]Realm Progression System
-[*]Five Elements Armor System
-[*]Cuisine & Cooking System
-[*]InvisibleEnemies
-[/list]
-
-[hr]
-[i]Additional enemies are provided by darkly天昏地暗 with materials and design ideas, thank you![/i]
-[i]Feedback, ratings, and suggestions are welcome![/i]
-
 [h1]武道传说：泰拉瑞亚奇幻武侠小型模组[/h1]
+
+[i]灵感源自中国武侠神话的奇幻武侠体验。[/i]
 
 [hr]
 [url=https://github.com/greenhand0403/WuDao]代码仓库[/url]
-[b]模组简介[/b]
-本模组以奇幻武侠世界为核心，讲述异世界武道强者破碎虚空，降临泰拉瑞亚，改变了世界的部分规则，引入诸多新颖内容和机制
+
+[b]模组简介[/b]  
+本模组以奇幻武侠世界为核心，讲述异世界武道强者破碎虚空，降临泰拉瑞亚，改变了世界的部分规则，引入了全新的机制与系统。
 
 [hr]
-[b]主要特色[/b]
+[b]核心机制[/b]
 [list]
-[*]绝学系统：装备绝学，消耗气力值，释放武侠绝技
-[*]近战刀光视觉：通过收藏武器，收藏染料，两两组合，有 4 种染色搭配
-[*]世界之毒：随游戏进度递增的属性惩罚机制，增加游戏难度
-[*]境界加成和成长型武器：部分绝学、武器和饰品随游戏进度增强，增添了部分随进度成长的武器，启用飞镖类武器造成投掷伤害
-[*]盔甲五行：盔甲部件具有额外五行属性，提供额外加成效果
-[*]厨艺和美食系统：首次品尝和制作食物，提升美味值和厨艺值，部分武器和饰品可获得额外的加成
-[*]隐身敌怪：可配置敌怪、弹幕和陷阱物块的回声隐身效果
+[*][b]绝学系统[/b]：通过消耗气力值释放强大的武学绝技。  
+[*][b]近战刀光视觉[/b]：收集武器与染料以自定义剑类武器的刀光，可组合出四种不同的刀光效果。  
+[*][b]世界之毒[/b]：一种随游戏进度逐渐强化的世界性惩罚机制。  
+[*][b]境界成长与成长武器[/b]：绝学伤害、部分武器和饰品的效果会随着击败 Boss 的进度增强，包含成长型武器与飞镖类投掷武器。  
+[*][b]五行盔甲系统[/b]：盔甲部件具有五行属性，同属性可获得额外效果。  
+[*][b]美味与厨艺系统[/b]：首次品尝或制作食物会提升美味值与厨艺值，为部分武器与饰品提供增益。  
+[*][b]隐身敌怪[/b]：可配置的物块回声隐身与敌怪隐形效果。  
+[/list]
+
+[hr]
+[b]当前开发进度：67%[/b]
+[list]
+[*]气力与绝学系统  
+[*]刀光染色系统  
+[*]世界之毒  
+[*]境界成长系统  
+[*]五行盔甲系统  
+[*]美味与厨艺系统  
+[*]隐身敌怪  
 [/list]
 
 [hr]
 [url=https://docs.google.com/spreadsheets/d/1hgZ5utxDtxubCBmULulSPM4aYQ4Ocr2JJmSGwDwntaE]模组物品表格[/url]
-[b]当前进度：67%[/b]
-[list]
-[*]气力和绝学机制
-[*]近战染色刀光机制
-[*]世界之毒机制
-[*]境界机制
-[*]盔甲五行机制
-[*]厨艺和美食系统
-[*]隐身敌怪
-[/list]
 
-[hr]
-[i]额外敌怪由网友 darkly天昏地暗 提供素材和设计思路，感谢！[/i]
-[i]欢迎点赞、评论与反馈！[/i]
+[i]额外敌怪由 B 站网友 darkly天昏地暗 提供素材与设计思路，感谢！[/i]  
+[i]欢迎反馈、评分与建议！[/i]

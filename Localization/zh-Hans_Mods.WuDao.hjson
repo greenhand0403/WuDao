@@ -673,6 +673,16 @@ Items: {
 		Tooltip: 召唤丘比
 		DisplayName: 魔法少女的灵魂石
 	}
+
+	CrimPowerCube: {
+		Tooltip: 增加4%减伤2%移速，在腐化环境+4%伤害
+		DisplayName: 猩红立方
+	}
+
+	CorruptPowerCube: {
+		Tooltip: 增加4%减伤2%移速，在腐化环境+4%伤害
+		DisplayName: 腐化立方
+	}
 }
 
 Projectiles: {

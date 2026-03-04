@@ -1,35 +1,40 @@
-Wu Dao Legends is a wuxia-themed mod with a strong personal style.
+[h1]Wu Dao Legends: A Wuxia Fantasy Mini Mod for Terraria[/h1]
 
-A fantasy wuxia experience inspired by Chinese martial arts mythology.
+[i]A fantasy wuxia experience inspired by Chinese martial arts mythology.[/i]
 
-A martial arts master from another world shattered the void and descended upon Terraria, altering parts of its rules and introducing new items and mechanics.
+[hr]
+[url=https://github.com/greenhand0403/WuDao]Source Code Repository[/url]
 
-Core Features:
+[b]Overview[/b]  
+This mod brings a unique wuxia-inspired fantasy experience to Terraria.  
+A martial arts master from another world shattered the void and descended upon Terraria, altering parts of the world's rules and introducing brand-new mechanics and systems.
 
-- Ultimate Arts System: Consume Qi energy to unleash unique martial abilities.
-- Melee Blade Aura Visuals: Sword-type weapons feature customizable blade effects. Collect weapons and dyes to create four possible color combinations.
-- World Poison: “The endlessly resurrecting player is the true corruption of the world.” A progressive global penalty that increases as the game advances.
-- Realm Progression: Ultimate Arts damage and certain weapons and accessories scale with boss progression. Includes scaling weapons and dart-style throwing weapons.
-- Five Elements Armor: Armor pieces possess elemental attributes. Matching elements grant additional bonuses.
-- Deliciousness & Cooking Skill: Tasting or crafting food for the first time increases attributes that enhance certain weapons and accessories.
-- InvisibleEnemies：Configurable Block Echo Stealth.
+[hr]
+[b]Main Features[/b]
+[list]
+[*][b]Ultimate Arts System[/b]: Equip martial techniques and consume Qi energy to unleash powerful wuxia-style abilities.  
+[*][b]Melee Blade Aura Visuals[/b]: Collect weapons and dyes to customize melee blade effects. Combine them for four color variations.  
+[*][b]World Poison Mechanic[/b]: A progressive global debuff that intensifies as the game advances.  
+[*][b]Realm Progression & Scaling Weapons[/b]: Certain techniques, weapons, and accessories grow stronger as bosses are defeated. Includes scaling weapons and throwing-class dart weapons.  
+[*][b]Five Elements Armor System[/b]: Armor pieces possess elemental attributes. Matching elements grant additional bonuses.  
+[*][b]Cuisine & Cooking System[/b]: Tasting or crafting food for the first time increases Deliciousness and Cooking Skill values, providing bonuses to certain weapons and accessories.  
+[*][b]InvisibleEnemies[/b]: Configurable echo stealth effects for enemies, barrages, and trap blocks.  
+[/list]
 
-The mod is still in development. More wuxia-themed content and unique systems will be added in future updates.
+[hr]
+[b]Current Progress: 67%[/b]
+[list]
+[*]Qi & Ultimate Arts System  
+[*]Melee Blade Dye System  
+[*]World Poison Mechanic  
+[*]Realm Progression System  
+[*]Five Elements Armor System  
+[*]Cuisine & Cooking System  
+[*]InvisibleEnemies  
+[/list]
 
-这是一个充满个人风格的武侠主题模组。故事起因于异世界的武道强者破碎虚空，穿越到泰拉瑞亚，影响了世界的部分规则，并带来了全新物品与机制。
+[hr]
+[url=https://docs.google.com/spreadsheets/d/1hgZ5utxDtxubCBmULulSPM4aYQ4Ocr2JJmSGwDwntaE]Mod Item Spreadsheet[/url]
 
-核心机制包括：
-
-- 绝学系统：通过消耗气力值释放独特绝技。
-- 近战剑类武器自带刀光染色视觉（收藏武器可以使用武器贴图刀光），还可以收藏背包中的首个染料进行染色，两两组合有四种刀光。
-- 世界之毒：“不断重生的玩家才是泰拉世界的污染源”，随游戏进度逐步增强的世界性惩罚。
-- 境界机制：“绝学伤害、部分武器和饰品的效果随击败 BOSS 进度逐渐增强。同时模组也有成长型武器、飞镖等投掷类武器。
-- 五行盔甲：盔甲部件具有五行属性，同属性获得额外效果。
-- 美味值与厨艺值：首次品尝或制作食物可提升相应属性，对部分武器和饰品有加成。
-- 隐身敌怪：可配置的物块回声隐身
-
-额外敌怪由B站网友 darkly天昏地暗 提供素材和设计思路，感谢！Thanks♪(･ω･)ﾉ
-
-详情参考：https://docs.google.com/spreadsheets/d/1hgZ5utxDtxubCBmULulSPM4aYQ4Ocr2JJmSGwDwntaE
-
-模组正在开发中，后续会有更多武侠相关内容和独特机制加入！
+[i]Additional enemies are provided by darkly天昏地暗 with materials and design ideas — thank you![/i]  
+[i]Feedback, ratings, and suggestions are welcome![/i]
