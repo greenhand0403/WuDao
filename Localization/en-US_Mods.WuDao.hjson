@@ -1153,6 +1153,9 @@ NPCs: {
 	MotherIceSlime.DisplayName: Mother Ice Slime
 	SpikedMotherBloodySlime.DisplayName: Spiked Mother Bloody Slime
 	VirulentSlime.DisplayName: Virulent Slime
+	AngryHunterHead.DisplayName: Angry Hunter Head
+	AngryHunterTentacle.DisplayName: Angry Hunter Tentacle
+	PeekWatcher.DisplayName: Peek Watcher
 }
 
 Prefixes: {
