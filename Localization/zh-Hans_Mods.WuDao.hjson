@@ -1067,7 +1067,7 @@ Configs: {
 		}
 
 		IncludePhaseblades: {
-			Label: 光剑配置
+			Label: 启用光剑的近战刀光配置
 			Tooltip: 默认启用光剑的近战刀光
 		}
 

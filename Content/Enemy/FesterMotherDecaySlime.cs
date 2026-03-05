@@ -11,7 +11,7 @@ namespace WuDao.Content.Enemy
     {
         public override void SetStaticDefaults()
         {
-            Main.npcFrameCount[NPC.type] = 4; // 4帧循环
+            Main.npcFrameCount[NPC.type] = 6; // 6帧循环
         }
 
         public override void SetDefaults()

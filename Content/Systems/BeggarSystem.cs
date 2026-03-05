@@ -22,10 +22,13 @@ namespace WuDao.Content.Systems
 
         private void OnNewDay()
         {
-            // 25% 几率在白天到来时生成一个流浪乞丐
-            if (Main.rand.NextFloat() < 0.25f)
+            // 5% 几率在白天到来时生成一个流浪乞丐
+            if (Main.rand.NextFloat() < 0.05f)
             {
-                SpawnBeggarNear(Main.LocalPlayer);
+                var p = Main.LocalPlayer;
+                SpawnBeggarNear(p);
+                var pos = p.Center + new Vector2(120f * (p.direction == 0 ? 1 : p.direction), -16);
+                NPC.NewNPC(p.GetSource_Misc("WanderingBeggarSummon"), (int)pos.X, (int)pos.Y, ModContent.NPCType<WanderingBeggar>());
             }
         }
 
