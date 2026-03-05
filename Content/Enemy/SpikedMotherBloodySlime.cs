@@ -19,7 +19,7 @@ namespace WuDao.Content.Enemy
         {
             NPC.width = 174;
             NPC.height = 145;
-            NPC.scale = 0.5f;
+            NPC.scale = 0.6f;
 
             NPC.damage = 180;
             NPC.defense = 26;

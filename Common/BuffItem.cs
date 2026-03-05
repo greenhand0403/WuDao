@@ -21,6 +21,13 @@ namespace WuDao.Common
     public static class BuffConditions
     {
         public static Func<Player, Item, bool> Always => (p, i) => true;
+        /// <summary>
+        /// 有概率触发，用int参数chanceDenominator（1/x 几率）
+        /// </summary>
+        /// <param name="chanceDenominator">1/x 几率</param>
+        /// <returns></returns>
+        public static Func<Player, Item, bool> SetProbability(int chanceDenominator)
+            => (p, i) => Main.rand.Next(chanceDenominator) == 0;
         public static Func<Player, Item, bool> Never => (p, i) => false;
 
         // 组合器

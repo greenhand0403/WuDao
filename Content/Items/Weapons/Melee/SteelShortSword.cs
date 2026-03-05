@@ -20,8 +20,8 @@ namespace WuDao.Content.Items.Weapons.Melee
             Item.width = 32;
             Item.height = 32;
             Item.UseSound = SoundID.Item1;
-            Item.DamageType = DamageClass.Melee;
-            Item.autoReuse = true;
+            Item.DamageType = DamageClass.MeleeNoSpeed;
+            Item.autoReuse = false;
             Item.noUseGraphic = true; // The sword is actually a "projectile", so the item should not be visible when used
             Item.noMelee = true; // The projectile will do the damage and not the item
 
@@ -29,7 +29,7 @@ namespace WuDao.Content.Items.Weapons.Melee
             Item.value = Item.sellPrice(0, 0, 3, 0);
 
             Item.shoot = ModContent.ProjectileType<SteelShortSwordProjectile>(); // The projectile is what makes a shortsword work
-            Item.shootSpeed = 3f; // This value bleeds into the behavior of the projectile as velocity, keep that in mind when tweaking values
+            Item.shootSpeed = 2.1f; // This value bleeds into the behavior of the projectile as velocity, keep that in mind when tweaking values
         }
         protected override void BuildStatRules(Player player, Item item, IList<StatRule> rules)
         {

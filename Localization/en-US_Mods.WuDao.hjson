@@ -482,7 +482,7 @@ Items: {
 	SteamedBun: {
 		DisplayName: Steamed Bun
 		Tooltip: May attract a wandering beggar
-		Messages: Wandering beggars are attracted by food
+		Messages: Wandering beggars are coming to town
 	}
 
 	BladeWaltz: {
@@ -693,6 +693,11 @@ Items: {
 		Tooltip: ""
 		DisplayName: NLNS Body
 	}
+
+	BeeStings: {
+		Tooltip: ""
+		DisplayName: Bee Stings
+	}
 }
 
 Projectiles: {
@@ -759,6 +764,7 @@ Projectiles: {
 	MonsterTrainMinion.DisplayName: Monster Train Minion
 	MonsterTrainSpear.DisplayName: Monster Train Spear
 	DragonflyMinion.DisplayName: Dragonfly Minion
+	BeeStingsProjectile.DisplayName: Bee Stings Projectile
 }
 
 DamageClasses: {
