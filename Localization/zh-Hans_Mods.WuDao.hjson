@@ -769,7 +769,7 @@ Projectiles: {
 	MonsterTrainMinion.DisplayName: 怪物火车
 	MonsterTrainSpear.DisplayName: 怪物火车矮人长矛
 	DragonflyMinion.DisplayName: 蜻蜓仆从
-	// BeeStingsProjectile.DisplayName: Bee Stings Projectile
+	BeeStingsProjectile.DisplayName: 蜂刺
 }
 
 DamageClasses: {
@@ -1158,9 +1158,9 @@ NPCs: {
 	MotherIceSlime.DisplayName: 冰雪史莱姆之母
 	SpikedMotherBloodySlime.DisplayName: 尖刺血污史莱姆之母
 	VirulentSlime.DisplayName: 剧毒史莱姆
-	// AngryHunterHead.DisplayName: Angry Hunter Head
-	// AngryHunterTentacle.DisplayName: Angry Hunter Tentacle
-	// PeekWatcher.DisplayName: Peek Watcher
+	AngryHunterHead.DisplayName: 愤怒猎手头
+	AngryHunterTentacle.DisplayName: 愤怒猎手触手
+	PeekWatcher.DisplayName: 窥探者
 }
 
 Prefixes: {

@@ -19,16 +19,17 @@ namespace WuDao.Content.Enemy
         public override void SetDefaults()
         {
             // —— 数值 ——
-            NPC.damage = 130;
-            NPC.lifeMax = 1000;
+            NPC.damage = 120;
+            NPC.lifeMax = 900;
             NPC.defense = 20;
             NPC.knockBackResist = 0.36f;
 
             // —— 体型（比 Demon Eye 稍大一点点）——
-            // 你的贴图单帧是 74x140，但 hitbox 不必等于贴图尺寸。
-            // 这里给一个“略大”的飞眼手感，后续你可以微调：
-            NPC.width = 54;
-            NPC.height = 46;
+            NPC.width = 74;
+            NPC.height = 74;
+            NPC.scale = 0.6f;
+            // 贴图位置往上偏移一点，对齐视觉
+            NPC.gfxOffY = -4f;
 
             // —— 其他基础属性 ——
             NPC.aiStyle = NPCAIStyleID.DemonEye; // 2
@@ -122,5 +123,34 @@ namespace WuDao.Content.Enemy
 
         // 可选：Bestiary（不写也不影响）
         // public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) { ... }
+
+        public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
+        {
+            Texture2D texture = Terraria.GameContent.TextureAssets.Npc[Type].Value;
+
+            int frameHeight = texture.Height / Main.npcFrameCount[Type];
+            Rectangle frame = new Rectangle(0, NPC.frame.Y, texture.Width, frameHeight);
+
+            SpriteEffects effects = NPC.spriteDirection == 1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+
+            Vector2 origin = new Vector2(frame.Width / 2f, frame.Height / 2f);
+
+            // 把贴图往左挪，制造“碰撞箱更靠右”的视觉效果
+            Vector2 drawOffset = new Vector2(-15f * NPC.direction, 0f);
+
+            spriteBatch.Draw(
+                texture,
+                NPC.Center - screenPos + drawOffset,
+                frame,
+                drawColor,
+                NPC.rotation,
+                origin,
+                NPC.scale,
+                effects,
+                0f
+            );
+
+            return false;
+        }
     }
 }
