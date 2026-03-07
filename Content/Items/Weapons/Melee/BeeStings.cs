@@ -7,10 +7,8 @@ using WuDao.Content.Projectiles.Melee;
 
 namespace WuDao.Content.Items.Weapons.Melee
 {
-    // TODO: 蜂刺贴图
     public class BeeStings : BuffItem
     {
-        public override string Texture => "WuDao/Content/Items/Weapons/Melee/SteelShortSword";
         public override void SetDefaults()
         {
             Item.width = 32;

@@ -8,7 +8,7 @@ namespace WuDao.Content.Projectiles.Melee
 {
 	public class BeeStingsProjectile : ModProjectile
 	{
-		public override string Texture => "WuDao/Content/Items/Weapons/Melee/SteelShortSword";
+		public override string Texture => "WuDao/Content/Items/Weapons/Melee/BeeStings";
 		public const int FadeInDuration = 7;
 		public const int FadeOutDuration = 4;
 

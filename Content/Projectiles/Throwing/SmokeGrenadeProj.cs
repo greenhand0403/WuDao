@@ -9,11 +9,7 @@ namespace WuDao.Content.Projectiles.Throwing
     // 烟雾弹 射弹
     public class SmokeGrenadeProj : ModProjectile
     {
-        // public override void SetStaticDefaults()
-        // {
-        //     DisplayName.SetDefault("烟雾手雷");
-        // }
-        public override string Texture => $"Terraria/Images/Projectile_{ProjectileID.Grenade}";
+        public override string Texture => $"WuDao/Content/Items/Weapons/Throwing/SmokeGrenade";
         public override void SetDefaults()
         {
             Projectile.width = 12;

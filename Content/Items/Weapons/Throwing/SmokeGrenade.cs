@@ -5,10 +5,8 @@ using WuDao.Content.Projectiles.Throwing;
 
 namespace WuDao.Content.Items.Weapons.Throwing
 {
-    // TODO: 烟雾手榴弹物品贴图重置
     public class SmokeGrenade : ModItem
     {
-        public override string Texture => $"Terraria/Images/Item_{ItemID.Grenade}";
         // public override void SetStaticDefaults()
         // {
         //     DisplayName.SetDefault("烟雾手雷");

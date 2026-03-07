@@ -7,10 +7,8 @@ using WuDao.Content.Items.Accessories;
 
 namespace WuDao.Content.Items
 {
-    // TODO: 食神宝藏袋物品贴图重置
     public class FoodGodBossBag : ModItem
     {
-        public override string Texture => $"Terraria/Images/Item_{ItemID.KingSlimeBossBag}";
         public override void SetStaticDefaults()
         {
             ItemID.Sets.BossBag[Type] = true;

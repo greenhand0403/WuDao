@@ -6,21 +6,15 @@ using WuDao.Content.Projectiles.Summon;
 
 namespace WuDao.Content.Items.Weapons.Summon
 {
-    // TODO: 飞蛇鞭物品贴图重置
     public class FlyingSnakeWhip : ModItem
     {
-        // public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(FlyingSnakeWhipDebuff.TagDamage);
-        public override string Texture => $"Terraria/Images/Item_{ItemID.BoneWhip}";
         public override void SetDefaults()
         {
-            // This method quickly sets the whip's properties.
-            // Mouse over to see its parameters.
             Item.DefaultToWhip(ModContent.ProjectileType<FlyingSnakeWhipProjectile>(), 120, 3, 8);
             Item.rare = ItemRarityID.Green;
             Item.value = Item.sellPrice(0, 0, 50);
         }
 
-        // Please see Content/ExampleRecipes.cs for a detailed explanation of recipe creation.
         public override void AddRecipes()
         {
             CreateRecipe()
