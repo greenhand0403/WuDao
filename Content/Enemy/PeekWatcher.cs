@@ -27,7 +27,7 @@ namespace WuDao.Content.Enemy
             // —— 体型（比 Demon Eye 稍大一点点）——
             NPC.width = 74;
             NPC.height = 74;
-            NPC.scale = 0.6f;
+            NPC.scale = 0.9f;
             // 贴图位置往上偏移一点，对齐视觉
             NPC.gfxOffY = -4f;
 
@@ -136,7 +136,7 @@ namespace WuDao.Content.Enemy
             Vector2 origin = new Vector2(frame.Width / 2f, frame.Height / 2f);
 
             // 把贴图往左挪，制造“碰撞箱更靠右”的视觉效果
-            Vector2 drawOffset = new Vector2(-15f * NPC.direction, 0f);
+            Vector2 drawOffset = new Vector2(-24f * NPC.direction, 0f);
 
             spriteBatch.Draw(
                 texture,
