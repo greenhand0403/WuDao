@@ -698,6 +698,12 @@ Items: {
 		Tooltip: ""
 		DisplayName: Bee Stings
 	}
+
+	SheRaSword: {
+		DisplayName: She Ra Sword
+		Tooltip: Right click to transform use She Ra Power
+		Cooldown: SheRaSwordCooldown remaining: {0}
+	}
 }
 
 Projectiles: {
@@ -996,6 +1002,11 @@ Buffs: {
 	LunarShipBuff: {
 		Description: Pilot the Lunar Ship
 		DisplayName: Lunar Ship Buff
+	}
+
+	SheRaTransformBuff: {
+		DisplayName: She Ra Transform Buff
+		Description: She Ra Power
 	}
 }
 

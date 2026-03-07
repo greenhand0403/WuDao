@@ -703,6 +703,12 @@ Items: {
 		Tooltip: ""
 		DisplayName: 蜂刺
 	}
+
+	SheRaSword: {
+		DisplayName: 希瑞之剑
+		Tooltip: 右键唤醒超凡之力
+		Cooldown: 希瑞之剑冷却中：{0} 秒
+	}
 }
 
 Projectiles: {
@@ -1001,6 +1007,11 @@ Buffs: {
 	LunarShipBuff: {
 		Description: 驾驶月亮船
 		DisplayName: 月亮船守护
+	}
+
+	SheRaTransformBuff: {
+		DisplayName: 超凡之力
+		Description: 超凡之力
 	}
 }
 

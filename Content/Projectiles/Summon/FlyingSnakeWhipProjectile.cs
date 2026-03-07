@@ -12,6 +12,10 @@ namespace WuDao.Content.Projectiles.Summon
     // 飞蛇鞭 蛇鞭
     public class FlyingSnakeWhipProjectile : ModProjectile
     {
+        public override void SetStaticDefaults()
+        {
+            ProjectileID.Sets.IsAWhip[Type] = true;
+        }
         public override void SetDefaults()
         {
             Projectile.DefaultToWhip();
