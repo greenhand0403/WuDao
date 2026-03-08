@@ -180,6 +180,12 @@ namespace WuDao.Common
             ItemID.ChristmasTreeSword,
             ItemID.Seedler
         };
+        /// <summary>
+        /// 判断物品是否为可御剑武器(默认刀光集合)
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        public static bool IsYuJianSword(Item item) => item != null && !item.IsAir && BladeTrailSet.Contains(item.type);
         // 万剑归宗和无敌包含的剑型射弹
         public static readonly HashSet<int> SwordItemSet = new()
         {
@@ -389,6 +395,7 @@ namespace WuDao.Common
             ProjectileID.MoonlordTurretLaser
         };
     }
+    // UN USE
     public static class NPCSets
     {
         // 变形怪

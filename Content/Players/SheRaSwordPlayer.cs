@@ -3,6 +3,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using WuDao.Content.Buffs;
+using WuDao.Content.Items.Weapons.Melee;
 
 namespace WuDao.Content.Players
 {
@@ -32,8 +33,21 @@ namespace WuDao.Content.Players
             {
                 if (TransformTimer > 0)
                 {
+                    Lighting.AddLight(Player.Center, 0.9f, 0.8f, 0.3f); // 金色光
                     TransformTimer--;
                     Player.AddBuff(ModContent.BuffType<SheRaTransformBuff>(), 2);
+
+                    // 如果武器处于 HoldUp 使用方式
+                    if (Player.HeldItem.useStyle == ItemUseStyleID.HoldUp && Player.HeldItem.type == ModContent.ItemType<SheRaSword>())
+                    {
+                        // 并且动画已经播放完成
+                        if (Player.itemAnimation == 0)
+                        {
+                            // 恢复默认攻击方式
+                            Player.HeldItem.useStyle = ItemUseStyleID.Swing;
+                            Player.HeldItem.noMelee = false;
+                        }
+                    }
                 }
 
                 if (TransformTimer <= 0)

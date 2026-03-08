@@ -704,6 +704,27 @@ Items: {
 		Tooltip: Right click to transform use She Ra Power
 		Cooldown: SheRaSwordCooldown remaining: {0}
 	}
+
+	YuJianShu: {
+		Tooltip:
+			'''
+			Find a sword in your inventory and ride it to fly.
+			While flying, you can only move; colliding with enemies deals the sword's damage.
+			Attacking and item use are disabled, and Qi drains over time.
+			Press the Juexue key or Mount key again to end the flight
+			'''
+		DisplayName: Yu Jian Shu
+	}
+
+	SkyWalking: {
+		Tooltip:
+			'''
+			Natural Qi regeneration stops, and you can jump infinitely.
+			Each jump costs 10 Qi, and standing on air costs 1 Qi per second.
+			Press the Juexue key again, or use a hook/mount to end Moon Step
+			'''
+		DisplayName: Sky Walking
+	}
 }
 
 Projectiles: {
@@ -1183,6 +1204,7 @@ Messages: {
 		NotEnoughQi: Can't use. Not enough qi
 		Immune: Dodge!
 		Config: Please enable the JueXue system in the configuration menu
+		NoSword: Can't use. No valid melee sword in bag
 	}
 
 	BundleClaimed: Claimed: added {0} kinds to inventory; dropped {1} kinds ({2} total stacks/items)

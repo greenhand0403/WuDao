@@ -70,36 +70,27 @@ namespace WuDao.Content.Items.Weapons.Melee
         public override bool AltFunctionUse(Player player) => true;
         public override bool CanUseItem(Player player)
         {
-            var modPlayer = player.GetModPlayer<SheRaSwordPlayer>();
-
             if (player.altFunctionUse == 2)
             {
+                var modPlayer = player.GetModPlayer<SheRaSwordPlayer>();
                 if (!modPlayer.CanTransform)
                 {
                     int seconds = modPlayer.TransformCooldown / 60;
                     Main.NewText(Language.GetTextValue("Mods.WuDao.Items.SheRaSword.Cooldown", seconds), 255, 180, 60);
                     return false;
                 }
-
-                Item.useTime = 20;
-                Item.useAnimation = 20;
-                Item.useStyle = ItemUseStyleID.HoldUp;
-                Item.UseSound = SoundID.Item4;
-                Item.damage = 0;
-                Item.noMelee = true;
-                Item.noUseGraphic = false;
+                else
+                {
+                    Item.useStyle = ItemUseStyleID.HoldUp;
+                    // Item.damage = 0;
+                    Item.noMelee = true;
+                }
             }
             else
             {
-                Item.damage = 50;
-                Item.DamageType = DamageClass.Melee;
-                Item.knockBack = 6f;
-                Item.useTime = 20;
-                Item.useAnimation = 20;
+                // Item.damage = 50;
                 Item.useStyle = ItemUseStyleID.Swing;
-                Item.UseSound = SoundID.Item1;
                 Item.noMelee = false;
-                Item.noUseGraphic = false;
             }
 
             return base.CanUseItem(player);
@@ -133,8 +124,8 @@ namespace WuDao.Content.Items.Weapons.Melee
                         DustID.GoldFlame
                     );
                     dust.noGravity = true;
-                    dust.scale = 2.4f;
-                    dust.velocity *= 3.8f;
+                    dust.scale = Main.rand.NextFloat(1f, 2f);
+                    dust.velocity *= Main.rand.NextFloat(24f, 30f);
                 }
 
                 return true;

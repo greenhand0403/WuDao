@@ -17,6 +17,8 @@ using WuDao.Common;
 using Terraria.Localization;
 using WuDao.Content.Config;
 using WuDao.Content.DamageClasses;
+using WuDao.Content.Mounts;
+using Terraria.DataStructures;
 
 namespace WuDao.Content.Players
 {
@@ -108,9 +110,33 @@ namespace WuDao.Content.Players
         public bool ShiftActive => shiftActive;
         public int ShiftTrailCount => trailCount;
         public Vector2 GetShiftTrailPos(int i) => trail[i];
-        // —— 被动触发冷却（按物品type区分） —— //
+        // === 御剑术 ===
+        public bool YuJianActive = false;
+        public int YuJianQiCostPerSecond = 0;
+
+        public int YuJianSwordType = 0;
+        public int YuJianSwordDamage = 0;
+        public float YuJianSwordKnockback = 0f;
+
+        // 防止一帧打很多次：对每个NPC做本地冷却
+        private int[] _yuJianNpcHitCooldown;
+        // === 月步 ===
+        public bool SkyWalkingActive = false;
+
+        // 配置
+        public const int SkyWalkingJumpQiCost = 10;
+        public const int SkyWalkingStandQiCostPerSecond = 1;
+
+        // 运行时状态
+        public bool SkyWalkingStandingOnAir = false;
+
+        // 跳跃输入边沿锁，防止按住空格一帧扣很多次
+        private bool _skyWalkingJumpPressedLastFrame = false;
+        private bool _skyWalkingJumpConsumed = false;
+        // 绝学招式特殊伤害类型
         private ChiEnergyDamageClass chi;
         private SupremeDamageClass sup;
+        // —— 被动触发冷却（按物品type区分） —— //
         public bool CanProcPassiveNow(int key)
         {
             uint now = Main.GameUpdateCount;
@@ -149,6 +175,8 @@ namespace WuDao.Content.Players
         }
         public override void Initialize()
         {
+            base.Initialize();
+            _yuJianNpcHitCooldown = new int[Main.maxNPCs];
             JuexueSlot = new Item();
             JuexueSlot.TurnToAir();
         }
@@ -230,12 +258,22 @@ namespace WuDao.Content.Players
                 _lingboDistanceAcc = 0f;
                 _lingboLastWavePos = Player.Bottom;
             }
+            // 御剑飞行
+            if (YuJianActive)
+            {
+                Player.noFallDmg = true;
+                Player.noKnockback = true;
+            }
+            // 月步
+            if (SkyWalkingActive)
+            {
+                Player.noFallDmg = true;
+            }
         }
-
         public override void PreUpdate()
         {
-            // 气力回复：站立/不动 +4/s，移动或攻击 +2/s
-            if (QiMax > 0)
+            // 气力回复：站立/不动 +4/s，移动或攻击 +2/s, 御剑飞行和月步时不再自动回气
+            if (QiMax > 0 && !SkyWalkingActive && !YuJianActive)
             {
                 float perTick = Helpers.IsPlayerAttackingOrMoving(Player) ? (QiRegenMove + QiRegenMoveBonus) : (QiRegenStand + QiRegenStandBonus);
 
@@ -306,6 +344,139 @@ namespace WuDao.Content.Players
                         }
                     }
                 }
+            }
+            // === 御剑飞行：每秒扣气；无气自动结束 ===
+            if (YuJianActive)
+            {
+                // 1. 死亡/失活
+                if (Player.dead || Player.ghost || !Player.active)
+                {
+                    EndYuJian(true);
+                    return;
+                }
+
+                // 2. 按 R：乘骑键 -> 结束御剑
+                if (Player.controlMount && Player.releaseMount)
+                {
+                    EndYuJian();
+                    return;
+                }
+
+                // 3. 按 E：钩爪键 -> 结束御剑
+                if (Player.controlHook && Player.releaseHook)
+                {
+                    EndYuJian();
+                    return;
+                }
+
+                // 4. 若不知为何 mount 被替换/丢失，也强制结束
+                if (Player.mount == null || !Player.mount.Active || Player.mount.Type != ModContent.MountType<YuJianMount>())
+                {
+                    EndYuJian();
+                    return;
+                }
+
+                // 每帧扣气（等价每秒 YuJianQiCostPerSecond）
+                float perTick = YuJianQiCostPerSecond / 60f;
+                if (QiCurrent <= perTick)
+                {
+                    QiCurrent = 0;
+                    EndYuJian();
+                    return;
+                }
+                QiCurrent -= perTick;
+
+                // 御剑期间：强制玩家“只能移动”
+                ApplyYuJianControlLock();
+
+                // 禁止打开背包（也避免打开后能点物品）
+                if (Player.controlInv)
+                    Main.playerInventory = false;
+
+                // 御剑期间：接触伤害
+                DoYuJianContactDamage();
+            }
+            // 释放月步
+            if (SkyWalkingActive)
+            {
+                // 死亡直接结束
+                if (Player.dead || Player.ghost || !Player.active)
+                {
+                    EndSkyWalking();
+                    return;
+                }
+
+                // 骑乘时直接结束，避免和坐骑冲突
+                if (Player.mount != null && Player.mount.Active)
+                {
+                    EndSkyWalking();
+                    return;
+                }
+
+                // 按坐骑键 -> 自动退出月步
+                if (Player.controlMount && Player.releaseMount)
+                {
+                    EndSkyWalking();
+                    return;
+                }
+
+                // 按钩爪键 -> 自动退出月步
+                if (Player.controlHook && Player.releaseHook)
+                {
+                    EndSkyWalking();
+                    return;
+                }
+
+                // 月步期间：左右腿附近随机生成 Cloud 粒子
+                if (Main.rand.NextBool(3)) // 控制粒子密度
+                {
+                    Vector2 legPos = Player.Bottom + new Vector2(0f, -10f * Player.gravDir);
+
+                    // 左右腿附近随机一点
+                    legPos.X += Main.rand.NextFloat(-10f, 10f);
+                    legPos.Y += Main.rand.NextFloat(-4f, 4f);
+
+                    int dust = Dust.NewDust(
+                        legPos,
+                        2,
+                        2,
+                        DustID.Cloud, // 可改成 Smoke / GemDiamond / SilverCoin 等你喜欢的视觉
+                        0f,
+                        0f,
+                        0,
+                        default,
+                        2f
+                    );
+
+                    Main.dust[dust].velocity = new Vector2(
+                        Main.rand.NextFloat(-1.2f, 1.2f),
+                        Main.rand.NextFloat(-1.2f, 1.2f)
+                    );
+
+                    Main.dust[dust].noGravity = true;
+                }
+
+                bool onGround = Player.velocity.Y == 0f && ModContent.GetInstance<BuffPlayer>().IsStandingOnGround(Player);
+
+                // 是否处于“可再次起跳”的状态
+                bool canStartSkyWalkingJump = onGround || SkyWalkingStandingOnAir;
+
+                // 一旦离开可起跳状态（比如已经真正跃起），就重置扣气锁
+                if (!canStartSkyWalkingJump)
+                {
+                    _skyWalkingJumpConsumed = false;
+                }
+
+                // 按住跳跃即可触发，包括自动跳跃
+                if (Player.controlJump && canStartSkyWalkingJump && !_skyWalkingJumpConsumed)
+                {
+                    TrySkyWalkingJump();
+                    _skyWalkingJumpConsumed = true;
+                    return;
+                }
+
+                // 再处理“站在空气中”
+                UpdateSkyWalkingAirStand();
             }
 
             // —— 释放天外飞仙：逐帧推进 & 路径伤害 —— //
@@ -897,6 +1068,237 @@ namespace WuDao.Content.Players
                     // 触发 2 秒虚影，稍微放大 1.1 倍，向上偏移 16 像素（站位更好看）
                     TriggerJuexueGhost(Kamehameha.KamehamehaFrameIndex, durationTick: 120, scale: 1.1f, offset: new Vector2(0, -20));
                 }
+            }
+        }
+        // 御剑飞行
+        public bool TryFindSwordFromBackpack(out Item sword)
+        {
+            // 非快捷栏：默认 10..57（0..9 是热键栏）
+            for (int i = 10; i < 58; i++)
+            {
+                Item it = Player.inventory[i];
+                if (ItemSets.IsYuJianSword(it))
+                {
+                    sword = it;
+                    return true;
+                }
+            }
+            sword = default;
+            return false;
+        }
+        public void BeginYuJian(int swordType, int swordDamage, float swordKnockback, int qiCostPerSecond)
+        {
+            YuJianActive = true;
+
+            YuJianSwordType = swordType;
+            YuJianSwordDamage = swordDamage;
+            YuJianSwordKnockback = swordKnockback;
+            YuJianQiCostPerSecond = qiCostPerSecond;
+
+            // 清理本地命中CD
+            for (int i = 0; i < _yuJianNpcHitCooldown.Length; i++)
+                _yuJianNpcHitCooldown[i] = 0;
+
+            // 立刻关背包，避免“进入御剑还在拖拽物品”造成异常
+            if (Main.playerInventory)
+                Main.playerInventory = false;
+
+            // 如果玩家正在抓钩/坐椅/睡觉/轨道车等，这里建议强制打断
+            Player.RemoveAllGrapplingHooks();
+            Player.pulley = false;
+            Player.sleeping.isSleeping = false;
+            Player.sitting.isSitting = false;
+        }
+
+        public void EndYuJian(bool fromDeath = false)
+        {
+            YuJianActive = false;
+            YuJianQiCostPerSecond = 0;
+            YuJianSwordType = 0;
+            YuJianSwordDamage = 0;
+            YuJianSwordKnockback = 0f;
+
+            Player.velocity *= 0.35f;
+            // 清接触伤害CD
+            if (_yuJianNpcHitCooldown != null)
+                Array.Clear(_yuJianNpcHitCooldown, 0, _yuJianNpcHitCooldown.Length);
+
+            // 若还有钩爪，也建议收掉，避免“刚退出就被钩爪拽飞”
+            Player.RemoveAllGrapplingHooks();
+
+            // 只卸掉御剑坐骑，避免别的异常状态被误伤
+            if (Player.mount != null && Player.mount.Active &&
+                Player.mount.Type == ModContent.MountType<YuJianMount>())
+            {
+                Player.mount.Dismount(Player);
+            }
+        }
+        private void ApplyYuJianControlLock()
+        {
+            // 禁止使用物品/攻击/放置/挥动
+            Player.controlUseItem = false;
+            Player.controlUseTile = false;
+            Player.controlThrow = false;
+            Player.controlHook = false;
+
+            // 禁止快捷键药水等（按你需求可增删）
+            Player.controlQuickHeal = false;
+            Player.controlQuickMana = false;
+            Player.controlTorch = false;
+
+            // 最关键：彻底禁止“用物品”
+            Player.noItems = true;
+
+            // 禁止鼠标与UI交互（降低“背包拖拽/装备坐骑物品”等bug概率）
+            Player.mouseInterface = true;
+
+            // 你如果不想禁跳也可以保留 controlJump
+            Player.controlJump = false;
+        }
+
+        private void DoYuJianContactDamage()
+        {
+            // 递减命中CD
+            for (int i = 0; i < _yuJianNpcHitCooldown.Length; i++)
+                if (_yuJianNpcHitCooldown[i] > 0) _yuJianNpcHitCooldown[i]--;
+
+            Rectangle hitbox = Player.Hitbox;
+
+            for (int i = 0; i < Main.maxNPCs; i++)
+            {
+                NPC n = Main.npc[i];
+                if (!n.active || n.friendly || n.dontTakeDamage || n.lifeMax <= 5)
+                    continue;
+
+                if (_yuJianNpcHitCooldown[i] > 0)
+                    continue;
+
+                if (!hitbox.Intersects(n.Hitbox))
+                    continue;
+
+                // 伤害 = 选中剑的伤害（不叠加加成，严格按你描述）
+                int dmg = YuJianSwordDamage;
+                float kb = YuJianSwordKnockback;
+
+                // 用 ApplyDamageToNPC：联机也能正确同步
+                Player.ApplyDamageToNPC(n, dmg, kb, Player.direction, crit: false);
+
+                // 给予一点点免打过快：10 ticks = 1/6 秒
+                _yuJianNpcHitCooldown[i] = 10;
+            }
+        }
+        public override void UpdateDead()
+        {
+            if (YuJianActive)
+                EndYuJian(true); // true = 死亡清理模式，可少做一些播放效果之类
+        }
+
+        public override void Kill(double damage, int hitDirection, bool pvp, PlayerDeathReason damageSource)
+        {
+            if (YuJianActive)
+                EndYuJian(true);
+        }
+
+        public override void OnRespawn()
+        {
+            if (YuJianActive)
+                EndYuJian(true);
+        }
+        // 月步
+        public void BeginSkyWalking()
+        {
+            SkyWalkingActive = true;
+            SkyWalkingStandingOnAir = false;
+            _skyWalkingJumpPressedLastFrame = false;
+
+            // 释放月步时松开钩爪
+            Player.RemoveAllGrapplingHooks();
+        }
+
+        public void EndSkyWalking()
+        {
+            SkyWalkingActive = false;
+            SkyWalkingStandingOnAir = false;
+            _skyWalkingJumpPressedLastFrame = false;
+            _skyWalkingJumpConsumed = false;
+        }
+        private void TrySkyWalkingJump()
+        {
+            if (QiCurrent < SkyWalkingJumpQiCost)
+            {
+                EndSkyWalking();
+                return;
+            }
+
+            QiCurrent -= SkyWalkingJumpQiCost;
+            SkyWalkingStandingOnAir = false;
+
+            // 1. 起跳速度：吃原版 jumpSpeedBoost
+            float jumpVelocity = Player.jumpSpeed + Player.jumpSpeedBoost;
+
+            // 你如果想让月步本身比普通跳跃更强，可以额外加一点基础值
+            jumpVelocity += 2.5f;
+
+            Player.velocity.Y = -jumpVelocity * Player.gravDir;
+
+            // 2. 跳跃持续时间：吃原版跳跃增强
+            int jumpFrames = Player.jumpHeight;
+
+            if (Player.jumpBoost)
+                jumpFrames += 5;
+
+            if (Player.frogLegJumpBoost)
+                jumpFrames += 2;
+
+            Player.jump = jumpFrames;
+
+            // 3. 刷新摔落起点
+            Player.fallStart = (int)(Player.position.Y / 16f);
+
+            // 4. 标记本帧刚跳过，避免和别的逻辑打架
+            Player.justJumped = true;
+        }
+        private void UpdateSkyWalkingAirStand()
+        {
+            // 判定是否站在地面上
+            bool onGround = Player.velocity.Y == 0f && ModContent.GetInstance<BuffPlayer>().IsStandingOnGround(Player);
+
+            bool rising = Player.velocity.Y * Player.gravDir < 0f; // 正在向“上”运动
+            bool wantsToDrop = Player.controlDown;
+
+            if (onGround)
+            {
+                SkyWalkingStandingOnAir = false;
+                return;
+            }
+
+            // 空中、且不再上升、且不想主动下落 -> 踏空站立
+            if (!rising && !wantsToDrop)
+            {
+                float costPerTick = SkyWalkingStandQiCostPerSecond / 60f;
+
+                if (QiCurrent <= costPerTick)
+                {
+                    QiCurrent = 0;
+                    EndSkyWalking();
+                    return;
+                }
+
+                QiCurrent -= costPerTick;
+
+                SkyWalkingStandingOnAir = true;
+
+                // 关键：冻结下落
+                Player.gravity = 0f;
+                Player.maxFallSpeed = 0f;
+                Player.velocity.Y = 0f;
+
+                // 刷新 fallStart，避免退出月步后瞬间结算高额摔落伤害
+                Player.fallStart = (int)(Player.position.Y / 16f);
+            }
+            else
+            {
+                SkyWalkingStandingOnAir = false;
             }
         }
     }
