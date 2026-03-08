@@ -19,7 +19,7 @@ namespace WuDao.Content.Enemy
         /// <summary>
         /// 体节间距
         /// </summary>
-        private const float SegmentSpacing = 30f;
+        private const float SegmentSpacing = 18f;
 
         public static void HeadAI(NPC npc)
         {
@@ -324,8 +324,8 @@ namespace WuDao.Content.Enemy
 
         public override void SetDefaults()
         {
-            NPC.width = 46;
-            NPC.height = 46;
+            NPC.width = 44;
+            NPC.height = 44;
             NPC.damage = 22;
             NPC.defense = 8;
             NPC.lifeMax = 12000;
@@ -369,8 +369,8 @@ namespace WuDao.Content.Enemy
         {
             base.SetDefaults();
 
-            NPC.width = 46;
-            NPC.height = 46;
+            NPC.width = 44;
+            NPC.height = 44;
             NPC.damage = 28;
             NPC.defense = 10;
             NPC.lifeMax = Main.hardMode ? 26000 : 18000;
@@ -378,7 +378,7 @@ namespace WuDao.Content.Enemy
             NPC.aiStyle = -1;
 
             // 视觉上等价于“碰撞箱向上对齐一点”
-            DrawOffsetY = 8;
+            DrawOffsetY = 2;
         }
         // 仅在猩红地下区域生成
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
@@ -419,8 +419,8 @@ namespace WuDao.Content.Enemy
         {
             base.SetDefaults();
 
-            NPC.width = 46;
-            NPC.height = 46;
+            NPC.width = 44;
+            NPC.height = 44;
             NPC.damage = 20;
             NPC.defense = 8;
             NPC.lifeMax = Main.hardMode ? 18000 : 11000;
@@ -435,8 +435,8 @@ namespace WuDao.Content.Enemy
         {
             base.SetDefaults();
 
-            NPC.width = 46;
-            NPC.height = 46;
+            NPC.width = 44;
+            NPC.height = 44;
             NPC.damage = 16;
             NPC.defense = 6;
             NPC.lifeMax = Main.hardMode ? 15000 : 9000;

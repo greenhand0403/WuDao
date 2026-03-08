@@ -60,7 +60,7 @@ namespace WuDao.Content.Enemy
             return 0f;
         }
 
-        public override bool CheckActive() => false;
+        public override bool CheckActive() => true;
 
         public override void AI()
         {
@@ -73,7 +73,11 @@ namespace WuDao.Content.Enemy
                 NPC.EncourageDespawn(10);
                 return;
             }
-
+            // 距离太远则消失
+            if (Vector2.Distance(NPC.Center, player.Center) > 3000f)
+            {
+                NPC.EncourageDespawn(10);
+            }
             if (Main.netMode != NetmodeID.MultiplayerClient)
             {
                 UpdateAnchors(player);

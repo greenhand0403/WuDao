@@ -730,6 +730,16 @@ Items: {
 			'''
 		DisplayName: 绝学·月步
 	}
+
+	ZombieStaff: {
+		Tooltip: 召唤僵尸仆从
+		DisplayName: 墓园来信
+	}
+
+	DandelionStaff: {
+		Tooltip: 召唤蒲公英哨兵
+		DisplayName: 蒲公英的约定
+	}
 }
 
 Projectiles: {
@@ -797,6 +807,8 @@ Projectiles: {
 	MonsterTrainSpear.DisplayName: 怪物火车矮人长矛
 	DragonflyMinion.DisplayName: 蜻蜓仆从
 	BeeStingsProjectile.DisplayName: 蜂刺
+	ZombieMinion.DisplayName: 僵尸仆从
+	DandelionSentry.DisplayName: 蒲公英哨兵
 }
 
 DamageClasses: {
@@ -1033,6 +1045,11 @@ Buffs: {
 	SheRaTransformBuff: {
 		DisplayName: 超凡之力
 		Description: 超凡之力
+	}
+
+	ZombieMinionBuff: {
+		Description: 僵尸仆从为你而战
+		DisplayName: 僵尸仆从守护
 	}
 }
 

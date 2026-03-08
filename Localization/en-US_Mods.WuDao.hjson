@@ -725,6 +725,16 @@ Items: {
 			'''
 		DisplayName: Sky Walking
 	}
+
+	ZombieStaff: {
+		Tooltip: Summons a zombie minion
+		DisplayName: Zombie Staff
+	}
+
+	DandelionStaff: {
+		Tooltip: Summons a dandelion sentry
+		DisplayName: Dandelion Staff
+	}
 }
 
 Projectiles: {
@@ -792,6 +802,8 @@ Projectiles: {
 	MonsterTrainSpear.DisplayName: Monster Train Spear
 	DragonflyMinion.DisplayName: Dragonfly Minion
 	BeeStingsProjectile.DisplayName: Bee Stings Projectile
+	ZombieMinion.DisplayName: Zombie Minion
+	DandelionSentry.DisplayName: Dandelion Sentry
 }
 
 DamageClasses: {
@@ -1028,6 +1040,11 @@ Buffs: {
 	SheRaTransformBuff: {
 		DisplayName: She Ra Transform Buff
 		Description: She Ra Power
+	}
+
+	ZombieMinionBuff: {
+		Description: The zombie minion fights for you
+		DisplayName: Zombie Minion Buff
 	}
 }
 
