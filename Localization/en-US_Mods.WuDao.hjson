@@ -1188,6 +1188,9 @@ NPCs: {
 	AngryHunterHead.DisplayName: Angry Hunter Head
 	AngryHunterTentacle.DisplayName: Angry Hunter Tentacle
 	PeekWatcher.DisplayName: Peek Watcher
+	BloodstainedIntestineBody.DisplayName: Bloodstained Intestine Body
+	BloodstainedIntestineHead.DisplayName: Bloodstained Intestine Head
+	BloodstainedIntestineTail.DisplayName: Bloodstained Intestine Tail
 }
 
 Prefixes: {

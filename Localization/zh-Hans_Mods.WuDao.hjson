@@ -1193,6 +1193,9 @@ NPCs: {
 	AngryHunterHead.DisplayName: 愤怒猎手头
 	AngryHunterTentacle.DisplayName: 愤怒猎手触手
 	PeekWatcher.DisplayName: 窥探者
+	BloodstainedIntestineBody.DisplayName: 血污肠道身体
+	BloodstainedIntestineHead.DisplayName: 血污肠道头
+	BloodstainedIntestineTail.DisplayName: 血污肠道尾
 }
 
 Prefixes: {
