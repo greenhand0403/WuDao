@@ -735,6 +735,11 @@ Items: {
 		Tooltip: Summons a dandelion sentry
 		DisplayName: Dandelion Staff
 	}
+
+	DuckMountItem: {
+		DisplayName: Duck Mount Item
+		Tooltip: Summons a duck mount
+	}
 }
 
 Projectiles: {
@@ -1046,6 +1051,11 @@ Buffs: {
 	ZombieMinionBuff: {
 		Description: The zombie minion fights for you
 		DisplayName: Zombie Minion Buff
+	}
+
+	DuckMountBuff: {
+		DisplayName: Duck Mount Buff
+		Description: Duck Mount
 	}
 }
 

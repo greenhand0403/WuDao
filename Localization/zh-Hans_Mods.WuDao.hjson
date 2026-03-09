@@ -740,6 +740,11 @@ Items: {
 		Tooltip: 召唤蒲公英哨兵
 		DisplayName: 蒲公英的约定
 	}
+
+	DuckMountItem: {
+		DisplayName: 绿色蠕虫
+		Tooltip: 召唤一只野鸭坐骑
+	}
 }
 
 Projectiles: {
@@ -1051,6 +1056,11 @@ Buffs: {
 	ZombieMinionBuff: {
 		Description: 僵尸仆从为你而战
 		DisplayName: 僵尸仆从守护
+	}
+
+	DuckMountBuff: {
+		DisplayName: 野鸭坐骑
+		Description: 比蜜蜂坐骑稍弱一点
 	}
 }
 
