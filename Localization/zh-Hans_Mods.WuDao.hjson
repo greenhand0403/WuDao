@@ -745,6 +745,11 @@ Items: {
 		DisplayName: 绿色蠕虫
 		Tooltip: 召唤一只野鸭坐骑
 	}
+
+	SeedMinigun: {
+		DisplayName: 种子机关枪
+		Tooltip: 射出种子、毒种子或坚果种子
+	}
 }
 
 Projectiles: {

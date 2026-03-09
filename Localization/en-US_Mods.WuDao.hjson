@@ -740,6 +740,11 @@ Items: {
 		DisplayName: Duck Mount Item
 		Tooltip: Summons a duck mount
 	}
+
+	SeedMinigun: {
+		DisplayName: Seed Minigun
+		Tooltip: Shoot seeds
+	}
 }
 
 Projectiles: {
