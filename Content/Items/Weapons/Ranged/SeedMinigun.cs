@@ -9,7 +9,6 @@ namespace WuDao.Content.Items.Weapons.Ranged
 {
     public class SeedMinigun : ModItem
     {
-        public override string Texture => "Terraria/Images/Item_" + ItemID.VenusMagnum;
         // public override void SetStaticDefaults()
         // {
         //     DisplayName.SetDefault("种子机关枪");

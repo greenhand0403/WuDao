@@ -750,6 +750,16 @@ Items: {
 		DisplayName: 种子机关枪
 		Tooltip: 射出种子、毒种子或坚果种子
 	}
+
+	RoundStonePillar: {
+		Tooltip:
+			'''
+			受到巨石飞镖长矛陷阱的伤害减半
+			增加坠落速度
+			减少移动速度和跳跃高度
+			'''
+		DisplayName: 石墩子
+	}
 }
 
 Projectiles: {

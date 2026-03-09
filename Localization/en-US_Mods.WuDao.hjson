@@ -745,6 +745,16 @@ Items: {
 		DisplayName: Seed Minigun
 		Tooltip: Shoot seeds
 	}
+
+	RoundStonePillar: {
+		Tooltip:
+			'''
+			Damage from boulder dart spikes is halved
+			Increased fallingspeed
+			Decrease movespeed and jump height
+			'''
+		DisplayName: Round Stone Pillar
+	}
 }
 
 Projectiles: {
