@@ -1,4 +1,9 @@
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
+using Terraria.DataStructures;
+using Terraria.GameContent;
+using Terraria.ID;
 using Terraria.ModLoader;
 using WuDao.Content.Projectiles.Summon;
 
@@ -7,7 +12,7 @@ namespace WuDao.Content.Buffs
     // 万魂幡 Summon Buff
     public class ThousandGhostBannerBuff : ModBuff
     {
-        public override string Texture => $"WuDao/Content/Items/Weapons/Summon/ThousandGhostBanner";
+        public override string Texture => "Terraria/Images/Buff";
 
         public override void SetStaticDefaults()
         {
@@ -17,7 +22,6 @@ namespace WuDao.Content.Buffs
 
         public override void Update(Player player, ref int buffIndex)
         {
-            // If the minions exist reset the buff time, otherwise remove the buff from the player
             if (player.ownedProjectileCounts[ModContent.ProjectileType<ThousandGhostMinion>()] > 0)
             {
                 player.buffTime[buffIndex] = 18000;
@@ -27,6 +31,26 @@ namespace WuDao.Content.Buffs
                 player.DelBuff(buffIndex);
                 buffIndex--;
             }
+        }
+        public override void PostDraw(SpriteBatch spriteBatch, int buffIndex, BuffDrawParams drawParams)
+        {
+            Texture2D texture = TextureAssets.Npc[NPCID.Ghost].Value;
+
+            Rectangle source = new Rectangle(0, 0, 40, 40);
+
+            Vector2 origin = new Vector2(0, 0);
+
+            Main.EntitySpriteDraw(
+                texture,
+                drawParams.Position,
+                source,
+                drawParams.DrawColor, // 不要再用 Color.White
+                0f,
+                origin,
+                0.8f,
+                SpriteEffects.None,
+                0
+            );
         }
     }
 }

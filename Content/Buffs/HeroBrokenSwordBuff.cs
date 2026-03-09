@@ -1,4 +1,8 @@
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
+using Terraria.DataStructures;
+using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -7,7 +11,7 @@ namespace WuDao.Content.Buffs
     // 断裂英雄剑 Summon Buff
     public class HeroBrokenSwordBuff : ModBuff
     {
-        public override string Texture => $"Terraria/Images/Item_{ItemID.BrokenHeroSword}";
+        public override string Texture => "Terraria/Images/Buff";
         public override void SetStaticDefaults()
         {
             Main.buffNoSave[Type] = true;       // 不存档
@@ -26,6 +30,31 @@ namespace WuDao.Content.Buffs
                 player.DelBuff(buffIndex);
                 buffIndex--;
             }
+        }
+        
+        public override void PostDraw(SpriteBatch spriteBatch, int buffIndex, BuffDrawParams drawParams)
+        {
+            Texture2D texture = TextureAssets.Item[ItemID.BrokenHeroSword].Value;
+
+            Rectangle sourceRect = new Rectangle(
+                0,
+                0,
+                34,
+                38
+            );
+            
+            Vector2 origin = new Vector2(-3, 0);
+            Main.EntitySpriteDraw(
+                texture,
+                drawParams.Position,
+                sourceRect,
+                drawParams.DrawColor,
+                0,
+                origin,
+                0.82f,
+                SpriteEffects.None,
+                0
+            );
         }
     }
 }

@@ -38,15 +38,15 @@ namespace WuDao.Content.Buffs
         {
             // 绘制僵尸的头像作为buff，从贴图38x48的单帧中裁剪32x32的区域
             Texture2D texture = TextureAssets.Npc[NPCID.Zombie].Value;
-
+            // 贴图坐标是左上角为原点
             Rectangle sourceRect = new Rectangle(
-                0,
+                3,// (38-32)/2 对齐中心
                 0,
                 32,
                 32
             );
-            // 偏移 (38-32)/2
-            Vector2 origin = new Vector2(3, 0);
+            // 往右偏移2像素，负数是往右下角挪
+            Vector2 origin = new Vector2(-2, 0);
             Main.EntitySpriteDraw(
                 texture,
                 drawParams.Position,

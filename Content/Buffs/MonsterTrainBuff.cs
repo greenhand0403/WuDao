@@ -1,4 +1,7 @@
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ModLoader;
 using WuDao.Content.Projectiles.Summon;
 
@@ -7,7 +10,7 @@ namespace WuDao.Content.Buffs
     // 怪物火车 Summon Buff
     public class MonsterTrainBuff : ModBuff
     {
-        public override string Texture => $"WuDao/Content/Items/Weapons/Summon/MonsterTrainStaff";
+        public override string Texture => "Terraria/Images/Buff";
         public override void SetStaticDefaults()
         {
             // 召唤类 Buff 的基本设置
@@ -26,6 +29,30 @@ namespace WuDao.Content.Buffs
                 player.DelBuff(buffIndex);
                 buffIndex--;
             }
+        }
+        public override void PostDraw(SpriteBatch spriteBatch, int buffIndex, BuffDrawParams drawParams)
+        {
+            Texture2D texture = ModContent.Request<Texture2D>("WuDao/Content/Items/Weapons/Summon/MonsterTrainStaff").Value;
+
+            Rectangle sourceRect = new Rectangle(
+                5,
+                0,
+                32,
+                32
+            );
+
+            Vector2 origin = new Vector2(0, 0);
+            Main.EntitySpriteDraw(
+                texture,
+                drawParams.Position,
+                sourceRect,
+                drawParams.DrawColor,
+                0,
+                origin,
+                1f,
+                SpriteEffects.None,
+                0
+            );
         }
     }
 }
