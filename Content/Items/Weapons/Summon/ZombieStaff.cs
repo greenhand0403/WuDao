@@ -8,9 +8,9 @@ using WuDao.Content.Buffs;
 
 namespace WuDao.Content.Items.Weapons.Summon
 {
+    // 像太极剑一样做个改动，只能召唤两只，一只僵尸新郎，一只僵尸新娘
     public class ZombieStaff : ModItem
     {
-        public override string Texture => "Terraria/Images/Item_" + ItemID.Sunflower;
         public override void SetDefaults()
         {
             Item.damage = 12;

@@ -804,6 +804,7 @@ Projectiles: {
 	BeeStingsProjectile.DisplayName: Bee Stings Projectile
 	ZombieMinion.DisplayName: Zombie Minion
 	DandelionSentry.DisplayName: Dandelion Sentry
+	DandelionSeedFriendly.DisplayName: Dandelion Seed Friendly
 }
 
 DamageClasses: {

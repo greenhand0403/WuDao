@@ -809,6 +809,7 @@ Projectiles: {
 	BeeStingsProjectile.DisplayName: 蜂刺
 	ZombieMinion.DisplayName: 僵尸仆从
 	DandelionSentry.DisplayName: 蒲公英哨兵
+	DandelionSeedFriendly.DisplayName: 蒲公英种子友方
 }
 
 DamageClasses: {
