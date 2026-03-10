@@ -4,23 +4,61 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using WuDao.Common;
 using WuDao.Content.Systems;
+using Terraria.ID;
 
 namespace WuDao.Content.Global.NPCs
 {
     public class InvisibleEnemiesGlobalNPC : GlobalNPC
     {
-        private static bool ShouldHide(NPC npc)
+        private static NPC GetHideOwner(NPC npc)
         {
-            if (!npc.active || npc.friendly || npc.townNPC)
+            if (!npc.active)
+                return npc;
+
+            // 对多段体 / 子体 / Boss 部件，优先跟随 realLife 主体
+            if (npc.realLife >= 0 && npc.realLife < Main.maxNPCs)
+            {
+                NPC owner = Main.npc[npc.realLife];
+                if (owner.active)
+                    return owner;
+            }
+
+            return npc;
+        }
+
+        // private static bool ShouldHide(NPC npc)
+        // {
+        //     if (!npc.active)
+        //         return false;
+
+        //     Player viewer = Main.LocalPlayer;
+
+        //     NPC owner = GetHideOwner(npc);
+
+        //     if (!owner.active || owner.friendly || owner.townNPC)
+        //         return false;
+
+        //     return !InvisibleEnemies.CanSeeEcho(viewer);
+        // }
+        internal static bool ShouldHideForDraw(NPC npc)
+        {
+            if (!npc.active)
                 return false;
 
             Player viewer = Main.LocalPlayer;
+            if (viewer == null || !viewer.active)
+                return false;
+
+            NPC owner = GetHideOwner(npc);
+
+            if (!owner.active || owner.friendly || owner.townNPC)
+                return false;
+
             return !InvisibleEnemies.CanSeeEcho(viewer);
         }
-
         public override void PostAI(NPC npc)
         {
-            if (!ShouldHide(npc))
+            if (!ShouldHideForDraw(npc))
                 return;
 
             // 1. 当前/上一帧扫掠
@@ -56,10 +94,25 @@ namespace WuDao.Content.Global.NPCs
         }
         public override bool PreDraw(NPC npc, SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
-            if (ShouldHide(npc))
+            if (ShouldHideForDraw(npc))
                 return false;
 
             return true;
+        }
+        public override void DrawEffects(NPC npc, ref Color drawColor)
+        {
+            if (!ShouldHideForDraw(npc))
+                return;
+
+            drawColor = Color.Transparent;
+        }
+
+        public override Color? GetAlpha(NPC npc, Color drawColor)
+        {
+            if (ShouldHideForDraw(npc))
+                return Color.Transparent;
+
+            return null;
         }
     }
 }
