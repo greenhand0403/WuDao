@@ -1234,6 +1234,7 @@ NPCs: {
 	BloodstainedIntestineBody.DisplayName: Bloodstained Intestine Body
 	BloodstainedIntestineHead.DisplayName: Bloodstained Intestine Head
 	BloodstainedIntestineTail.DisplayName: Bloodstained Intestine Tail
+	DoomGnome.DisplayName: Doom Gnome
 }
 
 Prefixes: {

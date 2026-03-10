@@ -1239,6 +1239,7 @@ NPCs: {
 	BloodstainedIntestineBody.DisplayName: 血污肠道身体
 	BloodstainedIntestineHead.DisplayName: 血污肠道头
 	BloodstainedIntestineTail.DisplayName: 血污肠道尾
+	DoomGnome.DisplayName: 厄运侏儒
 }
 
 Prefixes: {
