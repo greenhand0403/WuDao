@@ -755,6 +755,36 @@ Items: {
 			'''
 		DisplayName: Round Stone Pillar
 	}
+
+	PowerBracelet: {
+		Tooltip: Each bracelet increases 1% full damage, stackable
+		DisplayName: Power Bracelet
+	}
+
+	PowerBracelet1: {
+		DisplayName: Power Bracelet1
+		Tooltip: Increase 1% full damage
+	}
+
+	PowerBracelet2: {
+		DisplayName: Power Bracelet2
+		Tooltip: Increase 1% full damage
+	}
+
+	PowerBracelet3: {
+		DisplayName: Power Bracelet3
+		Tooltip: Increase 1% full damage
+	}
+
+	PowerBracelet4: {
+		DisplayName: Power Bracelet4
+		Tooltip: Increase 1% full damage
+	}
+
+	PowerBracelet5: {
+		DisplayName: Power Bracelet5
+		Tooltip: Increase 1% full damage
+	}
 }
 
 Projectiles: {

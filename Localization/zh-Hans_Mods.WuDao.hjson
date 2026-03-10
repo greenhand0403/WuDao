@@ -760,6 +760,36 @@ Items: {
 			'''
 		DisplayName: 石墩子
 	}
+
+	PowerBracelet: {
+		Tooltip: 每个手环增加1%全伤害，可叠加
+		DisplayName: 力量手环
+	}
+
+	PowerBracelet1: {
+		DisplayName: 力量手环1
+		Tooltip: 增加1%全伤害
+	}
+
+	PowerBracelet2: {
+		DisplayName: 力量手环2
+		Tooltip: 增加1%全伤害
+	}
+
+	PowerBracelet3: {
+		DisplayName: 力量手环3
+		Tooltip: 增加1%全伤害
+	}
+
+	PowerBracelet4: {
+		DisplayName: 力量手环4
+		Tooltip: 增加1%全伤害
+	}
+
+	PowerBracelet5: {
+		DisplayName: 力量手环5
+		Tooltip: 增加1%全伤害
+	}
 }
 
 Projectiles: {
