@@ -17,5 +17,6 @@ namespace WuDao.Content.Systems
             // 从主菜单进入世界后确保应用最新配置
             InvisibleTileRuntime.TryRebuildFromConfig();
         }
+        
     }
 }

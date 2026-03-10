@@ -63,12 +63,12 @@ namespace WuDao.Content.Config
         [DefaultValue(true)]
         public bool EnableJueXueSystem;
 
-        // [Label("敌怪和陷阱隐身")]
+        /// <summary>敌怪和陷阱隐身</summary>
         [DefaultValue(false)]
         public bool InvisibleEnemies;
 
         [DefaultValue(false)]
-        // [Label("忽略幽灵护目镜")]
+        /// <summary>忽略幽灵护目镜</summary>
         public bool IgnoreSpectreGoggles;
         // ✅ 白名单配置
         [LabelKey("$Mods.WuDao.Configs.WudaoConfig.InvisibleEnemies.Whitelist")]
