@@ -18,8 +18,8 @@ namespace WuDao.Content.Projectiles.Melee
 
 		public override void SetStaticDefaults()
 		{
-			ProjectileID.Sets.TrailCacheLength[Type] = 50;
-			ProjectileID.Sets.TrailingMode[Type] = 2;
+			ProjectileID.Sets.TrailCacheLength[Type] = 10;
+			ProjectileID.Sets.TrailingMode[Type] = 1;
 		}
 
 		public override void SetDefaults()
@@ -42,16 +42,33 @@ namespace WuDao.Content.Projectiles.Melee
 			Projectile.usesLocalNPCImmunity = true;
 			Projectile.localNPCHitCooldown = 10;
 		}
+		public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
+		{
+			for (int i = 0; i < Projectile.oldPos.Length; i++)
+			{
+				if (Projectile.oldPos[i] == Vector2.Zero)
+					break;
 
+				Rectangle hitbox = projHitbox;
+				hitbox.X = (int)Projectile.oldPos[i].X;
+				hitbox.Y = (int)Projectile.oldPos[i].Y;
+
+				if (hitbox.Intersects(targetHitbox))
+					return true;
+			}
+
+			return false;
+		}
 		public override void AI()
 		{
+			// 原版闪电珠弧 Handle movement 里面有这样的代码
 			// if (Projectile.localAI[1] < 1f)
 			// {
 			// 	Projectile.localAI[1] += 2f;
 			// 	Projectile.position += Projectile.velocity;
 			// 	Projectile.velocity = Vector2.Zero;
 			// }
-
+			// 原版闪电珠弧 vanilla AI 里面有这样的代码
 			Projectile.frameCounter++;
 			Lighting.AddLight(Projectile.Center, 0.3f, 0.45f, 0.5f);
 			if (Projectile.velocity == Vector2.Zero)
@@ -150,27 +167,89 @@ namespace WuDao.Content.Projectiles.Melee
 					Projectile.velocity = spinningpoint15.RotatedBy(Projectile.ai[0] + (float)Math.PI / 2f) * num780;
 					Projectile.rotation = Projectile.velocity.ToRotation() + (float)Math.PI / 2f;
 				}
-
-				// 绘制粒子
-				float num22 = Projectile.rotation + (float)Math.PI / 2f + ((Main.rand.Next(2) == 1) ? (-1f) : 1f) * ((float)Math.PI / 2f);
-				float num23 = (float)Main.rand.NextDouble() * 2f + 2f;
-				Vector2 vector = new Vector2((float)Math.Cos(num22) * num23, (float)Math.Sin(num22) * num23);
-				int num24 = Dust.NewDust(Projectile.oldPos[Projectile.oldPos.Length - 1], 0, 0, DustID.Vortex, vector.X, vector.Y);
-				Main.dust[num24].noGravity = true;
-				Main.dust[num24].scale = 1.7f;
 			}
-
+			// 原版闪电珠弧 Update 函数最后面有这样的代码 拖尾类型1
+			// if (Projectile.frameCounter == 0 || Projectile.oldPos[0] == Vector2.Zero)
+			{
+				// 记录历史位置
+				// for (int num13 = Projectile.oldPos.Length - 1; num13 > 0; num13--)
+				// {
+				// 	Projectile.oldPos[num13] = Projectile.oldPos[num13 - 1];
+				// }
+				// Projectile.oldPos[0] = Projectile.position;
+				// if (Projectile.velocity == Vector2.Zero)
+				// {
+				// 	// 绘制粒子
+				// 	float num22 = Projectile.rotation + (float)Math.PI / 2f + ((Main.rand.Next(2) == 1) ? (-1f) : 1f) * ((float)Math.PI / 2f);
+				// 	float num23 = (float)Main.rand.NextDouble() * 2f + 2f;
+				// 	Vector2 vector = new Vector2((float)Math.Cos(num22) * num23, (float)Math.Sin(num22) * num23);
+				// 	int num24 = Dust.NewDust(Projectile.oldPos[Projectile.oldPos.Length - 1], 0, 0, DustID.Vortex, vector.X, vector.Y);
+				// 	Main.dust[num24].noGravity = true;
+				// 	Main.dust[num24].scale = 1.7f;
+				// }
+			}
 		}
+		// public override bool PreDraw(ref Color lightColor)
+		// {
+		// 	Texture2D texture = TextureAssets.Projectile[Type].Value;
+
+		// 	Vector2 drawOrigin = new Vector2(texture.Width * 0.5f, Projectile.height * 0.5f);
+		// 	for (int k = Projectile.oldPos.Length - 1; k > 0; k--)
+		// 	{
+		// 		Vector2 drawPos = (Projectile.oldPos[k] - Main.screenPosition) + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
+		// 		Color color = Projectile.GetAlpha(lightColor);// * ((Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
+		// 		Main.EntitySpriteDraw(texture, drawPos, null, color, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0);
+		// 	}
+
+		// 	return false;
+		// }
 		public override bool PreDraw(ref Color lightColor)
 		{
-			Texture2D texture = TextureAssets.Projectile[Type].Value;
+			Vector2 end = Projectile.Center + Vector2.UnitY * Projectile.gfxOffY - Main.screenPosition;
+			Texture2D laserTex = TextureAssets.Extra[33].Value;
 
-			Vector2 drawOrigin = new Vector2(texture.Width * 0.5f, Projectile.height * 0.5f);
-			for (int k = Projectile.oldPos.Length - 1; k > 0; k--)
+			for (int layer = 0; layer < 3; layer++)
 			{
-				Vector2 drawPos = (Projectile.oldPos[k] - Main.screenPosition) + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
-				Color color = Projectile.GetAlpha(lightColor);// * ((Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
-				Main.EntitySpriteDraw(texture, drawPos, null, color, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0);
+				Vector2 scale;
+				switch (layer)
+				{
+					case 0:
+						scale = new Vector2(Projectile.scale) * 0.6f;
+						DelegateMethods.c_1 = new Color(115, 204, 219, 0) * 0.5f;
+						break;
+					case 1:
+						scale = new Vector2(Projectile.scale) * 0.4f;
+						DelegateMethods.c_1 = new Color(113, 251, 255, 0) * 0.5f;
+						break;
+					default:
+						scale = new Vector2(Projectile.scale) * 0.2f;
+						DelegateMethods.c_1 = new Color(255, 255, 255, 0) * 0.5f;
+						break;
+				}
+
+				DelegateMethods.f_1 = 1f;
+
+				for (int i = Projectile.oldPos.Length - 1; i > 0; i--)
+				{
+					if (Projectile.oldPos[i] == Vector2.Zero)
+						continue;
+
+					Vector2 start = Projectile.oldPos[i] + new Vector2(Projectile.width, Projectile.height) / 2f
+						+ Vector2.UnitY * Projectile.gfxOffY - Main.screenPosition;
+
+					Vector2 end2 = Projectile.oldPos[i - 1] + new Vector2(Projectile.width, Projectile.height) / 2f
+						+ Vector2.UnitY * Projectile.gfxOffY - Main.screenPosition;
+
+					Utils.DrawLaser(Main.spriteBatch, laserTex, start, end2, scale, DelegateMethods.LightningLaserDraw);
+				}
+
+				if (Projectile.oldPos[0] != Vector2.Zero)
+				{
+					Vector2 start = Projectile.oldPos[0] + new Vector2(Projectile.width, Projectile.height) / 2f
+						+ Vector2.UnitY * Projectile.gfxOffY - Main.screenPosition;
+
+					Utils.DrawLaser(Main.spriteBatch, laserTex, start, end, scale, DelegateMethods.LightningLaserDraw);
+				}
 			}
 
 			return false;
