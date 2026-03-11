@@ -10,7 +10,7 @@
 
 	<!-- References -->
 	<ItemGroup>
-		
+		<Compile Remove="Content\Systems\InvisibleEnemiesProjectileAI001HookSystem.cs" />
 	</ItemGroup>
 
 </Project>

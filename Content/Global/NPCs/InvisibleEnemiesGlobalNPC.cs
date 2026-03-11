@@ -10,6 +10,10 @@ namespace WuDao.Content.Global.NPCs
 {
     public class InvisibleEnemiesGlobalNPC : GlobalNPC
     {
+        public override bool InstancePerEntity => true;
+
+        private bool forcedHideApplied;
+        private bool originalHide;
         private static NPC GetHideOwner(NPC npc)
         {
             if (!npc.active)
@@ -58,7 +62,25 @@ namespace WuDao.Content.Global.NPCs
         }
         public override void PostAI(NPC npc)
         {
-            if (!ShouldHideForDraw(npc))
+            bool shouldHide = ShouldHideForDraw(npc);
+
+            if (shouldHide)
+            {
+                if (!forcedHideApplied)
+                {
+                    originalHide = npc.hide;
+                    forcedHideApplied = true;
+                }
+
+                npc.hide = true;
+            }
+            else if (forcedHideApplied)
+            {
+                npc.hide = originalHide;
+                forcedHideApplied = false;
+            }
+
+            if (!shouldHide)
                 return;
 
             // 1. 当前/上一帧扫掠
