@@ -785,6 +785,11 @@ Items: {
 		DisplayName: Power Bracelet5
 		Tooltip: Increase 1% full damage
 	}
+
+	StormwrathBlade: {
+		Tooltip: Shoots a lightning arc
+		DisplayName: Stormwrath Blade
+	}
 }
 
 Projectiles: {
@@ -855,6 +860,7 @@ Projectiles: {
 	ZombieMinion.DisplayName: Zombie Minion
 	DandelionSentry.DisplayName: Dandelion Sentry
 	DandelionSeedFriendly.DisplayName: Dandelion Seed Friendly
+	StormwrathLightning.DisplayName: Stormwrath Lightning
 }
 
 DamageClasses: {

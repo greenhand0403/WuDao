@@ -790,6 +790,11 @@ Items: {
 		DisplayName: 力量手环5
 		Tooltip: 增加1%全伤害
 	}
+
+	StormwrathBlade: {
+		Tooltip: 射出电弧
+		DisplayName: 奔雷剑
+	}
 }
 
 Projectiles: {
@@ -860,6 +865,7 @@ Projectiles: {
 	ZombieMinion.DisplayName: 僵尸仆从
 	DandelionSentry.DisplayName: 蒲公英哨兵
 	DandelionSeedFriendly.DisplayName: 蒲公英种子友方
+	StormwrathLightning.DisplayName: 奔雷剑电弧
 }
 
 DamageClasses: {
