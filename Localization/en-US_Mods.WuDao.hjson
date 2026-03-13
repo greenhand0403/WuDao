@@ -790,6 +790,11 @@ Items: {
 		Tooltip: Shoots a lightning arc
 		DisplayName: Stormwrath Blade
 	}
+
+	RainbowArrow: {
+		Tooltip: Leaves a rainbow trail
+		DisplayName: Rainbow Arrow
+	}
 }
 
 Projectiles: {
@@ -861,6 +866,7 @@ Projectiles: {
 	DandelionSentry.DisplayName: Dandelion Sentry
 	DandelionSeedFriendly.DisplayName: Dandelion Seed Friendly
 	StormwrathLightning.DisplayName: Stormwrath Lightning
+	RainbowArrowProjectile.DisplayName: Rainbow Arrow Projectile
 }
 
 DamageClasses: {

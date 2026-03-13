@@ -795,6 +795,11 @@ Items: {
 		Tooltip: 射出电弧
 		DisplayName: 奔雷剑
 	}
+
+	RainbowArrow: {
+		Tooltip: 留下彩虹轨迹
+		DisplayName: 彩虹箭
+	}
 }
 
 Projectiles: {
@@ -866,6 +871,7 @@ Projectiles: {
 	DandelionSentry.DisplayName: 蒲公英哨兵
 	DandelionSeedFriendly.DisplayName: 蒲公英种子友方
 	StormwrathLightning.DisplayName: 奔雷剑电弧
+	RainbowArrowProjectile.DisplayName: 彩虹箭
 }
 
 DamageClasses: {

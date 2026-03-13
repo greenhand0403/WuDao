@@ -9,7 +9,7 @@ using WuDao.Content.Projectiles.Melee;
 
 namespace WuDao.Content.Items.Weapons.Melee
 {
-    // TODO: 贴图重置
+    // TODO: 贴图重置、代码优化提升可读性
     public class StormwrathBlade : ModItem
     {
         public override string Texture => "Terraria/Images/Item_" + ItemID.Starfury;
