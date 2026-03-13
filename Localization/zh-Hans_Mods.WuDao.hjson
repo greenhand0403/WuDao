@@ -761,33 +761,33 @@ Items: {
 		DisplayName: 石墩子
 	}
 
-	PowerBracelet: {
+	LostSymbol: {
 		Tooltip: 每个手环增加1%全伤害，可叠加
-		DisplayName: 力量手环
+		DisplayName: 失落符文
 	}
 
-	PowerBracelet1: {
-		DisplayName: 力量手环1
+	LostSymbol1: {
+		DisplayName: 失落符文1
 		Tooltip: 增加1%全伤害
 	}
 
-	PowerBracelet2: {
-		DisplayName: 力量手环2
+	LostSymbol2: {
+		DisplayName: 失落符文2
 		Tooltip: 增加1%全伤害
 	}
 
-	PowerBracelet3: {
-		DisplayName: 力量手环3
+	LostSymbol3: {
+		DisplayName: 失落符文3
 		Tooltip: 增加1%全伤害
 	}
 
-	PowerBracelet4: {
-		DisplayName: 力量手环4
+	LostSymbol4: {
+		DisplayName: 失落符文4
 		Tooltip: 增加1%全伤害
 	}
 
-	PowerBracelet5: {
-		DisplayName: 力量手环5
+	LostSymbol5: {
+		DisplayName: 失落符文5
 		Tooltip: 增加1%全伤害
 	}
 
@@ -802,13 +802,33 @@ Items: {
 	}
 
 	BeetleArrow: {
-		// DisplayName: Beetle Arrow
-		// Tooltip: ""
+		DisplayName: 虫箭
+		Tooltip:
+			'''
+			增加近战伤害和召唤伤害
+			使玩家的召唤伤害可以造成暴击效果
+			基础暴击率4%
+			'''
 	}
 
 	CrackedCore: {
-		// DisplayName: Cracked Core
-		// Tooltip: ""
+		DisplayName: 破碎核心
+		Tooltip:
+			'''
+			增加魔法伤害10%
+			受伤则不享受魔法伤害加成
+			持续5秒未受伤则恢复加成
+			'''
+	}
+
+	FishSchoolWhip: {
+		Tooltip: 击中时产生任务鱼射弹
+		DisplayName: 鱼群鞭笞者
+	}
+
+	BirdWatchingLicense: {
+		Tooltip: 召唤海鸥仆从
+		DisplayName: 观鸟证
 	}
 }
 
@@ -882,6 +902,10 @@ Projectiles: {
 	DandelionSeedFriendly.DisplayName: 蒲公英种子友方
 	StormwrathLightning.DisplayName: 奔雷剑电弧
 	RainbowArrowProjectile.DisplayName: 彩虹箭
+	// SeagullMinion.DisplayName: Seagull Minion
+	// QuestFishProjectile.DisplayName: Quest Fish Projectile
+	// PoopProjectile.DisplayName: Poop Projectile
+	// FishSchoolWhipProj.DisplayName: Fish School Whip Proj
 }
 
 DamageClasses: {
@@ -1128,6 +1152,11 @@ Buffs: {
 	DuckMountBuff: {
 		DisplayName: 野鸭坐骑
 		Description: 比蜜蜂坐骑稍弱一点
+	}
+
+	SeagullBuff: {
+		// Description: Mods.WuDao.Buffs.SeagullBuff.Description
+		// DisplayName: Seagull Buff
 	}
 }
 

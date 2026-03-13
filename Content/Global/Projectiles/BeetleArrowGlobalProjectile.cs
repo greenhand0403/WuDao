@@ -2,6 +2,7 @@ using Terraria;
 using Terraria.ModLoader;
 using Terraria.ID;
 using WuDao.Content.Players;
+using System;
 
 namespace WuDao.Content.Global.Projectiles
 {
@@ -11,17 +12,31 @@ namespace WuDao.Content.Global.Projectiles
 
         public override void ModifyHitNPC(Projectile projectile, NPC target, ref NPC.HitModifiers modifiers)
         {
-            Player player = Main.player[projectile.owner];
+            if (projectile.owner < 0 || projectile.owner >= Main.maxPlayers)
+                return;
 
+            Player player = Main.player[projectile.owner];
             var modPlayer = player.GetModPlayer<BeetleArrowPlayer>();
 
             if (!modPlayer.beetleArrow)
                 return;
 
-            if (projectile.DamageType != DamageClass.Summon)
+            bool isSummon = projectile.CountsAsClass(DamageClass.Summon);
+            bool isWhip = projectile.CountsAsClass(DamageClass.SummonMeleeSpeed);
+
+            if (!isSummon && !isWhip)
                 return;
 
-            if (Main.rand.NextFloat() < 0.04f)
+            float critChance = 0f;
+
+            if (isWhip)
+                critChance = player.GetCritChance(DamageClass.SummonMeleeSpeed);
+            else
+                critChance = player.GetCritChance(DamageClass.Summon);
+
+            critChance = Math.Max(0f, critChance);
+
+            if (Main.rand.NextFloat(100f) < critChance)
             {
                 modifiers.SetCrit();
             }

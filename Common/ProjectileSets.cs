@@ -275,6 +275,11 @@ namespace WuDao.Common
             ItemID.FriedEgg,
             ItemID.DD2PetGhost
         };
+        // 所有任务鱼
+        public static readonly HashSet<int> TaskFishSet = new()
+        {
+            2475, 2476, 2450, 2477, 2478, 2451, 2479, 2480, 2452, 2453, 2481, 2454, 2482, 2483, 2455, 2456, 2457, 2458, 2459, 2460, 2484, 2472, 2461, 2462, 2463, 2485, 2464, 2465, 2486, 2466, 2467, 2468, 2487, 2469, 2488, 2470, 2471, 2473, 2474, 4393, 4394
+        };
     }
     public static class ProjectileSets
     {

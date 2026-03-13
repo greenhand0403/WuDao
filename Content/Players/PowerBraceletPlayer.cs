@@ -3,20 +3,20 @@ using Terraria.ModLoader;
 
 namespace WuDao.Content.Players
 {
-    public class PowerBraceletPlayer : ModPlayer
+    public class LostSymbolPlayer : ModPlayer
     {
-        public int PowerBraceletCount;
+        public int LostSymbolCount;
 
         public override void ResetEffects()
         {
-            PowerBraceletCount = 0;
+            LostSymbolCount = 0;
         }
 
         public override void PostUpdateEquips()
         {
-            if (PowerBraceletCount > 0)
+            if (LostSymbolCount > 0)
             {
-                Player.GetDamage(DamageClass.Generic) += 0.01f * PowerBraceletCount * PowerBraceletCount;
+                Player.GetDamage(DamageClass.Generic) += 0.01f * LostSymbolCount * LostSymbolCount;
             }
         }
     }

@@ -11,5 +11,16 @@ namespace WuDao.Content.Players
         {
             beetleArrow = false;
         }
+        public override void PostUpdateEquips()
+        {
+            if (!beetleArrow)
+                return;
+
+            // 仆从
+            Player.GetCritChance(DamageClass.Summon) += 4f;
+
+            // 鞭子
+            Player.GetCritChance(DamageClass.SummonMeleeSpeed) += 4f;
+        }
     }
 }

@@ -6,9 +6,10 @@ using WuDao.Content.Players;
 
 namespace WuDao.Content.Items.Accessories
 {
-    public abstract class BasePowerBracelet : ModItem
+    // 失落符文
+    public abstract class BaseLostSymbol : ModItem
     {
-        public override string Texture => "Terraria/Images/Item_" + ItemID.LifeCrystal;
+        public override string Texture => "WuDao/Content/Items/Accessories/LostSymbol";
 
         public override void SetStaticDefaults()
         {
@@ -26,13 +27,13 @@ namespace WuDao.Content.Items.Accessories
 
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
-            player.GetModPlayer<PowerBraceletPlayer>().PowerBraceletCount++;
+            player.GetModPlayer<LostSymbolPlayer>().LostSymbolCount++;
         }
 
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
-            tooltips.Add(new TooltipLine(Mod, "PowerBraceletInfo",
-                "每装备1个力量手环，增加1%全伤害"));
+            tooltips.Add(new TooltipLine(Mod, "LostSymbolInfo",
+                "每装备1个失落符文，增加1%全伤害"));
         }
 
         public override void AddRecipes()

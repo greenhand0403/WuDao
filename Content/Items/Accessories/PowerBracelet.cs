@@ -6,10 +6,10 @@ using WuDao.Content.Players;
 
 namespace WuDao.Content.Items.Accessories
 {
-    public class PowerBracelet : BasePowerBracelet { }
-    public class PowerBracelet1 : BasePowerBracelet { }
-    public class PowerBracelet2 : BasePowerBracelet { }
-    public class PowerBracelet3 : BasePowerBracelet { }
-    public class PowerBracelet4 : BasePowerBracelet { }
-    public class PowerBracelet5 : BasePowerBracelet { }
+    public class LostSymbol : BaseLostSymbol { }
+    public class LostSymbol1 : BaseLostSymbol { }
+    public class LostSymbol2 : BaseLostSymbol { }
+    public class LostSymbol3 : BaseLostSymbol { }
+    public class LostSymbol4 : BaseLostSymbol { }
+    public class LostSymbol5 : BaseLostSymbol { }
 }

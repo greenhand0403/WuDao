@@ -756,33 +756,33 @@ Items: {
 		DisplayName: Round Stone Pillar
 	}
 
-	PowerBracelet: {
+	LostSymbol: {
 		Tooltip: Each bracelet increases 1% full damage, stackable
-		DisplayName: Power Bracelet
+		DisplayName: LostSymbol
 	}
 
-	PowerBracelet1: {
-		DisplayName: Power Bracelet1
+	LostSymbol1: {
+		DisplayName: LostSymbol1
 		Tooltip: Increase 1% full damage
 	}
 
-	PowerBracelet2: {
-		DisplayName: Power Bracelet2
+	LostSymbol2: {
+		DisplayName: LostSymbol2
 		Tooltip: Increase 1% full damage
 	}
 
-	PowerBracelet3: {
-		DisplayName: Power Bracelet3
+	LostSymbol3: {
+		DisplayName: LostSymbol3
 		Tooltip: Increase 1% full damage
 	}
 
-	PowerBracelet4: {
-		DisplayName: Power Bracelet4
+	LostSymbol4: {
+		DisplayName: LostSymbol4
 		Tooltip: Increase 1% full damage
 	}
 
-	PowerBracelet5: {
-		DisplayName: Power Bracelet5
+	LostSymbol5: {
+		DisplayName: LostSymbol5
 		Tooltip: Increase 1% full damage
 	}
 
@@ -798,12 +798,32 @@ Items: {
 
 	BeetleArrow: {
 		DisplayName: Beetle Arrow
-		Tooltip: ""
+		Tooltip:
+			'''
+			Increase melee damage and summon damage
+			Make player's summon damage can cause critical effect
+			Base critical rate 4%
+			'''
 	}
 
 	CrackedCore: {
 		DisplayName: Cracked Core
-		Tooltip: ""
+		Tooltip:
+			'''
+			Increase magic damage 10%
+			Decrease magic damage when player is hurt
+			Restore magic damage boost after 5 seconds
+			'''
+	}
+
+	FishSchoolWhip: {
+		Tooltip: Shoot a special fish sometimes
+		DisplayName: Fish School Whip
+	}
+
+	BirdWatchingLicense: {
+		Tooltip: Summon a seagull servant
+		DisplayName: Bird Watching License
 	}
 }
 
@@ -877,6 +897,10 @@ Projectiles: {
 	DandelionSeedFriendly.DisplayName: Dandelion Seed Friendly
 	StormwrathLightning.DisplayName: Stormwrath Lightning
 	RainbowArrowProjectile.DisplayName: Rainbow Arrow Projectile
+	SeagullMinion.DisplayName: Seagull Minion
+	QuestFishProjectile.DisplayName: Quest Fish Projectile
+	PoopProjectile.DisplayName: Poop Projectile
+	FishSchoolWhipProj.DisplayName: Fish School Whip Proj
 }
 
 DamageClasses: {
@@ -1123,6 +1147,11 @@ Buffs: {
 	DuckMountBuff: {
 		DisplayName: Duck Mount Buff
 		Description: Duck Mount
+	}
+
+	SeagullBuff: {
+		Description: Mods.WuDao.Buffs.SeagullBuff.Description
+		DisplayName: Seagull Buff
 	}
 }
 
