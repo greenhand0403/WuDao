@@ -800,6 +800,16 @@ Items: {
 		Tooltip: 留下彩虹轨迹
 		DisplayName: 彩虹箭
 	}
+
+	BeetleArrow: {
+		// DisplayName: Beetle Arrow
+		// Tooltip: ""
+	}
+
+	CrackedCore: {
+		// DisplayName: Cracked Core
+		// Tooltip: ""
+	}
 }
 
 Projectiles: {

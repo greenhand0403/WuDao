@@ -15,7 +15,7 @@ namespace WuDao.Content.Players
             goldFullSet = false;
             fireFullSet = false;
         }
-
+        // 统计三种盔甲部件的五行属性
         public override void UpdateEquips()
         {
             int gold = 0, wood = 0, water = 0, fire = 0, earth = 0;

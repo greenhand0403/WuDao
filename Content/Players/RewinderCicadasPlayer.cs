@@ -109,6 +109,7 @@ namespace WuDao.Content.Players
             ConsumeEquippedRewinder();
             return false; // 阻止死亡（成功回溯）
         }
+        // 消耗饰品栏中已装备的春秋蝉
         private void ConsumeEquippedRewinder()
         {
             int cicadaType = ModContent.ItemType<RewinderCicadas>();

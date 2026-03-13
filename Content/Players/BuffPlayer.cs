@@ -180,22 +180,27 @@ namespace WuDao.Content.Players
             // —— 武器巨大化：近战尺寸 +20%（在 ModifyWeaponScale 内实现，这里无需处理）
 
             // —— 收藏家：武器稀有度 => 伤害；饰品稀有度总和 => 防御
+            // 统计当前原版可用功能饰品槽中，所有已装备饰品的稀有度总和，不算社交栏，不算模组额外饰品槽
             if (Player.HasBuff<Collector>())
             {
-                // 武器稀有度（默认 rare ∈ [-1, ...]，负值按 0 处理）
+                // 武器稀有度（负值按 0 处理）
                 int r = Math.Max(0, Player.HeldItem?.rare ?? 0);
                 float dmgBonus = 1f + 0.02f * r; // 每稀有度 +2% 伤害
                 Player.GetDamage(DamageClass.Generic) *= dmgBonus;
 
-                // 饰品稀有度总和 * 1 防御
+                // 原版“可用功能饰品槽”中的饰品稀有度总和 => 防御
                 int sum = 0;
-                for (int i = 3; i < 10 + Player.extraAccessorySlots; i++)
+                for (int i = 3; i <= 9; i++)
                 {
+                    if (!Player.IsItemSlotUnlockedAndUsable(i))
+                        continue;
+
                     Item acc = Player.armor[i];
                     if (acc != null && !acc.IsAir && acc.accessory)
                         sum += Math.Max(0, acc.rare);
                 }
-                Player.statDefense += (int)Math.Floor(sum * 1f);
+
+                Player.statDefense += sum;
             }
 
             // —— 资本主义：计算总金币（背包 + 4 个存钱容器）
@@ -314,21 +319,19 @@ namespace WuDao.Content.Players
             }
             return used;
         }
-        // ---------- 小工具：数“可用饰品栏空位”（不算时装栏） ----------
-        // 简化：只看前 5 + extraAccessorySlots 个饰品位（索引 3..）
         private static int CountAccessoryEmpty(Player p)
         {
-            int maxAcc = 5 + p.extraAccessorySlots; // 原版/专家/大师的额外饰品位会体现在 extraAccessorySlots
-            if (maxAcc < 0) maxAcc = 0;
-            if (maxAcc > 7) maxAcc = 7; // 保守上限（避免某些MOD扩展导致越界）
-
             int empty = 0;
-            for (int i = 0; i < maxAcc; i++)
+
+            for (int idx = 3; idx <= 9; idx++)
             {
-                int idx = 3 + i; // Player.armor[0..2]是盔甲，3..是饰品
-                if (idx >= 0 && idx < p.armor.Length && p.armor[idx].IsAir)
+                if (!p.IsItemSlotUnlockedAndUsable(idx))
+                    continue;
+
+                if (p.armor[idx] != null && p.armor[idx].IsAir)
                     empty++;
             }
+
             return empty;
         }
         public override void UpdateBadLifeRegen()

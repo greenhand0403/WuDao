@@ -795,6 +795,16 @@ Items: {
 		Tooltip: Leaves a rainbow trail
 		DisplayName: Rainbow Arrow
 	}
+
+	BeetleArrow: {
+		DisplayName: Beetle Arrow
+		Tooltip: ""
+	}
+
+	CrackedCore: {
+		DisplayName: Cracked Core
+		Tooltip: ""
+	}
 }
 
 Projectiles: {
