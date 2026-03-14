@@ -744,6 +744,7 @@ Items: {
 	DuckMountItem: {
 		DisplayName: 绿色蠕虫
 		Tooltip: 召唤一只野鸭坐骑
+		Broken: 绿色蠕虫丢失了
 	}
 
 	SeedMinigun: {
@@ -764,6 +765,7 @@ Items: {
 	LostSymbol: {
 		Tooltip: 每个手环增加1%全伤害，可叠加
 		DisplayName: 失落符文
+		Condition: 地下和洞穴层敌怪有0.125%概率掉落
 	}
 
 	LostSymbol1: {

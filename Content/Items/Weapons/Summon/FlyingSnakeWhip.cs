@@ -11,7 +11,7 @@ namespace WuDao.Content.Items.Weapons.Summon
         public override void SetDefaults()
         {
             Item.DefaultToWhip(ModContent.ProjectileType<FlyingSnakeWhipProjectile>(), 120, 3, 8);
-            Item.rare = ItemRarityID.Green;
+            Item.rare = ItemRarityID.Yellow;
             Item.value = Item.sellPrice(0, 0, 50);
         }
 

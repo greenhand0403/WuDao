@@ -37,7 +37,7 @@ namespace WuDao.Content.Items.Weapons.Summon
             Item.shoot = ModContent.ProjectileType<MonsterTrainMinion>();
             Item.buffType = ModContent.BuffType<MonsterTrainBuff>();
             Item.shootSpeed = 0f; // 仆从自己移动
-            Item.rare = ItemRarityID.Orange;
+            Item.rare = ItemRarityID.Purple;
             Item.value = Item.buyPrice(0, 2, 0, 0);
         }
 

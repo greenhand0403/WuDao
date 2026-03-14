@@ -33,11 +33,11 @@ namespace WuDao.Content.Systems
             if (NPC.AnyNPCs(ModContent.NPCType<WanderingBeggar>()))
                 return;
 
-            // 5% 几率在白天到来时生成一个流浪乞丐
-            if (Main.rand.Next(100) < 5)
-                return;
-
-            SpawnBeggarNearTown();
+            // 5% 几率在白天到来时生成一个流浪乞丐 1/20
+            if (Main.rand.NextBool(20))
+            {
+                SpawnBeggarNearTown();
+            }
         }
 
         public static void SpawnBeggarNearTown()

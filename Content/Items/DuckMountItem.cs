@@ -16,6 +16,10 @@ namespace WuDao.Content.Items
         {
             Item.width = 28;
             Item.height = 28;
+            Item.maxStack = 9999;
+
+            Item.noMelee = true;
+            Item.consumable = false;
 
             Item.useTime = 20;
             Item.useAnimation = 20;
@@ -24,9 +28,11 @@ namespace WuDao.Content.Items
 
             Item.noMelee = true;
             Item.value = Item.buyPrice(silver: 50);
-            Item.rare = ItemRarityID.Blue;
+            Item.rare = ItemRarityID.Green;
 
             Item.mountType = ModContent.MountType<DuckMount>();
+            
+            Item.bait = 30;
         }
     }
 }

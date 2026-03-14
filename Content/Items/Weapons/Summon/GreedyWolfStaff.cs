@@ -34,7 +34,7 @@ namespace WuDao.Content.Items.Weapons.Summon
             Item.shoot = ModContent.ProjectileType<GreedyWolfMinion>();
             Item.buffType = ModContent.BuffType<GreedyWolfBuff>();
 
-            Item.rare = ItemRarityID.Orange;
+            Item.rare = ItemRarityID.Lime;
             Item.UseSound = SoundID.Item44;
             Item.value = Item.buyPrice(0, 2, 0, 0);
         }

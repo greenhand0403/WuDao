@@ -29,21 +29,5 @@ namespace WuDao.Content.Items.Accessories
         {
             player.GetModPlayer<LostSymbolPlayer>().LostSymbolCount++;
         }
-
-        public override void ModifyTooltips(List<TooltipLine> tooltips)
-        {
-            tooltips.Add(new TooltipLine(Mod, "LostSymbolInfo",
-                "每装备1个失落符文，增加1%全伤害"));
-        }
-
-        public override void AddRecipes()
-        {
-            Recipe.Create(Type)
-                .AddIngredient(ItemID.Shackle, 1)
-                .AddIngredient(ItemID.IronBar, 8)
-                .AddIngredient(ItemID.Ruby, 1)
-                .AddTile(TileID.Anvils)
-                .Register();
-        }
     }
 }

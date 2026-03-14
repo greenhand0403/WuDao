@@ -18,7 +18,7 @@ namespace WuDao.Content.Items
             Item.useStyle = ItemUseStyleID.HoldUp;
             Item.noMelee = true;
             Item.mountType = ModContent.MountType<LunarShip>();
-            Item.rare = ItemRarityID.Yellow;
+            Item.rare = ItemRarityID.Lime;
             Item.value = Item.buyPrice(platinum: 1);
         }
         public override void UseStyle(Player player, Rectangle heldItemFrame)

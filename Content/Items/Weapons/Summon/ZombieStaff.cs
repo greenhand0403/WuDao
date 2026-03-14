@@ -13,7 +13,7 @@ namespace WuDao.Content.Items.Weapons.Summon
     {
         public override void SetDefaults()
         {
-            Item.damage = 12;
+            Item.damage = 22;
             Item.DamageType = DamageClass.Summon;
 
             Item.mana = 10;

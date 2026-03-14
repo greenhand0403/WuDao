@@ -41,7 +41,7 @@ namespace WuDao.Content.Items.Weapons.Summon
             Item.shoot = ModContent.ProjectileType<DragonflyMinion>();
             Item.buffType = ModContent.BuffType<DragonflyCaneBuff>();
 
-            Item.rare = ItemRarityID.Orange;
+            Item.rare = ItemRarityID.Blue;
             Item.value = Item.buyPrice(0, 2, 0, 0);
         }
 

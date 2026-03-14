@@ -23,10 +23,9 @@ namespace WuDao.Content.Items.Weapons.Summon
 
         public override void SetDefaults()
         {
-            // 可以克隆雀杖手感
             Item.CloneDefaults(ItemID.Smolstar);
 
-            Item.damage = 32;
+            Item.damage = 36;
             Item.knockBack = 2.5f;
             Item.mana = 10;
 
@@ -41,7 +40,7 @@ namespace WuDao.Content.Items.Weapons.Summon
             Item.shoot = ModContent.ProjectileType<TaijiSwordMinion>();
             Item.buffType = ModContent.BuffType<TaijiSwordBoxBuff>();
 
-            Item.rare = ItemRarityID.Orange;
+            Item.rare = ItemRarityID.LightPurple;
             Item.value = Item.buyPrice(0, 2, 0, 0);
         }
 

@@ -35,5 +35,13 @@ namespace WuDao.Content.Items.Accessories
             // 降低跳跃
             player.jumpSpeedBoost -= 3f;
         }
+        // 在重型工作台用200个石头制作
+        public override void AddRecipes()
+        {
+            CreateRecipe(200)
+                .AddIngredient(ItemID.StoneBlock, 200)
+                .AddTile(TileID.HeavyWorkBench)
+                .Register();
+        }
     }
 }

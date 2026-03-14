@@ -738,7 +738,8 @@ Items: {
 
 	DuckMountItem: {
 		DisplayName: Duck Mount Item
-		Tooltip: Summons a duck mount
+		Tooltip: Summon a duck mount
+		Broken: The duck mount is broken
 	}
 
 	SeedMinigun: {
@@ -759,6 +760,7 @@ Items: {
 	LostSymbol: {
 		Tooltip: Each bracelet increases 1% full damage, stackable
 		DisplayName: LostSymbol
+		Condition: Underground and cave enemies have 0.125% dropping
 	}
 
 	LostSymbol1: {
