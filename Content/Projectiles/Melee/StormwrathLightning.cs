@@ -11,7 +11,7 @@ using Terraria.Utilities;
 
 namespace WuDao.Content.Projectiles.Melee
 {
-	// 模仿原版的闪电珠弧射弹写一个自己的闪电效果，效果不像
+	// 模仿原版的闪电珠弧射弹闪电效果
 	public class StormwrathLightning : ModProjectile
 	{
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.CultistBossLightningOrbArc;
@@ -61,13 +61,6 @@ namespace WuDao.Content.Projectiles.Melee
 		}
 		public override void AI()
 		{
-			// 原版闪电珠弧 Handle movement 里面有这样的代码
-			// if (Projectile.localAI[1] < 1f)
-			// {
-			// 	Projectile.localAI[1] += 2f;
-			// 	Projectile.position += Projectile.velocity;
-			// 	Projectile.velocity = Vector2.Zero;
-			// }
 			// 原版闪电珠弧 vanilla AI 里面有这样的代码
 			Projectile.frameCounter++;
 			Lighting.AddLight(Projectile.Center, 0.3f, 0.45f, 0.5f);
@@ -168,45 +161,11 @@ namespace WuDao.Content.Projectiles.Melee
 					Projectile.rotation = Projectile.velocity.ToRotation() + (float)Math.PI / 2f;
 				}
 			}
-			// 原版闪电珠弧 Update 函数最后面有这样的代码 拖尾类型1
-			// if (Projectile.frameCounter == 0 || Projectile.oldPos[0] == Vector2.Zero)
-			{
-				// 记录历史位置
-				// for (int num13 = Projectile.oldPos.Length - 1; num13 > 0; num13--)
-				// {
-				// 	Projectile.oldPos[num13] = Projectile.oldPos[num13 - 1];
-				// }
-				// Projectile.oldPos[0] = Projectile.position;
-				// if (Projectile.velocity == Vector2.Zero)
-				// {
-				// 	// 绘制粒子
-				// 	float num22 = Projectile.rotation + (float)Math.PI / 2f + ((Main.rand.Next(2) == 1) ? (-1f) : 1f) * ((float)Math.PI / 2f);
-				// 	float num23 = (float)Main.rand.NextDouble() * 2f + 2f;
-				// 	Vector2 vector = new Vector2((float)Math.Cos(num22) * num23, (float)Math.Sin(num22) * num23);
-				// 	int num24 = Dust.NewDust(Projectile.oldPos[Projectile.oldPos.Length - 1], 0, 0, DustID.Vortex, vector.X, vector.Y);
-				// 	Main.dust[num24].noGravity = true;
-				// 	Main.dust[num24].scale = 1.7f;
-				// }
-			}
 		}
-		// public override bool PreDraw(ref Color lightColor)
-		// {
-		// 	Texture2D texture = TextureAssets.Projectile[Type].Value;
-
-		// 	Vector2 drawOrigin = new Vector2(texture.Width * 0.5f, Projectile.height * 0.5f);
-		// 	for (int k = Projectile.oldPos.Length - 1; k > 0; k--)
-		// 	{
-		// 		Vector2 drawPos = (Projectile.oldPos[k] - Main.screenPosition) + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
-		// 		Color color = Projectile.GetAlpha(lightColor);// * ((Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
-		// 		Main.EntitySpriteDraw(texture, drawPos, null, color, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0);
-		// 	}
-
-		// 	return false;
-		// }
 		public override bool PreDraw(ref Color lightColor)
 		{
 			Vector2 end = Projectile.Center + Vector2.UnitY * Projectile.gfxOffY - Main.screenPosition;
-			Texture2D laserTex = TextureAssets.Extra[33].Value;
+			Texture2D laserTex = TextureAssets.Extra[ExtrasID.CultistLightingArc].Value;
 
 			for (int layer = 0; layer < 3; layer++)
 			{

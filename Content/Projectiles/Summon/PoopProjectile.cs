@@ -3,7 +3,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace WuDao.Content.Projectiles.Summon;
-
+// 海鸥仆从投射的便便射弹
 public class PoopProjectile : ModProjectile
 {
     public override string Texture => "Terraria/Images/Item_"+ItemID.PoopBlock;

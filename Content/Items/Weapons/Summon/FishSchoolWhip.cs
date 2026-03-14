@@ -6,6 +6,7 @@ using WuDao.Content.Projectiles.Summon;
 
 namespace WuDao.Content.Items.Weapons.Summon
 {
+    // TODO: 鞭子射弹贴图需要修改，参考飞蛇鞭的贴图
     public class FishSchoolWhip : ModItem
     {
         public override string Texture => "Terraria/Images/Item_" + ItemID.BoneWhip;

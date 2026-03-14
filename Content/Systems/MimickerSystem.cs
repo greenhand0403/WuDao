@@ -4,6 +4,7 @@ using Terraria.ModLoader;
 
 namespace WuDao.Content.Systems
 {
+    // TODO: 拓展成长效果，射速、射弹大小、魔耗、伤害
     // 模仿者 特殊魔法武器的辅助类 解锁定义：指定NPC -> 解锁的友方射弹 -> 所需击杀数
     public struct UnlockDef
     {
