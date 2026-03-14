@@ -17,7 +17,7 @@ namespace WuDao.Content.Items.Accessories
         //         "召唤暴击率 4%"
         //     );
         // }
-        public override string Texture => "WuDao/Content/Items/Accessories/CorruptPowerCube";
+        public override string Texture => "WuDao/Content/Items/Accessories/ApeTouch";
         public override void SetDefaults()
         {
             Item.width = 30;
