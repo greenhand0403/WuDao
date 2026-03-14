@@ -827,6 +827,11 @@ Items: {
 		Tooltip: Summon a seagull servant
 		DisplayName: Bird Watching License
 	}
+
+	Electrocution: {
+		Tooltip: Swing a lightning arc
+		DisplayName: Electrocution
+	}
 }
 
 Projectiles: {
@@ -903,6 +908,7 @@ Projectiles: {
 	QuestFishProjectile.DisplayName: Quest Fish Projectile
 	PoopProjectile.DisplayName: Poop Projectile
 	FishSchoolWhipProj.DisplayName: Fish School Whip Proj
+	ElectrocutionProj.DisplayName: Electrocution Proj
 }
 
 DamageClasses: {
@@ -1318,6 +1324,7 @@ NPCs: {
 	BloodstainedIntestineHead.DisplayName: Bloodstained Intestine Head
 	BloodstainedIntestineTail.DisplayName: Bloodstained Intestine Tail
 	DoomGnome.DisplayName: Doom Gnome
+	GreenWorm.DisplayName: Green Worm
 }
 
 Prefixes: {

@@ -832,6 +832,11 @@ Items: {
 		Tooltip: 召唤海鸥仆从
 		DisplayName: 观鸟证
 	}
+
+	Electrocution: {
+		Tooltip: 挥舞电弧
+		DisplayName: 电刑
+	}
 }
 
 Projectiles: {
@@ -908,6 +913,7 @@ Projectiles: {
 	// QuestFishProjectile.DisplayName: Quest Fish Projectile
 	// PoopProjectile.DisplayName: Poop Projectile
 	// FishSchoolWhipProj.DisplayName: Fish School Whip Proj
+	// ElectrocutionProj.DisplayName: Electrocution Proj
 }
 
 DamageClasses: {
@@ -1323,6 +1329,7 @@ NPCs: {
 	BloodstainedIntestineHead.DisplayName: 血污肠道头
 	BloodstainedIntestineTail.DisplayName: 血污肠道尾
 	DoomGnome.DisplayName: 厄运侏儒
+	GreenWorm.DisplayName: 绿色蠕虫
 }
 
 Prefixes: {
