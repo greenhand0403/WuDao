@@ -7,16 +7,6 @@ namespace WuDao.Content.Items.Accessories
 {
     public class CrackedCore : ModItem
     {
-        // public override void SetStaticDefaults()
-        // {
-        //     DisplayName.SetDefault("破损核心");
-        //     Tooltip.SetDefault(
-        //         "增加10%魔法伤害\n" +
-        //         "受到伤害后失效5秒\n" +
-        //         "5秒未受伤则重新激活"
-        //     );
-        // }
-        public override string Texture => "WuDao/Content/Items/Accessories/ApeTouch";
         public override void SetDefaults()
         {
             Item.width = 28;

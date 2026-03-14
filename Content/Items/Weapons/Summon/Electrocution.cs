@@ -7,7 +7,6 @@ namespace WuDao.Content.Items.Weapons.Summon
 {
     public class Electrocution : ModItem
     {
-        public override string Texture => "Terraria/Images/Item_" + ItemID.BoneWhip;
         public override void SetDefaults()
         {
             Item.DefaultToWhip(ModContent.ProjectileType<ElectrocutionProj>(), 120, 3, 8);

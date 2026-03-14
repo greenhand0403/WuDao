@@ -7,17 +7,6 @@ namespace WuDao.Content.Items.Accessories
 {
     public class BeetleArrow : ModItem
     {
-        // public override void SetStaticDefaults()
-        // {
-        //     DisplayName.SetDefault("虫箭");
-        //     Tooltip.SetDefault(
-        //         "增加10%近战伤害\n" +
-        //         "增加10%召唤伤害\n" +
-        //         "你的召唤攻击可以暴击\n" +
-        //         "召唤暴击率 4%"
-        //     );
-        // }
-        public override string Texture => "WuDao/Content/Items/Accessories/ApeTouch";
         public override void SetDefaults()
         {
             Item.width = 30;

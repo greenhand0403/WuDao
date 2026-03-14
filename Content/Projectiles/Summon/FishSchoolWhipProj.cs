@@ -12,8 +12,6 @@ namespace WuDao.Content.Projectiles.Summon;
 
 public class FishSchoolWhipProj : ModProjectile
 {
-    public override string Texture => "WuDao/Content/Projectiles/Summon/FlyingSnakeWhipProjectile";
-
     // 任务鱼生成间隔（同一个目标）
     private const int FishSpawnCooldown = 24; // 24 tick = 0.4 秒
     public override void SetStaticDefaults()
