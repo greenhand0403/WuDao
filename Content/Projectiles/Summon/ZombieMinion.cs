@@ -1,6 +1,8 @@
 using System;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using WuDao.Content.Buffs;
@@ -9,7 +11,7 @@ namespace WuDao.Content.Projectiles.Summon
 {
     public class ZombieMinion : ModProjectile
     {
-        public override string Texture => "Terraria/Images/NPC_" + NPCID.Zombie;
+        public override string Texture => "Terraria/Images/NPC_" + NPCID.TheGroom;
         private const float Gravity = 0.4f;
         private const float MaxFallSpeed = 10f;
         private const float IdleSpeed = 1.8f;
@@ -18,9 +20,10 @@ namespace WuDao.Content.Projectiles.Summon
         private const float SearchDistance = 700f;
         private const int StuckJumpTime = 20; // 卡住约 1/3 秒后尝试强制跳
         private const float StuckMoveThreshold = 0.6f;
+        // 是不是僵尸新娘
+        private bool IsBride => false;
         public override bool? CanCutTiles() => false;
         public override bool MinionContactDamage() => true;
-
         public override void SetStaticDefaults()
         {
             Main.projFrames[Type] = 3;
@@ -31,8 +34,9 @@ namespace WuDao.Content.Projectiles.Summon
 
         public override void SetDefaults()
         {
-            Projectile.width = 36;
-            Projectile.height = 46;
+            // 默认僵尸新郎
+            Projectile.width = 18;
+            Projectile.height = 40;
 
             Projectile.friendly = true;
             Projectile.minion = true;
@@ -47,7 +51,6 @@ namespace WuDao.Content.Projectiles.Summon
             Projectile.ignoreWater = false;
             Projectile.netImportant = true;
         }
-
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
             if (oldVelocity.X != Projectile.velocity.X)
@@ -326,6 +329,48 @@ namespace WuDao.Content.Projectiles.Summon
         {
             fallThrough = false;
             return true;
+        }
+
+        public override bool PreDraw(ref Color lightColor)
+        {
+            if (Projectile.ai[0] == 1f)
+            {
+                Texture2D tex = ModContent.Request<Texture2D>("Terraria/Images/NPC_" + (int)NPCID.TheBride).Value;
+                // 手动绘制僵尸新娘 34x156 3帧
+                int frame = (int)((Main.GameUpdateCount / 4) % 3);
+                Rectangle src = new Rectangle(0, frame * 52, 34, 52);
+                Vector2 origin = src.Size() * 0.5f;
+                Main.EntitySpriteDraw(
+                    tex,
+                    Projectile.Center - Main.screenPosition,
+                    src,
+                    lightColor,
+                    Projectile.rotation,
+                    origin,
+                    Projectile.scale,
+                    Projectile.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally
+                );
+            }
+            else
+            {
+                Texture2D tex = ModContent.Request<Texture2D>("Terraria/Images/NPC_" + (int)NPCID.TheGroom).Value;
+                // 手动绘制僵尸新郎 34x164 3帧
+                int frame = (int)((Main.GameUpdateCount / 4) % 3);
+                Rectangle src = new Rectangle(0, frame * 54, 34, 54);
+                Vector2 origin = src.Size() * 0.5f;
+                Main.EntitySpriteDraw(
+                    tex,
+                    Projectile.Center - Main.screenPosition,
+                    src,
+                    lightColor,
+                    Projectile.rotation,
+                    origin,
+                    Projectile.scale,
+                    Projectile.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally
+                );
+            }
+            
+            return false;
         }
     }
 }

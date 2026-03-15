@@ -722,7 +722,7 @@ Items: {
 	}
 
 	ZombieStaff: {
-		Tooltip: 召唤僵尸仆从
+		Tooltip: 召唤僵尸仆从(只能召唤两只，一只僵尸新郎，一只僵尸新娘)
 		DisplayName: 墓园来信
 	}
 

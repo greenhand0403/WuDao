@@ -48,7 +48,7 @@ namespace WuDao.Content.Items.Weapons.Summon
     Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
             player.AddBuff(Item.buffType, 2);
-            
+
             int projType = ModContent.ProjectileType<TaijiSwordMinion>();
 
             // 当前已有的太极剑数量（每次只+1，直到2）

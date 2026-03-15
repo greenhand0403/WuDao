@@ -717,7 +717,7 @@ Items: {
 	}
 
 	ZombieStaff: {
-		Tooltip: Summons a zombie minion
+		Tooltip: Summons a zombie minion(can only summon 2, 1 zombie bride and 1 zombie groom)
 		DisplayName: Zombie Staff
 	}
 
