@@ -15,10 +15,12 @@ namespace WuDao.Content.Projectiles.Summon
         private const int IdleEnd = 6;
         private const int AttackStart = 7;
         private const int AttackEnd = 12;
-
+        public override bool? CanCutTiles() => false;
+        public override bool MinionContactDamage() => true;
         public override void SetStaticDefaults()
         {
             Main.projFrames[Type] = Main.npcFrameCount[NPCID.Dandelion];
+            ProjectileID.Sets.MinionTargettingFeature[Type] = true;
         }
 
         public override void SetDefaults()
@@ -36,9 +38,6 @@ namespace WuDao.Content.Projectiles.Summon
             Projectile.ignoreWater = true;
             Projectile.netImportant = true;
         }
-
-        public override bool? CanCutTiles() => false;
-        public override bool MinionContactDamage() => true;
 
         public override void AI()
         {

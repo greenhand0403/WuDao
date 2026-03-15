@@ -11,6 +11,10 @@ namespace WuDao.Content.Projectiles.Summon
     // 太极剑仆从：12帧动画（前6帧样式1穿甲，后6帧样式2吸血），82x82；AI整合蝴蝶仆从与断裂英雄剑思路，并模仿附魔剑敌怪的突进节奏
     public class TaijiSwordMinion : ModProjectile
     {
+        // 建议：把状态扩展成 3 个（更清晰）
+        private const int State_Idle = 0;
+        private const int State_Staging = 1;
+        private const int State_Dash = 2;
         public override bool MinionContactDamage() => true;
         public override bool? CanCutTiles() => true;
 
@@ -21,8 +25,8 @@ namespace WuDao.Content.Projectiles.Summon
         public override void SetStaticDefaults()
         {
             Main.projFrames[Type] = 6; // 12帧：前6帧样式1（穿甲），后6帧样式2（吸血）
-            ProjectileID.Sets.MinionTargettingFeature[Type] = true;
             Main.projPet[Type] = true;
+            ProjectileID.Sets.MinionTargettingFeature[Type] = true;
             ProjectileID.Sets.MinionSacrificable[Type] = true;
             ProjectileID.Sets.CultistIsResistantTo[Projectile.type] = true;
         }
@@ -46,11 +50,6 @@ namespace WuDao.Content.Projectiles.Summon
             Projectile.usesLocalNPCImmunity = true;
             Projectile.localNPCHitCooldown = 18;
         }
-
-        // 建议：把状态扩展成 3 个（更清晰）
-        private const int State_Idle = 0;
-        private const int State_Staging = 1;
-        private const int State_Dash = 2;
 
         public override void AI()
         {

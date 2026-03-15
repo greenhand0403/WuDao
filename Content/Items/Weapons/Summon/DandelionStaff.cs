@@ -9,6 +9,13 @@ namespace WuDao.Content.Items.Weapons.Summon
 {
     public class DandelionStaff : ModItem
     {
+        public override void SetStaticDefaults()
+        {
+            ItemID.Sets.GamepadWholeScreenUseRange[Item.type] = true;
+            ItemID.Sets.LockOnIgnoresCollision[Item.type] = true;
+            // 占 1 个哨兵栏
+            // ItemID.Sets.StaffMinionSlotsRequired[Type] = 1f;
+        }
         public override void SetDefaults()
         {
             Item.damage = 16;
@@ -29,6 +36,9 @@ namespace WuDao.Content.Items.Weapons.Summon
 
             Item.shoot = ModContent.ProjectileType<DandelionSentry>();
             Item.shootSpeed = 0f;
+
+            Item.sentry = true;
+            Item.staff[Item.type] = true;
         }
 
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity,

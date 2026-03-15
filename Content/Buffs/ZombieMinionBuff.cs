@@ -9,6 +9,7 @@ using Terraria.GameContent;
 
 namespace WuDao.Content.Buffs
 {
+    // 僵尸召唤buff
     public class ZombieMinionBuff : ModBuff
     {
         public override string Texture => "Terraria/Images/Buff";
@@ -28,11 +29,11 @@ namespace WuDao.Content.Buffs
                 buffIndex--;
             }
         }
-        public override bool RightClick(int buffIndex)
-        {
-            // 允许右键取消
-            return true;
-        }
+        // public override bool RightClick(int buffIndex)
+        // {
+        //     // 允许右键取消
+        //     return true;
+        // }
         // 在默认buff底图的基础上绘制僵尸头像，组合成buff图标
         public override void PostDraw(SpriteBatch spriteBatch, int buffIndex, BuffDrawParams drawParams)
         {

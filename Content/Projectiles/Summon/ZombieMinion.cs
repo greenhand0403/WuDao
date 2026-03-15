@@ -10,22 +10,23 @@ namespace WuDao.Content.Projectiles.Summon
     public class ZombieMinion : ModProjectile
     {
         public override string Texture => "Terraria/Images/NPC_" + NPCID.Zombie;
-
         private const float Gravity = 0.4f;
         private const float MaxFallSpeed = 10f;
         private const float IdleSpeed = 1.8f;
         private const float ChaseSpeed = 2.4f;
         private const float TeleportDistance = 1200f;
         private const float SearchDistance = 700f;
-
         private const int StuckJumpTime = 20; // 卡住约 1/3 秒后尝试强制跳
         private const float StuckMoveThreshold = 0.6f;
+        public override bool? CanCutTiles() => false;
+        public override bool MinionContactDamage() => true;
 
         public override void SetStaticDefaults()
         {
             Main.projFrames[Type] = 3;
             Main.projPet[Type] = true;
             ProjectileID.Sets.MinionTargettingFeature[Type] = true;
+            ProjectileID.Sets.MinionSacrificable[Projectile.type] = true; // This is needed so your minion can properly spawn when summoned and replaced when other minions are summoned
         }
 
         public override void SetDefaults()
@@ -36,17 +37,16 @@ namespace WuDao.Content.Projectiles.Summon
             Projectile.friendly = true;
             Projectile.minion = true;
             Projectile.minionSlots = 1f;
+
             Projectile.penetrate = -1;
             Projectile.timeLeft = 18000;
+
             Projectile.DamageType = DamageClass.Summon;
 
             Projectile.tileCollide = true;
             Projectile.ignoreWater = false;
             Projectile.netImportant = true;
         }
-
-        public override bool? CanCutTiles() => false;
-        public override bool MinionContactDamage() => true;
 
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
@@ -62,17 +62,16 @@ namespace WuDao.Content.Projectiles.Summon
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
-            if (!player.active || player.dead)
+            if (!player.active || player.dead || !player.HasBuff(ModContent.BuffType<ZombieMinionBuff>()))
             {
+                player.ClearBuff(ModContent.BuffType<ZombieMinionBuff>());
                 Projectile.Kill();
                 return;
             }
-            if (!player.HasBuff(ModContent.BuffType<ZombieMinionBuff>()))
-            {
-                Projectile.Kill();
-                return;
-            }
-            Projectile.timeLeft = 2;
+
+            // 维持buff（经典写法）
+            if (player.HasBuff(ModContent.BuffType<ZombieMinionBuff>()))
+                Projectile.timeLeft = 2;
 
             if (Vector2.Distance(Projectile.Center, player.Center) > TeleportDistance)
             {
