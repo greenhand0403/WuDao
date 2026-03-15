@@ -41,7 +41,7 @@ namespace WuDao.Content.Juexue.Active
             // 生成天刀射弹
             // 在中心上方 [-320, 320] 的随机水平偏移，垂直出生在中心上方 1200~1600 像素
             Vector2 spawn = mouse + new Vector2(Main.rand.NextFloat(-320f, 320f), -Main.rand.NextFloat(1200f, 1600f));
-            // 计算境界伤害和射弹速度加成
+            // 计算武道境界伤害和射弹速度加成
             Helpers.BossProgressBonus progressBonus = Helpers.BossProgressPower.Get(player);
             // 初速度朝向中心
             Vector2 v = (mouse - spawn).SafeNormalize(Vector2.UnitY) * baseVelocity * progressBonus.ProjSpeedMult;
@@ -58,7 +58,7 @@ namespace WuDao.Content.Juexue.Active
                 proj.DamageType = sup;
                 proj.originalDamage = finalDamage; // 建议也同步，避免某些逻辑用 originalDamage
             }
-            
+
             if (!Main.dedServ)
             {
                 // 冷却图标

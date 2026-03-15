@@ -6,7 +6,7 @@ using Terraria.ModLoader.IO;
 
 namespace WuDao.Content.Systems
 {
-    // 境界机制：随着计算的BOSS种类增加，部分物品的伤害、近战范围、射弹速度会增加
+    // 武道境界机制：随着计算的BOSS种类增加，部分物品的伤害、近战范围、射弹速度会增加
     // 1) 世界级别保存：记录“已首杀的BOSS组”集合（去重）
     class BossDownedSystem : ModSystem
     {

@@ -68,18 +68,22 @@ namespace WuDao.Content.Mounts
 
             // 水面游泳与飞行相同
             MountData.swimFrameCount = 4;
-            MountData.swimFrameDelay = 4;
+            MountData.swimFrameDelay = 9;
             MountData.swimFrameStart = 11;
 
             // 地面跑步：第4~11帧
             MountData.runningFrameCount = 8;
-            MountData.runningFrameDelay = 5;
+            MountData.runningFrameDelay = 8;
             MountData.runningFrameStart = 3;
 
             // 飞行：第12~15帧
             MountData.inAirFrameCount = 4;
-            MountData.inAirFrameDelay = 4;
+            MountData.inAirFrameDelay = 7;
             MountData.inAirFrameStart = 11;
+
+            MountData.flyingFrameCount = 4;
+            MountData.flyingFrameDelay = 7;
+            MountData.flyingFrameStart = 11;
 
             // -------- 贴图尺寸 --------
             // 单帧 66x52，竖排15帧

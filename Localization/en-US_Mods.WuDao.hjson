@@ -1168,7 +1168,7 @@ Configs: {
 		}
 	}
 
-	WorldOfBlightConfig: {
+	HeavenBacklash: {
 		DisplayName: World Of Blight Config
 
 		Enabled: {

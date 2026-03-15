@@ -7,11 +7,11 @@ using Terraria.ModLoader.Config;
 
 namespace WuDao.Content.Config
 {
-    // 世界之毒系统
+    // 天道反噬系统
     // ================================
     // 1) 配置：在模组配置菜单可调，使游戏难度随进度增强。
     // ================================
-    public class WorldOfBlightConfig : ModConfig
+    public class HeavenBacklash : ModConfig
     {
         public override ConfigScope Mode => ConfigScope.ServerSide; // 影响玩法，放到服务端配置
 
@@ -54,7 +54,7 @@ namespace WuDao.Content.Config
         public override void ResetEffects()
         {
             // 每tick刷新一次配置与进度
-            var cfg = ModContent.GetInstance<WorldOfBlightConfig>();
+            var cfg = ModContent.GetInstance<HeavenBacklash>();
             if (!cfg.Enabled)
             {
                 _steps = 0;
@@ -100,7 +100,7 @@ namespace WuDao.Content.Config
             int penaltyTicks = totalRegenLossPerSecond * 2; // 内部以每秒*2
 
 
-            var cfg = ModContent.GetInstance<WorldOfBlightConfig>();
+            var cfg = ModContent.GetInstance<HeavenBacklash>();
             if (cfg.Enabled && cfg.ClampLifeRegenNonNegative)
             {
                 // 只削减“正向”的生命再生，不会把它削成负数

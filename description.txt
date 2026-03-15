@@ -14,8 +14,8 @@ A martial arts master from another world shattered the void and descended upon T
 [list]
 [*][b]Ultimate Arts System[/b]: Equip martial techniques and consume Qi energy to unleash powerful wuxia-style abilities.  
 [*][b]Melee Blade Aura Visuals[/b]: Collect weapons and dyes to customize melee blade effects. Combine them for four color variations.  
-[*][b]World Poison Mechanic[/b]: A progressive global debuff that intensifies as the game advances.  
-[*][b]Realm Progression & Scaling Weapons[/b]: Certain techniques, weapons, and accessories grow stronger as bosses are defeated. Includes scaling weapons and throwing-class dart weapons.  
+[*][b]Heaven Backlash[/b]: A progressive global debuff that intensifies as the game advances.  
+[*][b]Martial Realm & Scaling Weapons[/b]: Certain techniques, weapons, and accessories grow stronger as bosses are defeated. Includes scaling weapons and throwing-class dart weapons.  
 [*][b]Five Elements Armor System[/b]: Armor pieces possess elemental attributes. Matching elements grant additional bonuses.  
 [*][b]Cuisine & Cooking System[/b]: Tasting or crafting food for the first time increases Deliciousness and Cooking Skill values, providing bonuses to certain weapons and accessories.  
 [*][b]InvisibleEnemies[/b]: Configurable echo stealth effects for enemies, barrages, and trap blocks.  
@@ -26,8 +26,8 @@ A martial arts master from another world shattered the void and descended upon T
 [list]
 [*]Qi & Ultimate Arts System  
 [*]Melee Blade Dye System  
-[*]World Poison Mechanic  
-[*]Realm Progression System  
+[*]Heaven Backlash  
+[*]Martial Realm System  
 [*]Five Elements Armor System  
 [*]Cuisine & Cooking System  
 [*]InvisibleEnemies  

@@ -36,12 +36,12 @@ namespace WuDao.Content.Juexue.Passive
             if (qi.XiangLongCount == 8) mult = 8f;  // 800%
             if (qi.XiangLongCount == 18) { mult = 18f; qi.XiangLongCount = 0; } // 1000% then reset
 
-            // 计算境界伤害和射弹速度加成
+            // 计算武道境界伤害和射弹速度加成
             Helpers.BossProgressBonus progressBonus = Helpers.BossProgressPower.Get(player);
             Vector2 dir = (Main.MouseWorld - player.Center).SafeNormalize(Vector2.UnitX) * vel.Length() * progressBonus.ProjSpeedMult;
 
             ChiEnergyDamageClass chi = ModContent.GetInstance<ChiEnergyDamageClass>();
-            int finalDamage = (int)(player.GetTotalDamage(chi).ApplyTo(baseDamage)* mult * progressBonus.DamageMult);
+            int finalDamage = (int)(player.GetTotalDamage(chi).ApplyTo(baseDamage) * mult * progressBonus.DamageMult);
 
             // 略微下移一点对齐发射口
             int proj = Projectile.NewProjectile(
@@ -55,7 +55,7 @@ namespace WuDao.Content.Juexue.Passive
             );
             Main.projectile[proj].DamageType = chi;
             Main.projectile[proj].originalDamage = finalDamage;
-            
+
             if (!Main.dedServ)
             {
                 // 触发 2 秒虚影，稍微放大 1.1 倍，向上偏移 16 像素（站位更好看）

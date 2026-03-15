@@ -21,12 +21,12 @@ namespace WuDao.Content.Juexue.Active
         protected override bool OnActivate(Player player, QiPlayer qi)
         {
             Vector2 at = Main.MouseWorld + new Vector2(0, 200f);
-            // 计算境界伤害和射弹速度加成
+            // 计算武道境界伤害和射弹速度加成
             Helpers.BossProgressBonus progressBonus = Helpers.BossProgressPower.Get(player);
-            
+
             ChiEnergyDamageClass chi = ModContent.GetInstance<ChiEnergyDamageClass>();
-            int finalDamage = (int)(player.GetTotalDamage(chi).ApplyTo(baseDamage)* progressBonus.DamageMult);
-            
+            int finalDamage = (int)(player.GetTotalDamage(chi).ApplyTo(baseDamage) * progressBonus.DamageMult);
+
             Vector2 v = Vector2.UnitY * -baseVelocity;
             for (int i = 0; i < 1; i++)
             {

@@ -23,7 +23,7 @@ namespace WuDao.Content.Juexue.Active
         {
             // 屏幕矩形（世界坐标）
             Rectangle rect = Helpers.ScreenBoundsWorldSpace();
-            // 计算境界伤害和射弹速度加成
+            // 计算武道境界伤害和射弹速度加成
             Helpers.BossProgressBonus progressBonus = Helpers.BossProgressPower.Get(player);
             // 从“远离鼠标”的一侧生成，横穿到对侧
             bool mouseOnRight = Main.MouseWorld.X > rect.Center.X;

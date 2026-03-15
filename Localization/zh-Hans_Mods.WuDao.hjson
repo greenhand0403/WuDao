@@ -1173,11 +1173,11 @@ Configs: {
 		}
 	}
 
-	WorldOfBlightConfig: {
-		DisplayName: 世界之毒配置
+	HeavenBacklash: {
+		DisplayName: 天道反噬配置
 
 		Enabled: {
-			Label: 启用世界之毒全局效果
+			Label: 启用天道反噬全局效果
 			Tooltip: ""
 		}
 
@@ -1203,7 +1203,7 @@ Configs: {
 
 		ClampLifeRegenNonNegative: {
 			Label: 防止本DEBUFF把生命再生降为负数
-			Tooltip: 勾选后：世界之毒在削减生命再生时，最多把正向生命再生削到 0，不会由本效果导致负数。默认启用。
+			Tooltip: 勾选后：天道反噬在削减生命再生时，最多把正向生命再生削到 0，不会由本效果导致负数。默认启用。
 		}
 	}
 

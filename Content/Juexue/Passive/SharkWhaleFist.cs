@@ -32,7 +32,7 @@ namespace WuDao.Content.Juexue.Passive
 
             int projType = ModContent.ProjectileType<SharkProjectile>();
 
-            // 计算境界伤害和射弹速度加成
+            // 计算武道境界伤害和射弹速度加成
             Helpers.BossProgressBonus progressBonus = Helpers.BossProgressPower.Get(player);
             // 沿用发射时射弹的初速度
             Vector2 v = vel.SafeNormalize(Vector2.UnitX) * vel.Length() * progressBonus.ProjSpeedMult;
@@ -53,7 +53,7 @@ namespace WuDao.Content.Juexue.Passive
             Main.projectile[proj].hostile = false;
             Main.projectile[proj].DamageType = chi;
             Main.projectile[proj].originalDamage = finalDamage;
-            
+
             // —— 启动“鲨鱼虚影” —— //
             if (!Main.dedServ)
             {

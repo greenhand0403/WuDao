@@ -8,7 +8,7 @@ using WuDao.Content.Systems;
 
 namespace WuDao.Common
 {
-    // 一些武器和饰品需要的通用方法、随境界系统的伤害加成等
+    // 一些武器和饰品需要的通用方法、随武道境界系统的伤害加成等
     public static class Helpers
     {
         // 绘制有关的辅助方法
@@ -64,7 +64,7 @@ namespace WuDao.Common
                 MeleeRangePixels = mr;
             }
         }
-        /// <summary>境界加成：按已击败唯一BOSS数量提供的成长加成。</summary>
+        /// <summary>武道境界加成：按已击败唯一BOSS数量提供的成长加成。</summary>
         public static class BossProgressPower
         {
             // —— 可调参数（给你默认一套克制的成长线；想改请调这里）——
