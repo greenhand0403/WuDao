@@ -17,8 +17,9 @@ public class QuestFishProjectile : ModProjectile
 
     public override void SetDefaults()
     {
-        Projectile.width = 26;
-        Projectile.height = 26;
+        Projectile.width = 30;
+        Projectile.height = 30;
+        Projectile.scale = 1.2f;
 
         Projectile.friendly = true;
         Projectile.DamageType = DamageClass.Summon;
@@ -32,13 +33,14 @@ public class QuestFishProjectile : ModProjectile
     public override void OnSpawn(IEntitySource source)
     {
         // 水花粒子
-        for (int i = 0; i < 6; i++)
+        for (int i = 0; i < 10; i++)
         {
             Dust.NewDust(
                 Projectile.position,
                 Projectile.width,
                 Projectile.height,
-                DustID.Water
+                DustID.Water,
+                Scale: 1.2f
             );
         }
     }

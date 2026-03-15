@@ -31,8 +31,10 @@ namespace WuDao.Content.Items
             Item.rare = ItemRarityID.Green;
 
             Item.mountType = ModContent.MountType<DuckMount>();
-            
+
             Item.bait = 30;
         }
+
+        // 如果只有1个堆叠，则右键自动装备坐骑
     }
 }

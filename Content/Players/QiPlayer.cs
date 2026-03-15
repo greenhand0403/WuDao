@@ -117,7 +117,8 @@ namespace WuDao.Content.Players
         public int YuJianSwordType = 0;
         public int YuJianSwordDamage = 0;
         public float YuJianSwordKnockback = 0f;
-
+        // 保持初始透明度
+        private float initialOpacity = 1f;
         // 防止一帧打很多次：对每个NPC做本地冷却
         private int[] _yuJianNpcHitCooldown;
         // === 月步 ===
@@ -688,7 +689,7 @@ namespace WuDao.Content.Players
         }
 
         // 进一步保险：把绘制信息设为隐身，确保任何残余层都不画
-        public override void ModifyDrawInfo(ref Terraria.DataStructures.PlayerDrawSet drawInfo)
+        public override void ModifyDrawInfo(ref PlayerDrawSet drawInfo)
         {
             // 利刃华尔兹或天外飞仙期间都可隐藏（你也可以只对华尔兹隐藏）
             if (BladeWaltzTicks > 0 /* || FeixianTicks > 0 */)
@@ -913,6 +914,7 @@ namespace WuDao.Content.Players
 
         public override void PostUpdate()
         {
+            // 绝学冷却图标虚影
             if (Ghost.IsCooldownIcon)
             {
                 uint now = Main.GameUpdateCount;
@@ -1108,6 +1110,10 @@ namespace WuDao.Content.Players
             Player.pulley = false;
             Player.sleeping.isSleeping = false;
             Player.sitting.isSitting = false;
+
+            // 保持初始透明度
+            initialOpacity = Player.opacityForAnimation;
+            Player.opacityForAnimation = 0.8f;
         }
 
         public void EndYuJian(bool fromDeath = false)
@@ -1132,6 +1138,8 @@ namespace WuDao.Content.Players
             {
                 Player.mount.Dismount(Player);
             }
+            // 恢复玩家透明度
+            Player.opacityForAnimation = initialOpacity;
         }
         private void ApplyYuJianControlLock()
         {

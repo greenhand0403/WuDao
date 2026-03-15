@@ -59,10 +59,10 @@ namespace WuDao.Content.DrawLayers
                 tex,
                 drawPos,
                 null,
-                drawInfo.colorArmorBody,
+                Color.White,
                 rotation,
                 origin,
-                1f,
+                1.5f,// 将剑调大一点
                 effects,
                 0
             ));
