@@ -9,9 +9,9 @@ using WuDao.Content.Projectiles.Melee;
 
 namespace WuDao.Content.Items.Weapons.Melee
 {
+    // 电弧绘制参考原版projectile里面的闪电珠弧AI和main里面的绘制电弧线段的方法
     public class StormwrathBlade : ModItem
     {
-
         public override void SetDefaults()
         {
             Item.width = 40;
