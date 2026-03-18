@@ -827,6 +827,11 @@ Items: {
 		Tooltip: 挥舞电弧
 		DisplayName: 电刑
 	}
+
+	InvisibleSwordQi: {
+		DisplayName: 无形剑气
+		Tooltip: 发射1条无形剑气
+	}
 }
 
 Projectiles: {
@@ -899,11 +904,12 @@ Projectiles: {
 	DandelionSeedFriendly.DisplayName: 蒲公英种子友方
 	StormwrathLightning.DisplayName: 奔雷剑电弧
 	RainbowArrowProjectile.DisplayName: 彩虹箭
-	// SeagullMinion.DisplayName: Seagull Minion
-	// QuestFishProjectile.DisplayName: Quest Fish Projectile
-	// PoopProjectile.DisplayName: Poop Projectile
-	// FishSchoolWhipProj.DisplayName: Fish School Whip Proj
-	// ElectrocutionProj.DisplayName: Electrocution Proj
+	SeagullMinion.DisplayName: 海鸥仆从
+	QuestFishProjectile.DisplayName: 任务鱼射弹
+	PoopProjectile.DisplayName: 便便射弹
+	FishSchoolWhipProj.DisplayName: 鱼群鞭笞者射弹
+	ElectrocutionProj.DisplayName: 电刑射弹
+	InvisibleSwordQiProj.DisplayName: 无形剑气射弹
 }
 
 DamageClasses: {

@@ -822,6 +822,11 @@ Items: {
 		Tooltip: Swing a lightning arc
 		DisplayName: Electrocution
 	}
+
+	InvisibleSwordQi: {
+		DisplayName: Invisible Sword Qi
+		Tooltip: Shoot 1 invisible sword projectile
+	}
 }
 
 Projectiles: {
@@ -899,6 +904,7 @@ Projectiles: {
 	PoopProjectile.DisplayName: Poop Projectile
 	FishSchoolWhipProj.DisplayName: Fish School Whip Proj
 	ElectrocutionProj.DisplayName: Electrocution Proj
+	InvisibleSwordQiProj.DisplayName: Invisible Sword Qi Proj
 }
 
 DamageClasses: {

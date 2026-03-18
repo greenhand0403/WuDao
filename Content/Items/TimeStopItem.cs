@@ -1,6 +1,6 @@
 using Terraria;
 using Terraria.ID;
-using WuDao.Content.Systems;
+using WuDao.Content.Global;
 using Terraria.ModLoader;
 
 namespace WuDao.Content.Items

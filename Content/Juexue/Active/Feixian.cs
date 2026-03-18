@@ -2,7 +2,7 @@ using Microsoft.Xna.Framework;
 using Terraria;
 using WuDao.Content.Players;
 using WuDao.Content.Juexue.Base;
-using WuDao.Content.Systems;
+using WuDao.Content.Global;
 
 namespace WuDao.Content.Juexue.Active
 {

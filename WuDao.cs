@@ -6,6 +6,8 @@ using Terraria.ModLoader;
 using WuDao.Content.Players;
 using WuDao.Content.Systems;
 using WuDao.Common.Rendering;
+using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 
 namespace WuDao
 {
@@ -20,9 +22,19 @@ namespace WuDao
 	{
 		SyncLifePenalty
 	}
-	// Please read https://github.com/tModLoader/tModLoader/wiki/Basic-tModLoader-Modding-Guide#mod-skeleton-contents for more information about the various files in a mod.
+	
 	public class WuDao : Mod
 	{
+		public static Effect InvisibleSwordQiEffect;
+        public override void Load()
+		{
+			if (!Main.dedServ)
+				InvisibleSwordQiEffect = ModContent.Request<Effect>("WuDao/Effects/InvisibleSwordQi", AssetRequestMode.ImmediateLoad).Value;
+        }
+        public override void Unload()
+        {
+            InvisibleSwordQiEffect = null;
+        }
 		// 自动喝药
 		public override void HandlePacket(BinaryReader reader, int whoAmI)
 		{

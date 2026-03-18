@@ -13,6 +13,7 @@ using WuDao.Content.Global.Projectiles;
 
 namespace WuDao.Content.Systems
 {
+    // 参考 https://github.com/tModLoader/tModLoader/wiki/Advanced-Detouring-Guide
     // 隐藏冰雪雾成功，但是隐藏闪电球的光照和粒子效果，但是没有成功。推测闪电珠和闪电珠弧的粒子可能在其他地方生成。到此为止吧，后续再仔细研究拜月邪教徒
     public class InvisibleEnemiesProjectileAIHookSystem : ModSystem
     {

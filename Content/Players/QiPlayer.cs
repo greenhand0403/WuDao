@@ -6,7 +6,7 @@ using Terraria.ModLoader.IO;
 using WuDao.Content.Juexue.Base;
 using WuDao.Content.Juexue.Active;
 using Terraria.ID;
-using WuDao.Content.Systems;
+using WuDao.Content.Global;
 using System;
 using ReLogic.Content;
 using Microsoft.Xna.Framework.Graphics;

@@ -338,6 +338,9 @@ namespace WuDao.Content.Projectiles.Summon
                 Texture2D tex = ModContent.Request<Texture2D>("Terraria/Images/NPC_" + (int)NPCID.TheBride).Value;
                 // 手动绘制僵尸新娘 34x156 3帧
                 int frame = (int)((Main.GameUpdateCount / 4) % 3);
+                // 如果速度太小就使用第1帧
+                if (Math.Abs(Projectile.velocity.X) < 0.2f)
+                    frame = 0;
                 Rectangle src = new Rectangle(0, frame * 52, 34, 52);
                 Vector2 origin = src.Size() * 0.5f;
                 Main.EntitySpriteDraw(
@@ -356,6 +359,9 @@ namespace WuDao.Content.Projectiles.Summon
                 Texture2D tex = ModContent.Request<Texture2D>("Terraria/Images/NPC_" + (int)NPCID.TheGroom).Value;
                 // 手动绘制僵尸新郎 34x164 3帧
                 int frame = (int)((Main.GameUpdateCount / 4) % 3);
+                // 如果速度太小就使用第1帧
+                if (Math.Abs(Projectile.velocity.X) < 0.2f)
+                    frame = 0;
                 Rectangle src = new Rectangle(0, frame * 54, 34, 54);
                 Vector2 origin = src.Size() * 0.5f;
                 Main.EntitySpriteDraw(

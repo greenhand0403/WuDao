@@ -29,8 +29,8 @@ namespace WuDao.Content.Items.Weapons.Melee
             Item.rare = ItemRarityID.Orange;
             Item.UseSound = SoundID.Item1;
 
-            Item.shoot = ModContent.ProjectileType<HellfireSwordProjectile>(); // ID of the projectiles the sword will shoot
-            Item.shootSpeed = 8f; // Speed of the projectiles the sword will shoot
+            Item.shoot = ModContent.ProjectileType<HellfireSwordProjectile>();
+            Item.shootSpeed = 8f;
 
             // If you want melee speed to only affect the swing speed of the weapon and not the shoot speed (not recommended)
             // Item.attackSpeedOnlyAffectsWeaponAnimation = true;
