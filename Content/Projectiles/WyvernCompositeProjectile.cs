@@ -29,6 +29,20 @@ namespace WuDao.Content.Projectiles
             NPCID.WyvernTail
         };
         public override string Texture => "Terraria/Images/Projectile_0";
+        private static bool _vanillaNpcTexturesLoaded;
+
+        private static void EnsureVanillaTexturesLoaded()
+        {
+            if (_vanillaNpcTexturesLoaded || Main.dedServ)
+                return;
+
+            foreach (int npcId in SegmentNpcIds)
+            {
+                Main.instance.LoadNPC(npcId);
+            }
+
+            _vanillaNpcTexturesLoaded = true;
+        }
         public override void SetStaticDefaults()
         {
             // 放宽离屏裁剪，合成“长龙”需要更宽的范围
@@ -48,6 +62,11 @@ namespace WuDao.Content.Projectiles
             Projectile.aiStyle = 0;
             Projectile.hostile = false;
             Projectile.light = 0.5f;
+        }
+
+        public override void OnSpawn(Terraria.DataStructures.IEntitySource source)
+        {
+            EnsureVanillaTexturesLoaded();
         }
         public override void AI()
         {
@@ -96,9 +115,6 @@ namespace WuDao.Content.Projectiles
             for (int i = 0; i < SegmentNpcIds.Length; i++)
             {
                 int npcId = SegmentNpcIds[i];
-
-                // 确保贴图已加载（避免 1×1 占位贴图）
-                Main.instance.LoadNPC(npcId);
                 Texture2D tex = TextureAssets.Npc[npcId].Value;
 
                 Rectangle frame = new Rectangle(0, 0, tex.Width, tex.Height);
