@@ -2,6 +2,7 @@ using Terraria.ModLoader;
 
 namespace WuDao.Content.DamageClasses
 {
+    // 超能伤害类
     public class SupremeDamageClass : DamageClass
     {
         public override StatInheritanceData GetModifierInheritance(DamageClass dc)

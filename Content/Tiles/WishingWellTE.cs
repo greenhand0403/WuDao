@@ -2,30 +2,35 @@ using System;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
-using Terraria.Localization;
 using Terraria.ModLoader;
 using WuDao.Content.Config;
 using WuDao.Content.Systems;
+using Terraria.Chat;
+using Terraria.Localization;
 
 namespace WuDao.Content.Tiles
 {
     // 许愿井物块
     public class WishingWellTE : ModTileEntity
     {
-        // ✅ 新增：让 Tile 能读到“是否可用”
+        // Tile 用来读“是否可用”
         public bool IsReady => _cooldown <= 0;
-        // 新增：每次触发后进入冷却（单位：帧）
+
+        // 每次触发后进入冷却（单位：帧）
         private int _cooldown = 0;
         public override void Update()
         {
+            // 多人客户端不处理真实逻辑，全部交给服务器/单机
             if (Main.netMode == NetmodeID.MultiplayerClient)
                 return;
+
             // 冷却递减
             if (_cooldown > 0)
             {
                 _cooldown--;
-                return; // 冷却时不处理任何物品
+                return;
             }
+
             Rectangle area = GetTouchArea();
             int plr = Player.FindClosest(Position.ToWorldCoordinates(24, 24), 1, 1);
             Player player = Main.player[plr];
@@ -33,63 +38,65 @@ namespace WuDao.Content.Tiles
             for (int i = 0; i < Main.maxItems; i++)
             {
                 Item it = Main.item[i];
-                if (!it.active || it.stack <= 0) continue;
+                if (!it.active || it.stack <= 0)
+                    continue;
 
                 if (!area.Intersects(it.Hitbox))
                     continue;
 
-                // 仅处理“BOSS 关联物”
                 if (!WishingWellSystem.TryResolveBossFromItem(it, out int bossID))
                 {
-                    CombatText.NewText(player.Hitbox, Color.Gray, Language.GetTextValue("Mods.WuDao.WishingWellItem.Messages.ResolveBossFromItemFail"));
-                    continue;
+                    BroadcastWellMessage("Mods.WuDao.WishingWellItem.Messages.ResolveBossFromItemFail", Color.Gray);
+                    _cooldown = 30;
+                    break;
                 }
 
-                // 环境不满足：完全不响应（也不吞）
                 if (!WishingWellSystem.CheckEnvOk(bossID, player))
                 {
-                    CombatText.NewText(player.Hitbox, Color.Gray, Language.GetTextValue("Mods.WuDao.WishingWellItem.Messages.CheckEnvFail"));
-                    continue;
+                    BroadcastWellMessage("Mods.WuDao.WishingWellItem.Messages.CheckEnvFail", Color.OrangeRed);
+                    _cooldown = 30;
+                    break;
                 }
 
-                NetMessage.SendData(MessageID.SyncItem, -1, -1, null, i);
-
-                // 概率决定吐双倍 or 召唤
+                // 服务器统一决定成功概率
                 float chance = ModContent.GetInstance<WishingWellConfig>().Chance;
                 bool giveDouble = Main.rand.NextFloat() < chance;
+
+                // 本次处理数量
                 int r = Math.Min(it.stack, Main.rand.Next(2, 6));
 
                 if (giveDouble)
                 {
-                    CombatText.NewText(player.Hitbox, Color.Yellow, Language.GetTextValue("Mods.WuDao.WishingWellItem.Messages.Success", r));
+                    // 成功：吐出额外奖励
                     player.QuickSpawnItem(player.GetSource_GiftOrReward(), it.type, r);
-                    for (int d = 0; d < 18; d++)
-                    {
-                        int dust = Dust.NewDust(Position.ToWorldCoordinates(16, 8), 32, 16, DustID.Firework_Red);
-                        Main.dust[dust].velocity *= 0.4f;
-                    }
+
+                    BroadcastWellMessage("Mods.WuDao.WishingWellItem.Messages.Success", Color.LightSkyBlue);
                 }
                 else
                 {
-                    CombatText.NewText(player.Hitbox, Color.Yellow, Language.GetTextValue("Mods.WuDao.WishingWellItem.Messages.Fail"));
+                    // 失败：召唤 BOSS，并吞掉 r 个物品
                     for (int bossAmount = 0; bossAmount < r; bossAmount++)
                     {
                         WishingWellSystem.SpawnBoss(player, bossID);
                     }
-                    for (int d = 0; d < 24; d++)
-                    {
-                        int dust = Dust.NewDust(Position.ToWorldCoordinates(16, 8), 32, 16, DustID.Firework_Green);
-                        Main.dust[dust].velocity *= 0.6f;
-                    }
-                    // 失败吞 1 个
+
                     it.stack -= r;
-                    if (it.stack <= 0) it.TurnToAir();
+                    if (it.stack <= 0)
+                        it.TurnToAir();
+
+                    BroadcastWellMessage("Mods.WuDao.WishingWellItem.Messages.Fail", Color.IndianRed);
                 }
 
-                // 关键：处理完一个物品就进入冷却
-                _cooldown = 300; // 300 帧≈5秒；需要更慢就加大
-                break; // 一次只吃一个
+                // 一定要在处理完成后再同步井口物品
+                NetMessage.SendData(MessageID.SyncItem, -1, -1, null, i);
+
+                // 进入冷却
+                _cooldown = 300;
+                break; // 一次只处理一个物品
             }
+
+            if (Main.netMode == NetmodeID.SinglePlayer)
+                SpawnWellDustLocal();
         }
 
         private Rectangle GetTouchArea()
@@ -103,6 +110,35 @@ namespace WuDao.Content.Tiles
         {
             Tile t = Framing.GetTileSafely(i, j);
             return t.HasTile && t.TileType == ModContent.TileType<WishingWellTile>();
+        }
+        private static void BroadcastWellMessage(string key, Color color)
+        {
+            if (Main.netMode == NetmodeID.Server)
+            {
+                ChatHelper.BroadcastChatMessage(
+                    NetworkText.FromKey(key),
+                    color
+                );
+            }
+            else if (Main.netMode == NetmodeID.SinglePlayer)
+            {
+                Main.NewText(Language.GetTextValue(key), color);
+            }
+        }
+
+        private void SpawnWellDustLocal()
+        {
+            if (Main.dedServ)
+                return;
+
+            Vector2 world = Position.ToWorldCoordinates(24, 8);
+
+            for (int k = 0; k < 16; k++)
+            {
+                int d = Dust.NewDust(world - new Vector2(12f, 12f), 24, 24, DustID.GoldFlame);
+                Main.dust[d].velocity *= 1.4f;
+                Main.dust[d].noGravity = true;
+            }
         }
     }
 }

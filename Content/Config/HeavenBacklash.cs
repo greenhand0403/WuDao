@@ -58,6 +58,10 @@ namespace WuDao.Content.Config
             if (!cfg.Enabled)
             {
                 _steps = 0;
+                _damagePenaltyPerStep = 0f;
+                _lifeRegenPenaltyPerStep = 0;
+                _defensePenaltyPerStep = 0;
+                _damageFloor = 0f;
                 return;
             }
 
