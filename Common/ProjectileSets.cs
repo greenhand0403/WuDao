@@ -29,7 +29,7 @@ namespace WuDao.Common
         public static int Get(this HashSet<int> set, SelectionMode mode, int index = 0)
         {
             if (set == null || set.Count == 0)
-                throw new InvalidOperationException("集合为空");
+                throw new InvalidOperationException("hashset is null or empty");
 
             switch (mode)
             {
@@ -46,7 +46,7 @@ namespace WuDao.Common
                     return ordered[index % ordered.Count];
 
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(mode), "不支持的选择模式");
+                    throw new ArgumentOutOfRangeException(nameof(mode), "invalid selection mode");
             }
         }
     }

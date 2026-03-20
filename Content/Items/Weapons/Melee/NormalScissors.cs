@@ -67,7 +67,7 @@ namespace WuDao.Content.Items.Weapons.Melee
 
         private const int BeamProjectileType = ProjectileID.TerraBlade2Shot;
         private const float BeamSpeed = 12f;
-
+        private bool logFlag = false;
         public override void SetDefaults()
         {
             Item.width = 34;
@@ -242,12 +242,14 @@ namespace WuDao.Content.Items.Weapons.Melee
 
                 mp.energy = NormalScissorsPlayer.EnergyMax;   // 能量直接拉满
                 mp.forceChargedOnNextSwing = true;            // 标记：下一次左键必放斩波
-                if (Main.netMode != NetmodeID.Server)
+                if (Main.netMode != NetmodeID.Server && !logFlag)
+                {
                     CombatText.NewText(
                     player.Hitbox,
                     new Color(120, 255, 120),
-                    Language.GetTextValue("Mods.WuDao.Items.NormalScissors.Messages.EnergyFull")
-                );
+                    Language.GetTextValue("Mods.WuDao.Items.NormalScissors.Messages.EnergyFull"));
+                    logFlag = true;
+                }
             }
             else
             {
@@ -257,7 +259,7 @@ namespace WuDao.Content.Items.Weapons.Melee
                     FireChargedSlash(player);
                     mp.ClearEnergy();                 // 清能量，避免叠触发
                     mp.forceChargedOnNextSwing = false;
-
+                    logFlag = false;
                     // （可选）如果你实现了斩波锁（waveLockout），这里顺手置个极短CD避免与同帧其他发射叠加
                     // mp.waveLockout = 6;
                 }

@@ -9,9 +9,7 @@ namespace WuDao.Content.Buffs
         public override void SetStaticDefaults()
         {
             Main.debuff[Type] = false;        // 不是减益
-            Main.pvpBuff[Type] = false;
             Main.buffNoSave[Type] = false;    // 允许存档
-            Main.buffNoTimeDisplay[Type] = false;
         }
     }
 }

@@ -9,6 +9,7 @@ namespace WuDao.Content.Buffs
         public override void SetStaticDefaults()
         {
             Main.debuff[Type] = true;
+            Main.buffNoSave[Type] = false;    // 允许存档
         }
     }
 }

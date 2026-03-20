@@ -4,12 +4,12 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.GameContent;
-using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.Utilities;
 
 namespace WuDao.Common
 {
+    // 模仿闪电珠弧的绘制，参考原版 main 里面的绘制方法
     public readonly record struct LightningPalette(
         Color OuterColor,
         Color MiddleColor,

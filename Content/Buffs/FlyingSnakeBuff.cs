@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent;
@@ -13,13 +14,25 @@ namespace WuDao.Content.Buffs
     public class FlyingSnakeBuff : ModBuff
     {
         public override string Texture => "Terraria/Images/Buff";
+        private static Asset<Texture2D> FlyingSnakeTexture;
         public override void SetStaticDefaults()
         {
             // 召唤类 Buff 的基本设置
             Main.buffNoTimeDisplay[Type] = true;
             Main.buffNoSave[Type] = true;
         }
+        public override void Load()
+        {
+            if (Main.dedServ)
+                return;
 
+            Main.instance.LoadNPC(NPCID.FlyingSnake);
+            FlyingSnakeTexture = TextureAssets.Npc[NPCID.FlyingSnake];
+        }
+        public override void Unload()
+        {
+            FlyingSnakeTexture = null;
+        }
         public override void Update(Player player, ref int buffIndex)
         {
             if (player.ownedProjectileCounts[ModContent.ProjectileType<FlyingSnakeMinion>()] > 0)
@@ -34,7 +47,11 @@ namespace WuDao.Content.Buffs
         }
         public override void PostDraw(SpriteBatch spriteBatch, int buffIndex, BuffDrawParams drawParams)
         {
-            Texture2D texture = TextureAssets.Npc[NPCID.FlyingSnake].Value;
+            // 确保已加载纹理
+            if (Main.dedServ || FlyingSnakeTexture == null)
+                return;
+
+            Texture2D texture = FlyingSnakeTexture.Value;
 
             Rectangle source = new Rectangle(0, 0, 64, 64);
 

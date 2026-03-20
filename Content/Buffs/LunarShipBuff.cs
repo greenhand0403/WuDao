@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ModLoader;
@@ -11,10 +12,22 @@ namespace WuDao.Content.Buffs
     public class LunarShipBuff : ModBuff
     {
         public override string Texture => "Terraria/Images/Buff";
+        private static Asset<Texture2D> LunarShipTexture;
         public override void SetStaticDefaults()
         {
             Main.buffNoTimeDisplay[Type] = true; // 坐骑 buff 无限
             Main.buffNoSave[Type] = true;
+        }
+        public override void Load()
+        {
+            if (Main.dedServ)
+                return;
+
+            LunarShipTexture = Mod.Assets.Request<Texture2D>("Content/Mounts/LunarShip_Front");
+        }
+        public override void Unload()
+        {
+            LunarShipTexture = null;
         }
         public override void Update(Player player, ref int buffIndex)
         {
@@ -28,7 +41,10 @@ namespace WuDao.Content.Buffs
         }
         public override void PostDraw(SpriteBatch spriteBatch, int buffIndex, BuffDrawParams drawParams)
         {
-            Texture2D texture = ModContent.Request<Texture2D>("WuDao/Content/Mounts/LunarShip_Front").Value;
+            if (Main.dedServ || LunarShipTexture == null)
+                return;
+                
+            Texture2D texture = LunarShipTexture.Value;
 
             Rectangle sourceRect = new Rectangle(
                 7,

@@ -1,7 +1,9 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 using WuDao.Content.Projectiles.Summon;
@@ -12,13 +14,25 @@ namespace WuDao.Content.Buffs
     public class EnchantedRoyalScepterBuff : ModBuff
     {
         public override string Texture => "Terraria/Images/Buff";
+        private static Asset<Texture2D> RoyalScepterTexture;
         public override void SetStaticDefaults()
         {
             Main.buffNoTimeDisplay[Type] = true;
             Main.buffNoSave[Type] = false;
             Main.debuff[Type] = false; // 允许右键移除
         }
+        public override void Load()
+        {
+            if (Main.dedServ)
+                return;
 
+            Main.instance.LoadItem(ItemID.RoyalScepter);
+            RoyalScepterTexture = TextureAssets.Item[ItemID.RoyalScepter];
+        }
+        public override void Unload()
+        {
+            RoyalScepterTexture = null;
+        }
         public override void Update(Player player, ref int buffIndex)
         {
             // 维持一个可见时长（即便不显示时间），避免自然掉光
@@ -43,8 +57,11 @@ namespace WuDao.Content.Buffs
         public override bool RightClick(int buffIndex) => true;
         public override void PostDraw(SpriteBatch spriteBatch, int buffIndex, BuffDrawParams drawParams)
         {
-            // 确保已加载
-            Texture2D texture = ModContent.Request<Texture2D>("Terraria/Images/Item_" + ItemID.RoyalScepter).Value;
+            // 确保已加载纹理
+            if (Main.dedServ || RoyalScepterTexture == null)
+                return;
+
+            Texture2D texture = RoyalScepterTexture.Value;
 
             Rectangle source = new Rectangle(0, 0, 14, 32);
             // 32-14 = 18, 18 / 2 = 9

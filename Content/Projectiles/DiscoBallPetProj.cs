@@ -6,13 +6,9 @@ using WuDao.Content.Buffs;
 
 namespace WuDao.Content.Projectiles
 {
-
-
     // 迪斯科灯球 宠物弹幕本体：参考猩红之心移动逻辑，加入“圆锥方向光 + 颜色循环 + 缓慢旋转”
     public class DiscoBallPetProj : ModProjectile
     {
-        // public override string Texture => $"WuDao/Content/Projectiles/DiscoBallPetProj";
-        public override string Texture => "Terraria/Images/Item_" + ItemID.DiscoBall;
         // 配置参数（可根据需要调节/做成 ModConfig）
         private const int BeamLengthTiles = 30;      // 期望照亮 45 格（~720 像素）
         private const int BeamStepTiles = 2;         // 取样步长（每 4 格一个采样点）

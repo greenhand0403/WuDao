@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent;
@@ -12,12 +13,25 @@ namespace WuDao.Content.Buffs
     public class HeroBrokenSwordBuff : ModBuff
     {
         public override string Texture => "Terraria/Images/Buff";
+        private static Asset<Texture2D> HeroBrokenSwordTexture;
         public override void SetStaticDefaults()
         {
             Main.buffNoSave[Type] = true;       // 不存档
             Main.buffNoTimeDisplay[Type] = true;// 不显示计时
         }
+        public override void Load()
+        {
+            // 预加载仅在客户端分支执行
+            if (Main.dedServ)
+                return;
 
+            Main.instance.LoadItem(ItemID.BrokenHeroSword);
+            HeroBrokenSwordTexture = TextureAssets.Item[ItemID.BrokenHeroSword];
+        }
+        public override void Unload()
+        {
+            HeroBrokenSwordTexture = null;
+        }
         public override void Update(Player player, ref int buffIndex)
         {
             // 有小兵则刷新时间；没有则移除（与示例一致）
@@ -34,7 +48,10 @@ namespace WuDao.Content.Buffs
         
         public override void PostDraw(SpriteBatch spriteBatch, int buffIndex, BuffDrawParams drawParams)
         {
-            Texture2D texture = TextureAssets.Item[ItemID.BrokenHeroSword].Value;
+            if (Main.dedServ || HeroBrokenSwordTexture == null)
+                return;
+                
+            Texture2D texture = HeroBrokenSwordTexture.Value;
 
             Rectangle sourceRect = new Rectangle(
                 0,

@@ -3,6 +3,7 @@ using System.IO;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
@@ -147,13 +148,29 @@ namespace WuDao.Content.Global
         };
         private void TryAssign(Item item)
         {
-            if (!IsArmor(item) || Element >= 0) return; // 已有标签则不覆盖
+            if (item == null || item.IsAir)
+                return;
+
+            if (Element >= 0)
+                return;
+
+            if (!IsArmor(item))
+                return;
+
+            // 多人里客户端不负责决定真实元素
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+                return;
 
             var cfg = ModContent.GetInstance<ArmorPrefixConfig>();
-            if (cfg.PrefixMode == ArmorPrefixMode.Disabled) return;
-            if (cfg.PrefixMode == ArmorPrefixMode.OreArmorOnly && !IsVanillaOreArmor(item)) return;
+            if (cfg == null)
+                return;
 
-            // 只在“获得盔甲时”随机赋值一次
+            if (cfg.PrefixMode == ArmorPrefixMode.Disabled)
+                return;
+
+            if (cfg.PrefixMode == ArmorPrefixMode.OreArmorOnly && !IsVanillaOreArmor(item))
+                return;
+
             Element = Main.rand.Next(0, 5);
         }
 

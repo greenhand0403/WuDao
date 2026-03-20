@@ -11,7 +11,6 @@ namespace WuDao.Content.Buffs
         {
             Main.debuff[Type] = false;
             Main.buffNoSave[Type] = false;
-            Main.buffNoTimeDisplay[Type] = false;
         }
     }
 }

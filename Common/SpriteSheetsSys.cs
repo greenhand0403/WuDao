@@ -39,13 +39,13 @@ namespace WuDao.Common
             if (Main.dedServ)
             {
                 // 服务器不加载贴图，但为了不空引用，仍放占位
-                _map[SpriteAtlasId.Effect1] = SpriteSheet.FromTexture("WuDao/Assets/Effect1");
-                _map[SpriteAtlasId.Effect2] = SpriteSheet.FromTexture("WuDao/Assets/Effect2");
-                _map[SpriteAtlasId.BlueEffect] = SpriteSheet.FromTexture("WuDao/Assets/BlueEffect");
-                _map[SpriteAtlasId.GreenEffect] = SpriteSheet.FromTexture("WuDao/Assets/GreenEffect");
-                _map[SpriteAtlasId.PurpleEffect] = SpriteSheet.FromTexture("WuDao/Assets/PurpleEffect");
-                _map[SpriteAtlasId.YellowEffect] = SpriteSheet.FromTexture("WuDao/Assets/YellowEffect");
-                _map[SpriteAtlasId.RedEffect] = SpriteSheet.FromTexture("WuDao/Assets/RedEffect");
+                _map[SpriteAtlasId.Effect1] = SpriteSheet.Empty();
+                _map[SpriteAtlasId.Effect2] = SpriteSheet.Empty();
+                _map[SpriteAtlasId.BlueEffect] = SpriteSheet.Empty();
+                _map[SpriteAtlasId.GreenEffect] = SpriteSheet.Empty();
+                _map[SpriteAtlasId.PurpleEffect] = SpriteSheet.Empty();
+                _map[SpriteAtlasId.YellowEffect] = SpriteSheet.Empty();
+                _map[SpriteAtlasId.RedEffect] = SpriteSheet.Empty();
                 return;
             }
 

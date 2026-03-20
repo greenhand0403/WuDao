@@ -50,10 +50,8 @@ namespace WuDao.Content.Items.Weapons.Summon
         {
             player.AddBuff(Item.buffType, 2);
 
-            int projType = ModContent.ProjectileType<ButterflyMinion>();
-
             // 当前已有的蝴蝶数量（每次只+1，直到8）
-            int current = player.ownedProjectileCounts[projType];
+            int current = player.ownedProjectileCounts[type];
 
             // Main.NewText($"蝴蝶召唤杖：已有{current}只");
             if (current > player.maxMinions || current == 8)
@@ -63,7 +61,7 @@ namespace WuDao.Content.Items.Weapons.Summon
                 source,
                 Main.MouseWorld,
                 Vector2.Zero,
-                projType,
+                type,
                 damage,
                 knockback,
                 player.whoAmI,

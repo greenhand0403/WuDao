@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent;
@@ -13,12 +14,25 @@ namespace WuDao.Content.Buffs
     public class GrasshopperBuff : ModBuff
     {
         public override string Texture => "Terraria/Images/Buff";
+        private static Asset<Texture2D> GrasshopperTexture;
         public override void SetStaticDefaults()
         {
             Main.buffNoSave[Type] = true;
             Main.buffNoTimeDisplay[Type] = true;
         }
-
+        public override void Load()
+        {
+            // 预加载仅在客户端分支执行
+            if (Main.dedServ)
+                return;
+            
+            Main.instance.LoadNPC(NPCID.Grasshopper);
+            GrasshopperTexture = TextureAssets.Npc[NPCID.Grasshopper];
+        }
+        public override void Unload()
+        {
+            GrasshopperTexture = null;
+        }
         public override void Update(Player player, ref int buffIndex)
         {
             if (player.ownedProjectileCounts[ModContent.ProjectileType<GrasshopperMinion>()] > 0)
@@ -35,7 +49,12 @@ namespace WuDao.Content.Buffs
         // 在默认buff底图的基础上绘制蚱蜢头像，组合成buff图标
         public override void PostDraw(SpriteBatch spriteBatch, int buffIndex, BuffDrawParams drawParams)
         {
-            Texture2D texture = TextureAssets.Npc[NPCID.Grasshopper].Value;
+            if (Main.dedServ||GrasshopperTexture == null)
+            {
+                return;
+            }
+            
+            Texture2D texture = GrasshopperTexture.Value;
 
             Rectangle sourceRect = new Rectangle(
                 0,

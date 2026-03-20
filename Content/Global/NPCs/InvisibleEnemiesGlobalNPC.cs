@@ -13,6 +13,9 @@ namespace WuDao.Content.Global.NPCs
         public override bool InstancePerEntity => true;
 
         private bool forcedHideApplied;
+        // 隐藏世纪之花藤蔓的绘制
+        // 合理使用 npc.hide 属性可以跳过世纪之花藤蔓、骷髅王手臂、血肉墙触手等的额外绘制
+        // 目前的代码是存在优化空间的（部分隐藏不是依赖hide可以改为统一依赖hide
         private bool originalHide;
         private static NPC GetHideOwner(NPC npc)
         {

@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria.DataStructures;
 using Microsoft.Xna.Framework;
 using Terraria.GameContent;
+using ReLogic.Content;
 
 namespace WuDao.Content.Buffs
 {
@@ -13,12 +14,23 @@ namespace WuDao.Content.Buffs
     public class ZombieMinionBuff : ModBuff
     {
         public override string Texture => "Terraria/Images/Buff";
+        private static Asset<Texture2D> ZombieMinionTexture;
         public override void SetStaticDefaults()
         {
             Main.buffNoSave[Type] = true;
             Main.buffNoTimeDisplay[Type] = true;
         }
-
+        public override void Load()
+        {
+            if (Main.dedServ)
+                return;
+            Main.instance.LoadNPC(NPCID.Zombie);
+            ZombieMinionTexture = TextureAssets.Npc[NPCID.Zombie];
+        }
+        public override void Unload()
+        {
+            ZombieMinionTexture = null;
+        }
         public override void Update(Player player, ref int buffIndex)
         {
             if (player.ownedProjectileCounts[ModContent.ProjectileType<ZombieMinion>()] > 0)
@@ -37,8 +49,10 @@ namespace WuDao.Content.Buffs
         // 在默认buff底图的基础上绘制僵尸头像，组合成buff图标
         public override void PostDraw(SpriteBatch spriteBatch, int buffIndex, BuffDrawParams drawParams)
         {
+            if (Main.dedServ || ZombieMinionTexture == null)
+                return;
             // 绘制僵尸的头像作为buff，从贴图38x48的单帧中裁剪32x32的区域
-            Texture2D texture = TextureAssets.Npc[NPCID.Zombie].Value;
+            Texture2D texture = ZombieMinionTexture.Value;
             // 贴图坐标是左上角为原点
             Rectangle sourceRect = new Rectangle(
                 3,// (38-32)/2 对齐中心

@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ModLoader;
@@ -11,13 +12,24 @@ namespace WuDao.Content.Buffs
     public class MonsterTrainBuff : ModBuff
     {
         public override string Texture => "Terraria/Images/Buff";
+        private static Asset<Texture2D> MonsterTrainTexture;
         public override void SetStaticDefaults()
         {
             // 召唤类 Buff 的基本设置
             Main.buffNoTimeDisplay[Type] = true;
             Main.buffNoSave[Type] = true;
         }
-
+        public override void Load()
+        {
+            if (Main.dedServ)
+                return;
+            
+            MonsterTrainTexture = Mod.Assets.Request<Texture2D>("Content/Items/Weapons/Summon/MonsterTrainStaff");
+        }
+        public override void Unload()
+        {
+            MonsterTrainTexture = null;
+        }
         public override void Update(Player player, ref int buffIndex)
         {
             if (player.ownedProjectileCounts[ModContent.ProjectileType<MonsterTrainMinion>()] > 0)
@@ -32,7 +44,10 @@ namespace WuDao.Content.Buffs
         }
         public override void PostDraw(SpriteBatch spriteBatch, int buffIndex, BuffDrawParams drawParams)
         {
-            Texture2D texture = ModContent.Request<Texture2D>("WuDao/Content/Items/Weapons/Summon/MonsterTrainStaff").Value;
+            if (Main.dedServ || MonsterTrainTexture == null)
+                return;
+            
+            Texture2D texture = MonsterTrainTexture.Value;
 
             Rectangle sourceRect = new Rectangle(
                 5,

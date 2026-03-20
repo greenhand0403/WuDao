@@ -69,16 +69,23 @@ namespace WuDao.Common
     public class SpriteSheet
     {
         public Asset<Texture2D> TextureAsset { get; private set; }
-        public Texture2D Texture => TextureAsset.Value;
-        public List<SpriteDef> Sprites { get; private set; } = new List<SpriteDef>();
+        public bool HasTexture => TextureAsset != null;
+        public Texture2D Texture => TextureAsset?.Value;
+        public List<SpriteDef> Sprites { get; private set; } = new();
 
         private SpriteSheet() { }
 
         public static SpriteSheet FromTexture(string assetPath)
         {
-            return new SpriteSheet { TextureAsset = ModContent.Request<Texture2D>(assetPath, AssetRequestMode.AsyncLoad) };
+            return new SpriteSheet
+            {
+                TextureAsset = ModContent.Request<Texture2D>(assetPath, AssetRequestMode.AsyncLoad)
+            };
         }
-
+        public static SpriteSheet Empty()
+        {
+            return new SpriteSheet();
+        }
         /// <summary>
         /// 规则网格切割（统一帧宽高）。可以产生许多“单帧精灵”或“多帧精灵”（按行/列组合）。
         /// </summary>
@@ -165,7 +172,7 @@ namespace WuDao.Common
             Sprites.Clear();
 
             if (framesPerColumn == null || framesPerColumn.Length != columns)
-                throw new ArgumentException("framesPerColumn 长度应等于 columns");
+                throw new ArgumentException("framesPerColumn length must equal to columns");
 
             for (int c = 0; c < columns; c++)
             {
@@ -215,6 +222,10 @@ namespace WuDao.Common
         /// </summary>
         public void Draw(int spriteIndex, int frameIndex, Vector2 worldCenter, Color color, float rotation, float scale, SpriteEffects fx = SpriteEffects.None, float layerDepth = 0f)
         {
+            // 服务器不碰纹理绘制
+            if (Main.dedServ || TextureAsset == null)
+                return;
+
             var rect = GetFrameRect(spriteIndex, frameIndex);
             var origin = new Vector2(rect.Width / 2f, rect.Height / 2f);
 

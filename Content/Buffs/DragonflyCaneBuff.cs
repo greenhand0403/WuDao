@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent;
@@ -13,12 +14,26 @@ namespace WuDao.Content.Buffs
     public class DragonflyCaneBuff : ModBuff
     {
         public override string Texture => "Terraria/Images/Buff";
+        private static Asset<Texture2D> DragonflyCaneTexture;
         public override void SetStaticDefaults()
         {
             Main.buffNoSave[Type] = true;
             Main.buffNoTimeDisplay[Type] = true;
         }
+        public override void Load()
+        {
+            // 预加载仅在客户端分支执行
+            if (Main.dedServ)
+                return;
 
+            Main.instance.LoadItem(ItemID.RedDragonfly);
+            DragonflyCaneTexture = TextureAssets.Item[ItemID.RedDragonfly];
+        }
+
+        public override void Unload()
+        {
+            DragonflyCaneTexture = null;
+        }
         public override void Update(Player player, ref int buffIndex)
         {
             if (player.ownedProjectileCounts[ModContent.ProjectileType<DragonflyMinion>()] > 0)
@@ -33,8 +48,10 @@ namespace WuDao.Content.Buffs
         }
         public override void PostDraw(SpriteBatch spriteBatch, int buffIndex, BuffDrawParams drawParams)
         {
-            // 确保已加载
-            Texture2D texture = ModContent.Request<Texture2D>("Terraria/Images/Item_" + ItemID.RedDragonfly).Value;
+            if (Main.dedServ || DragonflyCaneTexture == null)
+                return;
+
+            Texture2D texture = DragonflyCaneTexture.Value;
 
             Rectangle source = new Rectangle(0, 0, 26, 24);
 
