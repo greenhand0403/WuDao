@@ -23,6 +23,9 @@ namespace WuDao.Content.Juexue.Active
 
         public override bool TryActivate(Player player, QiPlayer qi)
         {
+            if (player.whoAmI != Main.myPlayer)
+                return false;
+
             // 御剑中：再次按键 -> 关闭（不进CD，不扣气）
             if (qi.YuJianActive)
             {
@@ -34,7 +37,8 @@ namespace WuDao.Content.Juexue.Active
             // 先找“非快捷栏”的第一把剑
             if (!qi.TryFindSwordFromBackpack(out var sword))
             {
-                Main.NewText(Language.GetTextValue("Mods.WuDao.Messages.JueXue.NoSword"), Color.OrangeRed);
+                if (player.whoAmI == Main.myPlayer)
+                    Main.NewText(Language.GetTextValue("Mods.WuDao.Messages.JueXue.NoSword"), Color.OrangeRed);
                 return false;
             }
 
@@ -51,7 +55,8 @@ namespace WuDao.Content.Juexue.Active
             // 启动消耗检查
             if (!qi.TrySpendQi(QiCost))
             {
-                Main.NewText(Language.GetTextValue("Mods.WuDao.Messages.JueXue.NotEnoughQi"), Color.OrangeRed);
+                if (player.whoAmI == Main.myPlayer)
+                    Main.NewText(Language.GetTextValue("Mods.WuDao.Messages.JueXue.NotEnoughQi"), Color.OrangeRed);
                 return false;
             }
 

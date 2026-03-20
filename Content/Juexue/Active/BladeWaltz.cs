@@ -18,6 +18,9 @@ namespace WuDao.Content.Juexue.Active
         public const int baseDamage = 115;//总共8*115=920
         public override bool TryActivate(Player player, QiPlayer qi)
         {
+            if (player.whoAmI != Main.myPlayer)
+                return false;
+
             if (!JuexueRuntime.Enabled)
                 return false;
 
@@ -28,14 +31,16 @@ namespace WuDao.Content.Juexue.Active
             // 冷却检查
             if (!qi.CanUseActiveNow(Item.type, SpecialCooldownTicks))
             {
-                Main.NewText(Language.GetTextValue("Mods.WuDao.Messages.JueXue.Cooldown"), Color.OrangeRed);
+                if (player.whoAmI == Main.myPlayer)
+                    Main.NewText(Language.GetTextValue("Mods.WuDao.Messages.JueXue.Cooldown"), Color.OrangeRed);
                 return false;
             }
 
             // 启动时仅扣一次
             if (!qi.TrySpendQi(QiCost))
             {
-                Main.NewText(Language.GetTextValue("Mods.WuDao.Messages.JueXue.NotEnoughQi"), Color.OrangeRed);
+                if (player.whoAmI == Main.myPlayer)
+                    Main.NewText(Language.GetTextValue("Mods.WuDao.Messages.JueXue.NotEnoughQi"), Color.OrangeRed);
                 return false;
             }
 
@@ -49,12 +54,12 @@ namespace WuDao.Content.Juexue.Active
 
             // 盖章冷却（含 2s 公共冷却）
             qi.StampActiveUse(Item.type, SpecialCooldownTicks);
-
-            Main.NewText(DisplayName, Color.MediumPurple);
+            if (player.whoAmI == Main.myPlayer)
+                Main.NewText(DisplayName, Color.MediumPurple);
             // 冷却图标
             qi.TriggerJuexueCooldownIcon(
                 frameIndex: BladeWaltzFrameIndex,
-                itemType: Type,                    // ModItem 的 Type
+                itemType: Item.type,                    // ModItem 的 Type
                 cooldownTicks: SpecialCooldownTicks,
                 scale: 1.1f,
                 offset: new Vector2(0, -20)

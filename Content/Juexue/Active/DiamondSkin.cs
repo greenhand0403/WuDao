@@ -18,10 +18,14 @@ namespace WuDao.Content.Juexue.Active
         public const int DiamondSkinFrameIndex = 2;
         protected override bool OnActivate(Player player, QiPlayer qi)
         {
+            if (player.whoAmI != Main.myPlayer)
+                return false;
+
             Helpers.BossProgressBonus progressBonus = Helpers.BossProgressPower.Get(player);
             int time = (int)(60 * 5 * progressBonus.DamageMult);
             player.AddBuff(ModContent.BuffType<DiamondSkinBuff>(), time);
             SoundEngine.PlaySound(SoundID.Item29, player.Center);
+            
             if (!Main.dedServ)
             {
                 // 冷却图标

@@ -15,12 +15,16 @@ namespace WuDao.Content.Juexue.Active
     {
         public override bool IsActive => true;
         public override int QiCost => 0;
-        public override int SpecialCooldownTicks => 0; // 45s
+        public override int SpecialCooldownTicks => 0;
         public const int ShengLongBaFrameIndex = 0;
         public const int baseDamage = 255;// 基础伤害
         public const int baseVelocity = 6;// 基础速度
         protected override bool OnActivate(Player player, QiPlayer qi)
         {
+            // 只允许技能拥有者本人生成这颗射弹
+            if (player.whoAmI != Main.myPlayer)
+                return false;
+
             // 计算武道境界伤害和射弹速度加成
             Helpers.BossProgressBonus progressBonus = Helpers.BossProgressPower.Get(player);
 
@@ -28,18 +32,24 @@ namespace WuDao.Content.Juexue.Active
             int finalDamage = (int)(player.GetTotalDamage(chi).ApplyTo(baseDamage) * progressBonus.DamageMult);
 
             // 从玩家位置指向光标位置，计算速度
-            Vector2 v = (Main.MouseWorld - player.Center).SafeNormalize(Vector2.Zero) ;
+            Vector2 v = (Main.MouseWorld - player.Center).SafeNormalize(Vector2.Zero);
+            
             int proj = Projectile.NewProjectile(
-                    player.GetSource_ItemUse(Item),
-                    player.Center + v * 72f,// 从玩家位置发射,朝目标方向偏移一点点
-                    v * baseVelocity,
-                    ModContent.ProjectileType<InvisibleSwordQiProj>(),
-                    finalDamage,
-                    3f,
-                    player.whoAmI);
-            var p = Main.projectile[proj];
-            p.DamageType = chi;
-            p.originalDamage = finalDamage;
+                player.GetSource_ItemUse(Item),
+                player.Center + v * 72f,// 从玩家位置发射,朝目标方向偏移一点点
+                v * baseVelocity,
+                ModContent.ProjectileType<InvisibleSwordQiProj>(),
+                finalDamage,
+                3f,
+                player.whoAmI
+            );
+
+            if (proj >= 0 && proj < Main.maxProjectiles)
+            {
+                Projectile p = Main.projectile[proj];
+                p.DamageType = chi;
+                p.originalDamage = finalDamage;
+            }
 
             if (!Main.dedServ)
             {

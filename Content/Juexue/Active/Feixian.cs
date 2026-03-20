@@ -3,6 +3,8 @@ using Terraria;
 using WuDao.Content.Players;
 using WuDao.Content.Juexue.Base;
 using WuDao.Content.Global;
+using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace WuDao.Content.Juexue.Active
 {
@@ -17,6 +19,9 @@ namespace WuDao.Content.Juexue.Active
         public const int Damage = 240;
         protected override bool OnActivate(Player player, QiPlayer qi)
         {
+            if (player.whoAmI != Main.myPlayer)
+                return false;
+
             // 1) 清多数减益
             for (int i = 0; i < player.buffType.Length; i++)
             {
@@ -44,9 +49,21 @@ namespace WuDao.Content.Juexue.Active
                     offset: new Vector2(0, -20)
                 );
             }
-            // 3) 启动“飞仙定向冻结”：只冻结 NPC 与敌对弹幕，放行本玩家友方弹幕
-            TimeStopSystem.StartFeixianFreeze(player.whoAmI, qi.FeixianTicks);
-
+            
+            if (Main.netMode == NetmodeID.SinglePlayer)
+            {
+                TimeStopSystem.TryStartFreeze(qi.FeixianTicks, 0, FreezeScope.Feixian, player.whoAmI);
+            }
+            else if (player.whoAmI == Main.myPlayer)
+            {
+                ModPacket packet = Mod.GetPacket();
+                packet.Write((byte)MessageType.RequestTimeStop);
+                packet.Write((byte)FreezeScope.Feixian);
+                packet.Write(qi.FeixianTicks);
+                packet.Write(0); // 飞仙不额外走这个系统冷却，仍由绝学冷却控制
+                packet.Write((byte)player.whoAmI);
+                packet.Send();
+            }
             return true;
         }
     }

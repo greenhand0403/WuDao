@@ -12,11 +12,18 @@ namespace WuDao.Content.Global
         public static int Timer = 0;
         // ★ 新增：全局冷却
         public static int CooldownTimer = 0;         // 冷却计时器（帧）
-        private static int _pendingCooldown = 0;     // 本次冻结结束后要应用的冷却（帧）
         public static bool IsOnCooldown => CooldownTimer > 0;
         // ★ 新增：冻结作用域 & 允许放行的玩家（飞仙施法者）
         public static FreezeScope Scope = FreezeScope.None;
         public static int AllowedPlayer = -1;
+        public static void Clear()
+        {
+            IsFrozen = false;
+            Timer = 0;
+            CooldownTimer = 0;
+            Scope = FreezeScope.None;
+            AllowedPlayer = -1;
+        }
         // ★ 新增：仅用于天外飞仙的“定向冻结”，放行某位玩家的友方弹幕
         public static void StartFeixianFreeze(int playerWhoAmI, int duration)
         {
@@ -33,39 +40,62 @@ namespace WuDao.Content.Global
 
             IsFrozen = true;
             Timer = duration;
+            CooldownTimer = cooldown;
             Scope = scope;
             AllowedPlayer = allowedPlayer;
-
-            _pendingCooldown = cooldown; // 冻结结束后再开始走冷却
             return true;
         }
-        // ★ 新增：如果当前是飞仙冻结，就结束它（避免误停在全局冻结状态）
+        public static void StopFreeze()
+        {
+            IsFrozen = false;
+            Timer = 0;
+            Scope = FreezeScope.None;
+            AllowedPlayer = -1;
+        }
+
         public static void StopIfFeixian()
         {
             if (Scope == FreezeScope.Feixian)
             {
-                IsFrozen = false;
-                Timer = 0;
-                Scope = FreezeScope.None;
-                AllowedPlayer = -1;
+                StopFreeze();
             }
         }
-        public static void Update()
+        public static void UpdateServerSide()
         {
+            if (Main.netMode == Terraria.ID.NetmodeID.MultiplayerClient)
+                return;
+
+            bool changed = false;
+
             if (IsFrozen)
             {
                 Timer--;
                 if (Timer <= 0)
                 {
-                    IsFrozen = false;
-                    Timer = 0;
-                    Scope = FreezeScope.None;
-                    AllowedPlayer = -1;
+                    StopFreeze();
+                    changed = true;
                 }
             }
-            // ★ 新增：冷却递减
+
             if (CooldownTimer > 0)
+            {
                 CooldownTimer--;
+                changed = true;
+            }
+
+            if (changed && Main.netMode == Terraria.ID.NetmodeID.Server)
+            {
+                WuDao mod = ModContent.GetInstance<WuDao>();
+                mod.BroadcastTimeStopState();
+            }
+        }
+        public static void ApplySyncedState(bool isFrozen, int timer, int cooldownTimer, FreezeScope scope, int allowedPlayer)
+        {
+            IsFrozen = isFrozen;
+            Timer = timer;
+            CooldownTimer = cooldownTimer;
+            Scope = scope;
+            AllowedPlayer = allowedPlayer;
         }
     }
 

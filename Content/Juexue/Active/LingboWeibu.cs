@@ -18,6 +18,9 @@ namespace WuDao.Content.Juexue.Active
         public const int LingboWeibuFrameIndex = 3;
         public override bool TryActivate(Player player, QiPlayer qi)
         {
+            if (player.whoAmI != Main.myPlayer)
+                return false;
+
             if (!JuexueRuntime.Enabled)
                 return false;
 
@@ -32,7 +35,8 @@ namespace WuDao.Content.Juexue.Active
             // 未开启 -> 正常走公共冷却时间检查
             if (!qi.CanUseActiveNow(Item.type, SpecialCooldownTicks))
             {
-                Main.NewText(Language.GetTextValue("Mods.WuDao.Messages.JueXue.Cooldown"), Color.OrangeRed);
+                if (player.whoAmI == Main.myPlayer)
+                    Main.NewText(Language.GetTextValue("Mods.WuDao.Messages.JueXue.Cooldown"), Color.OrangeRed);
                 return false;
             }
 
@@ -43,6 +47,9 @@ namespace WuDao.Content.Juexue.Active
 
         protected override bool OnActivate(Player player, QiPlayer qi)
         {
+            if (player.whoAmI != Main.myPlayer)
+                return false;
+
             if (qi.QiMax <= 0) return false;
             qi.LingboActive = true;
             qi.LingboQiCost = QiCost;

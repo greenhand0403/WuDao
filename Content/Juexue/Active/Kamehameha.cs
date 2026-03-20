@@ -23,9 +23,12 @@ namespace WuDao.Content.Juexue.Active
         {
             return false;
         }
-
+        // 多人表现增强没做，其他玩家是不知道当前玩家正在蓄力的
         public void ReleaseFire(Player player, QiPlayer qi, int spentQi)
         {
+            if (player.whoAmI != Main.myPlayer)
+                return;
+
             if (spentQi <= 0) return; // 没有蓄到就不发射
             if (!qi.CanUseActiveNow(Item.type, SpecialCooldownTicks)) return;
 

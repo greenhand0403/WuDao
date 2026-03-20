@@ -10,20 +10,25 @@ namespace WuDao.Content.DrawLayers
 {
     public class SheRaGlowLayer : PlayerDrawLayer
     {
-        private Asset<Texture2D> headGlow;
-        private Asset<Texture2D> bodyGlow;
-        private Asset<Texture2D> legsGlow;
+        private static Asset<Texture2D> headGlow;
+        private static Asset<Texture2D> bodyGlow;
+        private static Asset<Texture2D> legsGlow;
 
         public override void Load()
         {
             if (Main.dedServ)
                 return;
 
-            headGlow = ModContent.Request<Texture2D>("WuDao/Content/Items/Armor/SheRaSword_Head_Glow");
-            bodyGlow = ModContent.Request<Texture2D>("WuDao/Content/Items/Armor/SheRaSword_Body_Glow");
-            legsGlow = ModContent.Request<Texture2D>("WuDao/Content/Items/Armor/SheRaSword_Legs_Glow");
+            headGlow = Mod.Assets.Request<Texture2D>("Content/Items/Armor/SheRaSword_Head_Glow");
+            bodyGlow = Mod.Assets.Request<Texture2D>("Content/Items/Armor/SheRaSword_Body_Glow");
+            legsGlow = Mod.Assets.Request<Texture2D>("Content/Items/Armor/SheRaSword_Legs_Glow");
         }
-
+        public override void Unload()
+        {
+            headGlow = null;
+            bodyGlow = null;
+            legsGlow = null;
+        }
         public override Position GetDefaultPosition()
         {
             return new Between(

@@ -17,10 +17,5 @@ namespace WuDao.Content.Players
             }
             return true;
         }
-
-        public override void PreUpdate()
-        {
-            TimeStopSystem.Update(); // 每帧刷新冻结计时器
-        }
     }
 }

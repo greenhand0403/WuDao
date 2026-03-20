@@ -5,9 +5,6 @@ using Terraria.ModLoader;
 
 namespace WuDao.Content.Items
 {
-    /// <summary>
-    /// 静止游鱼：冻结时间，只有玩家能移动，但是不能攻击
-    /// </summary>
     public class TimeStopItem : ModItem
     {
         public override void SetDefaults()
@@ -18,37 +15,41 @@ namespace WuDao.Content.Items
             Item.rare = ItemRarityID.Red;
             Item.UseSound = SoundID.Item4;
         }
+
         public override bool CanUseItem(Player player)
         {
-            // 冷却中禁止使用
             if (TimeStopSystem.IsOnCooldown)
                 return false;
 
-            // 冻结中也不允许再次施放
             if (TimeStopSystem.IsFrozen)
                 return false;
 
             return true;
         }
+
         public override bool? UseItem(Player player)
         {
-            const int duration = 300;   // 冻结 5s（60fps）
-            const int cooldown = 2400;   // 冷却 2 分钟
+            const int duration = 300;
+            const int cooldown = 2400;
 
-            // Global 冻结；如果你要用“飞仙定向冻结”，把 scope/allowed 换成对应参数
-            bool ok = TimeStopSystem.TryStartFreeze(duration, cooldown, FreezeScope.Global, -1);
-            if (ok)
+            if (Main.netMode == NetmodeID.SinglePlayer)
             {
-                // 播个音效/特效（可选）
-                // SoundEngine.PlaySound(SoundID.Item, player.Center);
-                return true;
+                bool ok = TimeStopSystem.TryStartFreeze(duration, cooldown, FreezeScope.Global, -1);
+                return ok;
             }
-            else
+
+            if (player.whoAmI == Main.myPlayer)
             {
-                // 可选：给玩家一个提示（战斗文本/聊天）
-                // CombatText.NewText(player.Hitbox, Color.Cyan, $"冷却中：{TimeStopSystem.CooldownSeconds}s");
-                return false;
+                ModPacket packet = Mod.GetPacket();
+                packet.Write((byte)MessageType.RequestTimeStop);
+                packet.Write((byte)FreezeScope.Global);
+                packet.Write(duration);
+                packet.Write(cooldown);
+                packet.Write((byte)255); // allowedPlayer = -1
+                packet.Send();
             }
+
+            return true;
         }
     }
 }

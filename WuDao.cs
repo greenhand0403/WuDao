@@ -9,6 +9,7 @@ using WuDao.Common.Rendering;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using WuDao.Content.Development;
+using WuDao.Content.Global;
 
 namespace WuDao
 {
@@ -24,7 +25,9 @@ namespace WuDao
 		SyncLifePenalty,
 		SyncJuexueSlot,
 		SelectBundleCategory,
-		SyncSheRaTransform
+		SyncSheRaTransform,
+		RequestTimeStop,
+		SyncTimeStopState
 	}
 	
 	public class WuDao : Mod
@@ -39,6 +42,17 @@ namespace WuDao
         {
             InvisibleSwordQiEffect = null;
         }
+		public void BroadcastTimeStopState(int toClient = -1, int ignoreClient = -1)
+		{
+			ModPacket packet = GetPacket();
+			packet.Write((byte)MessageType.SyncTimeStopState);
+			packet.Write(TimeStopSystem.IsFrozen);
+			packet.Write(TimeStopSystem.Timer);
+			packet.Write(TimeStopSystem.CooldownTimer);
+			packet.Write((byte)TimeStopSystem.Scope);
+			packet.Write((byte)(TimeStopSystem.AllowedPlayer < 0 ? 255 : TimeStopSystem.AllowedPlayer));
+			packet.Send(toClient, ignoreClient);
+		}
 		public override void HandlePacket(BinaryReader reader, int whoAmI)
 		{
 			MessageType msg = (MessageType)reader.ReadByte();
@@ -161,6 +175,36 @@ namespace WuDao
 							packet.Send(-1, whoAmI);
 						}
 
+						break;
+					}
+				case MessageType.RequestTimeStop:
+					{
+						if (Main.netMode != NetmodeID.Server)
+							return;
+
+						FreezeScope scope = (FreezeScope)reader.ReadByte();
+						int duration = reader.ReadInt32();
+						int cooldown = reader.ReadInt32();
+						byte allowedPlrRaw = reader.ReadByte();
+						int allowedPlayer = allowedPlrRaw == 255 ? -1 : allowedPlrRaw;
+
+						bool ok = TimeStopSystem.TryStartFreeze(duration, cooldown, scope, allowedPlayer);
+
+						// 不管成功失败，都把当前状态广播出去，让客户端一致
+						BroadcastTimeStopState();
+						break;
+					}
+
+				case MessageType.SyncTimeStopState:
+					{
+						bool isFrozen = reader.ReadBoolean();
+						int timer = reader.ReadInt32();
+						int cooldownTimer = reader.ReadInt32();
+						FreezeScope scope = (FreezeScope)reader.ReadByte();
+						byte allowedPlrRaw = reader.ReadByte();
+						int allowedPlayer = allowedPlrRaw == 255 ? -1 : allowedPlrRaw;
+
+						TimeStopSystem.ApplySyncedState(isFrozen, timer, cooldownTimer, scope, allowedPlayer);
 						break;
 					}
 			}
