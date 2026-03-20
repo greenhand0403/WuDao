@@ -3,18 +3,17 @@ using WuDao.Common;
 
 namespace WuDao.Content.Systems
 {
-    // 染色刀光配置
     public class BladeTrailSystem : ModSystem
     {
         public override void OnWorldLoad()
         {
-            BladeTrailRuntime.TryRebuildFromConfig();
+            BladeTrailRuntime.ClearServerRule();
+            BladeTrailRuntime.TryRebuildFromServerConfig();
         }
 
-        public override void PostAddRecipes()
+        public override void OnWorldUnload()
         {
-            // 从主菜单进入世界后确保应用最新配置
-            BladeTrailRuntime.TryRebuildFromConfig();
+            BladeTrailRuntime.ClearServerRule();
         }
     }
 }

@@ -1216,30 +1216,33 @@ Configs: {
 	BladeTrailConfig: {
 		DisplayName: 近战刀光配置
 
+		GlobalBladeTrail: {
+			Label: 全局刀光配置
+			Tooltip: 总开关
+		}
+	}
+
+	BladeTrailServerConfig: {
+		DisplayName: 近战刀光服务器配置
+
 		Headers: {
 			CustomWhitelist: 自定义白名单
-			DefaultSets: 默认白名单
-			GlobalBladeTrail: 全局刀光
-		}
-
-		EnableVertexBladeTrail: {
-			Label: 全局刀光配置
-			Tooltip: 总开关，默认启用全局刀光
+			DefaultSets: 默认集合
 		}
 
 		IncludeDefaultBladeTrailSet: {
-			Label: 近战刀光配置
+			Label: 默认近战刀光集合
 			Tooltip: 默认集合启用近战刀光
 		}
 
 		IncludePhaseblades: {
-			Label: 启用光剑的近战刀光配置
-			Tooltip: 默认启用光剑的近战刀光
+			Label: 光剑的近战刀光配置
+			Tooltip: 光剑集合启用近战刀光
 		}
 
 		Whitelist: {
 			Label: 白名单配置
-			Tooltip: 已包含默认近战和光剑集合
+			Tooltip: 启用白名单配置
 		}
 	}
 

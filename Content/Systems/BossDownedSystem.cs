@@ -3,6 +3,7 @@ using Terraria.ModLoader;
 using Terraria.ID;
 using System.Collections.Generic;
 using Terraria.ModLoader.IO;
+using System.IO;
 
 namespace WuDao.Content.Systems
 {
@@ -30,6 +31,41 @@ namespace WuDao.Content.Systems
                     DownedBossGroups.Add(g);
             }
         }
+        public override void NetSend(BinaryWriter writer)
+        {
+            writer.Write7BitEncodedInt(DownedBossGroups.Count);
+            foreach (var g in DownedBossGroups)
+                writer.Write(g);
+        }
+
+        public override void NetReceive(BinaryReader reader)
+        {
+            DownedBossGroups.Clear();
+
+            int count = reader.Read7BitEncodedInt();
+            for (int i = 0; i < count; i++)
+            {
+                string g = reader.ReadString();
+                if (!string.IsNullOrEmpty(g))
+                    DownedBossGroups.Add(g);
+            }
+        }
+
+        public static bool TryMarkBossDowned(string group)
+        {
+            if (string.IsNullOrEmpty(group))
+                return false;
+
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+                return false;
+
+            bool added = DownedBossGroups.Add(group);
+
+            if (added && Main.netMode == NetmodeID.Server)
+                NetMessage.SendData(MessageID.WorldData);
+
+            return added;
+        }
     }
     // 2) 首杀钩子：当任意BOSS死亡时，把其映射成“Boss组ID”，仅首次加入集合
     public class BossKillTracker : GlobalNPC
@@ -43,7 +79,7 @@ namespace WuDao.Content.Systems
 
             string group = BossGroupHelper.GetGroupIdFor(npc.type);
             if (!string.IsNullOrEmpty(group))
-                BossDownedSystem.DownedBossGroups.Add(group);
+                BossDownedSystem.TryMarkBossDowned(group);
         }
     }
     // 3) 把“同名/同组BOSS”合并为一个组ID（避免 Twins 计两次等）
@@ -87,12 +123,7 @@ namespace WuDao.Content.Systems
 
         public static string GetGroupIdFor(int npcType)
         {
-            if (Map.TryGetValue(npcType, out var group))
-                return group;
-
-            // 兜底：若未知BOSS，退化为其 type 字符串，至少能去重“同一个类型”
-            // 这样其它模组BOSS也能被记住（如果它们有 npc.boss=true）
-            return $"Boss_{npcType}";
+            return Map.TryGetValue(npcType, out string group) ? group : null;
         }
     }
 }

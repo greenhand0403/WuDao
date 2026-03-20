@@ -1211,15 +1211,18 @@ Configs: {
 	BladeTrailConfig: {
 		DisplayName: Blade Trail Config
 
+		GlobalBladeTrail: {
+			Label: Global Blade Trail
+			Tooltip: The total switch enables global knife light staining by default
+		}
+	}
+
+	BladeTrailServerConfig: {
+		DisplayName: Blade Trail Server Config
+
 		Headers: {
 			CustomWhitelist: Whitelist Header
 			DefaultSets: Include Default Blade Trail Set Header
-			GlobalBladeTrail: Enable Vertex Blade Trail Header
-		}
-
-		EnableVertexBladeTrail: {
-			Label: Enable Vertex Blade Trail
-			Tooltip: The total switch enables global knife light staining by default
 		}
 
 		IncludeDefaultBladeTrailSet: {

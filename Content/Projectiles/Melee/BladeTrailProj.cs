@@ -7,7 +7,8 @@ using Terraria.GameContent;
 using System;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
-using Terraria.DataStructures;   // 你的 ItemSets.BladeTrailSet
+using Terraria.DataStructures;
+using WuDao.Common;   // 你的 ItemSets.BladeTrailSet
 
 namespace WuDao.Content.Projectiles.Melee
 {
@@ -20,7 +21,7 @@ namespace WuDao.Content.Projectiles.Melee
         Player player => Main.player[Projectile.owner];//获取玩家
         private static float SwordShaderExtraLen = 0.8f;
         private HashSet<int> hitNPCs = new();
-        public Color[] DiagColors;
+        // public Color[] DiagColors;
         public Color[] RowWeightedColors;
         public override bool? CanHitNPC(NPC target)
         {
@@ -67,13 +68,13 @@ namespace WuDao.Content.Projectiles.Melee
             int len = ProjectileID.Sets.TrailCacheLength[Type];
 
             // 取对角线色带（可配置方向、剔除规则、带宽）：
-            DiagColors = TrailColorSampler.SampleDiagonalColors(
-                texForColor,
-                samples: len,// 9段
-                dir: DiagDir.RightUp_to_LeftDown,          // ← 你可以切换成 LeftDown_to_RightUp
-                exclude: ExcludeMode.ExcludePureBlack, // ← 4 种模式任选
-                bandWidth: 2                                // 抗锯齿带宽，1~3 都可
-            );
+            // DiagColors = TrailColorSampler.SampleDiagonalColors(
+            //     texForColor,
+            //     samples: len,// 9段
+            //     dir: DiagDir.RightUp_to_LeftDown,          // ← 你可以切换成 LeftDown_to_RightUp
+            //     exclude: ExcludeMode.ExcludePureBlack, // ← 4 种模式任选
+            //     bandWidth: 2                                // 抗锯齿带宽，1~3 都可
+            // );
 
             // 取行加权色带（可配置方向、剔除规则、带宽）：
             RowWeightedColors = TrailColorSampler.SampleDiagonalRowWeightedColors(
@@ -132,6 +133,9 @@ namespace WuDao.Content.Projectiles.Melee
 
         public override bool PreDraw(ref Color lightColor)
         {
+            if (!BladeTrailRuntime.ShouldDrawVisual(player.HeldItem))
+                return false;
+
             // 调用你的 BladeTrailRenderer
             int len = ProjectileID.Sets.TrailCacheLength[Type];
             if (len < 2) return false;
@@ -244,10 +248,12 @@ namespace WuDao.Content.Projectiles.Melee
 
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
         {
-            // 用提取好的 BladeTrailCollision 工具检测
+            if (!BladeTrailRuntime.ServerRuleReady)
+                return false;
+
             int len = ProjectileID.Sets.TrailCacheLength[Type];
             float reach = player.itemHeight;
-            // 按比例调整碰撞体 跟刀光适配 1.1倍刀光
+
             return BladeTrailCollision.CheckCollision(
                 Projectile.Center, Projectile.oldRot, len,
                 1.2f * reach, 0.6f * reach, Main.player[Projectile.owner].direction, SwordShaderExtraLen,

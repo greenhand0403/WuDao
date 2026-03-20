@@ -6,75 +6,118 @@ namespace WuDao.Common
 {
     public static class BladeTrailRuntime
     {
-        // 默认关闭，直到配置应用成功
-        public static bool Enabled { get; private set; } = false;
+        // 视觉开关：只影响绘制
+        public static bool VisualEnabled { get; private set; } = true;
+
+        // 服务器规则：影响真实判定
+        public static bool ServerRuleEnabled { get; private set; } = false;
 
         public static readonly HashSet<int> AllowedItemIDs = new();
 
-        /// <summary>由配置实例应用（推荐：在 ModConfig.OnLoaded / OnChanged 里调用）</summary>
-        public static void ApplyFromConfig(BladeTrailConfig cfg)
+        // 多人时用于保底：规则未就绪则不要启用替代判定
+        public static bool ServerRuleReady { get; private set; } = false;
+
+        public static void ApplyVisualConfig(BladeTrailConfig cfg)
         {
             if (cfg == null)
             {
-                // 配置不可用时，保持关闭状态，避免 NRE
-                Enabled = false;
-                AllowedItemIDs.Clear();
+                VisualEnabled = true;
                 return;
             }
 
-            Enabled = cfg.EnableVertexBladeTrail;
+            VisualEnabled = cfg.GlobalBladeTrail;
+        }
+
+        public static void ApplyServerConfig(BladeTrailServerConfig cfg)
+        {
+            if (cfg == null)
+            {
+                ServerRuleEnabled = false;
+                AllowedItemIDs.Clear();
+                ServerRuleReady = Main.netMode == Terraria.ID.NetmodeID.SinglePlayer;
+                return;
+            }
+
+            ServerRuleEnabled = cfg.EnableWhitelistBladeTrail;
             AllowedItemIDs.Clear();
 
-            if (!Enabled)
+            if (!ServerRuleEnabled)
+            {
+                ServerRuleReady = true;
                 return;
+            }
 
-            // 1) 默认集合
+            // 1) 如果勾选了包含默认集合
             if (cfg.IncludeDefaultBladeTrailSet)
             {
                 foreach (var id in ItemSets.BladeTrailSet)
                     AllowedItemIDs.Add(id);
             }
 
-            // 2) 包含光剑集合（如果你有）
+            // 2) 如果勾选了包含光剑集合
             if (cfg.IncludePhaseblades && ItemSets.PhasebladeSet is not null)
             {
                 foreach (var id in ItemSets.PhasebladeSet)
                     AllowedItemIDs.Add(id);
             }
 
-            // 3) 用户白名单（覆盖/补充）
-            foreach (var def in cfg.Whitelist)
+            // 3) 如果勾选了包含用户白名单
+            if (cfg.EnableWhitelistBladeTrail && cfg.Whitelist is not null)
             {
-                if (def?.Type > 0)
-                    AllowedItemIDs.Add(def.Type);
+                foreach (var def in cfg.Whitelist)
+                {
+                    if (def?.Type > 0)
+                        AllowedItemIDs.Add(def.Type);
+                }
             }
+
+            ServerRuleReady = true;
         }
 
-        /// <summary>在“非配置回调”的时机尝试重建（拿不到就保持关闭，不抛异常）</summary>
-        public static void TryRebuildFromConfig()
+        public static void TryRebuildFromServerConfig()
         {
-            BladeTrailConfig cfg = null;
+            BladeTrailServerConfig cfg = null;
             try
             {
-                cfg = ModContent.GetInstance<BladeTrailConfig>();
+                cfg = ModContent.GetInstance<BladeTrailServerConfig>();
             }
             catch
             {
-                // 某些早期生命周期可能会抛，忽略即可
             }
 
-            ApplyFromConfig(cfg);
+            ApplyServerConfig(cfg);
         }
 
-        public static bool IsAllowed(Item item)
+        public static void ClearServerRule()
         {
-            if (!Enabled || item is null)
+            ServerRuleEnabled = false;
+            AllowedItemIDs.Clear();
+            ServerRuleReady = Main.netMode == Terraria.ID.NetmodeID.SinglePlayer;
+        }
+
+        public static bool IsAllowedByServerRule(Item item)
+        {
+            if (item is null)
+                return false;
+
+            if (!ServerRuleReady)
+                return false;
+
+            if (!ServerRuleEnabled)
                 return false;
 
             if (!item.DamageType.CountsAsClass(DamageClass.Melee) || item.noMelee)
                 return false;
 
             return AllowedItemIDs.Contains(item.type);
+        }
+
+        public static bool ShouldDrawVisual(Item item)
+        {
+            if (!VisualEnabled || item is null)
+                return false;
+
+            return item.DamageType.CountsAsClass(DamageClass.Melee) && !item.noMelee;
         }
     }
 }
