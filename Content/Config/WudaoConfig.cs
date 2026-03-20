@@ -6,63 +6,6 @@ using Terraria.ModLoader.Config;
 
 namespace WuDao.Content.Config
 {
-    // 隐藏敌怪物块机制的配置
-    public static class InvisibleTileRuntime
-    {
-        // 默认关闭，直到配置应用成功
-        public static bool Enabled { get; private set; } = false;
-        public static HashSet<int> InvisibleTileIDSet = new();
-
-        public static void Clear()
-        {
-            Enabled = false;
-            InvisibleTileIDSet.Clear();
-        }
-
-        public static void ApplyFromConfig(WudaoConfig cfg)
-        {
-            Clear();
-
-            if (cfg == null)
-                return;
-
-            Enabled = cfg.InvisibleEnemies;
-
-            if (!Enabled || cfg.InvisibleTileIDs == null)
-                return;
-
-            foreach (var def in cfg.InvisibleTileIDs)
-            {
-                if (def?.Type >= 0 && def.Type < TileID.Count)
-                {
-                    InvisibleTileIDSet.Add(def.Type);
-                }
-            }
-        }
-
-        /// <summary>在“非配置回调”的时机尝试重建（拿不到就保持关闭，不抛异常）</summary>
-        public static void TryRebuildFromConfig()
-        {
-            WudaoConfig cfg = null;
-            try
-            {
-                cfg = ModContent.GetInstance<WudaoConfig>();
-            }
-            catch
-            {
-            }
-
-            ApplyFromConfig(cfg);
-        }
-
-        public static bool IsTileInvisible(ushort type)
-        {
-            if (!Enabled)
-                return false;
-
-            return InvisibleTileIDSet.Contains(type);
-        }
-    }
     /// <summary>
     /// 默认开启 juexue 系统、关闭敌怪和陷阱隐身、允许幽灵护目镜看见回声块
     /// </summary>
@@ -70,10 +13,6 @@ namespace WuDao.Content.Config
     {
         // 多人联机要统一就用 ServerSide；只影响本地表现就用 ClientSide
         public override ConfigScope Mode => ConfigScope.ClientSide;
-
-        [DefaultValue(true)]
-        public bool EnableJueXueSystem;
-
         /// <summary>敌怪和陷阱隐身</summary>
         [DefaultValue(false)]
         public bool InvisibleEnemies;

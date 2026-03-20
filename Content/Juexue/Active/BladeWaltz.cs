@@ -18,7 +18,7 @@ namespace WuDao.Content.Juexue.Active
         public const int baseDamage = 115;//总共8*115=920
         public override bool TryActivate(Player player, QiPlayer qi)
         {
-            if (!ModContent.GetInstance<WudaoConfig>().EnableJueXueSystem)
+            if (!JuexueRuntime.Enabled)
                 return false;
 
             // 进行中：静默忽略

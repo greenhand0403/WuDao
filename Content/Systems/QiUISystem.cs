@@ -18,7 +18,7 @@ namespace WuDao.Content.Systems
         public override void ModifyInterfaceLayers(System.Collections.Generic.List<GameInterfaceLayer> layers)
         {
             // 如果禁用了绝学就不会显示气力条
-            if (!ModContent.GetInstance<WudaoConfig>().EnableJueXueSystem) return;
+            if (!JuexueRuntime.Enabled) return;
             
             int idx = layers.FindIndex(l => l.Name.Equals("Vanilla: Interface Logic 1"));
             if (idx != -1)
@@ -79,7 +79,6 @@ namespace WuDao.Content.Systems
 
             // —— Vanilla 背包的“底边 y”——
             int inventoryBottom = Main.instance.invBottom;
-
             int leftPadding = (int)(16 * scale); // 适配不同缩放
 
             // —— 目标位置：贴在“底行最左格”的正下方（略留间距）——
@@ -112,10 +111,12 @@ namespace WuDao.Content.Systems
                     {
                         Main.mouseItem = qi.JuexueSlot.Clone();
                         qi.JuexueSlot.TurnToAir();
+                        qi.RequestSyncJuexueSlot();
                     }
                     else if (mouseIsJuexue)
                     {
                         Utils.Swap(ref Main.mouseItem, ref qi.JuexueSlot);
+                        qi.RequestSyncJuexueSlot();
                     }
                     else
                     {
@@ -141,7 +142,7 @@ namespace WuDao.Content.Systems
                             // 放入空格，并清空绝学槽
                             player.inventory[emptyIndex] = qi.JuexueSlot.Clone();
                             qi.JuexueSlot.TurnToAir();
-
+                            qi.RequestSyncJuexueSlot();
                             // 可选：音效反馈
                             Terraria.Audio.SoundEngine.PlaySound(Terraria.ID.SoundID.Grab, player.Center);
                         }

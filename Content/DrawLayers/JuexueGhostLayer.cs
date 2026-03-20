@@ -15,7 +15,7 @@ namespace WuDao.Content.DrawLayers
 
         protected override void Draw(ref PlayerDrawSet drawInfo)
         {
-            if (!ModContent.GetInstance<WudaoConfig>().EnableJueXueSystem)
+            if (!JuexueRuntime.Enabled)
                 return;
 
             var player = drawInfo.drawPlayer;
@@ -45,7 +45,7 @@ namespace WuDao.Content.DrawLayers
             screenPos.Y += wobble;
             // 玩家面对左边时将虚影沿水平方向翻转
             SpriteEffects spriteEffects = player.direction == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
-            
+
             var color = Color.White * opacity;
             Main.EntitySpriteDraw(tex, screenPos, src, color, 0f, origin, qi.Ghost.Scale, spriteEffects, 0);
         }

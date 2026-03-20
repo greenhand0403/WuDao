@@ -32,14 +32,35 @@ namespace WuDao.Content.Development
 
         public override void RightClick(Player player)
         {
-            // 打开我们的 UI（把本次触发玩家与回调传给系统）
-            BundleSelectSystem.Show(category => GiveItemsForCategory(player, category, Mod));
-            Main.playerInventory = true; // 打开背包，避免 UI 被遮挡/鼠标锁定
+            BundleSelectSystem.Show(category =>
+            {
+                if (Main.netMode == NetmodeID.SinglePlayer)
+                {
+                    GiveItemsForCategoryNetSafe(player, category, Mod);
+                }
+                else if (Main.netMode == NetmodeID.MultiplayerClient)
+                {
+                    ModPacket packet = Mod.GetPacket();
+                    packet.Write((byte)MessageType.SelectBundleCategory);
+                    packet.Write((byte)player.whoAmI);
+                    packet.Write((byte)category);
+                    packet.Send();
+                }
+                else if (Main.netMode == NetmodeID.Server)
+                {
+                    GiveItemsForCategoryNetSafe(player, category, Mod);
+                }
+            });
+
+            Main.playerInventory = true;
             SoundEngine.PlaySound(SoundID.MenuOpen);
         }
 
-        private void GiveItemsForCategory(Player player, BundleCategory category, Mod mod)
+        public static void GiveItemsForCategoryNetSafe(Player player, BundleCategory category, Mod mod)
         {
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+                return; // 客户端禁止真正发物品
+
             int addedKinds = 0;
             int droppedKinds = 0;
             int droppedTotal = 0;
@@ -51,10 +72,9 @@ namespace WuDao.Content.Development
                 probe.SetDefaults(type);
 
                 if (probe.IsAir) continue;
-                if (probe.ModItem?.Mod != mod) continue; // 只给 WuDao 模组物品
-                if (type == Type) continue;              // 排除礼包本体
+                if (probe.ModItem?.Mod != mod) continue;
+                if (type == ModContent.ItemType<WeaponBundleItem>()) continue;
 
-                // 分类筛选
                 if (!BelongsToCategory(probe, category))
                     continue;
 
@@ -64,7 +84,6 @@ namespace WuDao.Content.Development
                 give.SetDefaults(type);
                 give.stack = stack;
 
-                // 使用 GetItem 让引擎尽可能塞入背包，返回“剩余”
                 Item leftover = player.GetItem(player.whoAmI, give, GetItemSettings.LootAllSettings);
 
                 if (leftover != null && leftover.stack > 0)
@@ -79,22 +98,25 @@ namespace WuDao.Content.Development
                 }
             }
 
-            Main.NewText(
-                Language.GetTextValue(
-                    "Mods.WuDao.Messages.BundleClaimed",
-                    addedKinds, droppedKinds, droppedTotal
-                ),
-                255, 240, 20
-            );
+            if (Main.netMode == NetmodeID.SinglePlayer)
+            {
+                Main.NewText(
+                    Language.GetTextValue("Mods.WuDao.Messages.BundleClaimed", addedKinds, droppedKinds, droppedTotal),
+                    255, 240, 20
+                );
+            }
 
-            // 领取完毕后自动关闭 UI
-            BundleSelectSystem.Hide();
-
-            // （多人联机同步）：
-            // 若此礼包可在客户端使用，需要用 ModPacket 广播所选类别并在服务器执行 GiveItemsForCategory，
-            // 或者仅允许在服务器端/单机端调用（检查 Main.netMode）。
+            if (Main.netMode == NetmodeID.Server && player.whoAmI >= 0)
+            {
+                Terraria.Chat.ChatHelper.SendChatMessageToClient(
+                    NetworkText.FromLiteral(
+                        Language.GetTextValue("Mods.WuDao.Messages.BundleClaimed", addedKinds, droppedKinds, droppedTotal)
+                    ),
+                    Microsoft.Xna.Framework.Color.Yellow,
+                    player.whoAmI
+                );
+            }
         }
-
         private static bool BelongsToCategory(Item it, BundleCategory cat)
         {
             switch (cat)

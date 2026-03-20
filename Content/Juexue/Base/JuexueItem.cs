@@ -8,7 +8,6 @@ using WuDao.Content.Players;
 
 namespace WuDao.Content.Juexue.Base
 {
-    // 绝学物品类
     public abstract class JuexueItem : ModItem
     {
         public override string Texture => $"Terraria/Images/Item_{ItemID.Book}";
@@ -16,6 +15,7 @@ namespace WuDao.Content.Juexue.Base
         public virtual int QiCost => 0;               // 主动技能消耗
         public virtual int SpecialCooldownTicks => 0; // 各自绝学的释放冷却时间（单位tick）
         public override bool CanRightClick() => true;
+
         public override void SetDefaults()
         {
             Item.width = 28;
@@ -25,36 +25,40 @@ namespace WuDao.Content.Juexue.Base
             Item.maxStack = 1;
         }
 
-        // 主动释放：默认检查气力、公冷却、专属冷却
         public virtual bool TryActivate(Player player, QiPlayer qi)
         {
-            if (!ModContent.GetInstance<WudaoConfig>().EnableJueXueSystem)
+            if (!JuexueRuntime.Enabled)
                 return false;
-                
-            if (!IsActive) return false;
-            if (qi.QiMax <= 0) return false;
+
+            if (!IsActive)
+                return false;
+
+            if (qi.QiMax <= 0)
+                return false;
 
             if (!qi.CanUseActiveNow(Item.type, SpecialCooldownTicks))
             {
-                Main.NewText(Language.GetTextValue("Mods.WuDao.Messages.JueXue.Cooldown"), Color.OrangeRed);
+                if (player.whoAmI == Main.myPlayer)
+                    Main.NewText(Language.GetTextValue("Mods.WuDao.Messages.JueXue.Cooldown"), Color.OrangeRed);
                 return false;
             }
+
             if (!qi.TrySpendQi(QiCost))
             {
-                Main.NewText(Language.GetTextValue("Mods.WuDao.Messages.JueXue.NotEnoughQi"), Color.OrangeRed);
+                if (player.whoAmI == Main.myPlayer)
+                    Main.NewText(Language.GetTextValue("Mods.WuDao.Messages.JueXue.NotEnoughQi"), Color.OrangeRed);
                 return false;
             }
 
             bool ok = OnActivate(player, qi);
-            // 主动型绝学释放完，盖章进入技能冷却中
-            if (ok) qi.StampActiveUse(Item.type, SpecialCooldownTicks);
+            if (ok)
+                qi.StampActiveUse(Item.type, SpecialCooldownTicks);
+
             return ok;
         }
 
-        // 由具体主动类实现
         protected virtual bool OnActivate(Player player, QiPlayer qi) => false;
 
-        // 被动类在 GlobalItem.Shoot 中调用各自的 TryPassive...
         public virtual bool IsPassive => !IsActive;
     }
 }

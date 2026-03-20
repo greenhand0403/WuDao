@@ -18,9 +18,9 @@ namespace WuDao.Content.Juexue.Active
         public const int LingboWeibuFrameIndex = 3;
         public override bool TryActivate(Player player, QiPlayer qi)
         {
-            if (!ModContent.GetInstance<WudaoConfig>().EnableJueXueSystem)
+            if (!JuexueRuntime.Enabled)
                 return false;
-                
+
             // 已开启 -> 直接关闭，不进 CD，不扣气
             if (qi.LingboActive)
             {

@@ -10,16 +10,15 @@ namespace WuDao.Content.Items.Weapons.Melee
 {
     public class SheRaSword : ModItem
     {
-        // 你可以自己改成固定 10 秒，或者保留 5~15 秒随机
-        public const int MinTransformTime = 60 * 5;   // 5秒
-        public const int MaxTransformTime = 60 * 15;  // 15秒
-        public const int CooldownTime = 60 * 60; // 1分钟 = 3600 tick
+        public const int MinTransformTime = 60 * 5;
+        public const int MaxTransformTime = 60 * 15;
+        public const int CooldownTime = 60 * 60;
+
         public override void Load()
         {
             if (Main.netMode == NetmodeID.Server)
                 return;
 
-            // 手动注册“变身时绘制”的三件套贴图
             EquipLoader.AddEquipTexture(Mod, $"WuDao/Content/Items/Armor/SheRaSword_{EquipType.Head}", EquipType.Head, this);
             EquipLoader.AddEquipTexture(Mod, $"WuDao/Content/Items/Armor/SheRaSword_{EquipType.Body}", EquipType.Body, this);
             EquipLoader.AddEquipTexture(Mod, $"WuDao/Content/Items/Armor/SheRaSword_{EquipType.Legs}", EquipType.Legs, this);
@@ -34,14 +33,9 @@ namespace WuDao.Content.Items.Weapons.Melee
             int body = EquipLoader.GetEquipSlot(Mod, Name, EquipType.Body);
             int legs = EquipLoader.GetEquipSlot(Mod, Name, EquipType.Legs);
 
-            // 这些设置和 ExampleCostume 的思路一致：
             ArmorIDs.Head.Sets.DrawHead[head] = true;
-
-            // 身体贴图完全覆盖上身皮肤/手臂
             ArmorIDs.Body.Sets.HidesTopSkin[body] = true;
             ArmorIDs.Body.Sets.HidesArms[body] = true;
-
-            // 腿部贴图完全覆盖下身皮肤
             ArmorIDs.Legs.Sets.HidesBottomSkin[legs] = true;
         }
 
@@ -50,7 +44,6 @@ namespace WuDao.Content.Items.Weapons.Melee
             Item.width = 52;
             Item.height = 52;
 
-            // 左键：普通近战剑
             Item.damage = 50;
             Item.DamageType = DamageClass.Melee;
             Item.knockBack = 6f;
@@ -68,29 +61,32 @@ namespace WuDao.Content.Items.Weapons.Melee
         }
 
         public override bool AltFunctionUse(Player player) => true;
+
         public override bool CanUseItem(Player player)
         {
+            // 每次先恢复成默认左键状态，避免状态残留
+            Item.useStyle = ItemUseStyleID.Swing;
+            Item.noMelee = false;
+
             if (player.altFunctionUse == 2)
             {
                 var modPlayer = player.GetModPlayer<SheRaSwordPlayer>();
                 if (!modPlayer.CanTransform)
                 {
-                    int seconds = modPlayer.TransformCooldown / 60;
-                    Main.NewText(Language.GetTextValue("Mods.WuDao.Items.SheRaSword.Cooldown", seconds), 255, 180, 60);
+                    if (player.whoAmI == Main.myPlayer && Main.netMode != NetmodeID.Server)
+                    {
+                        int seconds = modPlayer.TransformCooldown / 60;
+                        Main.NewText(
+                            Language.GetTextValue("Mods.WuDao.Items.SheRaSword.Cooldown", seconds),
+                            255, 180, 60
+                        );
+                    }
+
                     return false;
                 }
-                else
-                {
-                    Item.useStyle = ItemUseStyleID.HoldUp;
-                    // Item.damage = 0;
-                    Item.noMelee = true;
-                }
-            }
-            else
-            {
-                // Item.damage = 50;
-                Item.useStyle = ItemUseStyleID.Swing;
-                Item.noMelee = false;
+
+                Item.useStyle = ItemUseStyleID.HoldUp;
+                Item.noMelee = true;
             }
 
             return base.CanUseItem(player);
@@ -98,21 +94,26 @@ namespace WuDao.Content.Items.Weapons.Melee
 
         public override bool? UseItem(Player player)
         {
-            if (player.altFunctionUse == 2)
+            if (player.altFunctionUse != 2)
+                return base.UseItem(player);
+
+            var modPlayer = player.GetModPlayer<SheRaSwordPlayer>();
+
+            if (!modPlayer.CanTransform)
+                return false;
+
+            // 多人时只允许“本地拥有者”发起这次变身，避免客户端/服务器各自随机一遍
+            if (Main.netMode == NetmodeID.MultiplayerClient && player.whoAmI != Main.myPlayer)
+                return true;
+
+            int duration = Main.rand.Next(MinTransformTime, MaxTransformTime + 1);
+
+            modPlayer.StartTransformation(duration, Name, CooldownTime);
+            player.AddBuff(ModContent.BuffType<SheRaTransformBuff>(), 2);
+
+            // 纯表现只放客户端
+            if (player.whoAmI == Main.myPlayer && Main.netMode != NetmodeID.Server)
             {
-                var modPlayer = player.GetModPlayer<SheRaSwordPlayer>();
-
-                if (!modPlayer.CanTransform)
-                {
-                    return false;
-                }
-
-                int duration = Main.rand.Next(MinTransformTime, MaxTransformTime + 1);
-
-                modPlayer.StartTransformation(duration, Name, CooldownTime);
-
-                player.AddBuff(ModContent.BuffType<SheRaTransformBuff>(), 2);
-
                 SoundEngine.PlaySound(SoundID.Item29 with { Pitch = -0.1f }, player.Center);
 
                 for (int i = 0; i < 30; i++)
@@ -127,11 +128,9 @@ namespace WuDao.Content.Items.Weapons.Melee
                     dust.scale = Main.rand.NextFloat(1f, 2f);
                     dust.velocity *= Main.rand.NextFloat(24f, 30f);
                 }
-
-                return true;
             }
 
-            return base.UseItem(player);
+            return true;
         }
     }
 }

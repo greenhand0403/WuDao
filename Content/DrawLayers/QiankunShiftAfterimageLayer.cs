@@ -15,7 +15,7 @@ namespace WuDao.Content.DrawLayers
 
         protected override void Draw(ref PlayerDrawSet drawInfo)
         {
-            if (!ModContent.GetInstance<WudaoConfig>().EnableJueXueSystem)
+            if (!JuexueRuntime.Enabled)
                 return;
 
             Player p = drawInfo.drawPlayer;

@@ -19,6 +19,7 @@ using WuDao.Content.Config;
 using WuDao.Content.DamageClasses;
 using WuDao.Content.Mounts;
 using Terraria.DataStructures;
+using System.IO;
 
 namespace WuDao.Content.Players
 {
@@ -238,7 +239,8 @@ namespace WuDao.Content.Players
             }
 
             bool hasJuexueOnMouse = !Main.mouseItem.IsAir && Main.mouseItem.ModItem is JuexueItem;
-            bool enableQi = hasJuexueInSlot || hasJuexueInInventory || hasJuexueOnMouse;
+            bool enableSystem = JuexueRuntime.Enabled;
+            bool enableQi = enableSystem && (hasJuexueInSlot || hasJuexueInInventory || hasJuexueOnMouse);
 
             // 2) 基础上限：满足条件就给 100，否则为 0
             QiMaxBase = enableQi ? 100 : 0;
@@ -273,421 +275,419 @@ namespace WuDao.Content.Players
         }
         public override void PreUpdate()
         {
+            UpdateQiRegen();
+            UpdateKamehamehaCharging();
+            UpdateLingbo();
+            UpdateYuJian();
+            UpdateSkyWalking();
+            UpdateFeixian();
+            UpdateBladeWaltz();
+        }
+        private void UpdateQiRegen()
+        {
             // 气力回复：站立/不动 +4/s，移动或攻击 +2/s, 御剑飞行和月步时不再自动回气
             if (QiMax > 0 && !SkyWalkingActive && !YuJianActive)
             {
-                float perTick = Helpers.IsPlayerAttackingOrMoving(Player) ? (QiRegenMove + QiRegenMoveBonus) : (QiRegenStand + QiRegenStandBonus);
+                float perTick = Helpers.IsPlayerAttackingOrMoving(Player)
+                    ? (QiRegenMove + QiRegenMoveBonus)
+                    : (QiRegenStand + QiRegenStandBonus);
 
                 QiCurrent = MathHelper.Clamp(QiCurrent + perTick / 60f, 0, QiMax);
             }
+        }
+        private void UpdateKamehamehaCharging()
+        {
+            if (!Charging)
+                return;
 
-            // 蓄力期间（龟派气功）：每帧扣气
-            if (Charging)
+            if (QiCurrent >= 5f)
             {
-                if (QiCurrent >= 5f)
+                QiCurrent -= kamehameha_juexueItem.QiCost;
+                ChargeQiSpent++;
+
+                // 本机玩家维护虚影
+                EnsureKamehamehaGhost();
+
+                if (ChargeQiSpent % 20 == 0)
                 {
-                    QiCurrent -= kamehameha_juexueItem.QiCost;
-                    ChargeQiSpent++;
-                    // ★ 确保龟派气功射弹虚影存在
-                    EnsureKamehamehaGhost();
-                    // 每消耗 20 点真气，播放短促提示音
-                    if (ChargeQiSpent % 20 == 0)
-                    {
-                        SoundEngine.PlaySound(
+                    SoundEngine.PlaySound(
                         SoundID.MaxMana with { Volume = 0.6f, Pitch = 0.15f },
                         Player.Center
-                        );
-                    }
-                }
-                else
-                {
-                    // 没气了自动松手
-                    Charging = false;
-                    if (JuexueSlot.ModItem is Kamehameha k)
-                    {
-                        // 若存在虚影射弹实例，也一并删除
-                        if (KamehamehaGhostProj >= 0 && Main.projectile[KamehamehaGhostProj].active)
-                        {
-                            Main.projectile[KamehamehaGhostProj].Kill();
-                            KamehamehaGhostProj = -1;
-                        }
-                        k.ReleaseFire(Player, this, ChargeQiSpent);
-                        ChargeQiSpent = 0;
-                    }
-                }
-            }
-
-            // —— 凌波微步：每秒 15 气；无气自动关闭；移动出水波 —— 
-            if (LingboActive)
-            {
-                if (QiCurrent <= LingboQiCost)
-                {
-                    LingboActive = false;
-                }
-                else
-                {
-                    // 扣气
-                    QiCurrent -= LingboQiCost / 60f;
-                    // 距离累计 & 水波（Dust 水波占位）
-                    float moved = Vector2.Distance(Player.Bottom, _lingboLastWavePos);
-                    _lingboDistanceAcc += moved;
-                    _lingboLastWavePos = Player.Bottom;
-
-                    if (_lingboDistanceAcc >= 32f)
-                    { // 每移动 ~32px 出一圈水波
-                        _lingboDistanceAcc = 0f;
-                        for (int i = 0; i < 12; i++)
-                        {
-                            var d = Dust.NewDustPerfect(Player.Bottom + new Vector2(Main.rand.NextFloat(-12, 12), 0),
-                                DustID.Water, new Vector2(Main.rand.NextFloat(-1, 1), -Main.rand.NextFloat(0.5f, 1.5f)));
-                            d.noGravity = true;
-                            d.scale = 1.5f;
-                        }
-                    }
-                }
-            }
-            // === 御剑飞行：每秒扣气；无气自动结束 ===
-            if (YuJianActive)
-            {
-                // 1. 死亡/失活
-                if (Player.dead || Player.ghost || !Player.active)
-                {
-                    EndYuJian(true);
-                    return;
-                }
-
-                // 2. 按 R：乘骑键 -> 结束御剑
-                if (Player.controlMount && Player.releaseMount)
-                {
-                    EndYuJian();
-                    return;
-                }
-
-                // 3. 按 E：钩爪键 -> 结束御剑
-                if (Player.controlHook && Player.releaseHook)
-                {
-                    EndYuJian();
-                    return;
-                }
-
-                // 4. 若不知为何 mount 被替换/丢失，也强制结束
-                if (Player.mount == null || !Player.mount.Active || Player.mount.Type != ModContent.MountType<YuJianMount>())
-                {
-                    EndYuJian();
-                    return;
-                }
-
-                // 每帧扣气（等价每秒 YuJianQiCostPerSecond）
-                float perTick = YuJianQiCostPerSecond / 60f;
-                if (QiCurrent <= perTick)
-                {
-                    QiCurrent = 0;
-                    EndYuJian();
-                    return;
-                }
-                QiCurrent -= perTick;
-
-                // 御剑期间：强制玩家“只能移动”
-                ApplyYuJianControlLock();
-
-                // 禁止打开背包（也避免打开后能点物品）
-                if (Player.controlInv)
-                    Main.playerInventory = false;
-
-                // 御剑期间：接触伤害
-                DoYuJianContactDamage();
-            }
-            // 释放月步
-            if (SkyWalkingActive)
-            {
-                // 死亡直接结束
-                if (Player.dead || Player.ghost || !Player.active)
-                {
-                    EndSkyWalking();
-                    return;
-                }
-
-                // 骑乘时直接结束，避免和坐骑冲突
-                if (Player.mount != null && Player.mount.Active)
-                {
-                    EndSkyWalking();
-                    return;
-                }
-
-                // 按坐骑键 -> 自动退出月步
-                if (Player.controlMount && Player.releaseMount)
-                {
-                    EndSkyWalking();
-                    return;
-                }
-
-                // 按钩爪键 -> 自动退出月步
-                if (Player.controlHook && Player.releaseHook)
-                {
-                    EndSkyWalking();
-                    return;
-                }
-
-                // 月步期间：左右腿附近随机生成 Cloud 粒子
-                if (Main.rand.NextBool(3)) // 控制粒子密度
-                {
-                    Vector2 legPos = Player.Bottom + new Vector2(0f, -10f * Player.gravDir);
-
-                    // 左右腿附近随机一点
-                    legPos.X += Main.rand.NextFloat(-10f, 10f);
-                    legPos.Y += Main.rand.NextFloat(-4f, 4f);
-
-                    int dust = Dust.NewDust(
-                        legPos,
-                        2,
-                        2,
-                        DustID.Cloud, // 可改成 Smoke / GemDiamond / SilverCoin 等你喜欢的视觉
-                        0f,
-                        0f,
-                        0,
-                        default,
-                        2f
                     );
-
-                    Main.dust[dust].velocity = new Vector2(
-                        Main.rand.NextFloat(-1.2f, 1.2f),
-                        Main.rand.NextFloat(-1.2f, 1.2f)
-                    );
-
-                    Main.dust[dust].noGravity = true;
                 }
-
-                bool onGround = Player.velocity.Y == 0f && ModContent.GetInstance<BuffPlayer>().IsStandingOnGround(Player);
-
-                // 是否处于“可再次起跳”的状态
-                bool canStartSkyWalkingJump = onGround || SkyWalkingStandingOnAir;
-
-                // 一旦离开可起跳状态（比如已经真正跃起），就重置扣气锁
-                if (!canStartSkyWalkingJump)
-                {
-                    _skyWalkingJumpConsumed = false;
-                }
-
-                // 按住跳跃即可触发，包括自动跳跃
-                if (Player.controlJump && canStartSkyWalkingJump && !_skyWalkingJumpConsumed)
-                {
-                    TrySkyWalkingJump();
-                    _skyWalkingJumpConsumed = true;
-                    return;
-                }
-
-                // 再处理“站在空气中”
-                UpdateSkyWalkingAirStand();
             }
-
-            // —— 释放天外飞仙：逐帧推进 & 路径伤害 —— //
-            if (FeixianTicks > 0)
+            else
             {
-                // 基础无敌 & 隐身
-                // Player.immune = true;
-                // Player.immuneTime = 2;
-                // Player.invis = true;
-                // Player.noKnockback = true;
+                Charging = false;
 
-                // 朝向锁定
-                Vector2 toTarget = FeixianTarget - Player.Center;
-                Vector2 dir = toTarget.SafeNormalize(Vector2.UnitX);
-                Player.direction = (dir.X >= 0f) ? 1 : -1;
-
-                // 推进速度（像素/帧）；到达目标或超时即结束
-                float speed = 20f;
-                if (toTarget.Length() <= speed || FeixianTicks == 1)
+                if (JuexueSlot.ModItem is Kamehameha k)
                 {
-                    Player.velocity = Vector2.Zero;
-                    FeixianTicks = 0;
-                    // 解冻全场（仅当当前冻结来自飞仙）
-                    TimeStopSystem.StopIfFeixian();
-                    // ★ 结束帧：立刻清理免疫/隐身
-                    Player.immune = false;
-                    Player.immuneTime = 0;
-                    Player.invis = false;
-                    Player.noKnockback = false;
-                }
-                else
-                {
-                    // ★ 仅在未结束时维持免疫
-                    Player.immune = true;
-                    Player.immuneTime = 2;
-                    Player.invis = true;
-                    Player.noKnockback = true;
-
-                    Player.velocity = dir * speed;
-                    int baseDamage = Feixian.Damage;
-
-                    // 每 2 帧在当前位置生成极短命友方投射物（路径伤害；放行已在 TimeStopSystem 里处理）
-                    if ((FeixianTicks % 2) == 0)
+                    if (KamehamehaGhostProj >= 0 && Main.projectile[KamehamehaGhostProj].active)
                     {
-                        int finalDamage = (int)Player.GetTotalDamage(chi).ApplyTo(baseDamage);
-
-                        int proj = Projectile.NewProjectile(
-                            Player.GetSource_Misc("FeixianTrail"),
-                            Player.Center,
-                            Player.velocity,
-                            ProjectileID.FirstFractal,
-                            finalDamage,
-                            4f,
-                            Player.whoAmI
-                        );
-
-                        Projectile p = Main.projectile[proj];
-                        p.DamageType = chi;
-                        p.originalDamage = finalDamage; // 建议也同步，避免某些逻辑用 originalDamage
-                        p.timeLeft = 20;
-                        p.tileCollide = false;
-                    }
-                    // ★ 在飞行路径四周生成“花瓣环”：每 6 帧一圈，6~8 片
-                    if ((FeixianTicks % 6) == 0)
-                    {
-                        int petals = 6;                 // 每圈花瓣数量
-                        float radius = 18f;             // 出生半径（围绕玩家）
-                        float forwardSpeed = 8f;       // 沿路径前进分量
-                        float outwardMin = 1f;          // 向外发散速度范围
-                        float outwardMax = 5f;
-
-                        // 法线（与 dir 垂直），用于做环
-                        Vector2 normal = new Vector2(-dir.Y, dir.X);
-                        float baseAngle = Main.rand.NextFloat(0f, MathHelper.TwoPi);
-
-                        int finalDamage = (int)Player.GetTotalDamage(chi).ApplyTo(baseDamage) / petals;
-
-                        for (int i = 0; i < petals; i++)
-                        {
-                            float ang = baseAngle + i * MathHelper.TwoPi / petals;
-                            // 以 dir/normal 为正交基构造圆环点
-                            Vector2 ringOffset = (float)Math.Cos(ang) * normal + (float)Math.Sin(ang) * dir;
-                            Vector2 spawnPos = Player.Center + ringOffset * radius;
-
-                            // 速度 = 沿路线前进 + 径向微外扩
-                            Vector2 outward = (spawnPos - Player.Center).SafeNormalize(Vector2.UnitX);
-                            Vector2 vel = dir.RotatedBy(MathHelper.TwoPi / petals * i) * forwardSpeed + outward * Main.rand.NextFloat(outwardMin, outwardMax);
-
-                            var p = Projectile.NewProjectileDirect(
-                                Player.GetSource_Misc("FeixianPetals"),
-                                spawnPos,
-                                vel,
-                                ProjectileID.FlowerPetal,        // 原版花瓣
-                                finalDamage,
-                                3f,
-                                Player.whoAmI
-                            );
-
-                            if (p != null)
-                            {
-                                p.friendly = true;
-                                p.hostile = false;
-                                p.tileCollide = false;           // 防止被地形卡住（看喜好可改为 true）
-                                p.timeLeft = 30;                 // 花瓣寿命
-                                p.penetrate = 1;                 // 每片最多命中 1 次（按需调整）
-                                p.usesLocalNPCImmunity = true;   // 本地免疫，避免一群花瓣同帧狂打
-                                p.localNPCHitCooldown = 12;
-                                p.DamageType = chi;
-                                p.originalDamage = finalDamage; // 建议也同步，避免某些逻辑用 originalDamage
-                            }
-                        }
-                    }
-                }
-
-                FeixianTicks--;
-            }
-
-            // —— 利刃华尔兹：简化 8 段，每段 54 tick，出现残影 + 伤害 —— 
-            if (BladeWaltzTicks > 0)
-            {
-                BladeWaltzTicks--;
-                BladeWaltzStepTimer--;
-
-                // 全程无敌 + 隐身
-                Player.immune = true;
-                Player.immuneTime = 2;
-                Player.immuneNoBlink = true;  // 不要免疫闪烁（避免“可见”闪动）
-                Player.invis = true; // 结束时会复位
-
-                // 禁止一切玩家输入与使用
-                Player.controlUseItem = false;
-                Player.controlUseTile = false;
-                Player.controlHook = false;
-                Player.controlMount = false;
-                Player.controlJump = false;
-                Player.controlLeft = Player.controlRight = Player.controlUp = Player.controlDown = false;
-                Player.mount?.Dismount(Player);         // 退出坐骑（以免移动）
-                Player.velocity = Vector2.Zero;  // 锁定原地
-
-                Player.AddBuff(BuffID.Invisibility, 2, true); // ★ 每帧续 2tick，确保完全隐身
-
-                if (BladeWaltzStepTimer <= 0 && BladeWaltzHitsLeft > 0)
-                {
-                    BladeWaltzStepTimer = 30;   // 每段 ~0.5s
-                    BladeWaltzHitsLeft--;
-
-                    // 目标：半屏范围随机一个可追踪敌人
-                    int targetIndex = FindRandomWaltzTarget();
-                    Vector2 targetPos;
-
-                    if (targetIndex >= 0)
-                    {
-                        var npc = Main.npc[targetIndex];
-                        targetPos = npc.Center;
-                    }
-                    else
-                    {
-                        // 无目标则朝鼠标方向抡一刀
-                        targetPos = Main.MouseWorld;
+                        Main.projectile[KamehamehaGhostProj].Kill();
+                        KamehamehaGhostProj = -1;
                     }
 
-                    // 斩击起点：玩家附近随机一个空位（稍有偏移，像“瞬身到敌近旁出刀”）
-                    var spawn = Player.Center + Main.rand.NextVector2Unit() * Main.rand.NextFloat(60f, 120f);
-
-                    // 方向与速度
-                    var dir = (targetPos - spawn).SafeNormalize(Vector2.UnitX);
-                    float speed = 14f; // 速度越高，视觉越“快斩”
-
-                    int finalDamage = (int)Player.GetTotalDamage(chi).ApplyTo(BladeWaltz.baseDamage);
-
-                    float knockback = 3f;
-
-                    if (Main.netMode != NetmodeID.MultiplayerClient) // TODO: 只在服务端? 单机游玩时，本机属于服务端吗？
-                    {
-                        // int projType = ModContent.ProjectileType<FirstFractalCloneProj>();
-
-                        int pid = Projectile.NewProjectile(
-                            Player.GetSource_Misc("BladeWaltz"),
-                            spawn,
-                            dir * speed,
-                            ProjectileID.FirstFractal,
-                            finalDamage,
-                            knockback,
-                            Player.whoAmI
-                        );
-                        if (pid >= 0 && pid < Main.maxProjectiles)
-                        {
-                            Projectile p = Main.projectile[pid];
-                            p.tileCollide = false;
-                            p.timeLeft = 30;
-                            p.usesLocalNPCImmunity = true;
-                            p.localNPCHitCooldown = 10;
-                            p.netUpdate = true;
-                            p.DamageType = chi;
-                            p.originalDamage = finalDamage; // 建议也同步，避免某些逻辑用 originalDamage
-                        }
-                    }
-                }
-
-                if (BladeWaltzTicks <= 0)
-                {
-                    // ★ 结束帧：立刻清理免疫/隐身
-                    Player.immune = false;
-                    Player.immuneTime = 0;
-                    Player.invis = false;
-                    Player.noKnockback = false;
+                    k.ReleaseFire(Player, this, ChargeQiSpent);
+                    ChargeQiSpent = 0;
                 }
             }
         }
+        private void UpdateLingbo()
+        {
+            if (!LingboActive)
+                return;
 
+            if (QiCurrent <= LingboQiCost)
+            {
+                LingboActive = false;
+                return;
+            }
+
+            QiCurrent -= LingboQiCost / 60f;
+
+            float moved = Vector2.Distance(Player.Bottom, _lingboLastWavePos);
+            _lingboDistanceAcc += moved;
+            _lingboLastWavePos = Player.Bottom;
+
+            if (_lingboDistanceAcc >= 32f)
+            {
+                _lingboDistanceAcc = 0f;
+
+                for (int i = 0; i < 12; i++)
+                {
+                    var d = Dust.NewDustPerfect(
+                        Player.Bottom + new Vector2(Main.rand.NextFloat(-12, 12), 0),
+                        DustID.Water,
+                        new Vector2(Main.rand.NextFloat(-1, 1), -Main.rand.NextFloat(0.5f, 1.5f))
+                    );
+                    d.noGravity = true;
+                    d.scale = 1.5f;
+                }
+            }
+        }
+        private void UpdateYuJian()
+        {
+            if (!YuJianActive)
+                return;
+
+            if (Player.dead || Player.ghost || !Player.active)
+            {
+                EndYuJian(true);
+                return;
+            }
+
+            if (Player.controlMount && Player.releaseMount)
+            {
+                EndYuJian();
+                return;
+            }
+
+            if (Player.controlHook && Player.releaseHook)
+            {
+                EndYuJian();
+                return;
+            }
+
+            if (Player.mount == null || !Player.mount.Active || Player.mount.Type != ModContent.MountType<YuJianMount>())
+            {
+                EndYuJian();
+                return;
+            }
+
+            float perTick = YuJianQiCostPerSecond / 60f;
+            if (QiCurrent <= perTick)
+            {
+                QiCurrent = 0;
+                EndYuJian();
+                return;
+            }
+
+            QiCurrent -= perTick;
+
+            ApplyYuJianControlLock();
+
+            if (Player.controlInv)
+                Main.playerInventory = false;
+
+            DoYuJianContactDamage();
+        }
+        private void UpdateSkyWalking()
+        {
+            if (!SkyWalkingActive)
+                return;
+
+            if (Player.dead || Player.ghost || !Player.active)
+            {
+                EndSkyWalking();
+                return;
+            }
+
+            if (Player.mount != null && Player.mount.Active)
+            {
+                EndSkyWalking();
+                return;
+            }
+
+            if (Player.controlMount && Player.releaseMount)
+            {
+                EndSkyWalking();
+                return;
+            }
+
+            if (Player.controlHook && Player.releaseHook)
+            {
+                EndSkyWalking();
+                return;
+            }
+
+            SpawnSkyWalkingDust();
+
+            bool onGround = Player.velocity.Y == 0f && ModContent.GetInstance<BuffPlayer>().IsStandingOnGround(Player);
+            bool canStartSkyWalkingJump = onGround || SkyWalkingStandingOnAir;
+
+            if (!canStartSkyWalkingJump)
+                _skyWalkingJumpConsumed = false;
+
+            if (Player.controlJump && canStartSkyWalkingJump && !_skyWalkingJumpConsumed)
+            {
+                TrySkyWalkingJump();
+                _skyWalkingJumpConsumed = true;
+                return;
+            }
+
+            UpdateSkyWalkingAirStand();
+        }
+        private void SpawnSkyWalkingDust()
+        {
+            if (!Main.rand.NextBool(3))
+                return;
+
+            Vector2 legPos = Player.Bottom + new Vector2(0f, -10f * Player.gravDir);
+            legPos.X += Main.rand.NextFloat(-10f, 10f);
+            legPos.Y += Main.rand.NextFloat(-4f, 4f);
+
+            int dust = Dust.NewDust(
+                legPos,
+                2,
+                2,
+                DustID.Cloud,
+                0f,
+                0f,
+                0,
+                default,
+                2f
+            );
+
+            Main.dust[dust].velocity = new Vector2(
+                Main.rand.NextFloat(-1.2f, 1.2f),
+                Main.rand.NextFloat(-1.2f, 1.2f)
+            );
+
+            Main.dust[dust].noGravity = true;
+        }
+        private void UpdateFeixian()
+        {
+            if (FeixianTicks <= 0)
+                return;
+
+            Vector2 toTarget = FeixianTarget - Player.Center;
+            Vector2 dir = toTarget.SafeNormalize(Vector2.UnitX);
+            Player.direction = (dir.X >= 0f) ? 1 : -1;
+
+            float speed = 20f;
+            if (toTarget.Length() <= speed || FeixianTicks == 1)
+            {
+                EndFeixian();
+                return;
+            }
+
+            ApplyFeixianState(dir, speed);
+            SpawnFeixianProjectiles(dir);
+
+            FeixianTicks--;
+        }
+        private void EndFeixian()
+        {
+            Player.velocity = Vector2.Zero;
+            FeixianTicks = 0;
+
+            TimeStopSystem.StopIfFeixian();
+
+            Player.immune = false;
+            Player.immuneTime = 0;
+            Player.invis = false;
+            Player.noKnockback = false;
+        }
+        private void ApplyFeixianState(Vector2 dir, float speed)
+        {
+            Player.immune = true;
+            Player.immuneTime = 2;
+            Player.invis = true;
+            Player.noKnockback = true;
+            Player.velocity = dir * speed;
+        }
+        private void SpawnFeixianProjectiles(Vector2 dir)
+        {
+            if (Player.whoAmI != Main.myPlayer)
+                return;
+
+            int baseDamage = Feixian.Damage;
+
+            if ((FeixianTicks % 2) == 0)
+                SpawnFeixianTrailProjectile(baseDamage);
+
+            if ((FeixianTicks % 6) == 0)
+                SpawnFeixianPetals(dir, baseDamage);
+        }
+        private void SpawnFeixianTrailProjectile(int baseDamage)
+        {
+            int finalDamage = (int)Player.GetTotalDamage(chi).ApplyTo(baseDamage);
+
+            int proj = Projectile.NewProjectile(
+                Player.GetSource_Misc("FeixianTrail"),
+                Player.Center,
+                Player.velocity,
+                ProjectileID.FirstFractal,
+                finalDamage,
+                4f,
+                Player.whoAmI
+            );
+
+            Projectile p = Main.projectile[proj];
+            p.DamageType = chi;
+            p.originalDamage = finalDamage;
+            p.timeLeft = 20;
+            p.tileCollide = false;
+        }
+        private void SpawnFeixianPetals(Vector2 dir, int baseDamage)
+        {
+            int petals = 6;
+            float radius = 18f;
+            float forwardSpeed = 8f;
+            float outwardMin = 1f;
+            float outwardMax = 5f;
+
+            Vector2 normal = new Vector2(-dir.Y, dir.X);
+            float baseAngle = Main.rand.NextFloat(0f, MathHelper.TwoPi);
+
+            int finalDamage = (int)Player.GetTotalDamage(chi).ApplyTo(baseDamage) / petals;
+
+            for (int i = 0; i < petals; i++)
+            {
+                float ang = baseAngle + i * MathHelper.TwoPi / petals;
+                Vector2 ringOffset = (float)Math.Cos(ang) * normal + (float)Math.Sin(ang) * dir;
+                Vector2 spawnPos = Player.Center + ringOffset * radius;
+
+                Vector2 outward = (spawnPos - Player.Center).SafeNormalize(Vector2.UnitX);
+                Vector2 vel = dir.RotatedBy(MathHelper.TwoPi / petals * i) * forwardSpeed
+                              + outward * Main.rand.NextFloat(outwardMin, outwardMax);
+
+                var p = Projectile.NewProjectileDirect(
+                    Player.GetSource_Misc("FeixianPetals"),
+                    spawnPos,
+                    vel,
+                    ProjectileID.FlowerPetal,
+                    finalDamage,
+                    3f,
+                    Player.whoAmI
+                );
+
+                if (p != null)
+                {
+                    p.friendly = true;
+                    p.hostile = false;
+                    p.tileCollide = false;
+                    p.timeLeft = 30;
+                    p.penetrate = 1;
+                    p.usesLocalNPCImmunity = true;
+                    p.localNPCHitCooldown = 12;
+                    p.DamageType = chi;
+                    p.originalDamage = finalDamage;
+                }
+            }
+        }
+        private void UpdateBladeWaltz()
+        {
+            if (BladeWaltzTicks <= 0)
+                return;
+
+            BladeWaltzTicks--;
+            BladeWaltzStepTimer--;
+
+            ApplyBladeWaltzState();
+
+            if (BladeWaltzStepTimer <= 0 && BladeWaltzHitsLeft > 0)
+                PerformBladeWaltzStep();
+
+            if (BladeWaltzTicks <= 0)
+                EndBladeWaltz();
+        }
+        private void ApplyBladeWaltzState()
+        {
+            Player.immune = true;
+            Player.immuneTime = 2;
+            Player.immuneNoBlink = true;
+            Player.invis = true;
+
+            Player.controlUseItem = false;
+            Player.controlUseTile = false;
+            Player.controlHook = false;
+            Player.controlMount = false;
+            Player.controlJump = false;
+            Player.controlLeft = Player.controlRight = Player.controlUp = Player.controlDown = false;
+            Player.mount?.Dismount(Player);
+            Player.velocity = Vector2.Zero;
+
+            Player.AddBuff(BuffID.Invisibility, 2, true);
+        }
+        private void EndBladeWaltz()
+        {
+            Player.immune = false;
+            Player.immuneTime = 0;
+            Player.invis = false;
+            Player.noKnockback = false;
+        }
+        private void PerformBladeWaltzStep()
+        {
+            BladeWaltzStepTimer = 30;
+            BladeWaltzHitsLeft--;
+
+            int targetIndex = FindRandomWaltzTarget();
+            Vector2 targetPos = targetIndex >= 0 ? Main.npc[targetIndex].Center : Main.MouseWorld;
+
+            Vector2 spawn = Player.Center + Main.rand.NextVector2Unit() * Main.rand.NextFloat(60f, 120f);
+            Vector2 dir = (targetPos - spawn).SafeNormalize(Vector2.UnitX);
+            float speed = 14f;
+
+            int finalDamage = (int)Player.GetTotalDamage(chi).ApplyTo(BladeWaltz.baseDamage);
+            float knockback = 3f;
+
+            if (Player.whoAmI != Main.myPlayer)
+                return;
+
+            int pid = Projectile.NewProjectile(
+                Player.GetSource_Misc("BladeWaltz"),
+                spawn,
+                dir * speed,
+                ProjectileID.FirstFractal,
+                finalDamage,
+                knockback,
+                Player.whoAmI
+            );
+
+            if (pid >= 0 && pid < Main.maxProjectiles)
+            {
+                Projectile p = Main.projectile[pid];
+                p.tileCollide = false;
+                p.timeLeft = 30;
+                p.usesLocalNPCImmunity = true;
+                p.localNPCHitCooldown = 10;
+                p.netUpdate = true;
+                p.DamageType = chi;
+                p.originalDamage = finalDamage;
+            }
+        }
         // 进一步保险：把绘制信息设为隐身，确保任何残余层都不画
         public override void ModifyDrawInfo(ref PlayerDrawSet drawInfo)
         {
@@ -797,7 +797,7 @@ namespace WuDao.Content.Players
 
         public bool CanUseActiveNow(int itemType, int extraCooldownTicks)
         {
-            if (!ModContent.GetInstance<WudaoConfig>().EnableJueXueSystem)
+            if (!JuexueRuntime.Enabled)
                 return false;
 
             // 公共冷却时间
@@ -835,12 +835,16 @@ namespace WuDao.Content.Players
 
         public override void ProcessTriggers(Terraria.GameInput.TriggersSet triggersSet)
         {
+            if (!JuexueRuntime.Enabled)
+                return;
+
+            if (Player.whoAmI != Main.myPlayer)
+                return;
+
             if (QiKeybinds.CastSkillKey.JustPressed)
             {
-                // 按下：如果槽里是龟派气功，进入蓄力，否则尝试施放主动技能
                 if (JuexueSlot.ModItem is Kamehameha k)
                 {
-                    // 若冷却允许才进入蓄力，否则当作释放失败
                     if (CanUseActiveNow(JuexueSlot.type, k.SpecialCooldownTicks))
                     {
                         Charging = true;
@@ -853,25 +857,25 @@ namespace WuDao.Content.Players
                 }
                 else if (JuexueSlot.ModItem is JuexueItem ji && ji.IsActive)
                 {
-                    // ★ 华尔兹进行中时，忽略再次按键
-                    if (BladeWaltzTicks > 0) return;
+                    if (BladeWaltzTicks > 0)
+                        return;
 
-                    ji.TryActivate(Player, this); // 尝试主动释放
+                    ji.TryActivate(Player, this);
                 }
-
             }
+
             if (QiKeybinds.CastSkillKey.JustReleased)
             {
-                // 松开：若是龟派气功则结算发射
                 if (JuexueSlot.ModItem is Kamehameha k && Charging)
                 {
                     Charging = false;
-                    // 若存在虚影射弹实例，也一并删除
+
                     if (KamehamehaGhostProj >= 0 && Main.projectile[KamehamehaGhostProj].active)
                     {
                         Main.projectile[KamehamehaGhostProj].Kill();
                         KamehamehaGhostProj = -1;
                     }
+
                     k.ReleaseFire(Player, this, ChargeQiSpent);
                     ChargeQiSpent = 0;
                 }
@@ -1033,19 +1037,21 @@ namespace WuDao.Content.Players
         }
         private void EnsureKamehamehaGhost()
         {
-            if (Main.dedServ) return;
+            if (Main.dedServ)
+                return;
+
+            if (Player.whoAmI != Main.myPlayer)
+                return;
 
             int projType = ModContent.ProjectileType<KamehamehaProj>();
             int owner = Player.whoAmI;
 
-            // 是否已有虚影（owner 自己的、ai[1]==1）
             bool exists = false;
             for (int i = 0; i < Main.maxProjectiles; i++)
             {
                 Projectile p = Main.projectile[i];
                 if (p.active && p.owner == owner && p.type == projType && p.ai[1] == 1f)
                 {
-                    // 保鲜（最重要，不然会过期）
                     p.timeLeft = 2;
                     exists = true;
                     break;
@@ -1054,22 +1060,17 @@ namespace WuDao.Content.Players
 
             if (!exists)
             {
-                // 生成一个“虚影”实例：伤害 0、速度 0、ai1=1
                 KamehamehaGhostProj = Projectile.NewProjectile(
                     Player.GetSource_Misc("Kamehameha_Ghost"),
                     Player.Center,
                     Vector2.Zero,
                     projType,
                     0, 0f, owner,
-                    0f, // ai[0] 不用，实时读 ChargeQiSpent 更丝滑
-                    1f  // ai[1] = 1f => 虚影模式
+                    0f,
+                    1f
                 );
-                if (!Main.dedServ)
-                {
 
-                    // 触发 2 秒虚影，稍微放大 1.1 倍，向上偏移 16 像素（站位更好看）
-                    TriggerJuexueGhost(Kamehameha.KamehamehaFrameIndex, durationTick: 120, scale: 1.1f, offset: new Vector2(0, -20));
-                }
+                TriggerJuexueGhost(Kamehameha.KamehamehaFrameIndex, durationTick: 120, scale: 1.1f, offset: new Vector2(0, -20));
             }
         }
         // 御剑飞行
@@ -1166,7 +1167,9 @@ namespace WuDao.Content.Players
 
         private void DoYuJianContactDamage()
         {
-            // 递减命中CD
+            if (Player.whoAmI != Main.myPlayer)
+                return;
+
             for (int i = 0; i < _yuJianNpcHitCooldown.Length; i++)
                 if (_yuJianNpcHitCooldown[i] > 0) _yuJianNpcHitCooldown[i]--;
 
@@ -1184,14 +1187,10 @@ namespace WuDao.Content.Players
                 if (!hitbox.Intersects(n.Hitbox))
                     continue;
 
-                // 伤害 = 选中剑的伤害（不叠加加成，严格按你描述）
                 int dmg = YuJianSwordDamage;
                 float kb = YuJianSwordKnockback;
 
-                // 用 ApplyDamageToNPC：联机也能正确同步
                 Player.ApplyDamageToNPC(n, dmg, kb, Player.direction, crit: false);
-
-                // 给予一点点免打过快：10 ticks = 1/6 秒
                 _yuJianNpcHitCooldown[i] = 10;
             }
         }
@@ -1308,6 +1307,57 @@ namespace WuDao.Content.Players
             {
                 SkyWalkingStandingOnAir = false;
             }
+        }
+        // 服务器同步相关代码
+        public void RequestSyncJuexueSlot()
+        {
+            if (Player.whoAmI != Main.myPlayer)
+                return;
+
+            ModPacket packet = Mod.GetPacket();
+            packet.Write((byte)MessageType.SyncJuexueSlot);
+            packet.Write((byte)Player.whoAmI);
+            WriteSimpleItem(packet, JuexueSlot);
+            packet.Send();
+        }
+
+        public static void WriteSimpleItem(ModPacket packet, Item item)
+        {
+            bool hasItem = item != null && !item.IsAir;
+            packet.Write(hasItem);
+
+            if (!hasItem)
+                return;
+
+            packet.Write(item.type);
+            packet.Write(item.stack);
+            packet.Write(item.prefix);
+            packet.Write(item.favorited);
+        }
+
+        public static Item ReadSimpleItem(BinaryReader reader)
+        {
+            bool hasItem = reader.ReadBoolean();
+
+            Item item = new Item();
+            item.TurnToAir();
+
+            if (!hasItem)
+                return item;
+
+            int type = reader.ReadInt32();
+            int stack = reader.ReadInt32();
+            byte prefix = reader.ReadByte();
+            bool favorited = reader.ReadBoolean();
+
+            item.SetDefaults(type);
+            item.stack = stack;
+            item.favorited = favorited;
+
+            if (prefix > 0)
+                item.Prefix(prefix);
+
+            return item;
         }
     }
 }

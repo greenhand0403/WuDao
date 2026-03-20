@@ -92,6 +92,7 @@ namespace WuDao.Content.Development
         private void Select(BundleCategory cat)
         {
             OnSelect?.Invoke(cat);
+            BundleSelectSystem.Hide();
         }
 
         public override void OnActivate()

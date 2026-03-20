@@ -8,6 +8,7 @@ using WuDao.Content.Systems;
 using WuDao.Common.Rendering;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
+using WuDao.Content.Development;
 
 namespace WuDao
 {
@@ -20,7 +21,10 @@ namespace WuDao
 	// 自动喝药 把消息枚举放到一个公共位置，避免到处重复定义
 	public enum MessageType : byte
 	{
-		SyncLifePenalty
+		SyncLifePenalty,
+		SyncJuexueSlot,
+		SelectBundleCategory,
+		SyncSheRaTransform
 	}
 	
 	public class WuDao : Mod
@@ -35,7 +39,6 @@ namespace WuDao
         {
             InvisibleSwordQiEffect = null;
         }
-		// 自动喝药
 		public override void HandlePacket(BinaryReader reader, int whoAmI)
 		{
 			MessageType msg = (MessageType)reader.ReadByte();
@@ -52,20 +55,112 @@ namespace WuDao
 							Player player = Main.player[plr];
 							if (player != null && player.active)
 							{
-								// 把同步到的惩罚值赋给 ModPlayer
 								player.GetModPlayer<PotionPlayer>().maxLifePenalty = penalty;
 							}
 						}
 
-						// 服务端把这个包转发给所有其他客户端（避免只同步给发起者）
-						// if (Main.netMode == NetmodeID.Server)
-						// {
-						// 	ModPacket echo = GetPacket();
-						// 	echo.Write((byte)MessageType.SyncLifePenalty);
-						// 	echo.Write(plr);
-						// 	echo.Write(penalty);
-						// 	echo.Send(toClient: -1, ignoreClient: whoAmI);
-						// }
+						break;
+					}
+
+				case MessageType.SyncJuexueSlot:
+					{
+						byte plr = reader.ReadByte();
+
+						if (plr < 0 || plr >= Main.maxPlayers)
+							return;
+
+						Player player = Main.player[plr];
+						if (player == null || !player.active)
+							return;
+
+						QiPlayer qi = player.GetModPlayer<QiPlayer>();
+						qi.JuexueSlot = QiPlayer.ReadSimpleItem(reader);
+
+						// 客户端 -> 服务器：服务器收到后转发给其他客户端
+						if (Main.netMode == NetmodeID.Server)
+						{
+							ModPacket packet = GetPacket();
+							packet.Write((byte)MessageType.SyncJuexueSlot);
+							packet.Write(plr);
+							QiPlayer.WriteSimpleItem(packet, qi.JuexueSlot);
+							packet.Send(-1, whoAmI);
+						}
+
+						break;
+					}
+
+				case MessageType.SelectBundleCategory:
+					{
+						byte plr = reader.ReadByte();
+						byte catRaw = reader.ReadByte();
+
+						if (plr >= Main.maxPlayers)
+							return;
+
+						if (!System.Enum.IsDefined(typeof(BundleCategory), (int)catRaw))
+							return;
+
+						Player player = Main.player[plr];
+						if (player == null || !player.active)
+							return;
+
+						if (Main.netMode == NetmodeID.Server)
+						{
+							BundleCategory category = (BundleCategory)catRaw;
+
+							// 校验玩家身上是否真的持有礼包
+							int itemType = ModContent.ItemType<WeaponBundleItem>();
+							bool hasBundle = false;
+							for (int i = 0; i < player.inventory.Length; i++)
+							{
+								if (player.inventory[i] != null && player.inventory[i].type == itemType && player.inventory[i].stack > 0)
+								{
+									hasBundle = true;
+									break;
+								}
+							}
+
+							if (!hasBundle)
+								return;
+
+							WeaponBundleItem.GiveItemsForCategoryNetSafe(player, category, this);
+						}
+
+						break;
+					}
+				case MessageType.SyncSheRaTransform:
+					{
+						byte plr = reader.ReadByte();
+						bool transformed = reader.ReadBoolean();
+						string setName = reader.ReadString();
+						int timer = reader.ReadInt32();
+
+						if (plr >= Main.maxPlayers)
+							return;
+
+						Player player = Main.player[plr];
+						if (player == null || !player.active)
+							return;
+
+						var sheRaPlayer = player.GetModPlayer<SheRaSwordPlayer>();
+						sheRaPlayer.SetTransformState(
+							transformed,
+							string.IsNullOrEmpty(setName) ? null : setName,
+							timer
+						);
+
+						// 客户端 -> 服务器：服务器收到后转发给其他客户端
+						if (Main.netMode == NetmodeID.Server)
+						{
+							ModPacket packet = GetPacket();
+							packet.Write((byte)MessageType.SyncSheRaTransform);
+							packet.Write(plr);
+							packet.Write(transformed);
+							packet.Write(setName ?? "");
+							packet.Write(timer);
+							packet.Send(-1, whoAmI);
+						}
+
 						break;
 					}
 			}
