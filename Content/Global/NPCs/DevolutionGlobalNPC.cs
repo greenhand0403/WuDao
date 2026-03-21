@@ -1,49 +1,72 @@
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
-using Microsoft.Xna.Framework;
 using WuDao.Content.Players;
 
 namespace WuDao.Content.Global.NPCs
 {
-    // 压制力场：削弱敌怪和射弹伤害的效果
+    // 压制力场：范围内每个装备者提供1层效果
     public class DevolutionGlobalNPC : GlobalNPC
     {
-        static bool AnyAuraHolderAffecting(NPC npc)
+        private const int MaxStacks = Main.maxPlayers;
+        private const float DamageToPlayerPerStack = 0.9f; // 敌怪打玩家每层×0.9
+        private const float DamageToNpcPerStack = 1.1f;    // 敌怪承伤每层×1.1
+
+        private static int GetAuraStackCount(Vector2 targetCenter)
         {
-            // 距离玩家的半径30格内的敌怪将受到削弱 大约15.78像素1格
-            const float radius = 16f * 30;
-            float r2 = radius * radius;
+            float r2 = DevolutionPlayer.AuraRadius * DevolutionPlayer.AuraRadius;
+            int stacks = 0;
+
             for (int i = 0; i < Main.maxPlayers; i++)
             {
                 Player plr = Main.player[i];
-                if (plr == null || !plr.active || plr.dead) continue;
+                if (plr == null || !plr.active || plr.dead)
+                    continue;
 
-                if (plr.GetModPlayer<DevolutionPlayer>().HasDevolutionAura)
+                if (!plr.GetModPlayer<DevolutionPlayer>().HasDevolutionAura)
+                    continue;
+
+                if (Vector2.DistanceSquared(plr.Center, targetCenter) <= r2)
                 {
-                    // 用平方距离，别每次开方；用 Center 即可（需要更稳可改用 Hitbox.Center）
-                    if (Vector2.DistanceSquared(plr.Center, npc.Center) <= r2)
-                        return true;
+                    stacks++;
+                    if (stacks >= MaxStacks)
+                        return MaxStacks;
                 }
             }
-            return false;
-        }
 
+            return stacks;
+        }
 
         public override void ModifyHitPlayer(NPC npc, Player target, ref Player.HurtModifiers modifiers)
         {
-            // 敌怪打玩家 → 伤害 ×0.9
-            if (!npc.friendly && AnyAuraHolderAffecting(npc))
-                modifiers.SourceDamage *= 0.9f;
+            if (npc.friendly)
+                return;
+
+            int stacks = GetAuraStackCount(npc.Center);
+            if (stacks <= 0)
+                return;
+
+            float mult = 1f;
+            for (int i = 0; i < stacks; i++)
+                mult *= DamageToPlayerPerStack;
+
+            modifiers.SourceDamage *= mult;
         }
 
         public override void ModifyIncomingHit(NPC npc, ref NPC.HitModifiers modifiers)
         {
-            if (npc.friendly) return;
-            if (!AnyAuraHolderAffecting(npc)) return;
+            if (npc.friendly)
+                return;
 
-            // 提高敌怪承受的伤害10%
-            modifiers.FinalDamage *= 1.1f;
+            int stacks = GetAuraStackCount(npc.Center);
+            if (stacks <= 0)
+                return;
+
+            float mult = 1f;
+            for (int i = 0; i < stacks; i++)
+                mult *= DamageToNpcPerStack;
+
+            modifiers.FinalDamage *= mult;
         }
     }
-
 }

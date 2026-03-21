@@ -1350,56 +1350,5 @@ namespace WuDao.Content.Players
                 SkyWalkingStandingOnAir = false;
             }
         }
-        // 服务器同步相关代码
-        public void RequestSyncJuexueSlot()
-        {
-            if (Player.whoAmI != Main.myPlayer)
-                return;
-
-            ModPacket packet = Mod.GetPacket();
-            packet.Write((byte)MessageType.SyncJuexueSlot);
-            packet.Write((byte)Player.whoAmI);
-            WriteSimpleItem(packet, JuexueSlot);
-            packet.Send();
-        }
-
-        public static void WriteSimpleItem(ModPacket packet, Item item)
-        {
-            bool hasItem = item != null && !item.IsAir;
-            packet.Write(hasItem);
-
-            if (!hasItem)
-                return;
-
-            packet.Write(item.type);
-            packet.Write(item.stack);
-            packet.Write(item.prefix);
-            packet.Write(item.favorited);
-        }
-
-        public static Item ReadSimpleItem(BinaryReader reader)
-        {
-            bool hasItem = reader.ReadBoolean();
-
-            Item item = new Item();
-            item.TurnToAir();
-
-            if (!hasItem)
-                return item;
-
-            int type = reader.ReadInt32();
-            int stack = reader.ReadInt32();
-            byte prefix = reader.ReadByte();
-            bool favorited = reader.ReadBoolean();
-
-            item.SetDefaults(type);
-            item.stack = stack;
-            item.favorited = favorited;
-
-            if (prefix > 0)
-                item.Prefix(prefix);
-
-            return item;
-        }
     }
 }

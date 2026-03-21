@@ -24,18 +24,8 @@ namespace WuDao.Content.Items
         }
         public override void UpdateInventory(Player player)
         {
-            player.GetModPlayer<CuisinePlayer>().HasFoodLogItem = true;
-            // 把“收藏(⭐)”作为‘开启食谱提示’的条件
             var cp = player.GetModPlayer<CuisinePlayer>();
-            bool on = Item.favorited; // 只有收藏才算“开启”
-            if (on)
-            {
-                cp.HasFoodLogItem = true;
-            }
-            else
-            {
-                cp.HasFoodLogItem = false;
-            }
+            cp.HasFoodLogItem = Item.favorited; // 只有收藏才算开启
         }
 
         public override void ModifyTooltips(List<TooltipLine> tooltips)

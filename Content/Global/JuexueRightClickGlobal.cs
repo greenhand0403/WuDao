@@ -80,8 +80,6 @@ namespace WuDao.Content.Global
                 }
             }
 
-            qi.RequestSyncJuexueSlot();
-
             if (!Main.mouseItem.IsAir)
                 Main.mouseItem.TurnToAir();
 

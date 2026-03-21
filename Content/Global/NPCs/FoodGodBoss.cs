@@ -43,6 +43,10 @@ namespace WuDao.Content.Global.NPCs
             NPC.npcSlots = 10f;
             Music = MusicLoader.GetMusicSlot(Mod, "Sounds/Music/Michikusa2");
         }
+        private static bool IsServerAuthority()
+        {
+            return Main.netMode != NetmodeID.MultiplayerClient;
+        }
         public override void AI()
         {
             if (isDying)
@@ -58,8 +62,16 @@ namespace WuDao.Content.Global.NPCs
             }
 
             Player target = Main.player[NPC.target];
-            if (!target.active || target.dead) { NPC.TargetClosest(); target = Main.player[NPC.target]; }
-            if (!target.active || target.dead) { NPC.velocity.Y -= 0.5f; return; }
+            if (!target.active || target.dead)
+            {
+                NPC.TargetClosest(); target = Main.player[NPC.target];
+                if (IsServerAuthority())
+                    NPC.netUpdate = true;
+            }
+            if (!target.active || target.dead)
+            {
+                NPC.velocity.Y -= 0.5f; return;
+            }
 
             const int MaxDashes = 2;
             const int DashDuration = 18;
@@ -89,6 +101,7 @@ namespace WuDao.Content.Global.NPCs
                                     if (!Collision.SolidCollision(hitbox.TopLeft(), hitbox.Width, hitbox.Height))
                                     {
                                         NPC.Center = candidate;
+                                        NPC.netUpdate = true;
                                         break;
                                     }
                                 }
@@ -99,6 +112,7 @@ namespace WuDao.Content.Global.NPCs
                             float speed = 16f + (NPC.life < NPC.lifeMax / 2 ? 4f : 0f);
                             NPC.velocity = dir * speed;
                             dashesDone++;
+                            NPC.netUpdate = true;
                         }
 
                         if (timer <= DashDuration)
@@ -123,6 +137,9 @@ namespace WuDao.Content.Global.NPCs
                                 // 下一次冲刺
                                 timer = 0;
                             }
+
+                            if (IsServerAuthority())
+                                NPC.netUpdate = true;
                         }
                         break;
                     }
@@ -140,6 +157,9 @@ namespace WuDao.Content.Global.NPCs
                         {
                             timer = 0;
                             state = Phase.Shoot;
+
+                            if (IsServerAuthority())
+                                NPC.netUpdate = true;
                         }
                         break;
                     }
@@ -152,7 +172,7 @@ namespace WuDao.Content.Global.NPCs
                         Vector2 to = (target.Center - NPC.Center).SafeNormalize(Vector2.Zero) * 3.0f;
                         NPC.velocity = Vector2.Lerp(NPC.velocity, to, 0.08f);
 
-                        if (timer % 12 == 0)
+                        if (timer % 12 == 0 && IsServerAuthority())
                         {
                             bool red = Main.rand.NextBool(2);
                             NewFoodBullet(NPC.Center, (target.Center - NPC.Center).SafeNormalize(Vector2.UnitX) * Main.rand.NextFloat(4f, 8f), red);
@@ -161,6 +181,9 @@ namespace WuDao.Content.Global.NPCs
                         {
                             timer = 0;
                             state = Phase.Dash;
+
+                            if (IsServerAuthority())
+                                NPC.netUpdate = true;
                         }
                         break;
                     }
@@ -170,6 +193,9 @@ namespace WuDao.Content.Global.NPCs
         // ===== 发射工具 =====
         void ShootFoodArc(Player target, int n, float halfAngleDeg, float speed)
         {
+            if (!IsServerAuthority())
+                return;
+
             for (int i = 0; i < n; i++)
             {
                 float t = n == 1 ? 0f : i / (float)(n - 1);
@@ -181,17 +207,26 @@ namespace WuDao.Content.Global.NPCs
 
         void ShootFoodCone(Player target, int n, float spreadDeg, float minSpd, float maxSpd)
         {
+            if (!IsServerAuthority())
+                return;
+
             float spread = MathHelper.ToRadians(spreadDeg);
+
             for (int i = 0; i < n; i++)
             {
-                float lerp = (i / (float)(n - 1) - 0.5f);
-                var v = (target.Center - NPC.Center).SafeNormalize(Vector2.UnitX).RotatedBy(lerp * spread) * Main.rand.NextFloat(minSpd, maxSpd);
+                float lerp = (n == 1) ? 0f : (i / (float)(n - 1) - 0.5f);
+                Vector2 v = (target.Center - NPC.Center).SafeNormalize(Vector2.UnitX)
+                    .RotatedBy(lerp * spread) * Main.rand.NextFloat(minSpd, maxSpd);
+
                 NewFoodBullet(NPC.Center, v, red: Main.rand.NextBool(3));
             }
         }
 
         void NewFoodBullet(Vector2 pos, Vector2 vel, bool red)
         {
+            if (!IsServerAuthority())
+                return;
+
             Projectile.NewProjectile(
                 null, pos, vel,
                 ModContent.ProjectileType<FoodRainProjectile>(),
@@ -255,6 +290,7 @@ namespace WuDao.Content.Global.NPCs
                 NPC.dontTakeDamage = true;
                 NPC.life = 1;
                 NPC.timeLeft = 2;
+                NPC.netUpdate = true;
                 return false; // 阻止立即死亡
             }
             return true;

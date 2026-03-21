@@ -1159,8 +1159,8 @@ Buffs: {
 	}
 
 	SeagullBuff: {
-		// Description: Mods.WuDao.Buffs.SeagullBuff.Description
-		// DisplayName: Seagull Buff
+		Description: 海鸥仆从为你而战
+		DisplayName: 海鸥守护
 	}
 }
 
@@ -1257,7 +1257,7 @@ Configs: {
 	}
 
 	InvisibleEnemiesConfig: {
-		DisplayName: 武道模组配置
+		DisplayName: 隐身敌怪物块配置
 
 		IgnoreSpectreGoggles: {
 			Tooltip: 勾选后，即使佩戴幽灵护目镜，也会强制全体敌怪、射弹和陷阱回声隐身

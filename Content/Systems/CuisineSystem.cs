@@ -8,6 +8,7 @@ using WuDao.Content.Players;
 using Terraria.GameContent.ItemDropRules;
 using System.Text;
 using Terraria.Localization;
+using System.IO;
 
 namespace WuDao.Content.Systems
 {
@@ -85,7 +86,15 @@ namespace WuDao.Content.Systems
             if (Main.dayTime && Main.time == 0)
                 DayCounter++;
         }
+        public override void NetSend(BinaryWriter writer)
+        {
+            writer.Write(DayCounter);
+        }
 
+        public override void NetReceive(BinaryReader reader)
+        {
+            DayCounter = reader.ReadInt32();
+        }
         public override void SaveWorldData(TagCompound tag)
         {
             tag["DayCounter"] = DayCounter;
@@ -137,6 +146,7 @@ namespace WuDao.Content.Systems
         public override void OnWorldUnload()
         {
             FoodPool.Clear();
+            ManualFoodHints.Clear();
         }
         public static void RebuildFoodPool()
         {

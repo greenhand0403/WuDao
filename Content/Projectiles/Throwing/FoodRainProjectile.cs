@@ -38,14 +38,28 @@ namespace WuDao.Content.Projectiles.Throwing
             if (!IsRed)
             {
                 Projectile.hostile = false;
-                // 与本地玩家碰撞即治疗
-                var plr = Main.LocalPlayer;
-                if (plr.active && !plr.dead && Projectile.Hitbox.Intersects(plr.Hitbox))
+                // 绿弹的治疗判定只在单机/服务器执行
+                if (Main.netMode != NetmodeID.MultiplayerClient)
                 {
-                    int heal = 10; // 绿弹回血
-                    plr.statLife = Utils.Clamp(plr.statLife + heal, 0, plr.statLifeMax2);
-                    plr.HealEffect(heal, true);
-                    Projectile.Kill();
+                    for (int i = 0; i < Main.maxPlayers; i++)
+                    {
+                        Player plr = Main.player[i];
+                        if (plr == null || !plr.active || plr.dead)
+                            continue;
+
+                        if (!Projectile.Hitbox.Intersects(plr.Hitbox))
+                            continue;
+
+                        int heal = 10;
+                        plr.statLife = Utils.Clamp(plr.statLife + heal, 0, plr.statLifeMax2);
+                        plr.HealEffect(heal, true);
+
+                        if (Main.netMode == NetmodeID.Server)
+                            plr.netLife = true;
+
+                        Projectile.Kill();
+                        return;
+                    }
                 }
             }
 
@@ -61,11 +75,15 @@ namespace WuDao.Content.Projectiles.Throwing
         }
         public override void OnSpawn(IEntitySource source)
         {
-            Main.instance.LoadItem(ItemType);
+            if (!Main.dedServ && ItemType > 0)
+                Main.instance.LoadItem(ItemType);
             base.OnSpawn(source);
         }
         public override bool PreDraw(ref Color lightColor)
         {
+            if (ItemType <= 0)
+                return false;
+                
             var tex = Terraria.GameContent.TextureAssets.Item[ItemType].Value;
 
             Vector2 pos = Projectile.Center - Main.screenPosition;

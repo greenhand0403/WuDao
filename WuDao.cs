@@ -23,13 +23,15 @@ namespace WuDao
 	public enum MessageType : byte
 	{
 		SyncLifePenalty,// 服用永生之酒减少生命上限，同步生命值惩罚
-		SyncJuexueSlot,// TODO: 同步武学槽槽位，让其他客户端知道你装备了什么绝学？
 		SelectBundleCategory,// 同步开局礼包
 		SyncSheRaTransform,// 同步希瑞之剑的变身
 		RequestTimeStop,// 同步时间冻结道具的使用
 		SyncTimeStopState,// 同步时间冻结状态
 		SyncSkyWalkingState,// 同步月步绝学时玩家的状态
 		SyncDesignFlawState,// 同步败笔状态
+		SyncCuisineState,          // 同步厨艺/美味进度
+		RequestCuisineCraftReward, // 客户端请求服务器发放菜谱双倍奖励
+		RequestCuisineFoodRain,    // 客户端请求服务器尝试触发食物雨
 	}
 	
 	public class WuDao : Mod
@@ -73,33 +75,6 @@ namespace WuDao
 							{
 								player.GetModPlayer<PotionPlayer>().maxLifePenalty = penalty;
 							}
-						}
-
-						break;
-					}
-
-				case MessageType.SyncJuexueSlot:
-					{
-						byte plr = reader.ReadByte();
-
-						if (plr < 0 || plr >= Main.maxPlayers)
-							return;
-
-						Player player = Main.player[plr];
-						if (player == null || !player.active)
-							return;
-
-						QiPlayer qi = player.GetModPlayer<QiPlayer>();
-						qi.JuexueSlot = QiPlayer.ReadSimpleItem(reader);
-
-						// 客户端 -> 服务器：服务器收到后转发给其他客户端
-						if (Main.netMode == NetmodeID.Server)
-						{
-							ModPacket packet = GetPacket();
-							packet.Write((byte)MessageType.SyncJuexueSlot);
-							packet.Write(plr);
-							QiPlayer.WriteSimpleItem(packet, qi.JuexueSlot);
-							packet.Send(-1, whoAmI);
 						}
 
 						break;
@@ -268,6 +243,91 @@ namespace WuDao
 							packet.Write(flawPlayer.defeatCount);
 							packet.Send(-1, whoAmI);
 						}
+						break;
+					}
+				case MessageType.SyncCuisineState:
+					{
+						byte playerId = reader.ReadByte();
+
+						if (playerId >= Main.maxPlayers)
+							return;
+
+						Player player = Main.player[playerId];
+						if (player == null || !player.active)
+							return;
+
+						CuisinePlayer cp = player.GetModPlayer<CuisinePlayer>();
+
+						cp.CookingSkill = reader.ReadInt32();
+						cp.Deliciousness = reader.ReadInt32();
+
+						cp.CraftedEverFoods.Clear();
+						int craftedEverCount = reader.ReadInt32();
+						for (int i = 0; i < craftedEverCount; i++)
+							cp.CraftedEverFoods.Add(reader.ReadInt32());
+
+						cp.EatenEverFoods.Clear();
+						int eatenEverCount = reader.ReadInt32();
+						for (int i = 0; i < eatenEverCount; i++)
+							cp.EatenEverFoods.Add(reader.ReadInt32());
+
+						// 服务器收到客户端同步后，转发给其他客户端
+						if (Main.netMode == NetmodeID.Server)
+						{
+							ModPacket packet = GetPacket();
+							packet.Write((byte)MessageType.SyncCuisineState);
+							packet.Write(playerId);
+							packet.Write(cp.CookingSkill);
+							packet.Write(cp.Deliciousness);
+
+							packet.Write(cp.CraftedEverFoods.Count);
+							foreach (int t in cp.CraftedEverFoods)
+								packet.Write(t);
+
+							packet.Write(cp.EatenEverFoods.Count);
+							foreach (int t in cp.EatenEverFoods)
+								packet.Write(t);
+
+							packet.Send(-1, whoAmI);
+						}
+						break;
+					}
+
+				case MessageType.RequestCuisineCraftReward:
+					{
+						if (Main.netMode != NetmodeID.Server)
+							return;
+
+						byte playerId = reader.ReadByte();
+						int itemType = reader.ReadInt32();
+						int stack = reader.ReadInt32();
+
+						if (playerId >= Main.maxPlayers || stack <= 0)
+							return;
+
+						Player player = Main.player[playerId];
+						if (player == null || !player.active)
+							return;
+
+						player.QuickSpawnItem(player.GetSource_GiftOrReward(), itemType, stack);
+						player.QuickSpawnItem(player.GetSource_GiftOrReward(), itemType, stack);
+						break;
+					}
+
+				case MessageType.RequestCuisineFoodRain:
+					{
+						if (Main.netMode != NetmodeID.Server)
+							return;
+
+						byte playerId = reader.ReadByte();
+						if (playerId >= Main.maxPlayers)
+							return;
+
+						Player player = Main.player[playerId];
+						if (player == null || !player.active || player.dead)
+							return;
+
+						FoodRainSystem.TryTrigger(player);
 						break;
 					}
 			}

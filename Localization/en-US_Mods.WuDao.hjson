@@ -1154,7 +1154,7 @@ Buffs: {
 	}
 
 	SeagullBuff: {
-		Description: Mods.WuDao.Buffs.SeagullBuff.Description
+		Description: Seagull fights for you
 		DisplayName: Seagull Buff
 	}
 }
@@ -1252,7 +1252,7 @@ Configs: {
 	}
 
 	InvisibleEnemiesConfig: {
-		DisplayName: Wudao Config
+		DisplayName: Invisible Enemies Config
 
 		IgnoreSpectreGoggles: {
 			Tooltip: When checked, even wearing Ghost Goggles will force all enemies, projectiles, and traps to become invisible

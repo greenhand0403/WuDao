@@ -85,59 +85,161 @@ namespace WuDao.Content.Global
             }
             return false;
         }
+        private static void SendCuisineFoodRainRequest(Player player, Mod mod)
+        {
+            if (Main.netMode != NetmodeID.MultiplayerClient || player.whoAmI != Main.myPlayer)
+                return;
+
+            ModPacket packet = mod.GetPacket();
+            packet.Write((byte)MessageType.RequestCuisineFoodRain);
+            packet.Write((byte)player.whoAmI);
+            packet.Send();
+        }
+
+        private static void SendCuisineCraftRewardRequest(Player player, Item item, Mod mod)
+        {
+            if (Main.netMode != NetmodeID.MultiplayerClient || player.whoAmI != Main.myPlayer)
+                return;
+
+            ModPacket packet = mod.GetPacket();
+            packet.Write((byte)MessageType.RequestCuisineCraftReward);
+            packet.Write((byte)player.whoAmI);
+            packet.Write(item.type);
+            packet.Write(item.stack);
+            packet.Send();
+        }
         public override void OnConsumeItem(Item item, Player player)
         {
-            if (ItemID.Sets.IsFood[item.type])
+            if (!ItemID.Sets.IsFood[item.type])
+                return;
+
+            // 多人里由“拥有该客户端的玩家”本地管理菜单与首次品尝，再同步结果给服务器
+            if (Main.netMode == NetmodeID.MultiplayerClient && player.whoAmI != Main.myPlayer)
+                return;
+
+            CuisinePlayer p = player.GetModPlayer<CuisinePlayer>();
+
+            bool wasNewForMenu = p.FoodsEatenAll.Add(item.type);
+            bool wasFirstTaste = p.EatenEverFoods.Add(item.type);
+
+            if (wasNewForMenu && p.HasFoodLogItem)
+                p.RefreshSuggestedFoods6();
+
+            if (!wasFirstTaste)
+                return;
+
+            int bt = ContentSamples.ItemsByType[item.type].rare;
+            if (bt > 0)
+                p.Deliciousness += bt;
+
+            p.MarkCuisineDirty();
+
+            CombatText.NewText(
+                player.Hitbox,
+                Color.Green,
+                Language.GetTextValue("Mods.WuDao.Cuisine.Messages.TastedNewFood")
+            );
+
+            if (Main.netMode == NetmodeID.SinglePlayer)
             {
-                CuisinePlayer p = player.GetModPlayer<CuisinePlayer>();
-                if (p.FoodsEatenAll.Add(item.type))
-                {
-                    // 首次‘品尝’累加美味值
-                    int bt = ContentSamples.ItemsByType[item.type].rare;
-                    if (bt > 0) p.Deliciousness += bt;
-                    CombatText.NewText(
-                        player.Hitbox,
-                        Color.Green,
-                        Language.GetTextValue("Mods.WuDao.Cuisine.Messages.TastedNewFood")
-                    );
-                    // 触发食物海事件
-                    FoodRainSystem.TryTrigger(player);
-                }
+                FoodRainSystem.TryTrigger(player);
+            }
+            else if (Main.netMode == NetmodeID.MultiplayerClient && player.whoAmI == Main.myPlayer)
+            {
+                SendCuisineFoodRainRequest(player, Mod);
             }
         }
 
         public override void OnCreated(Item item, ItemCreationContext context)
         {
-            var player = Main.LocalPlayer;
-            var cp = player.GetModPlayer<CuisinePlayer>();
-
-            bool hasCookbook = HasCookbookNow(player); // ✅ 以制作当帧的真实背包为准
-            // —— 首次‘制作’累加厨艺值（与是否携带菜谱无关）——
-            if (ItemID.Sets.IsFood[item.type] && cp.CraftedEverFoods.Add(item.type))
-            {
-                int bt = ContentSamples.ItemsByType[item.type].rare;
-                if (bt > 0) cp.CookingSkill += bt;
-            }
-            // 仅当携带菜谱时才消耗‘首次双倍资格’与发奖励
-            if (!hasCookbook || !ItemID.Sets.IsFood[item.type])
+            if (!ItemID.Sets.IsFood[item.type])
                 return;
 
-            // 今日两道（个人）
-            CuisineSystem.GetTodayTwo(player, out int a, out int b);
-
-            if (item.type == a || item.type == b)
+            // 多人里这套菜单/菜谱逻辑只由本地客户端自己管理
+            if (Main.netMode == NetmodeID.MultiplayerClient)
             {
-                player.QuickSpawnItem(player.GetSource_GiftOrReward(), item.type, item.stack);
-                player.QuickSpawnItem(player.GetSource_GiftOrReward(), item.type, item.stack);
-                CombatText.NewText(
-                    player.Hitbox,
-                    Color.Yellow,
-                    Language.GetTextValue("Mods.WuDao.Cuisine.Messages.CookbookDoubleReward")
-                );
-                cp.CraftedFoodTypes.Add(item.type);
-                // —— 立刻补位（做掉第一道/第二道的规则在系统里处理）——
-                CuisineSystem.OnCraftedAndRefresh(player, item.type);
+                Player localPlayer = Main.LocalPlayer;
+                if (localPlayer == null || !localPlayer.active)
+                    return;
+
+                var cpLocal = localPlayer.GetModPlayer<CuisinePlayer>();
+
+                // 首次制作 -> 厨艺值
+                if (cpLocal.CraftedEverFoods.Add(item.type))
+                {
+                    int bt = ContentSamples.ItemsByType[item.type].rare;
+                    if (bt > 0)
+                        cpLocal.CookingSkill += bt;
+
+                    cpLocal.MarkCuisineDirty();
+                }
+
+                bool hasCookbookLocal = HasCookbookNow(localPlayer);
+                if (!hasCookbookLocal)
+                    return;
+
+                CuisineSystem.GetTodayTwo(localPlayer, out int aLocal, out int bLocal);
+
+                if (item.type == aLocal || item.type == bLocal)
+                {
+                    CombatText.NewText(
+                        localPlayer.Hitbox,
+                        Color.Yellow,
+                        Language.GetTextValue("Mods.WuDao.Cuisine.Messages.CookbookDoubleReward")
+                    );
+
+                    cpLocal.CraftedFoodTypes.Add(item.type);
+                    CuisineSystem.OnCraftedAndRefresh(localPlayer, item.type);
+
+                    SendCuisineCraftRewardRequest(localPlayer, item, Mod);
+                }
+
+                return;
             }
+
+            // 单机：直接生效
+            if (Main.netMode == NetmodeID.SinglePlayer)
+            {
+                var player = Main.LocalPlayer;
+                if (player == null || !player.active)
+                    return;
+
+                var cp = player.GetModPlayer<CuisinePlayer>();
+
+                if (cp.CraftedEverFoods.Add(item.type))
+                {
+                    int bt = ContentSamples.ItemsByType[item.type].rare;
+                    if (bt > 0)
+                        cp.CookingSkill += bt;
+                }
+
+                bool hasCookbook = HasCookbookNow(player);
+                if (!hasCookbook)
+                    return;
+
+                CuisineSystem.GetTodayTwo(player, out int a, out int b);
+
+                if (item.type == a || item.type == b)
+                {
+                    player.QuickSpawnItem(player.GetSource_GiftOrReward(), item.type, item.stack);
+                    player.QuickSpawnItem(player.GetSource_GiftOrReward(), item.type, item.stack);
+
+                    CombatText.NewText(
+                        player.Hitbox,
+                        Color.Yellow,
+                        Language.GetTextValue("Mods.WuDao.Cuisine.Messages.CookbookDoubleReward")
+                    );
+
+                    cp.CraftedFoodTypes.Add(item.type);
+                    CuisineSystem.OnCraftedAndRefresh(player, item.type);
+                }
+
+                return;
+            }
+
+            // 专服：菜单和菜谱是客户端本地权威，这里不做本地菜单判定
+            if (Main.netMode == NetmodeID.Server)
+                return;
         }
         // 把“厨艺值 / 美味值”转成伤害乘区（上限 +300%）
         public override void ModifyWeaponDamage(Item item, Player player, ref StatModifier damage)

@@ -111,12 +111,10 @@ namespace WuDao.Content.Systems
                     {
                         Main.mouseItem = qi.JuexueSlot.Clone();
                         qi.JuexueSlot.TurnToAir();
-                        qi.RequestSyncJuexueSlot();
                     }
                     else if (mouseIsJuexue)
                     {
                         Utils.Swap(ref Main.mouseItem, ref qi.JuexueSlot);
-                        qi.RequestSyncJuexueSlot();
                     }
                     else
                     {
@@ -142,7 +140,6 @@ namespace WuDao.Content.Systems
                             // 放入空格，并清空绝学槽
                             player.inventory[emptyIndex] = qi.JuexueSlot.Clone();
                             qi.JuexueSlot.TurnToAir();
-                            qi.RequestSyncJuexueSlot();
                             // 可选：音效反馈
                             Terraria.Audio.SoundEngine.PlaySound(Terraria.ID.SoundID.Grab, player.Center);
                         }
