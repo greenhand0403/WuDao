@@ -22,7 +22,16 @@ namespace WuDao.Content.Global.Projectiles
 
         private bool inReturnPhase;        // —— 新增：回程阶段“锁存”状态（解决只翻倍一次）
         private int lastAi0;               // —— 新增：监控 ai[0] 的跃迁
+        private static bool HasProjectileAuthority(Projectile projectile)
+        {
+            if (Main.netMode == NetmodeID.SinglePlayer)
+                return true;
 
+            if (Main.netMode == NetmodeID.Server)
+                return true;
+
+            return projectile.owner == Main.myPlayer;
+        }
 
         public override void OnSpawn(Projectile projectile, IEntitySource source)
         {
@@ -36,25 +45,57 @@ namespace WuDao.Content.Global.Projectiles
 
         public override void PostAI(Projectile projectile)
         {
-            if (!IsBoomerang(projectile)) return;
+            if (!projectile.active || !projectile.friendly || projectile.owner < 0 || projectile.owner >= Main.maxPlayers)
+                return;
+
+            if (!IsBoomerang(projectile))
+                return;
 
             Player owner = Main.player[projectile.owner];
-            var mp = owner.GetModPlayer<BoomerangAccessoryPlayer>();
+            if (owner == null || !owner.active)
+                return;
 
-            // —— 跃升：穿墙 + 无限穿透（保持你的写法）
+            if (!HasProjectileAuthority(projectile))
+                return;
+
+            var mp = owner.GetModPlayer<BoomerangAccessoryPlayer>();
+            bool changed = false;
+
+            // —— 跃升：穿墙 + 无限穿透（只在状态变化时同步一次）
             if (mp.Yuesheng)
             {
-                projectile.tileCollide = false;
-                projectile.penetrate = -1;
-                projectile.usesLocalNPCImmunity = true;
+                if (projectile.tileCollide)
+                {
+                    projectile.tileCollide = false;
+                    changed = true;
+                }
+
+                if (projectile.penetrate != -1)
+                {
+                    projectile.penetrate = -1;
+                    changed = true;
+                }
+
+                if (!projectile.usesLocalNPCImmunity)
+                {
+                    projectile.usesLocalNPCImmunity = true;
+                    changed = true;
+                }
+
                 if (projectile.localNPCHitCooldown < 8)
+                {
                     projectile.localNPCHitCooldown = 8;
+                    changed = true;
+                }
             }
 
-            // —— 抑制窗口：把“因命中导致的回程”打回外放（保持你的写法）
+            if (changed)
+                projectile.netUpdate = true;
+
+            // —— 抑制窗口：把“因命中导致的回程”打回外放
             if (mp.Yuesheng && suppressReturnTicks > 0)
             {
-                if (projectile.aiStyle == ProjAIStyleID.Boomerang && projectile.ai[0] != 0f)
+                if (projectile.ai[0] != 0f)
                 {
                     projectile.ai[0] = 0f;
                     if (cachedForwardVel != Vector2.Zero)
@@ -64,26 +105,19 @@ namespace WuDao.Content.Global.Projectiles
                 suppressReturnTicks--;
             }
 
-            // === 新增 A：回程阶段“锁存”判定 ===
-            if (projectile.aiStyle == ProjAIStyleID.Boomerang)
+            // === 回程阶段“锁存”判定 ===
             {
                 int ai0 = (int)projectile.ai[0];
 
-                // 从外放(0) -> 回程(非0) 且 不在抑制期：进入“真正回程”
+                // 从外放(0) -> 回程(非0) 且不在抑制期：进入真正回程
                 if (lastAi0 == 0 && ai0 != 0 && suppressReturnTicks <= 0)
                 {
                     inReturnPhase = true;
                 }
                 lastAi0 = ai0;
             }
-            else
-            {
-                // 自定义 boomerang：兜底（速度朝向玩家 且 不在抑制期）
-                if (Vector2.Dot(projectile.velocity, owner.Center - projectile.Center) > 0f && suppressReturnTicks <= 0)
-                    inReturnPhase = true;
-            }
 
-            // === 新增 B：归心似箭 + 贴身收敛 + 过线接取 ===
+            // === 归心似箭：回程加速 + 收镖 ===
             if (mp.Guixin && inReturnPhase)
             {
                 Vector2 toOwner = owner.MountedCenter - projectile.Center;
@@ -91,34 +125,39 @@ namespace WuDao.Content.Global.Projectiles
                 Vector2 dir = dist > 1f ? toOwner / dist : Vector2.Zero;
 
                 float baseSpeed = initialSpeed > 0.01f ? initialSpeed : projectile.velocity.Length();
-                float maxDesired = baseSpeed * 2f;                // 你的“归心似箭”2倍
-                float nearLimited = MathF.Min(maxDesired, MathF.Max(6f, dist * 0.5f)); // 距离越近，速度越低
+                float maxDesired = baseSpeed * 2f;
+                float nearLimited = MathF.Min(maxDesired, MathF.Max(6f, dist * 0.5f));
 
                 Vector2 targetVel = dir * nearLimited;
                 projectile.velocity = Vector2.Lerp(projectile.velocity, targetVel, 0.5f);
 
-                // —— 接取半径：进入就直接接住，防止拖尾绕身后
-                const float catchRadius = 18f; // 约 1.125 格
-                if (dist <= catchRadius) { SafeCatch(projectile); return; }
+                const float catchRadius = 18f;
+                if (dist <= catchRadius)
+                {
+                    SafeCatch(projectile);
+                    return;
+                }
 
-                // —— 过线检测：本帧运动会跨过玩家（避免“飞过头”）
                 Vector2 nextPos = projectile.Center + projectile.velocity;
                 float dNow = dist;
                 float dNext = (owner.MountedCenter - nextPos).Length();
-                // 如果 dNext > dNow 且且速度方向不再指向玩家，说明即将/已经越过
+
                 if (Vector2.Dot(projectile.velocity, toOwner) < 0f || dNext > dNow + 2f)
                 {
-                    // 直接在玩家处接住
                     SafeCatch(projectile);
                     return;
                 }
             }
 
-            // 非归心似箭但已在回程阶段，也加一个保底接取，避免极端情况下绕身后
+            // 非归心似箭但已在回程阶段，也加一个保底接取
             if (inReturnPhase)
             {
                 float dist = Vector2.Distance(owner.MountedCenter, projectile.Center);
-                if (dist <= 14f) { SafeCatch(projectile); return; }
+                if (dist <= 14f)
+                {
+                    SafeCatch(projectile);
+                    return;
+                }
             }
         }
 
@@ -126,6 +165,7 @@ namespace WuDao.Content.Global.Projectiles
         private void SafeCatch(Projectile p)
         {
             inReturnPhase = false;
+            p.netUpdate = true;
             p.Kill();
         }
 
@@ -134,7 +174,16 @@ namespace WuDao.Content.Global.Projectiles
             if (!IsBoomerang(projectile))
                 return;
 
+            if (projectile.owner < 0 || projectile.owner >= Main.maxPlayers)
+                return;
+
+            if (!HasProjectileAuthority(projectile))
+                return;
+
             Player owner = Main.player[projectile.owner];
+            if (owner == null || !owner.active)
+                return;
+
             var mp = owner.GetModPlayer<BoomerangAccessoryPlayer>();
 
             if (mp.Yuesheng)
@@ -143,17 +192,30 @@ namespace WuDao.Content.Global.Projectiles
                 cachedForwardVel = projectile.oldVelocity;
                 if (cachedForwardVel.Length() < 0.01f)
                     cachedForwardVel = projectile.velocity;
+
                 suppressReturnTicks = SuppressFrames;
             }
         }
 
         public override void ModifyHitNPC(Projectile projectile, NPC target, ref NPC.HitModifiers modifiers)
         {
-            if (!IsBoomerang(projectile)) return;
+            // 真实伤害结果：多人里只让服务器判，避免客户端重复参与
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+                return;
+
+            if (!IsBoomerang(projectile))
+                return;
+
+            if (projectile.owner < 0 || projectile.owner >= Main.maxPlayers)
+                return;
+
             Player owner = Main.player[projectile.owner];
+            if (owner == null || !owner.active)
+                return;
+
             var mp = owner.GetModPlayer<BoomerangAccessoryPlayer>();
 
-            // ✅ 一旦进入回程阶段（inReturnPhase=true），回程途中每一击都翻倍
+            // 一旦进入回程阶段，回程途中每一击都翻倍
             if (mp.Yanfan && inReturnPhase)
                 modifiers.SourceDamage *= 2f;
         }

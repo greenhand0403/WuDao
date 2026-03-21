@@ -105,21 +105,35 @@ namespace WuDao.Content.Global.NPCs
             // 生成由 BeggarSystem / 包子控制
             return 0f;
         }
+        // TODO: 测试流浪乞丐的方向
+        // public override void PostAI()
+        // {
+        //     bool isTalking = Main.LocalPlayer.talkNPC == NPC.whoAmI;
 
+        //     if (!Main.dayTime && !isTalking)
+        //     {
+        //         NPC.active = false;
+        //         NPC.netUpdate = true;
+        //         return;
+        //     }
+
+        //     NPC.spriteDirection = NPC.direction;
+        // }
         public override void PostAI()
         {
-            bool isTalking = Main.LocalPlayer.talkNPC == NPC.whoAmI;
-
-            if (!Main.dayTime && !isTalking)
+            // 只在白天停留；夜晚由服务端/单机直接移除
+            if (!Main.dayTime)
             {
-                NPC.active = false;
-                NPC.netUpdate = true;
+                if (Main.netMode != NetmodeID.MultiplayerClient)
+                {
+                    NPC.active = false;
+                    NPC.netUpdate = true;
+                }
                 return;
             }
 
-            NPC.spriteDirection = NPC.direction;
+            base.PostAI();
         }
-
         public override string GetChat()
         {
             return Language.GetTextValue("Mods.WuDao.NPCs.WanderingBeggar.Chat.Default");

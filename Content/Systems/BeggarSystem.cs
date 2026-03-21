@@ -1,6 +1,7 @@
 using System;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
@@ -40,44 +41,51 @@ namespace WuDao.Content.Systems
             }
         }
 
-        public static void SpawnBeggarNearTown()
+        private void SpawnBeggarNearTown()
         {
-            // 选一个“城镇NPC”作为中心点（像旅商：靠近城镇）
-            int anchorIndex = FindTownAnchorNPCIndex();
+            if (NPC.AnyNPCs(ModContent.NPCType<WanderingBeggar>()))
+                return;
 
-            // 如果城镇里一个NPC都没有，就退化为在任意活跃玩家附近刷（兜底）
-            Vector2 anchorWorldPos;
-            if (anchorIndex != -1)
+            int who = -1;
+            for (int i = 0; i < Main.maxPlayers; i++)
             {
-                anchorWorldPos = Main.npc[anchorIndex].Bottom;
+                Player p = Main.player[i];
+                if (p.active && !p.dead)
+                {
+                    who = i;
+                    break;
+                }
             }
-            else
+            if (who < 0)
+                return;
+
+            Player player = Main.player[who];
+
+            int spawnX = (int)(player.Center.X / 16f) + Main.rand.Next(-20, 21);
+            int spawnY = (int)(player.Center.Y / 16f) - 10;
+
+            // 找地面
+            for (int y = spawnY; y < spawnY + 50; y++)
             {
-                Player p = FindAnyActivePlayer();
-                if (p == null) return;
-                anchorWorldPos = p.Bottom;
+                Tile t = Framing.GetTileSafely(spawnX, y);
+                Tile below = Framing.GetTileSafely(spawnX, y + 1);
+
+                if (!t.HasTile && below.HasTile && Main.tileSolid[below.TileType])
+                {
+                    int id = NPC.NewNPC(
+                        new EntitySource_Misc("WanderingBeggarSummon"),
+                        spawnX * 16,
+                        y * 16,
+                        ModContent.NPCType<WanderingBeggar>()
+                    );
+
+                    if (id >= 0 && id < Main.maxNPCs)
+                        Main.npc[id].netUpdate = true;
+
+                    Main.NewText(Language.GetTextValue("Mods.WuDao.Items.SteamedBun.Messages"), Color.LightGreen);
+                    return;
+                }
             }
-
-            // 尝试在城镇NPC附近找一个可站立的落点
-            if (!TryFindStandableSpotNear(anchorWorldPos, out Vector2 spawnPos))
-            {
-                // 找不到就稍微偏移一下兜底
-                spawnPos = anchorWorldPos + new Vector2(120f, -16f);
-            }
-
-            int id = NPC.NewNPC(
-                Main.LocalPlayer.GetSource_Misc("WanderingBeggarSummon"),
-                (int)spawnPos.X,
-                (int)spawnPos.Y,
-                ModContent.NPCType<WanderingBeggar>()
-            );
-
-            if (id >= 0 && id < Main.maxNPCs)
-            {
-                Main.npc[id].netUpdate = true;
-            }
-
-            Main.NewText(Language.GetTextValue("Mods.WuDao.Items.SteamedBun.Messages"), Color.LightGreen);
         }
 
         private static int FindTownAnchorNPCIndex()

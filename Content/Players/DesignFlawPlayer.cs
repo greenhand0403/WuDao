@@ -97,7 +97,7 @@ namespace WuDao.Content.Players
                 Projectile proj = Main.projectile[damageSource.SourceProjectileLocalIndex];
                 if (proj.active)
                 {
-                    var gp = proj.GetGlobalProjectile<BossOwnerGlobalProjectile>();
+                    var gp = proj.GetGlobalProjectile<DesignFlawGlobalProjectile>();
                     int ownerNpc = gp?.OwnerNPC ?? -1;
                     if (ownerNpc >= 0)
                     {

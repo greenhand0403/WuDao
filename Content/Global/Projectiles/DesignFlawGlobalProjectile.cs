@@ -5,7 +5,7 @@ using Terraria.DataStructures;
 namespace WuDao.Content.Global.Projectiles
 {
     // 败笔：记录将玩家击败的最近一个 boss
-    public class BossOwnerGlobalProjectile : GlobalProjectile
+    public class DesignFlawGlobalProjectile : GlobalProjectile
     {
         public override bool InstancePerEntity => true;
 

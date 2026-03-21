@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 
 namespace WuDao.Content.Global.NPCs
 {
+    // 静止游鱼的冻结时间系统
     public class TimeStopGlobalNPC : GlobalNPC
     {
         public override bool InstancePerEntity => true;

@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 using WuDao.Common;
 using WuDao.Content.Systems;
@@ -26,12 +27,21 @@ namespace WuDao.Content.Global.Projectiles
             HiddenHostileProjectileCount = 0;
         }
 
-        internal static bool ShouldHide(Projectile projectile)
+        public static bool ShouldHide(Projectile projectile)
         {
-            if (!projectile.active || !projectile.hostile || projectile.friendly)
+            if (Main.dedServ || Main.netMode == NetmodeID.Server)
+                return false;
+
+            if (projectile == null || !projectile.active)
+                return false;
+
+            if (!projectile.hostile)
                 return false;
 
             Player viewer = Main.LocalPlayer;
+            if (viewer == null || !viewer.active)
+                return false;
+
             return !InvisibleEnemies.CanSeeEcho(viewer);
         }
 

@@ -12,6 +12,10 @@ namespace WuDao.Content.Global.Projectiles
 
         public override void ModifyHitNPC(Projectile projectile, NPC target, ref NPC.HitModifiers modifiers)
         {
+            // 暴击属于真实战斗结果：多人里只让服务器判，避免客户端各自随机
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+                return;
+
             if (projectile.owner < 0 || projectile.owner >= Main.maxPlayers)
                 return;
 
@@ -27,7 +31,7 @@ namespace WuDao.Content.Global.Projectiles
             if (!isSummon && !isWhip)
                 return;
 
-            float critChance = 0f;
+            float critChance;
 
             if (isWhip)
                 critChance = player.GetCritChance(DamageClass.SummonMeleeSpeed);

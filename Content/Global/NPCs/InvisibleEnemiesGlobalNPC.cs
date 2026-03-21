@@ -33,20 +33,25 @@ namespace WuDao.Content.Global.NPCs
             return npc;
         }
 
-        // private static bool ShouldHide(NPC npc)
-        // {
-        //     if (!npc.active)
-        //         return false;
+        public override bool? DrawHealthBar(NPC npc, byte hbPosition, ref float scale, ref Vector2 position)
+        {
+            if (Main.dedServ)
+                return null;
 
-        //     Player viewer = Main.LocalPlayer;
+            if (ShouldHideForDraw(npc))
+                return false;
 
-        //     NPC owner = GetHideOwner(npc);
+            return null;
+        }
 
-        //     if (!owner.active || owner.friendly || owner.townNPC)
-        //         return false;
+        public override void BossHeadSlot(NPC npc, ref int index)
+        {
+            if (Main.dedServ)
+                return;
 
-        //     return !InvisibleEnemies.CanSeeEcho(viewer);
-        // }
+            if (ShouldHideForDraw(npc))
+                index = -1;
+        }
         internal static bool ShouldHideForDraw(NPC npc)
         {
             if (!npc.active)
