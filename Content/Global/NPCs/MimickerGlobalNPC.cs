@@ -1,83 +1,64 @@
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 using WuDao.Content.Global.Projectiles;
 using WuDao.Content.Players;
-using Microsoft.Xna.Framework;
-using WuDao.Content.Systems;
-using Terraria.Localization;
 
 namespace WuDao.Content.Global.NPCs
 {
-    // 模仿者：击杀敌怪获取它的射弹
-    // 记录“最后一次受到来自模仿者弹体的伤害”的NPC
+    // 模仿者：记录最近是否被模仿者弹体命中过，并在击杀时给玩家结算进度
     public class MimickerGlobalNPC : GlobalNPC
     {
-        public bool lastHitByMimicker;
-        public int lastHitterPlayer = -1;
         public override bool InstancePerEntity => true;
-        public int mimickerHitTimer; // 以tick计时，>0 表示最近被模仿者击中过
 
-        public override void AI(NPC npc)
+        private int recentMimickerHitTimer;
+        private int lastHitterPlayer = -1;
+
+        public override void PostAI(NPC npc)
         {
-            if (mimickerHitTimer > 0) mimickerHitTimer--;
+            if (recentMimickerHitTimer > 0)
+            {
+                recentMimickerHitTimer--;
+                if (recentMimickerHitTimer <= 0)
+                    lastHitterPlayer = -1;
+            }
         }
 
         public override void OnHitByProjectile(NPC npc, Projectile projectile, NPC.HitInfo hit, int damageDone)
         {
-            if (projectile.GetGlobalProjectile<MimickerGlobalProjectile>().fromMimicker)
-            {
-                mimickerHitTimer = 60; // 最近1秒内算模仿者命中过
-                lastHitterPlayer = projectile.owner; // 由子弹的 owner 获取玩家 whoAmI
-            }
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+                return;
+
+            if (projectile == null || !projectile.active)
+                return;
+
+            if (projectile.owner < 0 || projectile.owner >= Main.maxPlayers)
+                return;
+
+            var gp = projectile.GetGlobalProjectile<MimickerGlobalProjectile>();
+            if (!gp.fromMimicker)
+                return;
+
+            lastHitterPlayer = projectile.owner;
+            recentMimickerHitTimer = 60;
         }
 
         public override void OnKill(NPC npc)
         {
-            if (mimickerHitTimer <= 0 || lastHitterPlayer < 0)
-                return;
-            // 查是否在解锁表里
-            if (!MimickerSystem.UnlockByNPC.TryGetValue(npc.type, out var def))
+            if (Main.netMode == NetmodeID.MultiplayerClient)
                 return;
 
-            Player p = Main.player[lastHitterPlayer];
-            if (p == null || !p.active) return;
+            if (recentMimickerHitTimer <= 0 || lastHitterPlayer < 0 || lastHitterPlayer >= Main.maxPlayers)
+                return;
 
-            var mp = p.GetModPlayer<MimickerPlayer>();
-            mp.killProgress.TryGetValue(def.NpcType, out int cur);
-            cur++;
-            mp.killProgress[def.NpcType] = cur;
+            Player player = Main.player[lastHitterPlayer];
+            if (player == null || !player.active)
+                return;
 
-            string projName = Lang.GetProjectileName(def.ProjectileType).Value;
+            player.GetModPlayer<MimickerPlayer>().RegisterKillFromServer(npc.type);
 
-            if (cur >= def.Required && !mp.unlockedProjectiles.Contains(def.ProjectileType))
-            {
-                mp.unlockedProjectiles.Add(def.ProjectileType);
-
-                if (p.whoAmI == Main.myPlayer)
-                {
-
-                    CombatText.NewText(
-                        p.getRect(),
-                        new Color(255, 220, 100),
-                        Language.GetTextValue("Mods.WuDao.Items.Mimicker.UnlockCombatText", projName)
-                    );
-
-                    Main.NewText(
-                        Language.GetTextValue("Mods.WuDao.Items.Mimicker.UnlockChatText", projName),
-                        255, 240, 150
-                    );
-                }
-            }
-            else if (p.whoAmI == Main.myPlayer)
-            {
-                int remain = System.Math.Max(0, def.Required - cur);
-
-                CombatText.NewText(
-                    p.getRect(),
-                    new Color(180, 220, 255),
-                    Language.GetTextValue("Mods.WuDao.Items.Mimicker.RemainCombatText", projName, remain)
-                );
-            }
+            recentMimickerHitTimer = 0;
+            lastHitterPlayer = -1;
         }
     }
 }

@@ -83,15 +83,15 @@ namespace WuDao.Content.Global.Projectiles
             // 仅处理彩虹高尔夫球射弹。不要干扰其他原版射弹
             if (!IsGolfBall(projectile.type)) return;
 
-            // —— 补课式初始化：有些生成路径拿不到 item/source，这里兜底一次 ——
-            if (projectile.ai[1] != 1f && IsGolfBall(projectile.type))
-            {
-                // 只在前几帧尝试补一次，避免误伤别的来源的高尔夫玩法
-                if (projectile.timeLeft > 1800 - 5) // 高尔夫类原版通常长寿命；“刚生成”的一个粗略判据
-                {
-                    InitRainbowGolfBall(projectile);
-                }
-            }
+            // TODO: 未测试，补课式初始化：有些生成路径拿不到 item/source，这里兜底一次 ——
+            // if (projectile.ai[1] != 1f && IsGolfBall(projectile.type))
+            // {
+            //     // 只在前几帧尝试补一次，避免误伤别的来源的高尔夫玩法
+            //     if (projectile.timeLeft > 1800 - 5) // 高尔夫类原版通常长寿命；“刚生成”的一个粗略判据
+            //     {
+            //         InitRainbowGolfBall(projectile);
+            //     }
+            // }
 
             if (projectile.ai[1] != 1f) return; // 仍未标记则不接管
 

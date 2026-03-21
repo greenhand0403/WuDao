@@ -1,11 +1,24 @@
+using System.IO;
+using Terraria;
 using Terraria.ModLoader;
+using Terraria.ModLoader.IO;
 
 namespace WuDao.Content.Global.Projectiles
 {
-    // 模仿者：用于标记“是否来自模仿者”的弹体
     public class MimickerGlobalProjectile : GlobalProjectile
     {
-        public bool fromMimicker;
         public override bool InstancePerEntity => true;
+
+        public bool fromMimicker;
+
+        public override void SendExtraAI(Projectile projectile, BitWriter bitWriter, BinaryWriter binaryWriter)
+        {
+            bitWriter.WriteBit(fromMimicker);
+        }
+
+        public override void ReceiveExtraAI(Projectile projectile, BitReader bitReader, BinaryReader binaryReader)
+        {
+            fromMimicker = bitReader.ReadBit();
+        }
     }
 }

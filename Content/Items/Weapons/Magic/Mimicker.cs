@@ -18,6 +18,11 @@ namespace WuDao.Content.Items.Weapons.Magic
     // - 初始仅能发射宝石法杖类射弹
     // - 用其射弹击败特定远程系敌怪，累计达到阈值后，解锁该敌怪对应“可用射弹”加入随机池
     // - 伤害随解锁种类数提升
+    // TODO: 未测试
+    // 单机下击杀指定敌怪，是否会正常累计并解锁。
+    // 联机客户端进服后，已有存档解锁是否正确带到服务器。
+    // 联机客户端用模仿者击杀敌怪后，进度是否正确增长。
+    // 解锁后立刻使用模仿者，Shoot() 的池子和面板伤害是否已更新
     // =====================
     public class Mimicker : ModItem
     {
@@ -69,7 +74,9 @@ namespace WuDao.Content.Items.Weapons.Magic
             int p = Projectile.NewProjectile(source, position, perturbed * speedScale, choice, damage, knockback, player.whoAmI);
             if (p >= 0 && p < Main.maxProjectiles)
             {
-                Main.projectile[p].GetGlobalProjectile<MimickerGlobalProjectile>().fromMimicker = true;
+                var gp = Main.projectile[p].GetGlobalProjectile<MimickerGlobalProjectile>();
+                gp.fromMimicker = true;
+                Main.projectile[p].netUpdate = true;
             }
             return false;
         }

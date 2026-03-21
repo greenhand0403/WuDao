@@ -32,6 +32,7 @@ namespace WuDao
 		SyncCuisineState,          // 同步厨艺/美味进度
 		RequestCuisineCraftReward, // 客户端请求服务器发放菜谱双倍奖励
 		RequestCuisineFoodRain,    // 客户端请求服务器尝试触发食物雨
+		SyncMimickerState,         // 同步模仿者击杀/解锁进度
 	}
 	
 	public class WuDao : Mod
@@ -328,6 +329,36 @@ namespace WuDao
 							return;
 
 						FoodRainSystem.TryTrigger(player);
+						break;
+					}
+				case MessageType.SyncMimickerState:
+					{
+						byte playerId = reader.ReadByte();
+
+						if (playerId >= Main.maxPlayers)
+							return;
+
+						Player player = Main.player[playerId];
+						if (player == null || !player.active)
+							return;
+
+						MimickerPlayer mp = player.GetModPlayer<MimickerPlayer>();
+
+						var progress = new Dictionary<int, int>();
+						int progressCount = reader.ReadInt32();
+						for (int i = 0; i < progressCount; i++)
+						{
+							int npcType = reader.ReadInt32();
+							int kills = reader.ReadInt32();
+							progress[npcType] = kills;
+						}
+
+						var unlocked = new HashSet<int>();
+						int unlockedCount = reader.ReadInt32();
+						for (int i = 0; i < unlockedCount; i++)
+							unlocked.Add(reader.ReadInt32());
+
+						mp.ApplySyncedState(progress, unlocked);
 						break;
 					}
 			}
