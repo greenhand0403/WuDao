@@ -9,7 +9,7 @@ namespace WuDao.Content.Config
     /// <summary>
     /// 默认开启 juexue 系统、关闭敌怪和陷阱隐身、允许幽灵护目镜看见回声块
     /// </summary>
-    public class WudaoConfig : ModConfig
+    public class InvisibleEnemiesConfig : ModConfig
     {
         // 多人联机要统一就用 ServerSide；只影响本地表现就用 ClientSide
         public override ConfigScope Mode => ConfigScope.ClientSide;
@@ -21,8 +21,8 @@ namespace WuDao.Content.Config
         /// <summary>忽略幽灵护目镜</summary>
         public bool IgnoreSpectreGoggles;
         // ✅ 白名单配置
-        [LabelKey("$Mods.WuDao.Configs.WudaoConfig.InvisibleEnemies.Whitelist")]
-        public List<TileDefinition> InvisibleTileIDs { get; set; } = new () {
+        [LabelKey("$Mods.WuDao.Configs.InvisibleEnemiesConfig.InvisibleEnemies.Whitelist")]
+        public List<TileDefinition> InvisibleTileIDs { get; set; } = new() {
             new TileDefinition(TileID.Traps),//陷阱
             new TileDefinition(TileID.Spikes),//尖刺
             new TileDefinition(TileID.WoodenSpikes),//木刺

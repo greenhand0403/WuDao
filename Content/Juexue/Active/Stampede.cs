@@ -21,6 +21,10 @@ namespace WuDao.Content.Juexue.Active
         public const int baseVelocity = 20;// 基础速度
         protected override bool OnActivate(Player player, QiPlayer qi)
         {
+            // 只允许技能拥有者本人生成这颗射弹
+            if (player.whoAmI != Main.myPlayer)
+                return false;
+                
             // 屏幕矩形（世界坐标）
             Rectangle rect = Helpers.ScreenBoundsWorldSpace();
             // 计算武道境界伤害和射弹速度加成
@@ -74,6 +78,7 @@ namespace WuDao.Content.Juexue.Active
 
                     Main.projectile[idx].DamageType = sup;
                     Main.projectile[idx].originalDamage = finalDamage;
+                    Main.projectile[idx].netUpdate = true;
                 }
             }
             if (!Main.dedServ)

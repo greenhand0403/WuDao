@@ -38,7 +38,7 @@ namespace WuDao.Common
             if (player == null || !player.active)
                 return false;
 
-            var cfg = ModContent.GetInstance<WudaoConfig>();
+            var cfg = ModContent.GetInstance<InvisibleEnemiesConfig>();
 
             if (!cfg.InvisibleEnemies)
                 return true;

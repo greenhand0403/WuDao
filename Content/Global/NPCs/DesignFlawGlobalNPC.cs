@@ -19,34 +19,38 @@ namespace WuDao.Content.Global.NPCs
 
             if (!(npc.boss || NPCID.Sets.ShouldBeCountedAsBoss[npc.type])) return;
 
-            int killer = npc.lastInteraction; // 最后造成伤害的玩家索引
-            if (killer < 0 || killer >= Main.maxPlayers)
-                return;
-
-            Player player = Main.player[killer];
-            if (player is null || !player.active)
-                return;
-
-            var modPlr = player.GetModPlayer<DesignFlawPlayer>();
-            // 条件：饰品正在生效、记录的NPC类型匹配、计数>0
-            if (!modPlr.hasFlaw || modPlr.recordedNPCType != npc.type || modPlr.defeatCount <= 0)
-                return;
-
-            // 额外掉落次数 = 被该NPC击败次数
-            int times = modPlr.defeatCount;
-
-            RunVanillaLootTableMultipleTimes(npc, player, times);
-
-            // 在NPC死亡的位置，额外掉落宝藏袋
-            int bossBagItemID = GetBossBagItemIDForNPCType(npc.type);
-            if (bossBagItemID > 0)
+            for (int i = 0; i < Main.maxPlayers; i++)
             {
-                Item.NewItem(npc.GetSource_Death(), npc.position, npc.width, npc.height, bossBagItemID,times);
-            }
+                Player player = Main.player[i];
+                if (player == null || !player.active)
+                    continue;
 
-            // 清空记录
-            modPlr.recordedNPCType = -1;
-            modPlr.defeatCount = 0;
+                DesignFlawPlayer modPlr = player.GetModPlayer<DesignFlawPlayer>();
+
+                // 当前必须装备着败笔，且记录匹配
+                if (!modPlr.hasFlaw || modPlr.recordedNPCType != npc.type || modPlr.defeatCount <= 0)
+                    continue;
+
+                int times = modPlr.defeatCount;
+
+                RunVanillaLootTableMultipleTimes(npc, player, times);
+
+                int bossBagItemID = GetBossBagItemIDForNPCType(npc.type);
+                if (bossBagItemID > 0)
+                {
+                    Item.NewItem(
+                        npc.GetSource_Death(),
+                        npc.position,
+                        npc.width,
+                        npc.height,
+                        bossBagItemID,
+                        times
+                    );
+                }
+
+                // 只清空这个玩家自己的记录
+                modPlr.ClearRecord(sync: true);
+            }
         }
         // 简易映射（把常用 boss 列出来）
         private static int GetBossBagItemIDForNPCType(int npcType)

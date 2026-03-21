@@ -18,6 +18,10 @@ namespace WuDao.Content.Juexue.Active
         public const int baseDamage = 560;
         protected override bool OnActivate(Player player, QiPlayer qi)
         {
+            // 只允许技能拥有者本人生成这颗射弹
+            if (player.whoAmI != Main.myPlayer)
+                return false;
+                
             var rect = Helpers.ScreenBoundsWorldSpace();
             Vector2 mouse = Main.MouseWorld;
 

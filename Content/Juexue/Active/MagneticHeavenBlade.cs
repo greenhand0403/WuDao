@@ -21,6 +21,9 @@ namespace WuDao.Content.Juexue.Active
         public const int baseVelocity = 20;// 基础速度
         protected override bool OnActivate(Player player, QiPlayer qi)
         {
+            if (player.whoAmI != Main.myPlayer)
+                return false;
+                
             Vector2 mouse = Main.MouseWorld;
             SoundEngine.PlaySound(SoundID.Item8, mouse);
 

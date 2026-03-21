@@ -1251,13 +1251,8 @@ Configs: {
 		Headers.Main: Prefix Mode Header
 	}
 
-	WudaoConfig: {
+	InvisibleEnemiesConfig: {
 		DisplayName: Wudao Config
-
-		EnableJueXueSystem: {
-			Label: Enable Jue Xue System
-			Tooltip: The exclusive skill system is enabled by default
-		}
 
 		IgnoreSpectreGoggles: {
 			Tooltip: When checked, even wearing Ghost Goggles will force all enemies, projectiles, and traps to become invisible
@@ -1289,6 +1284,15 @@ Configs: {
 		AllArmor: {
 			Label: All Armor
 			Tooltip: ""
+		}
+	}
+
+	JuexueServerConfig: {
+		DisplayName: Juexue Server Config
+
+		Enabled: {
+			Label: Enable Jue Xue System
+			Tooltip: The exclusive skill system is enabled by default
 		}
 	}
 }

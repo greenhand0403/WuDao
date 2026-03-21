@@ -96,10 +96,14 @@ namespace WuDao.Content.Projectiles.Melee
                 Main.dust[id].noGravity = true;
             }
 
+            if (Projectile.owner != Main.myPlayer)
+                return;
+
             // 可选：在落点制造一次小范围伤害（类似爆裂），半径 96
             int damage = (int)(Projectile.damage * 0.8f);
             float kb = 3f;
             Rectangle box = Utils.CenteredRectangle(Projectile.Center, new Vector2(192, 192));
+
             for (int n = 0; n < Main.maxNPCs; n++)
             {
                 NPC npc = Main.npc[n];
@@ -149,6 +153,11 @@ namespace WuDao.Content.Projectiles.Melee
                 var d = Dust.NewDustPerfect(p, DustID.GemDiamond, (center - p).SafeNormalize(Vector2.Zero) * 2f, 0, default, 1.2f);
                 d.noGravity = true;
             }
+            // 单机：正常吸附
+            // 多人服务器：服务器负责吸附 NPC
+            // 多人客户端：不改 NPC 速度，只看同步结果
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+                return;
 
             // —— 核心：持续吸附 + 阻尼 —— //
             for (int i = 0; i < Main.maxNPCs; i++)
@@ -161,7 +170,7 @@ namespace WuDao.Content.Projectiles.Melee
 
                 Vector2 dir = (center - npc.Center);
                 float pull = MathHelper.Clamp((radius - dist) / radius, 0f, 1f); // 越靠外吸力越大
-                float accel = 1.8f + 3.2f * pull; // 1.8~5.0 像素/tick 的加速度
+                // float accel = 1.8f + 3.2f * pull; // 1.8~5.0 像素/tick 的加速度
                 Vector2 desiredVel = dir.SafeNormalize(Vector2.Zero) * (8f + 10f * pull);
 
                 // 速度插值朝向中心

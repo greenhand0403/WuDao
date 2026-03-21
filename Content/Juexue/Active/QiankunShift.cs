@@ -15,6 +15,9 @@ namespace WuDao.Content.Juexue.Active
         public const int QiankunShiftFrameIndex = 6;
         protected override bool OnActivate(Player player, QiPlayer qi)
         {
+            if (player.whoAmI != Main.myPlayer)
+                return false;
+                
             Vector2 p0 = player.Center;
             Vector2 p1 = Main.MouseWorld;
 

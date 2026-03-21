@@ -3,6 +3,7 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.ModLoader.IO;
 using WuDao.Content.Global.Projectiles;
 
 namespace WuDao.Content.Players
@@ -18,7 +19,63 @@ namespace WuDao.Content.Players
         {
             hasFlaw = false;
         }
+        public override void SaveData(TagCompound tag)
+        {
+            tag["DesignFlawRecordedNPCType"] = recordedNPCType;
+            tag["DesignFlawDefeatCount"] = defeatCount;
+        }
 
+        public override void LoadData(TagCompound tag)
+        {
+            recordedNPCType = tag.GetInt("DesignFlawRecordedNPCType");
+            defeatCount = tag.GetInt("DesignFlawDefeatCount");
+
+            if (defeatCount <= 0)
+            {
+                recordedNPCType = -1;
+                defeatCount = 0;
+            }
+        }
+
+        public override void CopyClientState(ModPlayer targetCopy)
+        {
+            DesignFlawPlayer clone = (DesignFlawPlayer)targetCopy;
+            clone.recordedNPCType = recordedNPCType;
+            clone.defeatCount = defeatCount;
+        }
+
+        public override void SendClientChanges(ModPlayer clientPlayer)
+        {
+            DesignFlawPlayer old = (DesignFlawPlayer)clientPlayer;
+
+            if (old.recordedNPCType != recordedNPCType ||
+                old.defeatCount != defeatCount)
+            {
+                SyncPlayer(-1, Main.myPlayer, false);
+            }
+        }
+
+        public override void SyncPlayer(int toWho, int fromWho, bool newPlayer)
+        {
+            ModPacket packet = Mod.GetPacket();
+            packet.Write((byte)MessageType.SyncDesignFlawState);
+            packet.Write((byte)Player.whoAmI);
+            packet.Write(recordedNPCType);
+            packet.Write(defeatCount);
+            packet.Send(toWho, fromWho);
+        }
+
+        public void ClearRecord(bool sync = true)
+        {
+            recordedNPCType = -1;
+            defeatCount = 0;
+
+            if (sync && Main.netMode != NetmodeID.SinglePlayer)
+            {
+                if (Main.netMode == NetmodeID.Server || Player.whoAmI == Main.myPlayer)
+                    SyncPlayer(-1, Main.netMode == NetmodeID.Server ? -1 : Main.myPlayer, false);
+            }
+        }
         public override void Kill(double damage, int hitDirection, bool pvp, PlayerDeathReason damageSource)
         {
             if (!hasFlaw)
@@ -86,6 +143,12 @@ namespace WuDao.Content.Players
                 else
                 {
                     defeatCount++;
+                }
+                // 多人模式时同步记录
+                if (Main.netMode != NetmodeID.SinglePlayer)
+                {
+                    if (Main.netMode == NetmodeID.Server || Player.whoAmI == Main.myPlayer)
+                        SyncPlayer(-1, Main.netMode == NetmodeID.Server ? -1 : Main.myPlayer, false);
                 }
             }
             // 若仍为 null → 无法确定 Boss，保持原记录不变

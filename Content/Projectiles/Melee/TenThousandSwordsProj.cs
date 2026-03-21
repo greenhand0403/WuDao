@@ -45,13 +45,17 @@ namespace WuDao.Content.Projectiles.Melee
 
         public override void OnSpawn(IEntitySource source)
         {
-            // 按原版流程：确保已加载 → 拿到帧矩形 → 用帧居中绘制
-            Main.instance.LoadItem(chosenItemType); // 确保贴图已加载（原版也是这么干的）:contentReference[oaicite:2]{index=2}
-            // 只在拥有者一侧决定随机结果，然后通过 ai[0] 同步给其他端
+            // 只由拥有者决定样式，然后同步给其他端
             if (Projectile.owner == Main.myPlayer)
             {
                 chosenItemType = ItemSets.SwordItemSet.Get(SelectionMode.Random);
                 Projectile.netUpdate = true;
+            }
+
+            // 已经拿到有效类型时再加载贴图
+            if (chosenItemType > 0)
+            {
+                Main.instance.LoadItem(chosenItemType);
             }
         }
 

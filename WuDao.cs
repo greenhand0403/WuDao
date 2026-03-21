@@ -22,12 +22,14 @@ namespace WuDao
 	// 自动喝药 把消息枚举放到一个公共位置，避免到处重复定义
 	public enum MessageType : byte
 	{
-		SyncLifePenalty,
-		SyncJuexueSlot,
-		SelectBundleCategory,
-		SyncSheRaTransform,
-		RequestTimeStop,
-		SyncTimeStopState
+		SyncLifePenalty,// 服用永生之酒减少生命上限，同步生命值惩罚
+		SyncJuexueSlot,// TODO: 同步武学槽槽位，让其他客户端知道你装备了什么绝学？
+		SelectBundleCategory,// 同步开局礼包
+		SyncSheRaTransform,// 同步希瑞之剑的变身
+		RequestTimeStop,// 同步时间冻结道具的使用
+		SyncTimeStopState,// 同步时间冻结状态
+		SyncSkyWalkingState,// 同步月步绝学时玩家的状态
+		SyncDesignFlawState,// 同步败笔状态
 	}
 	
 	public class WuDao : Mod
@@ -205,6 +207,67 @@ namespace WuDao
 						int allowedPlayer = allowedPlrRaw == 255 ? -1 : allowedPlrRaw;
 
 						TimeStopSystem.ApplySyncedState(isFrozen, timer, cooldownTimer, scope, allowedPlayer);
+						break;
+					}
+				case MessageType.SyncSkyWalkingState:
+					{
+						byte playerId = reader.ReadByte();
+						if (playerId >= Main.maxPlayers)
+							return;
+
+						Player player = Main.player[playerId];
+						if (player == null || !player.active)
+							return;
+						QiPlayer qi = player.GetModPlayer<QiPlayer>();
+
+						qi.SkyWalkingActive = reader.ReadBoolean();
+						qi.SkyWalkingStandingOnAir = reader.ReadBoolean();
+						qi.QiCurrent = reader.ReadSingle();
+
+						if (Main.netMode == NetmodeID.Server)
+						{
+							// 转发给其他客户端
+							ModPacket packet = GetPacket();
+							packet.Write((byte)MessageType.SyncSkyWalkingState);
+							packet.Write(playerId);
+							packet.Write(qi.SkyWalkingActive);
+							packet.Write(qi.SkyWalkingStandingOnAir);
+							packet.Write(qi.QiCurrent);
+							packet.Send(-1, whoAmI);
+						}
+						break;
+					}
+				case MessageType.SyncDesignFlawState:
+					{
+						byte playerId = reader.ReadByte();
+
+						if (playerId >= Main.maxPlayers)
+							return;
+
+						Player player = Main.player[playerId];
+						if (player == null || !player.active)
+							return;
+
+						DesignFlawPlayer flawPlayer = player.GetModPlayer<DesignFlawPlayer>();
+
+						flawPlayer.recordedNPCType = reader.ReadInt32();
+						flawPlayer.defeatCount = reader.ReadInt32();
+
+						if (flawPlayer.defeatCount <= 0)
+						{
+							flawPlayer.recordedNPCType = -1;
+							flawPlayer.defeatCount = 0;
+						}
+
+						if (Main.netMode == NetmodeID.Server)
+						{
+							ModPacket packet = GetPacket();
+							packet.Write((byte)MessageType.SyncDesignFlawState);
+							packet.Write(playerId);
+							packet.Write(flawPlayer.recordedNPCType);
+							packet.Write(flawPlayer.defeatCount);
+							packet.Send(-1, whoAmI);
+						}
 						break;
 					}
 			}

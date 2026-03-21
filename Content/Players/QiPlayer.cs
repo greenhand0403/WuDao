@@ -957,6 +957,9 @@ namespace WuDao.Content.Players
         }
         public override void PreUpdateMovement()
         {
+            if (Player.whoAmI != Main.myPlayer)
+                return;
+
             if (!shiftActive) return;
 
             // 归一化时间（缓动）：前半加速，后半减速
@@ -1006,7 +1009,7 @@ namespace WuDao.Content.Players
                 shiftActive = false;
                 Player.velocity = Vector2.Zero;
                 Player.noFallDmg = false;
-
+                
                 SoundEngine.PlaySound(SoundID.Item6, Player.Center);
                 for (int i = 0; i < 24; i++)
                 {
@@ -1211,6 +1214,36 @@ namespace WuDao.Content.Players
             if (YuJianActive)
                 EndYuJian(true);
         }
+        // 月步状态同步
+        public override void CopyClientState(ModPlayer targetCopy)
+        {
+            QiPlayer clone = (QiPlayer)targetCopy;
+            clone.SkyWalkingActive = SkyWalkingActive;
+            clone.SkyWalkingStandingOnAir = SkyWalkingStandingOnAir;
+            clone.QiCurrent = QiCurrent;
+        }
+
+        public override void SendClientChanges(ModPlayer clientPlayer)
+        {
+            QiPlayer old = (QiPlayer)clientPlayer;
+
+            if (old.SkyWalkingActive != SkyWalkingActive ||
+                old.SkyWalkingStandingOnAir != SkyWalkingStandingOnAir)
+            {
+                SyncPlayer(-1, Main.myPlayer, false);
+            }
+        }
+
+        public override void SyncPlayer(int toWho, int fromWho, bool newPlayer)
+        {
+            ModPacket packet = Mod.GetPacket();
+            packet.Write((byte)MessageType.SyncSkyWalkingState);
+            packet.Write((byte)Player.whoAmI);
+            packet.Write(SkyWalkingActive);
+            packet.Write(SkyWalkingStandingOnAir);
+            packet.Write(QiCurrent);
+            packet.Send(toWho, fromWho);
+        }
         // 月步
         public void BeginSkyWalking()
         {
@@ -1220,6 +1253,9 @@ namespace WuDao.Content.Players
 
             // 释放月步时松开钩爪
             Player.RemoveAllGrapplingHooks();
+
+            if (Player.whoAmI == Main.myPlayer)
+                SyncPlayer(-1, Main.myPlayer, false);
         }
 
         public void EndSkyWalking()
@@ -1228,6 +1264,9 @@ namespace WuDao.Content.Players
             SkyWalkingStandingOnAir = false;
             _skyWalkingJumpPressedLastFrame = false;
             _skyWalkingJumpConsumed = false;
+
+            if (Player.whoAmI == Main.myPlayer)
+                SyncPlayer(-1, Main.myPlayer, false);
         }
         private void TrySkyWalkingJump()
         {
@@ -1264,6 +1303,9 @@ namespace WuDao.Content.Players
 
             // 4. 标记本帧刚跳过，避免和别的逻辑打架
             Player.justJumped = true;
+
+            if (Player.whoAmI == Main.myPlayer)
+                SyncPlayer(-1, Main.myPlayer, false);
         }
         private void UpdateSkyWalkingAirStand()
         {

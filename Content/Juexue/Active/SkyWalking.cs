@@ -15,6 +15,10 @@ namespace WuDao.Content.Juexue.Active
 
         public override bool TryActivate(Player player, QiPlayer qi)
         {
+            // 只允许技能拥有者本人生成这颗射弹
+            if (player.whoAmI != Main.myPlayer)
+                return false;
+                
             if (qi.SkyWalkingActive)
             {
                 qi.EndSkyWalking();

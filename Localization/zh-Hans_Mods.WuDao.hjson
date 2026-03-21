@@ -1256,13 +1256,8 @@ Configs: {
 		Headers.Main: 盔甲五行系统
 	}
 
-	WudaoConfig: {
+	InvisibleEnemiesConfig: {
 		DisplayName: 武道模组配置
-
-		EnableJueXueSystem: {
-			Label: 绝学系统
-			Tooltip: 默认启用绝学系统
-		}
 
 		IgnoreSpectreGoggles: {
 			Tooltip: 勾选后，即使佩戴幽灵护目镜，也会强制全体敌怪、射弹和陷阱回声隐身
@@ -1294,6 +1289,15 @@ Configs: {
 		AllArmor: {
 			Label: 对所有盔甲启用
 			Tooltip: ""
+		}
+	}
+
+	JuexueServerConfig: {
+		DisplayName: 绝学机制服务器配置
+
+		Enabled: {
+			Label: 绝学系统
+			Tooltip: 默认启用绝学系统
 		}
 	}
 }

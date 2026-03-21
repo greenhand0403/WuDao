@@ -21,6 +21,9 @@ namespace WuDao.Content.Juexue.Passive
         public void TryPassiveTriggerOnShoot(Player player, QiPlayer qi, EntitySource_ItemUse_WithAmmo src,
             Vector2 pos, Vector2 vel, int type, int damage, float knockback)
         {
+            // 只允许技能拥有者本人生成这颗射弹
+            if (player.whoAmI != Main.myPlayer)
+                return;
 
             if (qi.QiMax <= 0) return;
             if (Main.rand.NextFloat() > Chance) return;

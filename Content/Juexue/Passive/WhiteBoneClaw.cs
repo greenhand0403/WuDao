@@ -23,6 +23,10 @@ namespace WuDao.Content.Juexue.Passive
         public void TryPassiveTriggerOnShoot(Player player, QiPlayer qi, EntitySource_ItemUse_WithAmmo src,
             Vector2 pos, Vector2 vel, int type, int dmg, float kb)
         {
+            // 只允许技能拥有者本人生成这颗射弹
+            if (player.whoAmI != Main.myPlayer)
+                return;
+
             if (qi.QiMax <= 0) return;
             if (Main.rand.NextFloat() > Chance) return;
             if (!qi.TrySpendQi(Cost)) return;
@@ -72,7 +76,8 @@ namespace WuDao.Content.Juexue.Passive
             Projectile p = Main.projectile[proj];
             p.DamageType = sup;
             p.originalDamage = finalDamage; // 建议也同步，避免某些逻辑用 originalDamage
-
+            p.netUpdate = true;
+            
             // —— 启动“白骨爪虚影” —— //
             if (!Main.dedServ)
             {

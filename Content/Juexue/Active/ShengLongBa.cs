@@ -20,6 +20,10 @@ namespace WuDao.Content.Juexue.Active
         public const int baseVelocity = 14;// 基础速度
         protected override bool OnActivate(Player player, QiPlayer qi)
         {
+            // 只允许技能拥有者本人生成这颗射弹
+            if (player.whoAmI != Main.myPlayer)
+                return false;
+                
             Vector2 at = Main.MouseWorld + new Vector2(0, 200f);
             // 计算武道境界伤害和射弹速度加成
             Helpers.BossProgressBonus progressBonus = Helpers.BossProgressPower.Get(player);

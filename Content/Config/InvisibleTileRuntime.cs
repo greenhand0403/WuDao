@@ -18,7 +18,7 @@ namespace WuDao.Content.Config
             InvisibleTileIDSet.Clear();
         }
 
-        public static void ApplyFromConfig(WudaoConfig cfg)
+        public static void ApplyFromConfig(InvisibleEnemiesConfig cfg)
         {
             Clear();
 
@@ -42,10 +42,10 @@ namespace WuDao.Content.Config
         /// <summary>在“非配置回调”的时机尝试重建（拿不到就保持关闭，不抛异常）</summary>
         public static void TryRebuildFromConfig()
         {
-            WudaoConfig cfg = null;
+            InvisibleEnemiesConfig cfg = null;
             try
             {
-                cfg = ModContent.GetInstance<WudaoConfig>();
+                cfg = ModContent.GetInstance<InvisibleEnemiesConfig>();
             }
             catch
             {
