@@ -5,6 +5,7 @@ using Terraria.ModLoader;
 using WuDao.Content.Players;
 using WuDao.Content.Projectiles.Ranged;
 using WuDao.Content.Items.Ammo;
+using WuDao.Content.Global;
 
 namespace WuDao.Content.Items.Weapons.Ranged
 {
@@ -53,11 +54,7 @@ namespace WuDao.Content.Items.Weapons.Ranged
             if (type == ModContent.ProjectileType<HeartArrowProj>())
             {
                 int lifeCost = mp.GetHeartArrowLifeCost(usingCupidBow: true);
-                if (lifeCost > 0 && player.statLife > lifeCost)
-                {
-                    player.statLife -= lifeCost;
-                    player.HealEffect(-lifeCost, broadcast: true);
-                }
+                HeartPlayerUtils.PayLife(player, lifeCost);
             }
 
             // 3) —— 关键：出膛点前推，避免刚生成就与玩家/方块/近身敌人重叠 —— //
@@ -69,8 +66,12 @@ namespace WuDao.Content.Items.Weapons.Ranged
             if (Collision.CanHit(position, 0, 0, position + muzzleOffset, 0, 0))
                 position += muzzleOffset;
 
+            float ai0 = mp.SoulGemEquipped ? 1f : 0f;
+            
             // 4) 发射第1支
-            Projectile.NewProjectile(source, position, velocity, type, damage, knockback, player.whoAmI);
+            int p = Projectile.NewProjectile(source, position, velocity, type, damage, knockback, player.whoAmI, ai0);
+            if (p < Main.projectile.Length)
+                Main.projectile[p].netUpdate = true;
 
             // 5) 双发：同样需要对第2支应用“出膛前推”
             if (Main.rand.NextFloat() < DoubleShotChance)
@@ -83,7 +84,9 @@ namespace WuDao.Content.Items.Weapons.Ranged
                 if (Collision.CanHit(pos2, 0, 0, pos2 + micro, 0, 0))
                     pos2 += micro;
 
-                Projectile.NewProjectile(source, pos2, v2, type, (int)(damage * 0.9f), knockback, player.whoAmI);
+                p = Projectile.NewProjectile(source, pos2, v2, type, (int)(damage * 0.9f), knockback, player.whoAmI, ai0);
+                if (p < Main.projectile.Length)
+                    Main.projectile[p].netUpdate = true;
             }
 
             return false; // 我们手动生成了弹幕

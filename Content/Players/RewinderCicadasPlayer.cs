@@ -46,68 +46,61 @@ namespace WuDao.Content.Players
         public override bool PreKill(double damage, int hitDirection, bool pvp, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource)
         {
             if (!equipped)
-            {
-                // 没有装备则正常死亡，减少1分钟冷却
-                if (nextReadyTick > 60 * 60)
-                {
-                    nextReadyTick -= 60 * 60;
-                }
                 return true;
-            }
+
+            if (Player.HasBuff(ModContent.BuffType<RewinderCicadasBuff>()))
+                return true;
 
             long now = Main.GameUpdateCount;
-
-            // 冷却检查
-            if (now < nextReadyTick)
-                return true;
-
-            // 取 3 秒前的快照
             long targetTick = now - RewindDelayTicks;
             if (targetTick <= 0)
                 return true;
 
             int idx = (int)(targetTick % lifeRing.Length);
-            // 确保这个槽位真的是目标时间记录（避免环覆盖/初始未填充）
             if (tickRing[idx] != targetTick)
                 return true;
 
-            int restoreLife = Math.Max(1, lifeRing[idx]);  // 至少回到 1 点
+            int restoreLife = Math.Max(1, lifeRing[idx]);
             int oldLife = Player.statLife;
 
-            // 执行回溯：取消死亡
             Player.statLife = restoreLife;
             Player.dead = false;
             Player.immune = true;
             Player.immuneTime = ImmuneTicks;
-
-            // 视觉治疗数字（以“增加量”显示）
-            int healedAmount = Math.Max(0, restoreLife - Math.Max(0, oldLife));
-            if (healedAmount > 0)
-            {
-                Player.HealEffect(healedAmount, true);
-            }
-
-            // 触发冷却
-            nextReadyTick = now + CooldownTicks;
-
-            // 可选：给一个冷却 Buff（如果你实现了，下方有 Buff 示例）
             Player.AddBuff(ModContent.BuffType<RewinderCicadasBuff>(), CooldownTicks);
 
-            // 播个简洁特效（非必须）
-            Terraria.Audio.SoundEngine.PlaySound(SoundID.Item29, Player.Center); // 魔法“倒带”音效
-            CombatText.NewText(Player.Hitbox, Color.Green, Language.GetTextValue(
-                "Mods.WuDao.Items.RewinderCicadas.Messages.Heal",
-                healedAmount
-            ));
-            for (int i = 0; i < 25; i++)
+            int healedAmount = Math.Max(0, restoreLife - Math.Max(0, oldLife));
+            if (healedAmount > 0)
+                Player.HealEffect(healedAmount, true);
+
+            Terraria.Audio.SoundEngine.PlaySound(SoundID.Item29, Player.Center);
+
+            if (Main.netMode == NetmodeID.SinglePlayer)
             {
-                int d = Dust.NewDust(Player.position, Player.width, Player.height, DustID.MagicMirror);
-                Main.dust[d].velocity *= 1.5f;
-                Main.dust[d].noGravity = true;
+                Terraria.Audio.SoundEngine.PlaySound(SoundID.Item29, Player.Center);
+                CombatText.NewText(Player.Hitbox, Color.Green,
+                    Language.GetTextValue("Mods.WuDao.Items.RewinderCicadas.Messages.Heal", healedAmount));
+
+                for (int i = 0; i < 25; i++)
+                {
+                    int d = Dust.NewDust(Player.position, Player.width, Player.height, DustID.MagicMirror);
+                    Main.dust[d].velocity *= 1.5f;
+                    Main.dust[d].noGravity = true;
+                }
             }
-            // ☆ 新增：回溯触发后，自动卸下并销毁春秋蝉（仅销毁1个已装备的功能位副本）
-            ConsumeEquippedRewinder();
-            return false; // 阻止死亡（成功回溯）
+
+            // 真正消耗饰品，优先让服务器/单机负责
+            if (Main.netMode != NetmodeID.MultiplayerClient)
+            {
+                ConsumeEquippedRewinder();
+            }
+
+            if (Main.netMode == NetmodeID.Server)
+            {
+                WuDao mod = ModContent.GetInstance<WuDao>();
+                mod.BroadcastRewinderCicadasTriggered(Player.whoAmI, healedAmount);
+            }
+            return false;
         }
         // 消耗饰品栏中已装备的春秋蝉
         private void ConsumeEquippedRewinder()
@@ -130,17 +123,11 @@ namespace WuDao.Content.Players
                     // 立刻清掉本帧“已装备”标记，避免本帧重复逻辑
                     equipped = false;
 
-                    // 一点点反馈（可选）
-                    Terraria.Audio.SoundEngine.PlaySound(SoundID.Grass, Player.Center);
-                    CombatText.NewText(Player.Hitbox, Color.LightGreen, Language.GetTextValue("Mods.WuDao.Items.RewinderCicadas.Messages.RewindTriggered"));
-
-                    // 同步给其他玩家（多人联机时建议）
-                    if (Main.netMode == NetmodeID.MultiplayerClient)
+                    if (Main.netMode == NetmodeID.Server)
                     {
-                        // 发送本玩家的饰品栏变动
                         NetMessage.SendData(MessageID.SyncEquipment, number: Player.whoAmI, number2: i);
                     }
-                    return; // 只消耗一个
+                    return;
                 }
             }
         }

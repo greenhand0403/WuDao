@@ -1,6 +1,7 @@
 using Terraria;
 using Terraria.ModLoader;
 using System;
+using WuDao.Content.Buffs;
 
 namespace WuDao.Content.Players
 {
@@ -8,22 +9,20 @@ namespace WuDao.Content.Players
     public class ApeTouchPlayer : ModPlayer
     {
         public bool ApeTouch;
-        // 5秒冷却（300 tick）
-        private const int ManaGuardCDTicks = 60 * 5;
-        private int manaGuardCooldown;
 
         // 防止同一帧/同一次伤害链多次扣蓝
         private bool manaGuardThisHit;
-
+        public override void ResetEffects()
+        {
+            ApeTouch = false;
+        }
         public override void UpdateDead()
         {
-            manaGuardCooldown = 0;
             manaGuardThisHit = false;
         }
 
         public override void PreUpdate()
         {
-            if (manaGuardCooldown > 0) manaGuardCooldown--;
             // 每帧清掉一次性标记
             manaGuardThisHit = false;
         }
@@ -33,7 +32,10 @@ namespace WuDao.Content.Players
         {
             if (!ApeTouch) return;
             if (Player.statLife > Player.statLifeMax2 * 0.51f) return;
-            if (manaGuardCooldown > 0) return;
+
+            if (Player.HasBuff(ModContent.BuffType<ApeTouchCooldownBuff>()))
+                return;
+
             if (npc == null || !npc.active || npc.friendly) return;
 
             // 在最终伤害生成时介入（这一步仍处于一次受击的计算链内，还没真正扣血）
@@ -59,7 +61,7 @@ namespace WuDao.Content.Players
                     info.Damage = Math.Max(1, (finalIncoming + 1) / 2);
 
                     // 进入 5 秒冷却
-                    manaGuardCooldown = ManaGuardCDTicks;
+                    Player.AddBuff(ModContent.BuffType<ApeTouchCooldownBuff>(), 60 * 5);
                     manaGuardThisHit = true;
                 }
                 // 法力不够：不改 info.Damage，本次不生效，也不进CD

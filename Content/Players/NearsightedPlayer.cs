@@ -12,83 +12,118 @@ namespace WuDao.Content.Players
     {
         public bool Nearsighted;
         public bool ShowRangeRings; // 想关掉可视化就设为 false
+        // ===== 真实数值效果：所有端都要算，尤其服务器要算 =====
+        readonly float nearRadius = 10 * 16f;
+        readonly float midRadius = 20 * 16f;
+        readonly float farRadius = 30 * 16f;
+
+        readonly float NearBonusDamage = 0.1f;
+        readonly float MidBonusDamage = 0.15f;
+        
+        readonly float MidEndurance = 0.15f;
+
+        readonly float FarProjReduction = 0.1f;
+        readonly float MidProjReduction = 0.15f;
 
         public override void ResetEffects()
         {
             Nearsighted = false;
             ShowRangeRings = false;
         }
+        private void SpawnRingDust(float radius, int dustType)
+        {
+            const int count = 20;
 
+            for (int i = 0; i < count; i++)
+            {
+                float angle = MathHelper.TwoPi * i / count;
+                Vector2 offset = radius * angle.ToRotationVector2();
+                Vector2 pos = Player.Center + offset;
+
+                int d = Dust.NewDust(pos - new Vector2(4f), 8, 8, dustType, 0f, 0f, 140, default, 1f);
+                Main.dust[d].noGravity = true;
+                Main.dust[d].velocity = Vector2.Zero;
+            }
+        }
         public override void PostUpdateEquips()
         {
-            if (!Nearsighted || !ShowRangeRings) return;
-            if (Main.dedServ) return;
-            if (Player.whoAmI != Main.myPlayer) return;
+            if (!Nearsighted)
+                return;
 
-            float minDist = float.MaxValue;
-            foreach (NPC npc in Main.npc)
+            bool anyNear = false;
+            bool anyMid = false;
+
+            for (int i = 0; i < Main.maxNPCs; i++)
             {
-                if (npc.active && !npc.friendly && npc.lifeMax > 5)
+                NPC npc = Main.npc[i];
+                if (npc == null || !npc.active || npc.friendly || npc.dontTakeDamage)
+                    continue;
+
+                float d = Vector2.Distance(Player.Center, npc.Center);
+
+                if (d <= nearRadius)
                 {
-                    float dist = Vector2.Distance(npc.Center, Player.Center) / 16f; // tile为单位
-                    if (dist < minDist) minDist = dist;
+                    anyNear = true;
+                    break;
+                }
+                else if (d <= midRadius)
+                {
+                    anyMid = true;
                 }
             }
 
-            if (minDist == float.MaxValue) return;
-
-            if (minDist < 8f)
+            if (anyNear)
             {
-                // +10% 伤害
-                Player.GetDamage(DamageClass.Generic) += 0.10f;
+                Player.GetDamage(DamageClass.Generic) += NearBonusDamage;
             }
-            else if (minDist <= 32f)
+            else if (anyMid)
             {
-                // +15% 伤害
-                Player.GetDamage(DamageClass.Generic) += 0.15f;
-                // -15% 来自射弹的伤害
-                Player.endurance += 0.15f;
+                Player.GetDamage(DamageClass.Generic) += MidBonusDamage;
+                Player.endurance += MidEndurance;
             }
 
-            // 1 tile = 16 像素
-            SpawnRangeRing(Player.Center, 8 * 16, DustID.GemEmerald);   // 8格：绿色
-            SpawnRangeRing(Player.Center, 32 * 16, DustID.GemSapphire); // 32格：蓝色
+            // ===== 纯本地表现：范围圆环 =====
+            if (!ShowRangeRings)
+                return;
+
+            if (Main.dedServ)
+                return;
+
+            if (Player.whoAmI != Main.myPlayer)
+                return;
+
+            SpawnRingDust(nearRadius, DustID.GemRuby);
+            SpawnRingDust(midRadius, DustID.GemEmerald);
+            SpawnRingDust(farRadius, DustID.GemDiamond);
         }
 
         public override void ModifyHitByProjectile(Projectile proj, ref Player.HurtModifiers modifiers)
         {
-            if (!Nearsighted) return;
-
-            // 只处理敌对射弹
-            if (proj.friendly) return;
-
-            // 拿到 GlobalProjectile 里记录的发射者
-            var gp = proj.GetGlobalProjectile<NearsightedGlobalProjectile>();
-            if (gp == null || gp.SourceNPC < 0)
-            {
-                // 找不到发射者：不做误判，直接忽略（也可选做 >32 的10%，但更安全是忽略）
+            if (!Nearsighted)
                 return;
+
+            if (proj == null || !proj.active || !proj.hostile)
+                return;
+
+            var gp = proj.GetGlobalProjectile<NearsightedGlobalProjectile>();
+            int sourceNpcId = gp.SourceNPC;
+
+            if (sourceNpcId < 0 || sourceNpcId >= Main.maxNPCs)
+                return;
+
+            NPC sourceNpc = Main.npc[sourceNpcId];
+            if (sourceNpc == null || !sourceNpc.active || sourceNpc.friendly)
+                return;
+
+            float d = Vector2.Distance(Player.Center, sourceNpc.Center);
+
+            if (d >= farRadius)
+            {
+                modifiers.FinalDamage *= 1f - FarProjReduction;
             }
-
-            NPC shooter = Main.npc[gp.SourceNPC];
-            if (!shooter.active || shooter.friendly) return;
-
-            // 玩家与“发射者NPC”的距离（tile）
-            float distTiles = Vector2.Distance(Player.Center, shooter.Center) / 16f;
-
-            float dr = 0f; // 本饰品对该射弹的减伤比例
-            if (distTiles >= 8f && distTiles <= 32f)
+            else if (d >= midRadius)
             {
-                dr = 0.15f; // 中距：-15% 射弹伤害
-            }
-            else if (distTiles > 32f)
-            {
-                dr = 0.10f; // 远距：-10% 射弹伤害
-            } // 近距 <8f：不减伤
-
-            if (dr > 0f)
-            {
-                modifiers.FinalDamage *= (1f - dr);
+                modifiers.FinalDamage *= 1f - MidProjReduction;
             }
         }
         /// <summary>

@@ -15,16 +15,24 @@ namespace WuDao.Content.Global
 
         public override bool OnPickup(Item item, Player player)
         {
-            int cicadaType = ModContent.ItemType<Items.Accessories.RewinderCicadas>();
+            int cicadaType = ModContent.ItemType<RewinderCicadas>();
 
             // —— 规则 1：若拾取的是萤火虫，20% 概率转化为春秋蝉（前提：当前不存在春秋蝉） —— //
             if (item.type == ItemID.Firefly && !HasCicadaAnywhere(player))
             {
+                // 多人客户端不做权威判定，交给服务器
+                if (Main.netMode == NetmodeID.MultiplayerClient)
+                    return true;
+
                 if (Main.rand.NextFloat() < 0.20f) // 20%
                 {
                     // 移除这只萤火虫
                     if (item.active && item.whoAmI >= 0 && item.whoAmI < Main.maxItems)
+                    {
                         Main.item[item.whoAmI].TurnToAir();
+                        if (Main.netMode == NetmodeID.Server)
+                            NetMessage.SendData(MessageID.SyncItem, number: item.whoAmI);
+                    }
 
                     // 直接给玩家一只春秋蝉
                     if (player.whoAmI == Main.myPlayer)
@@ -58,6 +66,7 @@ namespace WuDao.Content.Global
             int start = 3;
             int lastInclusive = 3 + 7 + player.extraAccessorySlots;
             if (lastInclusive >= player.armor.Length) lastInclusive = player.armor.Length - 1;
+            
             for (int i = start; i <= lastInclusive; i++)
                 if (!player.armor[i].IsAir && player.armor[i].type == cicada) return true;
 

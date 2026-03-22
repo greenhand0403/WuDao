@@ -5,6 +5,7 @@ using WuDao.Content.Players;
 
 namespace WuDao.Content.Items.Accessories
 {
+    // 石墩子饰品
     public class RoundStonePillar : ModItem
     {
         public override void SetDefaults()

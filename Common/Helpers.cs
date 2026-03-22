@@ -106,7 +106,9 @@ namespace WuDao.Common
                 && NPC.downedQueenBee
                 && NPC.downedDeerclops
                 && Main.hardMode        // 肉山
-                && NPC.downedMechBossAny  // 机械三王至少一个，若想要求三王全清可改成：downedMechBoss1 && downedMechBoss2 && downedMechBoss3
+                && NPC.downedMechBoss1
+                && NPC.downedMechBoss2
+                && NPC.downedMechBoss3
                 && NPC.downedPlantBoss
                 && NPC.downedGolemBoss
                 && NPC.downedFishron

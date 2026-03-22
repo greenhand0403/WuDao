@@ -63,17 +63,26 @@ namespace WuDao.Content.Items.Weapons.Magic
         }
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+                return false;
+
             var pool = Main.hardMode ? HMProjectilePool : PreHMProjectilePool;
             int choice = pool[Main.rand.Next(pool.Length)];
 
-            // 适度随机散射/速度微扰，增强手感
             Vector2 perturbed = velocity.RotatedByRandom(MathHelper.ToRadians(6));
             float speedScale = 0.9f + Main.rand.NextFloat(0.2f);
-            // 发射口下移对齐武器
-            int p = Projectile.NewProjectile(source, position + Vector2.UnitY * 6 + player.direction * 8 * Vector2.UnitX, perturbed * speedScale, choice, damage, knockback, player.whoAmI);
 
-            // 若弹体有独特AI可进一步处理（例如：修改本体ai或者本mod的GlobalProjectile）
-            return false; // 返回false避免tML再次发射默认的shoot
+            Projectile.NewProjectile(
+                source,
+                position + Vector2.UnitY * 6 + player.direction * 8 * Vector2.UnitX,
+                perturbed * speedScale,
+                choice,
+                damage,
+                knockback,
+                player.whoAmI
+            );
+
+            return false;
         }
 
         public override void AddRecipes()

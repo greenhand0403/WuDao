@@ -9,6 +9,28 @@ using Microsoft.Xna.Framework;
 
 namespace WuDao.Content.Global
 {
+    public static class HeartPlayerUtils
+    {
+        public static void PayLife(Player player, int amount)
+        {
+            if (amount <= 0)
+                return;
+
+            if (player.statLife > amount)
+            {
+                player.statLife -= amount;
+                player.HealEffect(-amount, true);
+            }
+        }
+
+        public static void HealPlayer(Player player, int amount)
+        {
+            if (amount <= 0)
+                return;
+
+            player.Heal(amount);
+        }
+    }
     // 丘比特弓：将木箭转化为心箭
     public class HeartArrowAmmoGlobal : GlobalItem
     {
@@ -42,8 +64,7 @@ namespace WuDao.Content.Global
                     int lifeCost = mp.GetHeartArrowLifeCost(false);
                     if (lifeCost > 0 && player.statLife > lifeCost)
                     {
-                        player.statLife -= lifeCost;
-                        player.HealEffect(-lifeCost, broadcast: true);
+                        HeartPlayerUtils.PayLife(player, lifeCost);
                     }
                 }
             }
@@ -84,8 +105,7 @@ namespace WuDao.Content.Global
                 var mp = player.GetModPlayer<HeartStuffPlayer>();
                 if (mp.SoulGemEquipped && player.statLife < player.statLifeMax2)
                 {
-                    player.statLife = System.Math.Min(player.statLife + 2, player.statLifeMax2);
-                    player.HealEffect(2, true);
+                    HeartPlayerUtils.HealPlayer(player, 2);
                 }
             }
             return base.OnPickup(item, player);

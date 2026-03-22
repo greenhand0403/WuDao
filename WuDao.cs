@@ -33,6 +33,7 @@ namespace WuDao
 		RequestCuisineCraftReward, // 客户端请求服务器发放菜谱双倍奖励
 		RequestCuisineFoodRain,    // 客户端请求服务器尝试触发食物雨
 		SyncMimickerState,         // 同步模仿者击杀/解锁进度
+		SyncRewinderCicadasTriggered, // 同步春秋蝉触发视觉表现
 	}
 	
 	public class WuDao : Mod
@@ -56,6 +57,14 @@ namespace WuDao
 			packet.Write(TimeStopSystem.CooldownTimer);
 			packet.Write((byte)TimeStopSystem.Scope);
 			packet.Write((byte)(TimeStopSystem.AllowedPlayer < 0 ? 255 : TimeStopSystem.AllowedPlayer));
+			packet.Send(toClient, ignoreClient);
+		}
+		public void BroadcastRewinderCicadasTriggered(int playerWhoAmI, int healedAmount, int toClient = -1, int ignoreClient = -1)
+		{
+			ModPacket packet = GetPacket();
+			packet.Write((byte)MessageType.SyncRewinderCicadasTriggered);
+			packet.Write((byte)playerWhoAmI);
+			packet.Write(healedAmount);
 			packet.Send(toClient, ignoreClient);
 		}
 		public override void HandlePacket(BinaryReader reader, int whoAmI)
@@ -359,6 +368,44 @@ namespace WuDao
 							unlocked.Add(reader.ReadInt32());
 
 						mp.ApplySyncedState(progress, unlocked);
+						break;
+					}
+				case MessageType.SyncRewinderCicadasTriggered:
+					{
+						byte plr = reader.ReadByte();
+						int healedAmount = reader.ReadInt32();
+
+						if (plr >= Main.maxPlayers)
+							return;
+
+						Player player = Main.player[plr];
+						if (player == null || !player.active)
+							return;
+
+						// 服务器收到这种包时，不做任何事
+						// 这个消息应当只由服务器发给客户端
+						if (Main.netMode == NetmodeID.Server)
+							return;
+
+						// 客户端播放视觉效果
+						Terraria.Audio.SoundEngine.PlaySound(SoundID.Item29, player.Center);
+
+						CombatText.NewText(
+							player.Hitbox,
+							Microsoft.Xna.Framework.Color.Green,
+							Terraria.Localization.Language.GetTextValue(
+								"Mods.WuDao.Items.RewinderCicadas.Messages.Heal",
+								healedAmount
+							)
+						);
+
+						for (int i = 0; i < 25; i++)
+						{
+							int d = Dust.NewDust(player.position, player.width, player.height, DustID.MagicMirror);
+							Main.dust[d].velocity *= 1.5f;
+							Main.dust[d].noGravity = true;
+						}
+
 						break;
 					}
 			}
