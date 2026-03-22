@@ -6,6 +6,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using WuDao.Common;
 using Microsoft.Xna.Framework.Graphics;
+using System.IO;
 
 namespace WuDao.Content.Projectiles.Melee
 {
@@ -33,6 +34,7 @@ namespace WuDao.Content.Projectiles.Melee
         // —— 视觉：淡入
         private int fadeTimer = 8;                   // 前 8 tick 淡入
         private const int BaseHitbox = 40;           // 初始碰撞箱基准（像素，按你的美术留白调节）
+        private bool IsEmpowered => Projectile.ai[1] == 1f;
 
         // —— 动画（虽然是单帧，这里保留 Animator 便于将来切换多帧）
         private readonly SpriteAnimator _anim = new SpriteAnimator();
@@ -43,7 +45,6 @@ namespace WuDao.Content.Projectiles.Melee
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 10;
             ProjectileID.Sets.TrailingMode[Projectile.type] = 2; // 2=按 oldPos 画平滑拖尾
         }
-
         public override void SetDefaults()
         {
             Projectile.width = BaseHitbox;
@@ -66,8 +67,16 @@ namespace WuDao.Content.Projectiles.Melee
             _sheet = SpriteSheets.Get(SpriteAtlasId.BlueEffect);
             // 单帧：让 Animator 走个形式；若改成多帧，直接改 frameCount 即可
         }
-        private bool IsEmpowered => Projectile.ai[1] == 1f;
-
+        public override void SendExtraAI(BinaryWriter writer)
+        {
+            writer.Write((byte)pierced);
+            writer.Write(sizeScale);
+        }
+        public override void ReceiveExtraAI(BinaryReader reader)
+        {
+            pierced = reader.ReadByte();
+            sizeScale = reader.ReadSingle();
+        }
         public override void OnSpawn(IEntitySource source)
         {
             // 统一初速

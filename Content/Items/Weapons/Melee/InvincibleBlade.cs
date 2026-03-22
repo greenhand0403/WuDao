@@ -50,13 +50,15 @@ namespace WuDao.Content.Items.Weapons.Melee
 
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-            if (player.whoAmI != Main.myPlayer) return true;
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+                return false;
 
-            // 在鼠标附近随机生成
-            Vector2 spawnPos = Main.MouseWorld + 150 * new Vector2(Main.rand.NextFloat(-1, 1f), Main.rand.NextFloat(-1, 1f));
             InvincibleBladePlayer mp = player.GetModPlayer<InvincibleBladePlayer>();
-            // 发射的射弹随着使用时间增多
             int cold = mp.Cooldown;
+            Vector2 spawnPos = Main.MouseWorld + 150f * new Vector2(
+                Main.rand.NextFloat(-1f, 1f),
+                Main.rand.NextFloat(-1f, 1f)
+            );
             for (int i = 0; i < 1 + (CooldownFrames - cold) / 2; i++)
             {
                 // 发射一个“弧线寻敌”的射弹，速度/路径由射弹自行处理
@@ -71,7 +73,10 @@ namespace WuDao.Content.Items.Weapons.Melee
             if (mp.ExtraSpawnCD <= 0)
             {
                 mp.ExtraSpawnCD = 60; // 60帧=1秒
-                Vector2 spawnPos2 = Main.MouseWorld + 150 * new Vector2(Main.rand.NextFloat(-1f, 1f), Main.rand.NextFloat(-1f, 1f));
+                Vector2 spawnPos2 = Main.MouseWorld + 150f * new Vector2(
+                    Main.rand.NextFloat(-1f, 1f),
+                    Main.rand.NextFloat(-1f, 1f)
+                );
                 // 这里用 ai[1] 传一个“负数的 ItemID”告诉弹体：不要随机，直接用这把剑的贴图
                 float forceItemId = -ItemID.Zenith; // 你的本体现在用的是 Zenith 贴图
                 Projectile.NewProjectile(

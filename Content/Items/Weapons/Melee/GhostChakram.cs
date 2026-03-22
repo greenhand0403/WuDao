@@ -67,7 +67,7 @@ namespace WuDao.Content.Items.Weapons.Melee
             }
 
             int proj = Projectile.NewProjectile(
-                player.GetSource_ItemUse(Item),
+                source,
                 position, velocity, type, finalDamage, knockback, player.whoAmI,
                 ai0: 0f, ai1: ai1);
 

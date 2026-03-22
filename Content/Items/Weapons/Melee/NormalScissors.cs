@@ -20,9 +20,10 @@ namespace WuDao.Content.Items.Weapons.Melee
         public const int EnergyGainPerHit = 25; // 每次左键命中获得的能量
         public bool forceChargedOnNextSwing = false; // 冲刺后置位，下一次左键挥砍必定释放剑气
 
-        public override void ResetEffects()
+        public override void PreUpdate()
         {
-            if (dashCooldown > 0) dashCooldown--;
+            if (dashCooldown > 0)
+                dashCooldown--;
         }
 
         public float EnergyPercent => Utils.Clamp(energy / (float)EnergyMax, 0f, 1f);
@@ -219,17 +220,19 @@ namespace WuDao.Content.Items.Weapons.Melee
                 player.immune = true;
                 player.immuneTime = 10;
 
-                Projectile.NewProjectile(
-                    player.GetSource_ItemUse(Item),
-                    player.Center,
-                    dir * 0.1f,
-                    ModContent.ProjectileType<DashSlashProj>(),
-                    (int)(Item.damage * 1.1f),
-                    Item.knockBack + 1.0f,
-                    player.whoAmI,
-                    DashSlashProjTime
-                );
-
+                if (Main.netMode != NetmodeID.MultiplayerClient)
+                {
+                    Projectile.NewProjectile(
+                        player.GetSource_ItemUse(Item),
+                        player.Center,
+                        dir * 0.1f,
+                        ModContent.ProjectileType<DashSlashProj>(),
+                        (int)(Item.damage * 1.1f),
+                        Item.knockBack + 1.0f,
+                        player.whoAmI,
+                        DashSlashProjTime
+                    );
+                }
                 for (int i = 0; i < 10; i++)
                 {
                     int dust = Dust.NewDust(player.position, player.width, player.height, DustID.Smoke,
@@ -270,6 +273,9 @@ namespace WuDao.Content.Items.Weapons.Melee
         // ——— 自动释放“蓄力斩” ——— //
         private void FireChargedSlash(Player player)
         {
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+                return;
+
             // （可保留）短暂无敌，给点手感容错；不需要就删
             player.immune = true;
             player.immuneTime = 10;

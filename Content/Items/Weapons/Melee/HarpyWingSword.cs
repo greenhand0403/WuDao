@@ -123,6 +123,7 @@ namespace WuDao.Content.Items.Weapons.Melee
             // 调整尺寸：对“会读取 scale 绘制/判定”的弹幕有效。HarpyFeather 会跟随 scale 绘制，但命中盒不一定等比；
             // 如需更严谨，建议自定义 ModProjectile，在其中用 scale 或 AI 参数控制判定。
             p.scale *= scaleMult;
+            p.netUpdate = true;
             p.light = 0.1f;
             return false; // 阻止默认发射（因为我们已经手动发射了）
         }
