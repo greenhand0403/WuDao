@@ -141,20 +141,26 @@ public class SeagullMinion : ModProjectile
         if (poopTimer >= 45)
         {
             poopTimer = 0;
+            if (Main.netMode != NetmodeID.MultiplayerClient)
+            {
+                Vector2 spawnPos = Projectile.Center + new Vector2(0f, 8f);
+                // 往敌怪身上投射 poop
+                Vector2 poopVelocity = (target.Center - spawnPos).SafeNormalize(Vector2.Zero) * Main.rand.Next(8, 10);
 
-            Vector2 spawnPos = Projectile.Center + new Vector2(0f, 8f);
-            // 往敌怪身上投射 poop
-            Vector2 poopVelocity = (target.Center - spawnPos).SafeNormalize(Vector2.Zero) * Main.rand.Next(8, 10);
-
-            Projectile.NewProjectile(
-                Projectile.GetSource_FromAI(),
-                spawnPos,
-                poopVelocity,
-                ModContent.ProjectileType<PoopProjectile>(),
-                Projectile.damage,
-                0f,
-                Projectile.owner
-            );
+                int proj = Projectile.NewProjectile(
+                    Projectile.GetSource_FromAI(),
+                    spawnPos,
+                    poopVelocity,
+                    ModContent.ProjectileType<PoopProjectile>(),
+                    Projectile.damage,
+                    0f,
+                    Projectile.owner
+                );
+                if (proj > 0)
+                {
+                    Main.projectile[proj].netUpdate = true;
+                }
+            }
         }
     }
 

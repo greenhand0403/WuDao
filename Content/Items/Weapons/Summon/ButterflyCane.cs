@@ -5,6 +5,7 @@ using WuDao.Content.Projectiles.Summon;
 using WuDao.Content.Buffs;
 using Microsoft.Xna.Framework;
 using Terraria.DataStructures;
+using Humanizer;
 
 namespace WuDao.Content.Items.Weapons.Summon
 {
@@ -57,18 +58,20 @@ namespace WuDao.Content.Items.Weapons.Summon
             if (current > player.maxMinions || current == 8)
                 return false;
 
-            Projectile.NewProjectile(
+            int variant = current % player.maxMinions;
+
+            int proj = Projectile.NewProjectile(
                 source,
                 Main.MouseWorld,
                 Vector2.Zero,
                 type,
                 damage,
                 knockback,
-                player.whoAmI,
-                ai0: current % player.maxMinions,  // 这只蝴蝶的品种
-                ai1: 0f
+                player.whoAmI
             );
 
+            Main.projectile[proj].localAI[0] = variant;
+            Main.projectile[proj].netUpdate = true;
             return false; // 手动生成
         }
 

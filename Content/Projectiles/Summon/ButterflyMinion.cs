@@ -16,10 +16,14 @@ namespace WuDao.Content.Projectiles.Summon
         public override string Texture => "Terraria/Images/NPC_" + NPCID.Butterfly;
         public override bool MinionContactDamage() => true;
         public override bool? CanCutTiles() => false;
-        // ai[0] = variantIndex (0..7)
-        // ai[1] = 0 (未使用)
-        // localAI[0] = state (0=盘旋, 1=俯冲)
-        // localAI[1] = timer (状态计时)
+
+        // 建议：把状态扩展成 3 个（更清晰）
+        private const int State_Idle = 0;
+        private const int State_Staging = 1;
+        private const int State_Dash = 2;
+        private ref float Variant => ref Projectile.localAI[0];   // 仅表现用途，生成时确定
+        private ref float State => ref Projectile.ai[1];          // 需要同步的状态机
+        private ref float StateTimer => ref Projectile.localAI[1];// 本地计时器
         public override void SetStaticDefaults()
         {
             Main.projFrames[Type] = 3; // 三帧动画
@@ -49,10 +53,6 @@ namespace WuDao.Content.Projectiles.Summon
             Projectile.usesLocalNPCImmunity = true;
             Projectile.localNPCHitCooldown = 18;
         }
-        // 建议：把状态扩展成 3 个（更清晰）
-        private const int State_Idle = 0;
-        private const int State_Staging = 1;
-        private const int State_Dash = 2;
         public override void AI()
         {
             Player owner = Main.player[Projectile.owner];
@@ -64,7 +64,7 @@ namespace WuDao.Content.Projectiles.Summon
                 Projectile.Kill();
                 return;
             }
-            
+
             if (owner.HasBuff(ModContent.BuffType<ButterflyCaneBuff>()))
                 Projectile.timeLeft = 2;
 
@@ -81,17 +81,15 @@ namespace WuDao.Content.Projectiles.Summon
             bool hasTarget = targetIndex != -1;
             NPC target = hasTarget ? Main.npc[targetIndex] : null;
 
-            // 状态与计时器：沿用你的 localAI
-            int state = (int)Projectile.localAI[0];
-            Projectile.localAI[1]++; // stateTimer
-            Vector2 idlePos=Vector2.Zero;
+            // 状态与计时器
+            StateTimer++; // stateTimer
+            Vector2 idlePos = Vector2.Zero;
             // 3) Movement (State Machine)
             if (!hasTarget)
             {
                 // 没目标：回到 Idle
-                state = State_Idle;
-                Projectile.localAI[0] = state;
-                Projectile.localAI[1] = 0f;
+                State = State_Idle;
+                StateTimer = 0f;
 
                 GetIdleSlot(owner, out int index, out int total);
 
@@ -106,30 +104,28 @@ namespace WuDao.Content.Projectiles.Summon
                 HoverTo(idlePos, speed: 10f, inertia: 18f);
 
                 // 4) Visuals：悬停严格跟玩家方向，不要用 idlePos 决定方向
-                UpdateVisuals(owner, hasTarget: false,idlePos);
+                UpdateVisuals(owner, hasTarget: false, idlePos);
                 return;
             }
 
             // 有目标：攻击逻辑
-            if (state == State_Idle)
+            if (State == State_Idle)
             {
                 // 刚发现目标：进入 Staging
-                state = State_Staging;
-                Projectile.localAI[0] = state;
-                Projectile.localAI[1] = 0f;
+                State = State_Staging;
+                StateTimer = 0f;
                 Projectile.netUpdate = true;
             }
 
-            if (state == State_Staging)
+            if (State == State_Staging)
             {
                 Vector2 stagingPos = target.Center + new Vector2(0f, -70f);
                 HoverTo(stagingPos, speed: 11f, inertia: 14f);
 
                 if (Vector2.Distance(Projectile.Center, stagingPos) < 26f)
                 {
-                    state = State_Dash;
-                    Projectile.localAI[0] = state;
-                    Projectile.localAI[1] = 0f;
+                    State = State_Dash;
+                    StateTimer = 0f;
                     Projectile.netUpdate = true;
                 }
             }
@@ -147,15 +143,14 @@ namespace WuDao.Content.Projectiles.Summon
                 // Dash 持续一小段时间后回到 Staging 或 Idle
                 if (Projectile.localAI[1] > 22f || to.Length() < 16f)
                 {
-                    state = State_Staging; // 你也可以改回 Idle：看你想不想连段
-                    Projectile.localAI[0] = state;
-                    Projectile.localAI[1] = 0f;
+                    State = State_Staging; // 你也可以改回 Idle：看你想不想连段
+                    StateTimer = 0f;
                     Projectile.netUpdate = true;
                 }
             }
-
+            
             // 4) Visuals：攻击时方向跟速度，旋转让头对齐速度方向
-            UpdateVisuals(owner, hasTarget: true,idlePos);
+            UpdateVisuals(owner, hasTarget: true, idlePos);
         }
 
         private void UpdateVisuals(Player owner, bool hasTarget,Vector2 idlePos)
@@ -306,7 +301,7 @@ namespace WuDao.Content.Projectiles.Summon
         {
             Texture2D tex = TextureAssets.Projectile[Type].Value;
 
-            int variant = ((int)Projectile.ai[0] % 8 + 8) % 8; // 0..7
+            int variant = ((int)Variant % 8 + 8) % 8; // 0..7
             int variantBaseY = variant * 72;
 
             // 帧：0,1,2（每4 tick换一次）

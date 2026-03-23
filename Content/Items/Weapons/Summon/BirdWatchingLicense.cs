@@ -30,16 +30,17 @@ public class BirdWatchingLicense : ModItem
     public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
     {
         player.AddBuff(Item.buffType, 2);
-
-        Projectile.NewProjectile(
+        if (player.whoAmI == Main.myPlayer)
+        {
+            Projectile.NewProjectile(
             source,
             Main.MouseWorld,
             Vector2.Zero,
             type,
             damage,
             knockback,
-            player.whoAmI
-        );
+            player.whoAmI);
+        }
 
         return false;
     }

@@ -16,10 +16,9 @@ namespace WuDao.Content.Projectiles.Summon
         public override string Texture => "Terraria/Images/NPC_" + NPCID.BlackDragonfly;
         public override bool MinionContactDamage() => true;
         public override bool? CanCutTiles() => false;
-        // ai[0] = variantIndex (0..6)
-        // ai[1] = 0 (未使用)
-        // localAI[0] = state (0=盘旋, 1=俯冲)
-        // localAI[1] = timer (状态计时)
+        private ref float Variant => ref Projectile.ai[0];      // 已同步
+        private ref float State => ref Projectile.ai[1];        // 改这里
+        private ref float StateTimer => ref Projectile.localAI[1];
         public override void SetStaticDefaults()
         {
             ProjectileID.Sets.MinionTargettingFeature[Type] = true;
@@ -90,16 +89,13 @@ namespace WuDao.Content.Projectiles.Summon
             NPC target = hasTarget ? Main.npc[targetIndex] : null;
 
             // 状态与计时器：沿用你的 localAI
-            int state = (int)Projectile.localAI[0];
-            Projectile.localAI[1]++; // stateTimer
             Vector2 idlePos = Vector2.Zero;
             // 3) Movement (State Machine)
             if (!hasTarget)
             {
                 // 没目标：回到 Idle
-                state = State_Idle;
-                Projectile.localAI[0] = state;
-                Projectile.localAI[1] = 0f;
+                State = State_Idle;
+                StateTimer = 0f;
 
                 GetIdleSlot(owner, out int index, out int total);
                 // 7只蜻蜓圆环分布
@@ -185,9 +181,6 @@ namespace WuDao.Content.Projectiles.Summon
         }
         private void DoDragonflyAttack(Player owner, NPC target)
         {
-            int state = (int)Projectile.localAI[0];
-            float timer = Projectile.localAI[1];
-
             // 观望点：目标上方+左右摆动（用 whoAmI 做相位差，避免一堆蜻蜓重叠）
             Vector2 observePos = target.Center + new Vector2(0f, -80f);
             float sway = (float)Math.Sin((Main.GameUpdateCount + Projectile.whoAmI * 13) * 0.08f) * 80f;
@@ -196,29 +189,30 @@ namespace WuDao.Content.Projectiles.Summon
             // “点水蛰一下”的落点：敌人头顶
             Vector2 strikePos = target.Top + new Vector2(0f, -8f);
 
-            switch (state)
+            switch (State)
             {
                 case State_Idle:
-                    state = State_Observe;
-                    timer = 0f;
+                    State = State_Observe;
+                    StateTimer = 0f;
                     break;
 
                 case State_Observe:
-                    timer++;
+                    StateTimer++;
 
                     // 观望：平滑飞到 observePos
                     HoverTo(observePos, speed: 12f, inertia: 14f);
 
                     // 观望一会儿 → 进行一次点水
-                    if (timer >= 50f)
+                    if (StateTimer >= 50f)
                     {
-                        state = State_Strike;
-                        timer = 0f;
+                        State = State_Strike;
+                        StateTimer = 0f;
+                        Projectile.netUpdate = true;
                     }
                     break;
 
                 case State_Strike:
-                    timer++;
+                    StateTimer++;
 
                     // 点水：快速冲到敌人头顶（不像蝴蝶那样穿来穿去）
                     Vector2 to = strikePos - Projectile.Center;
@@ -226,16 +220,14 @@ namespace WuDao.Content.Projectiles.Summon
                     Projectile.velocity = Vector2.Lerp(Projectile.velocity, desiredVel, 0.45f);
 
                     // 到达头顶附近 或 超时 → 回观望
-                    if (to.Length() < 14f || timer >= 14f)
+                    if (to.Length() < 14f || StateTimer >= 14f)
                     {
-                        state = State_Observe;
-                        timer = 0f;
+                        State = State_Observe;
+                        StateTimer = 0f;
+                        Projectile.netUpdate = true;
                     }
                     break;
             }
-
-            Projectile.localAI[0] = state;
-            Projectile.localAI[1] = timer;
         }
         private void HoverTo(Vector2 targetPos, float speed, float inertia)
         {

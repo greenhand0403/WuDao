@@ -103,7 +103,7 @@ namespace WuDao.Content.Projectiles.Summon
 
         private void FireSeedAt(NPC target)
         {
-            if (Main.myPlayer != Projectile.owner)
+            if (Main.netMode == NetmodeID.MultiplayerClient)
                 return;
 
             Vector2 spawnPos = Projectile.Center + new Vector2(Projectile.spriteDirection * 10f, -8f);
