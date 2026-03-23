@@ -82,20 +82,6 @@ namespace WuDao.Content.Items.Weapons.Ranged
             // 攻速只影响射弹飞行速度
             float attackSpeed = player.GetAttackSpeed(DamageClass.Ranged);
             velocity *= attackSpeed;
-
-            // 将火枪子弹转换为随机种子射弹
-            type = Main.rand.Next(3) switch
-            {
-                0 => ProjectileID.SeedlerNut,         // 坚果
-                1 => ProjectileID.SeedPlantera,       // 世纪之花种子
-                _ => ProjectileID.PoisonSeedPlantera  // 毒种子
-            };
-            // 增加坚果射弹的速度
-            if (type == ProjectileID.SeedlerNut)
-                velocity *= 1.3f;
-
-            // 稍微给一点散射，更像机关枪
-            velocity = velocity.RotatedByRandom(MathHelper.ToRadians(3.5f));
         }
 
         public override bool Shoot(
@@ -107,25 +93,42 @@ namespace WuDao.Content.Items.Weapons.Ranged
             int damage,
             float knockback)
         {
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+                return false;
+
             var modPlayer = player.GetModPlayer<SeedMinigunPlayer>();
 
             if (modPlayer.seedMinigunShots <= 0)
                 return false;
 
-            // 这里的 damage 已经包含：
-            // 武器基础伤害 + 当前消耗的火枪子弹伤害贡献
+            int actualType = Main.rand.Next(3) switch
+            {
+                0 => ProjectileID.SeedlerNut,
+                1 => ProjectileID.SeedPlantera,
+                _ => ProjectileID.PoisonSeedPlantera
+            };
+
+            if (actualType == ProjectileID.SeedlerNut)
+                velocity *= 1.3f;
+
+            velocity = velocity.RotatedByRandom(MathHelper.ToRadians(3.5f));
+
             int proj = Projectile.NewProjectile(
                 source,
                 position,
                 velocity,
-                type,
+                actualType,
                 damage,
                 knockback,
                 player.whoAmI
             );
 
-            Main.projectile[proj].hostile = false;
-            Main.projectile[proj].friendly = true;
+            if (proj >= 0 && proj < Main.maxProjectiles)
+            {
+                Main.projectile[proj].hostile = false;
+                Main.projectile[proj].friendly = true;
+                Main.projectile[proj].netUpdate = true;
+            }
 
             modPlayer.seedMinigunShots--;
 

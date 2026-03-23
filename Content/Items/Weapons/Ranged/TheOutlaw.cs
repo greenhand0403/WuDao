@@ -58,7 +58,12 @@ namespace WuDao.Content.Items.Weapons.Ranged
                 player.velocity = new Vector2(-player.direction * backSpeed, -3f);
                 player.immune = true;
                 player.immuneTime = 20; // ~1/3秒
+                
                 gp.TriggerDashBack();
+                if (Main.netMode == NetmodeID.MultiplayerClient)
+                {
+                    NetMessage.SendData(MessageID.PlayerControls, number: player.whoAmI);
+                }
 
                 // 右键这帧不射击
                 return false;
@@ -69,14 +74,19 @@ namespace WuDao.Content.Items.Weapons.Ranged
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
             var gp = player.GetModPlayer<TheOutlawPlayer>();
-
+            // 只由持有者执行一次发射逻辑，避免多人重复生成
+            if (player.whoAmI != Main.myPlayer)
+                return false;
             // 终极爆弹（拜月邪教徒后，攒4层暴击触发一次）
             if (NPC.downedAncientCultist && gp.ultimateReady)
             {
                 gp.ultimateReady = false;
+                gp.SyncPlayer(-1, -1, false);
                 // 终极爆弹：基础伤害*5
                 int dmg = (int)(damage * 5f);
                 int proj = Projectile.NewProjectile(source, position, velocity, ModContent.ProjectileType<TheOutlawUltimateBomb>(), dmg, knockback, player.whoAmI);
+                if (proj > 0 && proj < Main.projectile.Length)
+                    Main.projectile[proj].netUpdate = true;
                 CombatText.NewText(
                     new Rectangle((int)player.position.X, (int)player.position.Y, 150, 30),
                     Color.Red,
@@ -96,8 +106,9 @@ namespace WuDao.Content.Items.Weapons.Ranged
                 pelletCount = 6;
                 dmgScale *= 1.3f; // +30% 伤害
                 gp.nextShotEmpowered = false; // 消耗
+                gp.SyncPlayer(-1, -1, false);
             }
-
+            // TODO: 未测试，将火枪子弹转化为扇形散射弹
             float spread = MathHelper.ToRadians(Main.rand.Next(5, 12)); // 扇形总展开角的大致基准（单发的左右偏移）15f 太大了
             for (int i = 0; i < pelletCount; i++)
             {
@@ -107,9 +118,11 @@ namespace WuDao.Content.Items.Weapons.Ranged
                 int projType = type == ProjectileID.Bullet ? type : ModContent.ProjectileType<TheOutlawPellet>();
                 int proj = Projectile.NewProjectile(
                     source, position, perturbed,
-                    type,
+                    projType,
                     (int)(damage * dmgScale), knockback, player.whoAmI
                 );
+                if (proj > 0 && proj < Main.projectile.Length)
+                    Main.projectile[proj].netUpdate = true;
             }
 
             // 机械后：额外发射 1 枚“分裂射弹”（穿透1，命中/撞墙/短时后分裂成左右爆破弹）
@@ -120,6 +133,8 @@ namespace WuDao.Content.Items.Weapons.Ranged
                     ModContent.ProjectileType<TheOutlawSplitShot>(),
                     damage, knockback, player.whoAmI
                 );
+                if (split > 0 && split < Main.projectile.Length)
+                    Main.projectile[split].netUpdate = true;
             }
 
             return false; // 我们手动发射了

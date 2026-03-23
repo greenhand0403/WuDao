@@ -1,8 +1,10 @@
+using System.IO;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.ModLoader.IO;
 using WuDao.Content.Projectiles.Melee;
 
 namespace WuDao.Content.Items.Weapons.Melee
@@ -53,10 +55,39 @@ namespace WuDao.Content.Items.Weapons.Melee
             );
             // 把配色塞进 localAI[1]
             if (proj >= 0 && proj < Main.maxProjectiles)
-                Main.projectile[proj].localAI[1] = paletteIndex;
+            {
+                Projectile p = Main.projectile[proj];
+                if (p.ModProjectile is SteelBroadSwordProjectile steelProj)
+                {
+                    steelProj.PaletteIndex = (byte)paletteIndex;
+                    p.netUpdate = true;
+                }
+            }
             return false;
         }
+        public override void SaveData(TagCompound tag)
+        {
+            tag["paletteIndex"] = paletteIndex;
+        }
 
+        public override void LoadData(TagCompound tag)
+        {
+            paletteIndex = tag.GetInt("paletteIndex");
+            if (paletteIndex < 0 || paletteIndex > 2)
+                paletteIndex = 1;
+        }
+
+        public override void NetSend(BinaryWriter writer)
+        {
+            writer.Write((byte)paletteIndex);
+        }
+
+        public override void NetReceive(BinaryReader reader)
+        {
+            paletteIndex = reader.ReadByte();
+            if (paletteIndex < 0 || paletteIndex > 2)
+                paletteIndex = 1;
+        }
         public override bool CanUseItem(Player player)
         {
             if (player.altFunctionUse == 2)

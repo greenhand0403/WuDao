@@ -34,6 +34,7 @@ namespace WuDao
 		RequestCuisineFoodRain,    // 客户端请求服务器尝试触发食物雨
 		SyncMimickerState,         // 同步模仿者击杀/解锁进度
 		SyncRewinderCicadasTriggered, // 同步春秋蝉触发视觉表现
+		SyncOutlawPlayer,         // 同步法外狂徒状态
 	}
 	
 	public class WuDao : Mod
@@ -406,6 +407,30 @@ namespace WuDao
 							Main.dust[d].noGravity = true;
 						}
 
+						break;
+					}
+				case MessageType.SyncOutlawPlayer:
+					{
+						byte plr = reader.ReadByte();
+						Player player = Main.player[plr];
+						var modPlayer = player.GetModPlayer<TheOutlawPlayer>();
+
+						modPlayer.nextShotEmpowered = reader.ReadBoolean();
+						modPlayer.critStacksForUltimate = reader.ReadInt32();
+						modPlayer.ultimateReady = reader.ReadBoolean();
+						modPlayer.dashBackCooldownTicks = reader.ReadInt32();
+
+						if (Main.netMode == NetmodeID.Server)
+						{
+							ModPacket packet = GetPacket();
+							packet.Write((byte)MessageType.SyncOutlawPlayer);
+							packet.Write(plr);
+							packet.Write(modPlayer.nextShotEmpowered);
+							packet.Write(modPlayer.critStacksForUltimate);
+							packet.Write(modPlayer.ultimateReady);
+							packet.Write(modPlayer.dashBackCooldownTicks);
+							packet.Send(-1, whoAmI);
+						}
 						break;
 					}
 			}

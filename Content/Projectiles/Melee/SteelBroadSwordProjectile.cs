@@ -1,3 +1,5 @@
+using System;
+using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -14,6 +16,7 @@ namespace WuDao.Content.Projectiles.Melee
     /// </summary>
     public class SteelBroadSwordProjectile : ModProjectile
     {
+        public byte PaletteIndex;
         public override void SetStaticDefaults()
         {
             Main.projFrames[Type] = 4; // 竖排4帧（示例会把不同pass用到第0/3帧）
@@ -43,7 +46,15 @@ namespace WuDao.Content.Projectiles.Melee
             Projectile.aiStyle = -1;
             Projectile.noEnchantmentVisuals = true;
         }
+        public override void SendExtraAI(BinaryWriter writer)
+        {
+            writer.Write(PaletteIndex);
+        }
 
+        public override void ReceiveExtraAI(BinaryReader reader)
+        {
+            PaletteIndex = reader.ReadByte();
+        }
         public override void AI()
         {
             // 约定：ai[0]=方向(+1/-1，含重力翻转)；ai[1]=最大时长；ai[2]=近战缩放
@@ -152,7 +163,7 @@ namespace WuDao.Content.Projectiles.Melee
             float lerp = Utils.Remap(t, 0f, 0.6f, 0f, 1f) * Utils.Remap(t, 0.6f, 1f, 1f, 0f);
 
             // ===== 三套配色 =====
-            int palette = (int)MathHelper.Clamp(Projectile.localAI[1], 0, 2);
+            int palette = Math.Clamp(PaletteIndex, (byte)0, (byte)2);
             Color c_back, c_mid, c_front;
 
             if (palette == 0)

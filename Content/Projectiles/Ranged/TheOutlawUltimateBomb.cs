@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
@@ -34,7 +35,15 @@ namespace WuDao.Content.Projectiles.Ranged
             Projectile.MaxUpdates = 2;
             Projectile.scale = 1.2f;
         }
+        public override void SendExtraAI(BinaryWriter writer)
+        {
+            writer.Write(_detonated);
+        }
 
+        public override void ReceiveExtraAI(BinaryReader reader)
+        {
+            _detonated = reader.ReadBoolean();
+        }
         public override void AI()
         {
             // 对齐飞行方向
@@ -49,6 +58,7 @@ namespace WuDao.Content.Projectiles.Ranged
             // 未命中任何敌人时的自动爆炸
             if (!_detonated) ConeExplode(Projectile.Center, Projectile.velocity.SafeNormalize(Vector2.UnitX), 90f, (int)(Projectile.damage * 0.9f));
             _detonated = true;
+            Projectile.netUpdate = true;
             return true;
         }
 
@@ -76,7 +86,8 @@ namespace WuDao.Content.Projectiles.Ranged
 
         private void ConeExplode(Vector2 origin, Vector2 forward, float halfAngleDeg, int damage, int ignoreFirst = -1)
         {
-            if (Projectile.owner != Main.myPlayer) return;
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+                return;
 
             float halfRad = MathHelper.ToRadians(halfAngleDeg);
 
@@ -125,9 +136,8 @@ namespace WuDao.Content.Projectiles.Ranged
                     Crit = false
                 };
                 npc.StrikeNPC(hitInfo, fromNet: false);
-
-                // 简单特效（可删）
-                Dust.NewDust(npc.position, npc.width, npc.height, DustID.PurpleCrystalShard);
+                if (Main.netMode == NetmodeID.Server)
+                    NetMessage.SendStrikeNPC(npc, hitInfo);
             }
 
             // 视觉：可以多一点粒子增强“打到了很多目标”的反馈

@@ -1162,6 +1162,11 @@ Buffs: {
 		Description: 海鸥仆从为你而战
 		DisplayName: 海鸥守护
 	}
+
+	ApeTouchCooldownBuff: {
+		// Description: Mods.WuDao.Buffs.ApeTouchCooldownBuff.Description
+		// DisplayName: Ape Touch Cooldown Buff
+	}
 }
 
 Configs: {

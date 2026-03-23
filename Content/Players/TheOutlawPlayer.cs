@@ -1,5 +1,7 @@
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.ModLoader.IO;
 using WuDao.Content.Buffs;
 
 namespace WuDao.Content.Players
@@ -40,11 +42,65 @@ namespace WuDao.Content.Players
             {
                 ReduceBackstepCooldownOnCrit();
             }
+            SyncIfNeeded();
         }
 
-        public override void ResetEffects()
+        public override void SaveData(TagCompound tag)
         {
-            // 这里不重置 nextShotEmpowered/ultimateReady，它们在使用后由武器清除
+            tag["nextShotEmpowered"] = nextShotEmpowered;
+            tag["critStacksForUltimate"] = critStacksForUltimate;
+            tag["ultimateReady"] = ultimateReady;
+            tag["dashBackCooldownTicks"] = dashBackCooldownTicks;
+        }
+
+        public override void LoadData(TagCompound tag)
+        {
+            nextShotEmpowered = tag.GetBool("nextShotEmpowered");
+            critStacksForUltimate = tag.GetInt("critStacksForUltimate");
+            ultimateReady = tag.GetBool("ultimateReady");
+            dashBackCooldownTicks = tag.GetInt("dashBackCooldownTicks");
+        }
+
+        public override void CopyClientState(ModPlayer targetCopy)
+        {
+            var clone = (TheOutlawPlayer)targetCopy;
+            clone.nextShotEmpowered = nextShotEmpowered;
+            clone.critStacksForUltimate = critStacksForUltimate;
+            clone.ultimateReady = ultimateReady;
+            clone.dashBackCooldownTicks = dashBackCooldownTicks;
+        }
+
+        public override void SendClientChanges(ModPlayer clientPlayer)
+        {
+            var old = (TheOutlawPlayer)clientPlayer;
+
+            if (old.nextShotEmpowered != nextShotEmpowered ||
+                old.critStacksForUltimate != critStacksForUltimate ||
+                old.ultimateReady != ultimateReady ||
+                old.dashBackCooldownTicks != dashBackCooldownTicks)
+            {
+                SyncIfNeeded();
+            }
+        }
+
+        public override void SyncPlayer(int toWho, int fromWho, bool newPlayer)
+        {
+            ModPacket packet = Mod.GetPacket();
+            packet.Write((byte)MessageType.SyncOutlawPlayer);
+            packet.Write((byte)Player.whoAmI);
+
+            packet.Write(nextShotEmpowered);
+            packet.Write(critStacksForUltimate);
+            packet.Write(ultimateReady);
+            packet.Write(dashBackCooldownTicks);
+
+            packet.Send(toWho, fromWho);
+        }
+
+        private void SyncIfNeeded()
+        {
+            if (Main.netMode != NetmodeID.SinglePlayer)
+                SyncPlayer(-1, -1, false);
         }
         public void ReduceBackstepCooldownOnCrit()
         {
@@ -72,6 +128,7 @@ namespace WuDao.Content.Players
             // 2分钟冷却
             dashBackCooldownTicks = 7200;
             // 实际位移与无敌帧在武器触发处完成（因为方向/速度与持武器时机更自然）
+            SyncIfNeeded();
         }
 
         public override void PostUpdate()
@@ -82,6 +139,10 @@ namespace WuDao.Content.Players
                 int buffType = ModContent.BuffType<OutlawBackstepBuff>();
                 Player.ClearBuff(buffType);
                 Player.AddBuff(buffType, dashBackCooldownTicks);
+
+                // 只在关键节点发同步，避免每 tick 狂刷
+                if (dashBackCooldownTicks % 30 == 0)
+                    SyncIfNeeded();
             }
         }
     }

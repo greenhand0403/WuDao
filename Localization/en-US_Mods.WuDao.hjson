@@ -1157,6 +1157,11 @@ Buffs: {
 		Description: Seagull fights for you
 		DisplayName: Seagull Buff
 	}
+
+	ApeTouchCooldownBuff: {
+		Description: Mods.WuDao.Buffs.ApeTouchCooldownBuff.Description
+		DisplayName: Ape Touch Cooldown Buff
+	}
 }
 
 Configs: {

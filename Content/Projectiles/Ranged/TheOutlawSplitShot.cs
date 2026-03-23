@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
@@ -32,7 +33,19 @@ namespace WuDao.Content.Projectiles.Ranged
             Projectile.localNPCHitCooldown = 10;
             Projectile.MaxUpdates = 2;
         }
+        public override void SendExtraAI(BinaryWriter writer)
+        {
+            writer.Write(_split);
+            writer.Write(_spawnedFirewall);
+            writer.Write((byte)_deferSplitTicks);
+        }
 
+        public override void ReceiveExtraAI(BinaryReader reader)
+        {
+            _split = reader.ReadBoolean();
+            _spawnedFirewall = reader.ReadBoolean();
+            _deferSplitTicks = reader.ReadByte();
+        }
         public override void AI()
         {
             // 贴图朝右，需要旋转90°对齐速度方向
@@ -160,10 +173,11 @@ namespace WuDao.Content.Projectiles.Ranged
         {
             if (_spawnedFirewall) return;
             if (!NPC.downedPlantBoss) return;
-            if (Projectile.owner != Main.myPlayer) return;
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+                return;
 
             Vector2 pos = overrideCenter ?? Projectile.Center; // ← 支持指定中心
-            Projectile.NewProjectile(
+            int proj = Projectile.NewProjectile(
                 Projectile.GetSource_FromThis(),
                 pos,                        // ★ 用这个位置
                 Vector2.Zero,
@@ -175,6 +189,8 @@ namespace WuDao.Content.Projectiles.Ranged
                 ai1: orient                 // -1右墙/0地面/+1左墙（你之前的方位枚举）
             );
             _spawnedFirewall = true;
+            if (proj > 0 && proj < Main.projectile.Length)
+                Main.projectile[proj].netUpdate = true;
         }
 
         public override void OnKill(int timeLeft)
@@ -191,7 +207,7 @@ namespace WuDao.Content.Projectiles.Ranged
             if (!_split) DoSplit();
 
             // ★ 命中后补墙：未生成 → 优先贴地，其次至少放在“身体中心”
-            if (!_spawnedFirewall && NPC.downedPlantBoss && Projectile.owner == Main.myPlayer)
+            if (!_spawnedFirewall && NPC.downedPlantBoss && Main.netMode != NetmodeID.MultiplayerClient)
             {
                 // 1) 三列X位（左1/4、中、右1/4），向下扫描若干格，找“最近的实心顶面”
                 Vector2 footMid = new Vector2(target.Center.X, target.Bottom.Y);
@@ -247,8 +263,8 @@ namespace WuDao.Content.Projectiles.Ranged
             if (_split) return; // 双保险
             _split = true;
 
+            Projectile.netUpdate = true;
             if (!Projectile.active) return;
-
             var src = Projectile.GetSource_FromThis();
 
             // 以当前飞行方向为基准，顺/逆时针旋转 90°
@@ -260,15 +276,18 @@ namespace WuDao.Content.Projectiles.Ranged
             Vector2 ccw = dir.RotatedBy(MathHelper.PiOver2) * speed; // 逆时针 90°
 
             // 立即爆炸的爆破弹（只飞极短时间）
-            if (Projectile.owner == Main.myPlayer)
+            if (Main.netMode != NetmodeID.MultiplayerClient)
             {
-                Projectile.NewProjectile(src, Projectile.Center, cw,
+                int proj = Projectile.NewProjectile(src, Projectile.Center, cw,
                     ModContent.ProjectileType<TheOutlawSplitBomblet>(),
                     (int)(Projectile.damage * 1f), Projectile.knockBack, Projectile.owner);
-
-                Projectile.NewProjectile(src, Projectile.Center, ccw,
+                if (proj > 0 && proj < Main.projectile.Length)
+                    Main.projectile[proj].netUpdate = true;
+                proj = Projectile.NewProjectile(src, Projectile.Center, ccw,
                     ModContent.ProjectileType<TheOutlawSplitBomblet>(),
                     (int)(Projectile.damage * 1f), Projectile.knockBack, Projectile.owner);
+                if (proj > 0 && proj < Main.projectile.Length)
+                    Main.projectile[proj].netUpdate = true;
             }
 
             // ★ 分裂瞬间：仅当贴靠到实心物块时才生成火墙
@@ -375,8 +394,8 @@ namespace WuDao.Content.Projectiles.Ranged
         {
             if (!Main.dedServ)
             {
-                TexAsset = ModContent.Request<Texture2D>(
-                    "WuDao/Content/Projectiles/Ranged/TheOutlawFirewall",
+                TexAsset = Mod.Assets.Request<Texture2D>(
+                    "Content/Projectiles/Ranged/TheOutlawFirewall",
                     AssetRequestMode.AsyncLoad);
             }
         }
@@ -465,9 +484,14 @@ namespace WuDao.Content.Projectiles.Ranged
         // 绘制自己的火墙 水平方向也有偏移 例如打到左侧墙壁上，贴图应该往右边移动20像素
         public override bool PreDraw(ref Color lightColor)
         {
+            if (Main.dedServ || TexAsset == null)
+            {
+                return false;
+            }
+
             // 朝向判断（能识别 +90° / -90°）
             float rot = MathHelper.WrapAngle(Projectile.rotation);
-            bool vertical = Math.Abs(Math.Abs(rot) - MathHelper.PiOver2) < MathHelper.PiOver4;
+            // bool vertical = Math.Abs(Math.Abs(rot) - MathHelper.PiOver2) < MathHelper.PiOver4;
             Rectangle rec = _grid.GetFrameRect(1);
             // ★ 仅在“水平”时抬高贴图 10px（命中盒子不动）
             Vector2 drawCenter = Projectile.Center;

@@ -90,11 +90,11 @@ namespace WuDao.Content.Projectiles.Ranged
         private void TryBurstOnce(Vector2 center, Vector2 baseVelocity)
         {
             if (_burstFired)
-            {
                 return;
-            }
+
             _burstFired = true;
-            if (Projectile.owner == Main.myPlayer)
+
+            if (Main.netMode != NetmodeID.MultiplayerClient)
             {
                 SpawnHolyCrossBurst(center, baseVelocity);
             }
@@ -123,7 +123,8 @@ namespace WuDao.Content.Projectiles.Ranged
                     var proj = Main.projectile[p];
                     proj.Center = center;
                     proj.ai[0] = off;  // 不随着碰撞面的方向 baseAngle + 
-                    proj.localAI[0] = b;           // 横向半宽；纵向 a 自动由公式算
+                    proj.ai[1] = b;           // 横向半宽；纵向 a 自动由公式算
+                    proj.netUpdate = true;
                     proj.timeLeft = duration;
 
                     proj.friendly = true;

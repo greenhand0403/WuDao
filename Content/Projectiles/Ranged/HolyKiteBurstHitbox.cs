@@ -41,7 +41,7 @@ namespace WuDao.Content.Projectiles.Ranged
             Vector2 v = new Vector2(0f, -1f).RotatedBy(angle); // 向上
             Vector2 u = v.RotatedBy(MathHelper.PiOver2);       // 向右
 
-            float b = Math.Abs(Projectile.localAI[0]);         // 横向半宽
+            float b = Math.Abs(Projectile.ai[1]);         // 横向半宽
             float cot15 = 3.7320508f;                          // cot(15°)
             float a = b * (1f + cot15) * 0.5f;                 // 纵向半轴
             float yMid = b;                                    // 侧点的纵向位置（自底尖起）
@@ -67,7 +67,7 @@ namespace WuDao.Content.Projectiles.Ranged
             Vector2 v = new Vector2(0f, -1f).RotatedBy(angle);
             Vector2 u = v.RotatedBy(MathHelper.PiOver2);
 
-            float b = Math.Abs(Projectile.localAI[0]);
+            float b = Math.Abs(Projectile.ai[1]);
             float cot15 = 3.7320508f;
             float a = b * (1f + cot15) * 0.5f;
             float yMid = b;

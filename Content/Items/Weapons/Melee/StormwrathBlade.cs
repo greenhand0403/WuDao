@@ -50,6 +50,9 @@ namespace WuDao.Content.Items.Weapons.Melee
             int damage,
             float knockback)
         {
+            if (Main.netMode == NetmodeID.Server)
+                return false;
+
             if (player.whoAmI != Main.myPlayer)
                 return false;
 
@@ -74,7 +77,7 @@ namespace WuDao.Content.Items.Weapons.Melee
             );
             Main.projectile[proj].friendly = true;
             Main.projectile[proj].hostile = false;
-
+            Main.projectile[proj].netUpdate = true;
             return false;
         }
 
