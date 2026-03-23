@@ -34,9 +34,11 @@ namespace WuDao.Content.Tiles
 
         public override void NearbyEffects(int i, int j, bool closer)
         {
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+                return;
+
             const int range = 16 * 20;
-            // 小范围光环：对半径 ~320 像素（约 20 格）内玩家赋予短 Buff 1 格 16像素
-            Rectangle rect = new Rectangle(i * 16 - range, j * 16 - range, 16 * 3 + range, 16 * 2 + range);
+            Rectangle rect = new Rectangle(i * 16 - range, j * 16 - range, range * 2 + 16 * 3, range * 2 + 16 * 2);
             for (int idx = 0; idx < Main.maxPlayers; idx++)
             {
                 Player p = Main.player[idx];
@@ -45,13 +47,12 @@ namespace WuDao.Content.Tiles
                     int ib = p.FindBuffIndex(ModContent.BuffType<PyramidWard>());
                     if (ib >= 0)
                     {
-                        // 只有在剩余时间偏低时才回填，避免每帧重置导致的闪烁
                         if (p.buffTime[ib] < 60)
                             p.buffTime[ib] = 60;
                     }
                     else
                     {
-                        p.AddBuff(ModContent.BuffType<PyramidWard>(), 60); // 持续刷新
+                        p.AddBuff(ModContent.BuffType<PyramidWard>(), 60);
                     }
                 }
             }

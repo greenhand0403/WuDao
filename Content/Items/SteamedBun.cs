@@ -28,13 +28,20 @@ namespace WuDao.Content.Items
 
         public override bool? UseItem(Player player)
         {
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+                return true;
+
             // 50% 的几率召唤流浪乞丐
             if (Main.rand.NextBool(2))
             {
                 return false;
             }
+
             BeggarSystem.SpawnBeggarNear(player);
-            Main.NewText(Language.GetTextValue("Mods.WuDao.Items.SteamedBun.Messages"), Color.LightGreen);
+
+            if (Main.netMode != NetmodeID.Server)
+                Main.NewText(Language.GetTextValue("Mods.WuDao.Items.SteamedBun.Messages"), Color.LightGreen);
+
             return true;
         }
     }
