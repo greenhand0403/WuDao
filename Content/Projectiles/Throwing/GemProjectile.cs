@@ -13,6 +13,7 @@ namespace WuDao.Content.Projectiles.Throwing
     public class GemProjectile : BaseThrowingProjectile
     {
         public override string Texture => $"Terraria/Images/Item_{ItemID.Diamond}";
+        private ref float GemTypeAI => ref Projectile.ai[1];
         private int gemID;
         public override void SetDefaults()
         {
@@ -26,8 +27,10 @@ namespace WuDao.Content.Projectiles.Throwing
         }
         public override void OnSpawn(IEntitySource source)
         {
-            // 随机选宝石，并加载对应贴图
-            gemID = ItemSets.GemSet.Get(SelectionMode.Random);
+            gemID = (int)GemTypeAI;
+            if (gemID <= 0)
+                gemID = ItemID.Diamond; // 兜底
+
             Main.instance.LoadItem(gemID);
 
             // —— 出生时一次性的被动调整（不依赖命中）—— //
@@ -83,41 +86,52 @@ namespace WuDao.Content.Projectiles.Throwing
             switch (gemID)
             {
                 case ItemID.Diamond:
-                    // 钻石：增伤 10%（加在源伤害上，受后续计算影响，更自然）
                     modifiers.SourceDamage *= 1.10f;
                     break;
 
                 case ItemID.Topaz:
-                    // 黄玉：击退 1.5 倍
                     modifiers.Knockback *= 1.5f;
                     break;
 
+                case ItemID.Sapphire:
+                    // 只有服务器确认 owner 有蓝，才给 +10 最终伤害
+                    if (Main.netMode != NetmodeID.MultiplayerClient && owner.statMana >= 5)
+                        modifiers.FinalDamage.Flat += 10f;
+                    break;
+            }
+        }
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+        {
+            base.OnHitNPC(target, hit, damageDone);
+
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+                return;
+
+            Player owner = Main.player[Projectile.owner];
+            if (!owner.active || owner.dead)
+                return;
+
+            switch (gemID)
+            {
                 case ItemID.Ruby:
-                    // 红玉：命中时治疗 2 生命（仅本地拥有者触发）
-                    if (Main.myPlayer == owner.whoAmI && owner.statLife < owner.statLifeMax2)
                     {
                         int heal = 2;
                         owner.statLife = Math.Min(owner.statLife + heal, owner.statLifeMax2);
                         owner.HealEffect(heal, true);
+                        break;
                     }
-                    break;
 
                 case ItemID.Sapphire:
-                    // 蓝玉：若法力 ≥5，则消耗 5 法力，给予 +10 点最终伤害
-                    if (owner.statMana >= 5)
                     {
-                        if (Main.myPlayer == owner.whoAmI)
+                        if (owner.statMana >= 5)
                         {
                             owner.statMana -= 5;
-                            owner.ManaEffect(-5); // 漂浮文字反馈
+                            owner.ManaEffect(-5);
                         }
-                        // 最终伤害加成：Flat 表示在最终值上再加固定值（贴合“最终伤害+10”的直觉）
-                        modifiers.FinalDamage.Flat += 10f;
+                        break;
                     }
-                    break;
             }
         }
-
         // 若你想让绘制也更“贴合宝石”，可保留你原来的 PreDraw：
         // （已经根据 gemID 切换了贴图）
         public override bool PreDraw(ref Color lightColor)

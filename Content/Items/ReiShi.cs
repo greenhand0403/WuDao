@@ -31,10 +31,13 @@ namespace WuDao.Content.Items
         }
         public override bool? UseItem(Player player)
         {
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+                return true;
             var qi = player.GetModPlayer<QiPlayer>();
             qi.Used_ReiShi++;
             qi.QiMaxFromItems += 50;
             Main.NewText(Language.GetTextValue("Mods.WuDao.ReiShi.Messages"), Color.SkyBlue);
+            qi.SyncQiPermanentState();
             return true;
         }
         public override void AddRecipes()

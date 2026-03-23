@@ -32,10 +32,13 @@ namespace WuDao.Content.Items
         }
         public override bool? UseItem(Player player)
         {
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+                return true;
             var qi = player.GetModPlayer<QiPlayer>();
             qi.Used_PassionFruit++;
             qi.QiMaxFromItems += 10;
             Main.NewText(Language.GetTextValue("Mods.WuDao.PassionFruit.Messages"), Color.LightSeaGreen);
+            qi.SyncQiPermanentState();
             return true;
         }
         public override void AddRecipes()

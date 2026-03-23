@@ -33,10 +33,12 @@ namespace WuDao.Content.Items
         }
         public override bool? UseItem(Player player)
         {
-            // 强力食物增益（1.4.4：WellFed3 = Exquisitely Stuffed）
-            player.AddBuff(BuffID.WellFed3, 60 * 60 * 2); // 2 分钟
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+                return true;
 
-            // 增益池（尽量选通用而稳定的 Buff）
+            // 强力食物增益
+            player.AddBuff(BuffID.WellFed3, 60 * 60 * 2);
+
             int[] pool = new int[] {
                 BuffID.Regeneration,
                 BuffID.Swiftness,
@@ -54,13 +56,13 @@ namespace WuDao.Content.Items
                 ModContent.BuffType<SweetLucky>(),
             };
 
-            // 随机抽取 5 个不同的
             Shuffle(pool, Main.rand);
             int count = Math.Min(5, pool.Length);
             for (int i = 0; i < count; i++)
             {
-                player.AddBuff(pool[i], 60 * 60 * 2); // 2 分钟
+                player.AddBuff(pool[i], 60 * 60 * 2);
             }
+
             return true;
         }
 

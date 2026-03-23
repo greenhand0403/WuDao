@@ -29,19 +29,20 @@ namespace WuDao.Content.Items
 
         public override bool? UseItem(Player player)
         {
-            // 食物层：WellFed(小) 或 WellFed2(中)
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+                return true;
+
             int[] foods = new int[] { BuffID.WellFed, BuffID.WellFed2 };
             int pickFood = Main.rand.Next(foods.Length);
-            player.AddBuff(foods[pickFood], 60 * 60); // 1 分钟
+            player.AddBuff(foods[pickFood], 60 * 60);
 
-            // 自定义池：再生/敏捷/幸运（自定义 Buff，避免跨版本 ID 差异）
             int[] pool = new int[] {
                 ModContent.BuffType<SweetRegen>(),
                 ModContent.BuffType<SweetAgile>(),
                 ModContent.BuffType<SweetLucky>(),
             };
             int pick = Main.rand.Next(pool.Length);
-            player.AddBuff(pool[pick], 60 * 60); // 1 分钟
+            player.AddBuff(pool[pick], 60 * 60);
 
             return true;
         }

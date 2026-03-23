@@ -35,6 +35,7 @@ namespace WuDao
 		SyncMimickerState,         // 同步模仿者击杀/解锁进度
 		SyncRewinderCicadasTriggered, // 同步春秋蝉触发视觉表现
 		SyncOutlawPlayer,         // 同步法外狂徒状态
+		SyncQiPermanentState,     // 同步气力上限恢复速度等增益永久状态
 	}
 	
 	public class WuDao : Mod
@@ -429,6 +430,41 @@ namespace WuDao
 							packet.Write(modPlayer.critStacksForUltimate);
 							packet.Write(modPlayer.ultimateReady);
 							packet.Write(modPlayer.dashBackCooldownTicks);
+							packet.Send(-1, whoAmI);
+						}
+						break;
+					}
+				case MessageType.SyncQiPermanentState:
+					{
+						byte playerWhoAmI = reader.ReadByte();
+						if (playerWhoAmI < 0 || playerWhoAmI >= Main.maxPlayers)
+							return;
+
+						Player player = Main.player[playerWhoAmI];
+						QiPlayer qi = player.GetModPlayer<QiPlayer>();
+
+						qi.QiMaxFromItems = reader.ReadInt32();
+						qi.Used_ReiShi = reader.ReadInt32();
+						qi.Used_PassionFruit = reader.ReadInt32();
+						qi.JinggongUsed = reader.ReadInt32();
+						qi.DonggongUsed = reader.ReadInt32();
+						qi.QiRegenStandBonus = reader.ReadSingle();
+						qi.QiRegenMoveBonus = reader.ReadSingle();
+
+						if (Main.netMode == NetmodeID.Server)
+						{
+							ModPacket packet = GetPacket();
+							packet.Write((byte)MessageType.SyncQiPermanentState);
+							packet.Write(playerWhoAmI);
+
+							packet.Write(qi.QiMaxFromItems);
+							packet.Write(qi.Used_ReiShi);
+							packet.Write(qi.Used_PassionFruit);
+							packet.Write(qi.JinggongUsed);
+							packet.Write(qi.DonggongUsed);
+							packet.Write(qi.QiRegenStandBonus);
+							packet.Write(qi.QiRegenMoveBonus);
+
 							packet.Send(-1, whoAmI);
 						}
 						break;

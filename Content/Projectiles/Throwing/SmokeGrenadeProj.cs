@@ -3,6 +3,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Audio;
+using Terraria.DataStructures;
 
 namespace WuDao.Content.Projectiles.Throwing
 {
@@ -37,11 +38,38 @@ namespace WuDao.Content.Projectiles.Throwing
 
         public override void OnKill(int timeLeft)
         {
-            // 生成烟雾场
-            Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.Zero,
-                ModContent.ProjectileType<SmokeCloud>(), 1, 0f, Projectile.owner, ai0: 120f /*2秒*/);
+            if (Main.netMode != NetmodeID.MultiplayerClient)
+            {
+                int proj = Projectile.NewProjectile(
+                    Projectile.GetSource_FromThis(),
+                    Projectile.Center,
+                    Vector2.Zero,
+                    ModContent.ProjectileType<SmokeCloud>(),
+                    1,
+                    0f,
+                    Projectile.owner,
+                    ai0: 120f
+                );
+
+                if (proj > 0)
+                    Main.projectile[proj].netUpdate = true;
+            }
+
             for (int i = 0; i < 20; i++)
-                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Smoke, Main.rand.NextFloat(-2, 2), Main.rand.NextFloat(-2, 2), 100, default, 2.5f);
+            {
+                Dust.NewDust(
+                    Projectile.position,
+                    Projectile.width,
+                    Projectile.height,
+                    DustID.Smoke,
+                    Main.rand.NextFloat(-2, 2),
+                    Main.rand.NextFloat(-2, 2),
+                    100,
+                    default,
+                    2.5f
+                );
+            }
+
             SoundEngine.PlaySound(SoundID.Item62, Projectile.Center);
         }
     }
@@ -49,10 +77,6 @@ namespace WuDao.Content.Projectiles.Throwing
     public class SmokeCloud : ModProjectile
     {
         private int _tick;
-        // public override void SetStaticDefaults()
-        // {
-        //     DisplayName.SetDefault("烟雾");
-        // }
         public override string Texture => $"Terraria/Images/Projectile_{ProjectileID.ToxicCloud}";
         public override void SetDefaults()
         {
@@ -65,40 +89,51 @@ namespace WuDao.Content.Projectiles.Throwing
             Projectile.ignoreWater = true;
             Projectile.hide = true;
         }
-
+        public override void OnSpawn(IEntitySource source)
+        {
+            if (Projectile.ai[0] > 0)
+                Projectile.timeLeft = (int)Projectile.ai[0];
+        }
         public override void AI()
         {
-            // if (Projectile.ai[0] > 0) Projectile.timeLeft = (int)Projectile.ai[0];
-
-            // 漫延烟雾粉尘
             for (int i = 0; i < 4; i++)
             {
                 Vector2 pos = Projectile.Center + Main.rand.NextVector2Circular(Projectile.width / 2, Projectile.height / 2);
                 Dust.NewDustPerfect(pos, DustID.Smoke, Vector2.Zero, 200, default, Main.rand.NextFloat(2.2f, 2.8f));
             }
 
-            // 每 10 tick 结算一次 DOT：5~10 固定伤害
             if (++_tick >= 10)
             {
                 _tick = 0;
+
+                if (Main.netMode == NetmodeID.MultiplayerClient)
+                    return;
+
                 foreach (var npc in Main.npc)
                 {
-                    if (npc.active && !npc.friendly && npc.life > 0)
+                    if (!npc.active || npc.friendly || npc.life <= 0 || npc.dontTakeDamage)
+                        continue;
+
+                    if (Collision.CheckAABBvAABBCollision(
+                        npc.position, npc.Size,
+                        Projectile.position, new Vector2(Projectile.width, Projectile.height)))
                     {
-                        if (Collision.CheckAABBvAABBCollision(npc.position, npc.Size, Projectile.position, new Vector2(Projectile.width, Projectile.height)))
+                        int dmg = Main.rand.Next(5, 11);
+
+                        NPC.HitInfo hitInfo = new NPC.HitInfo
                         {
-                            int dmg = Main.rand.Next(5, 11);
-                            var hitInfo = new NPC.HitInfo
-                            {
-                                Damage = dmg,
-                                Knockback = 0f,
-                                HitDirection = npc.direction,
-                                Crit = false
-                            };
-                            npc.StrikeNPC(hitInfo, fromNet: false);
-                            // 轻微特效
-                            Dust.NewDust(npc.position, npc.width, npc.height, DustID.Smoke, 0, -1f, 120, default, 2f);
-                        }
+                            Damage = dmg,
+                            Knockback = 0f,
+                            HitDirection = npc.direction,
+                            Crit = false
+                        };
+
+                        npc.StrikeNPC(hitInfo, fromNet: false);
+
+                        if (Main.netMode == NetmodeID.Server)
+                            NetMessage.SendStrikeNPC(npc, hitInfo);
+
+                        Dust.NewDust(npc.position, npc.width, npc.height, DustID.Smoke, 0, -1f, 120, default, 2f);
                     }
                 }
             }

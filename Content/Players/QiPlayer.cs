@@ -194,6 +194,9 @@ namespace WuDao.Content.Players
             tag["QiRegenStandBonus"] = QiRegenStandBonus;
             tag["QiRegenMoveBonus"] = QiRegenMoveBonus;
 
+            tag["QiRegenStandBonus"] = QiRegenStandBonus;
+            tag["QiRegenMoveBonus"] = QiRegenMoveBonus;
+
             // 保存绝学槽
             if (!JuexueSlot.IsAir)
                 tag["JuexueSlot"] = ItemIO.Save(JuexueSlot);
@@ -210,6 +213,9 @@ namespace WuDao.Content.Players
             QiRegenStandBonus = tag.GetFloat("QiRegenStandBonus");
             QiRegenMoveBonus = tag.GetFloat("QiRegenMoveBonus");
 
+            QiRegenStandBonus = tag.GetFloat("QiRegenStandBonus");
+            QiRegenMoveBonus = tag.GetFloat("QiRegenMoveBonus");
+            
             if (tag.ContainsKey("JuexueSlot"))
             {
                 JuexueSlot = ItemIO.Load(tag.GetCompound("JuexueSlot"));
@@ -1009,7 +1015,7 @@ namespace WuDao.Content.Players
                 shiftActive = false;
                 Player.velocity = Vector2.Zero;
                 Player.noFallDmg = false;
-                
+
                 SoundEngine.PlaySound(SoundID.Item6, Player.Center);
                 for (int i = 0; i < 24; i++)
                 {
@@ -1349,6 +1355,25 @@ namespace WuDao.Content.Players
             {
                 SkyWalkingStandingOnAir = false;
             }
+        }
+        public void SyncQiPermanentState(int toWho = -1, int fromWho = -1)
+        {
+            if (Main.netMode == NetmodeID.SinglePlayer)
+                return;
+
+            ModPacket packet = Mod.GetPacket();
+            packet.Write((byte)MessageType.SyncQiPermanentState);
+            packet.Write((byte)Player.whoAmI);
+
+            packet.Write(QiMaxFromItems);
+            packet.Write(Used_ReiShi);
+            packet.Write(Used_PassionFruit);
+            packet.Write(JinggongUsed);
+            packet.Write(DonggongUsed);
+            packet.Write(QiRegenStandBonus);
+            packet.Write(QiRegenMoveBonus);
+
+            packet.Send(toWho, fromWho);
         }
     }
 }

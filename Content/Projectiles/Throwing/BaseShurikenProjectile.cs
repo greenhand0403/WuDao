@@ -100,19 +100,24 @@ namespace WuDao.Content.Projectiles.Throwing
         // 命中 NPC：加 Debuff + 自定义扩展
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
-            if (DebuffTypeOnHit > 0 && DebuffTimeOnHit > 0)
+            // 真实战斗结果：服务器权威
+            if (Main.netMode != NetmodeID.MultiplayerClient)
             {
-                bool apply = DebuffChanceDenom <= 1 || Main.rand.NextBool(DebuffChanceDenom);
-                if (apply)
-                    target.AddBuff(DebuffTypeOnHit, DebuffTimeOnHit);
+                if (DebuffTypeOnHit > 0 && DebuffTimeOnHit > 0)
+                {
+                    bool apply = DebuffChanceDenom <= 1 || Main.rand.NextBool(DebuffChanceDenom);
+                    if (apply)
+                        target.AddBuff(DebuffTypeOnHit, DebuffTimeOnHit);
+                }
+
+                OnHitNPCExt(target, hit, damageDone);
             }
 
+            // 表现层：各端可自行播放
             if (HitSound.HasValue)
                 SoundEngine.PlaySound(HitSound.Value, Projectile.position);
 
             SpawnDust(HitDustType, HitDustCount);
-
-            OnHitNPCExt(target, hit, damageDone);
         }
 
         /// <summary>命中扩展（分裂/溅射等）。</summary>

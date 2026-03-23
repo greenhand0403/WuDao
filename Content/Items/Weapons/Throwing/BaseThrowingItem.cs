@@ -17,8 +17,12 @@ namespace WuDao.Content.Items.Weapons.Throwing
         public override bool Shoot(Player player, Terraria.DataStructures.EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
             // 直接生成射弹并把 AI 模式写入 ai[0]
-            var proj = Projectile.NewProjectileDirect(source, position, velocity, BaseProjectileType, damage, knockback, player.whoAmI);
-            proj.ai[0] = ProjectileAIMode; // 0 或 1
+            if (player.whoAmI == Main.myPlayer)
+            {
+                var proj = Projectile.NewProjectileDirect(source, position, velocity, BaseProjectileType, damage, knockback, player.whoAmI);
+                proj.ai[0] = ProjectileAIMode; // 0 或 1
+                proj.netUpdate = true;
+            }
             return false; // 我们已经手动生成了射弹
         }
     }

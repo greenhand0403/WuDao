@@ -78,11 +78,15 @@ namespace WuDao.Content.Projectiles.Throwing
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             base.OnHitNPC(target, hit, damageDone);
-            // 20% 中毒 + 20% 流血
-            if (Main.rand.NextBool(5))
-                target.AddBuff(BuffID.Poisoned, 120);
-            if (Main.rand.NextBool(5))
-                target.AddBuff(BuffID.Bleeding, 120);
+
+            if (Main.netMode != NetmodeID.MultiplayerClient)
+            {
+                if (Main.rand.NextBool(5))
+                    target.AddBuff(BuffID.Poisoned, 120);
+
+                if (Main.rand.NextBool(5))
+                    target.AddBuff(BuffID.Bleeding, 120);
+            }
         }
     }
 }

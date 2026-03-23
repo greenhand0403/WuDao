@@ -34,6 +34,8 @@ namespace WuDao.Content.Items
 
         public override bool? UseItem(Player player)
         {
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+                return true;
             var qi = player.GetModPlayer<QiPlayer>();
             qi.JinggongUsed++;
             qi.QiRegenStandBonus += BonusPerUse;
@@ -47,6 +49,7 @@ namespace WuDao.Content.Items
                         MaxUses
                     )
                 );
+            qi.SyncQiPermanentState();
             return true;
         }
         public override void AddRecipes()

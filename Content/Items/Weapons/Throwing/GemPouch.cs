@@ -3,6 +3,7 @@ using Terraria.ModLoader;
 using Terraria.ID;
 using WuDao.Content.Projectiles.Throwing;
 using Microsoft.Xna.Framework;
+using WuDao.Common;
 
 namespace WuDao.Content.Items.Weapons.Throwing
 {
@@ -40,11 +41,24 @@ namespace WuDao.Content.Items.Weapons.Throwing
         // 重写 Shoot 使每次发射时随机选择外观（我们通过 projectile.frame 来传递外观索引）
         public override bool Shoot(Player player, Terraria.DataStructures.EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-            int projIndex = Projectile.NewProjectileDirect(source, position, velocity, BaseProjectileType, damage, knockback, player.whoAmI).whoAmI;
-            Projectile proj = Main.projectile[projIndex];
+            if (player.whoAmI != Main.myPlayer)
+                return false;
 
-            // 设定 AI 模式（这里使用基类的 ProjectileAIMode）
-            proj.ai[0] = ProjectileAIMode;
+            int gemItem = ItemSets.GemSet.Get(SelectionMode.Random);
+
+            int projIndex = Projectile.NewProjectile(
+                source,
+                position,
+                velocity,
+                BaseProjectileType,
+                damage,
+                knockback,
+                player.whoAmI,
+                ai0: ProjectileAIMode,
+                ai1: gemItem
+            );
+            
+            Main.projectile[projIndex].netUpdate = true;
 
             return false;
         }
