@@ -15,6 +15,7 @@ namespace WuDao.Content.Projectiles.Summon
         private const float TargetAcquireRange = 700f;
         public override bool? CanCutTiles() => false; // 不用于清草
         public override bool MinionContactDamage() => true;
+        private ref float IdleRadius => ref Projectile.ai[0];
         public override void SetStaticDefaults()
         {
             // Sets the amount of frames this minion has on its spritesheet
@@ -83,7 +84,7 @@ namespace WuDao.Content.Projectiles.Summon
             Vector2 arcDir = new Vector2(0f, -1f).RotatedBy(angleRad);
 
             // Idle 目标点
-            Vector2 idlePos = owner.Center + arcDir * Projectile.localAI[1];
+            Vector2 idlePos = owner.Center + arcDir * IdleRadius;
 
 
             // —— 寻怪（保持你原来的 FindTarget，如果名字不同就替换） ——
@@ -166,9 +167,10 @@ namespace WuDao.Content.Projectiles.Summon
         // 6~8 格，每格 16 像素 => 128~256 px
         private void EnsureIdleRadius()
         {
-            if (Projectile.localAI[1] == 0f)
+            if (IdleRadius == 0f)
             {
-                Projectile.localAI[1] = Main.rand.Next(6, 8) * 16f;
+                IdleRadius = Main.rand.Next(6, 8) * 16f;
+                Projectile.netUpdate = true;
             }
         }
 
@@ -227,7 +229,7 @@ namespace WuDao.Content.Projectiles.Summon
             float distToOwner = Vector2.Distance(Projectile.Center, owner.Center);
             bool lineOfSight = Collision.CanHitLine(Projectile.Center, 1, 1, owner.Center, 1, 1);
 
-            if (Projectile.owner != Main.myPlayer) return;
+            if (Main.netMode == NetmodeID.MultiplayerClient) return;
 
             if (distToOwner > InstantSnapDist || (!lineOfSight && distToOwner > LostBehindDist))
             {

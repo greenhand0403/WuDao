@@ -107,6 +107,9 @@ public class FishSchoolWhipProj : ModProjectile
     // 目前冷却时对武器而言的，武器打A后马上打B也会被冷却住
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
     {
+        if (Main.netMode == NetmodeID.MultiplayerClient)
+            return;
+
         // ai[0] 作为该鞭子对每个目标的本地命中冷却计时入口不合适，
         // 最简单的方法：直接使用 target 的 immunity 概念不太适配这个需求，
         // 所以推荐配一个 GlobalNPC 存 timer。
@@ -162,6 +165,8 @@ public class FishSchoolWhipProj : ModProjectile
                 player.whoAmI,
                 fishItem
             );
+
+            Main.projectile[proj].netUpdate = true;
         }
     }
 

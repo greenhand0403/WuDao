@@ -43,9 +43,12 @@ namespace WuDao.Content.Items.Weapons.Summon
         {
             // 经典召唤杖：在鼠标位置召唤
             player.AddBuff(Item.buffType, 2);
-
-            var projectile = Projectile.NewProjectileDirect(source, position, velocity, type, damage, knockback, Main.myPlayer);
-            projectile.originalDamage = Item.damage;
+            
+            if (player.whoAmI == Main.myPlayer)
+            {
+                var projectile = Projectile.NewProjectileDirect(source, position, velocity, type, damage, knockback, Main.myPlayer);
+                projectile.originalDamage = Item.damage;
+            }
 
             return false;
         }

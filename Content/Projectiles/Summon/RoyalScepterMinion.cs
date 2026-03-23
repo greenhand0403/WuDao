@@ -43,6 +43,7 @@ namespace WuDao.Content.Projectiles.Summon
             Projectile.usesLocalNPCImmunity = true;
             Projectile.localNPCHitCooldown = 10;
             Projectile.minionSlots = 1f; // 占用 1 个随从栏位
+            Projectile.netImportant = true;
         }
 
         public override bool? CanCutTiles() => false;
@@ -63,14 +64,14 @@ namespace WuDao.Content.Projectiles.Summon
             Vector2 desired = player.MountedCenter + new Vector2(0f, -HoverYOffset);
             Projectile.velocity = Vector2.Zero;
             Projectile.Center = desired;
-
+            Projectile.netUpdate = true;
             // 面向
             Projectile.direction = player.direction;
             Projectile.spriteDirection = Projectile.direction;
 
             // 自动索敌并开火
             fireTimer++;
-            if (fireTimer >= FireCD && Main.myPlayer == Projectile.owner)
+            if (fireTimer >= FireCD && Main.netMode != NetmodeID.MultiplayerClient)
             {
                 int target = FindTarget(player.Center, TargetRange);
                 if (target != -1)
@@ -93,20 +94,15 @@ namespace WuDao.Content.Projectiles.Summon
                     int shotDmg = (int)player.GetTotalDamage(DamageClass.Summon).ApplyTo(baseWithEmpty);
 
                     // 发射光束时，damage 用 shotDmg（不要用 Projectile.damage）
-                    Projectile.NewProjectile(src, Projectile.Center, dir * speedShoot,
+                    int proj = Projectile.NewProjectile(src, Projectile.Center, dir * speedShoot,
                         ModContent.ProjectileType<RoyalShadowBeam>(),
                         shotDmg, 0f, Projectile.owner,
                         ai0: Projectile.whoAmI, ai1: 0f);
+                    Main.projectile[proj].netUpdate = true;
 
                     SoundEngine.PlaySound(SoundID.Item72 with { Volume = 0.8f }, Projectile.Center);
                 }
             }
-        }
-
-        int GetBaseDamage()
-        {
-            // originalDamage 在生成时 = Item.damage；这里为了“空栏位增伤”更稳定，取当前持有武器也可
-            return Math.Max(1, Projectile.originalDamage);
         }
 
         int FindTarget(Vector2 from, float range)

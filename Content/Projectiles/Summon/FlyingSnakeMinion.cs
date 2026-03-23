@@ -79,7 +79,7 @@ namespace WuDao.Content.Projectiles.Summon
             bool lineOfSightToOwner = Collision.CanHitLine(Projectile.Center, 1, 1, owner.Center, 1, 1);
 
             // 只让 owner 端执行以避免多人不同步
-            if (Projectile.owner == Main.myPlayer)
+            if (Main.netMode != NetmodeID.MultiplayerClient)
             {
                 // 1) 距离极大：无条件瞬移
                 if (distToOwner > InstantSnapDist)
@@ -143,7 +143,7 @@ namespace WuDao.Content.Projectiles.Summon
             // —— 冷却与开火（SalamanderSpit 从“嘴巴”发射） ——
             Projectile.localAI[0] = Math.Max(0f, Projectile.localAI[0] - 1f);
 
-            if (hasTarget && Projectile.owner == Main.myPlayer)
+            if (hasTarget && Main.netMode != NetmodeID.MultiplayerClient)
             {
                 float dist = Vector2.Distance(Projectile.Center, target.Center);
                 if (dist <= ShootRange && Projectile.localAI[0] <= 0f)
@@ -168,6 +168,7 @@ namespace WuDao.Content.Projectiles.Summon
                     }
 
                     Projectile.localAI[0] = ShootCooldownMax;
+                    Projectile.netUpdate = true;
                 }
             }
         }

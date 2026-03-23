@@ -17,11 +17,9 @@ namespace WuDao.Content.Projectiles.Summon
         private const int State_Dash = 2;
         public override bool MinionContactDamage() => true;
         public override bool? CanCutTiles() => true;
-
-        // ai[0] = style (0/1)
-        // ai[1] = initFlag
-        // localAI[0] = state (0=盘旋, 1=接敌巡航, 2=俯冲)
-        // localAI[1] = timer (状态计时)
+        private ref float Style => ref Projectile.ai[0];
+        private ref float State => ref Projectile.ai[1];
+        private ref float StateTimer => ref Projectile.localAI[1];
         public override void SetStaticDefaults()
         {
             Main.projFrames[Type] = 6; // 12帧：前6帧样式1（穿甲），后6帧样式2（吸血）
@@ -81,8 +79,7 @@ namespace WuDao.Content.Projectiles.Summon
             NPC target = hasTarget ? Main.npc[targetIndex] : null;
 
             // 状态与计时器：沿用你的 localAI
-            int state = (int)Projectile.localAI[0];
-            Projectile.localAI[1]++; // stateTimer
+            StateTimer++; // stateTimer
             Vector2 idlePos = Vector2.Zero;
 
             GetIdleSlot(owner, out int index, out int total);
@@ -91,9 +88,9 @@ namespace WuDao.Content.Projectiles.Summon
             if (!hasTarget)
             {
                 // 没目标：回到 Idle
-                state = State_Idle;
-                Projectile.localAI[0] = state;
-                Projectile.localAI[1] = 0f;
+                State = State_Idle;
+                StateTimer = 0f;
+                Projectile.netUpdate = true;
 
                 float radius = 40f;
                 float height = -70f;
@@ -116,28 +113,26 @@ namespace WuDao.Content.Projectiles.Summon
             }
 
             // 有目标：攻击逻辑
-            if (state == State_Idle)
+            if (State == State_Idle)
             {
                 // 刚发现目标：进入 Staging
-                state = State_Staging;
-                Projectile.localAI[0] = state;
-                Projectile.localAI[1] = 0f;
+                State = State_Staging;
+                StateTimer = 0f;
                 Projectile.netUpdate = true;
             }
 
-            if (state == State_Staging)
+            if (State == State_Staging)
             {
                 float side = (index == 0) ? -60f : 60f; // ✅两把剑左右分开
                 // 加一点随机偏移
-                Vector2 stagingPos = target.Center + new Vector2(side, 70f * Main.rand.NextFloat(-2f, 2f));
+                Vector2 stagingPos = target.Center + new Vector2(side, 70f);
                 // 正常速度 18f，惯性越大转向越慢 8f
                 HoverTo(stagingPos, speed: 18f, inertia: 8f);
 
                 if (Vector2.Distance(Projectile.Center, stagingPos) < 26f)
                 {
-                    state = State_Dash;
-                    Projectile.localAI[0] = state;
-                    Projectile.localAI[1] = 0f;
+                    State = State_Dash;
+                    StateTimer = 0f;
                     Projectile.netUpdate = true;
                 }
             }
@@ -146,7 +141,7 @@ namespace WuDao.Content.Projectiles.Summon
                 Vector2 to = target.Center - Projectile.Center;
 
                 // 第1帧给一个冲刺初速度（之后主要靠惯性飞）
-                if (Projectile.localAI[1] == 1f)
+                if (StateTimer == 1f)
                 {
                     Projectile.velocity = to.SafeNormalize(Vector2.UnitY) * 24f; // 可调：穿刺速度
                 }
@@ -159,10 +154,10 @@ namespace WuDao.Content.Projectiles.Summon
 
                 // ✅关键：Dash 持续固定时间后回到巡航位，形成“不断穿刺”
                 // 16 控制惯性距离
-                if (Projectile.localAI[1] >= 16f)
+                if (StateTimer >= 16f)
                 {
-                    Projectile.localAI[0] = State_Staging;
-                    Projectile.localAI[1] = 0f;
+                    State = State_Staging;
+                    StateTimer = 0f;
                     Projectile.netUpdate = true;
                 }
             }
@@ -285,18 +280,9 @@ namespace WuDao.Content.Projectiles.Summon
             if ((int)Projectile.ai[0] == 0)
             {
                 Player owner = Main.player[Projectile.owner];
-                if (owner != null && owner.active && !owner.dead)
+                if (owner.active && !owner.dead && Main.netMode != NetmodeID.MultiplayerClient)
                 {
-                    // 单人/服务器端执行：避免纯客户端改血导致不同步
-                    if (Main.netMode != NetmodeID.MultiplayerClient)
-                    {
-                        owner.Heal(2);
-                    }
-                    else if (Main.myPlayer == owner.whoAmI)
-                    {
-                        // 多人客户端兜底：至少本地先显示回血效果（严格同步可改为自定义 ModPacket 让服务器加血）
-                        owner.Heal(2);
-                    }
+                    owner.Heal(2);
                 }
             }
         }

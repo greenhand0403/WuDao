@@ -103,6 +103,9 @@ namespace WuDao.Content.Projectiles.Summon
         }
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+                return;
+                
             if (Main.rand.NextBool(3))
             {
                 target.AddBuff(BuffID.Poisoned, 120);

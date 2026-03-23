@@ -48,8 +48,13 @@ namespace WuDao.Content.Items.Weapons.Summon
         {
             // Buff 持续 & 手动生成投射物并回填 originalDamage（示例中的标准做法）
             player.AddBuff(Item.buffType, 2);
-            var proj = Projectile.NewProjectileDirect(source, position, velocity, type, damage, knockback, player.whoAmI);
-            proj.originalDamage = Item.damage;   // 确保随重新铸造/加成正确缩放
+
+            if (player.whoAmI == Main.myPlayer)
+            {
+                var proj = Projectile.NewProjectileDirect(source, position, velocity, type, damage, knockback, player.whoAmI);
+                proj.originalDamage = Item.damage;   // 确保随重新铸造/加成正确缩放
+            }
+            
             return false; // 已手动生成，阻止默认生成
         }
 

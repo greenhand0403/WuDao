@@ -59,17 +59,20 @@ namespace WuDao.Content.Items.Weapons.Summon
 
             if (current > player.maxMinions || current == 2)
                 return false;
-
-            Projectile.NewProjectile(
-                source,
-                position,
-                velocity,
-                type,
-                damage,
-                knockback,
-                player.whoAmI,
-                ai0: current % player.maxMinions
-            );
+                
+            if (player.whoAmI == Main.myPlayer)
+            {
+                Projectile.NewProjectile(
+                    source,
+                    position,
+                    velocity,
+                    type,
+                    damage,
+                    knockback,
+                    player.whoAmI,
+                    ai0: current % player.maxMinions
+                );
+            }
 
             return false;
         }

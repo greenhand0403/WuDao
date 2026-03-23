@@ -67,6 +67,7 @@ namespace WuDao.Content.Projectiles.Summon
             Projectile.localNPCHitCooldown = 18;
             // 发光
             Projectile.light = 0.5f;
+            Projectile.netImportant = true;
         }
         private int GetTrainCount()
         {
@@ -270,7 +271,7 @@ namespace WuDao.Content.Projectiles.Summon
 
             Projectile.localAI[1] = 0f;
 
-            if (Main.myPlayer != Projectile.owner)
+            if (Main.netMode == NetmodeID.MultiplayerClient)
                 return;
 
             // ✅ 从矮人位置发射（与绘制 offset 对齐）
@@ -283,7 +284,7 @@ namespace WuDao.Content.Projectiles.Summon
             Vector2 vel = to * ShootSpeed;
             int dmg = (int)(Projectile.damage * GetTrainDamageMult());
             // 原版矮人长矛弹幕：ProjectileID.PygmySpear
-            Projectile.NewProjectile(
+            int proj = Projectile.NewProjectile(
                 Projectile.GetSource_FromThis(),
                 from,
                 vel,
@@ -292,8 +293,12 @@ namespace WuDao.Content.Projectiles.Summon
                 Projectile.knockBack,
                 Projectile.owner
             );
-
+            if (proj>0)
+            {
+                Main.projectile[proj].netUpdate = true;
+            }
             Projectile.frameCounter = 18; // 触发投矛动作（可调 12~24）
+            Projectile.netUpdate = true;
         }
         // 获取当前矿车索引
         private int GetMinecartIndex()
